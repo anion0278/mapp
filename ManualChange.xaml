@@ -1,0 +1,24 @@
+﻿<Window x:Class="Martin_app.ManualChange"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Martin_app"
+        mc:Ignorable="d"
+        Title="Manualni uprava" Height="180" Width="436"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition Height="1.2*"/>
+        </Grid.RowDefinitions>
+        <Label Grid.Row="0">Pubvodni text:</Label>
+        <TextBox Grid.Row="1" Name="InitialText" IsReadOnly="True" />
+        <Label Grid.Row="2">Upraveny text:</Label>
+        <TextBox Grid.Row="3"  Name="ChangedText" MaxLength="{Binding MaxLength}" />
+        <Button Grid.Row="4" Margin="5" Width="100"  Content="OK" Click="Button_Click"/>
+    </Grid>
+</Window>

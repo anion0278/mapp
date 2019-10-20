@@ -1,0 +1,12 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Martin_app" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="DPH" Type="System.decimal" Scope="User">
+      <Value Profile="(Default)">0.1736</Value>
+    </Setting>
+    <Setting Name="ExistingInvoceNumber" Type="System.UInt32" Scope="User">
+      <Value Profile="(Default)">290100436</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
