@@ -30,9 +30,6 @@ using Path = System.IO.Path;
 
 namespace Martin_app
 {
-    /// <summary>
-    /// Interaction logic for StartWindow.xaml
-    /// </summary>
     public partial class StartWindow : Window
     {
         private static readonly int MaxItemNameLength = 85;
