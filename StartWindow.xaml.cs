@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -33,8 +34,8 @@ namespace Martin_app
     public partial class StartWindow : Window
     {
         private static readonly int MaxItemNameLength = 85;
-        private uint _existingInvoceNumber = Settings.Default.ExistingInvoceNumber;
-        private decimal _dphValue = Settings.Default.DPH;
+        private uint _existingInvoceNumber;
+        private decimal _dphValue;
         private readonly int MaxAddressNameLength = 60;
         private readonly int MaxClientNameLength = 30;
         private IEnumerable<InvoiceXML.dataPackDataPackItem> _convertedInvoices;
@@ -44,13 +45,24 @@ namespace Martin_app
 
         public ObservableCollection<InvoiceXML.dataPackDataPackItem> InvoicesTable { get; set; } = new ObservableCollection<InvoiceXML.dataPackDataPackItem>();
 
-        public ObservableCollection<InvoiceItemWithDetailes> InvoiceItemsAll { get; set; } = new ObservableCollection<InvoiceItemWithDetailes>();
+        public ObservableCollection<InvoiceItemWithDetails> InvoiceItemsAll { get; set; } = new ObservableCollection<InvoiceItemWithDetails>();
 
-        public Dictionary<string, string> ProductNumberByName { get; set; }
-        private string ProductNumberByNameJson = "ProductNumberByName.json";
+        public string[] _euContries =
+        {
+            "BE", "BG", "CZ", "DK", "EE", "FI", "FR", "IE", "IT", "CY", "LT", "LV", "LU", "HU", "HR", "MT", "DE",
+            "NL", "PL", "PT", "AT", "RO", "GR", "SK", "SI", "ES", "SE", "GB", "EU"
+        };
 
-        public Dictionary<string, string> ProductCodeByAmazonName { get; set; }
-        private string ProductCodeByAmazonNameJson = "ProductCodeByAmazonName.json";
+        private string[] DefaultShippingNames = {"Shipping", "Registered shipping"};
+
+        public Dictionary<string, string> ProductNumberByItemName { get; set; }
+        private string ProductNumberByItemNameJson = "ProductNumberByName.json";
+
+        public Dictionary<string, string> ProductCodeByItemName { get; set; }
+        private string ProductCodeByItemNameJson = "ProductCodeByAmazonName.json";
+
+        public Dictionary<string, string> ShippingNameByItemName { get; set; }
+        private string ShippingNameByItemNameJson = "ShippingNameByItemName.json";
 
         private uint ExistingInvoceNumber
         {
@@ -85,12 +97,37 @@ namespace Martin_app
             }
         }
 
+        private string _defaultEmail;
+        private string DefaultEmail
+        {
+            get
+            {
+                return _defaultEmail;
+            }
+            set
+            {
+                if (value == _defaultEmail) return;
+
+                _defaultEmail = value;
+                Settings.Default.DefaultEmail = _defaultEmail;
+                Settings.Default.Save();
+                DefaultEmailBox.Text = DefaultEmail;
+            }
+        }
+
         public StartWindow()
         {
+            Settings.Default.Upgrade();
+            Application.Current.DispatcherUnhandledException += Current_DispatcherUnhandledException;
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             InitializeComponent();
             Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
             Initialize();
+        }
+
+        private void Current_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+        {
+            MessageBox.Show("Unhandled error: " + e.Exception.Message);
         }
 
         private void ConvertAmazonToPohoda()
@@ -102,21 +139,24 @@ namespace Martin_app
             foreach (var report in fromAmazonReports)
             {
                 var singleAmazonInvoice = FillDataPackItem(report, source.Count + 1);
-                var existingDataPack = source.FirstOrDefault((di => di.invoice.invoiceHeader.symPar == singleAmazonInvoice.invoice.invoiceHeader.symPar));
+                var existingDataPack = source.FirstOrDefault((di => di.invoice.invoiceHeader.symVar == singleAmazonInvoice.invoice.invoiceHeader.symVar));
                 if (existingDataPack != null) AddItemsToExistingDataPack(existingDataPack, singleAmazonInvoice);
                 else source.Add(singleAmazonInvoice);
             }
 
             var invoiceInvoiceItems = source.SelectMany((di => di.invoice.invoiceDetail));
             InvoiceItemsAll.Clear();
-            foreach (var invoiceInvoiceItem in invoiceInvoiceItems)
+            foreach (var invoiceItem in invoiceInvoiceItems)
             {
-                var item = invoiceInvoiceItem;
-                InvoiceItemsAll.Add(new InvoiceItemWithDetailes(item, source.Single((di => (di.invoice.invoiceDetail).Contains<InvoiceXML.invoiceInvoiceItem>(item))).invoice.invoiceHeader));
+                var item = invoiceItem;
+                InvoiceItemsAll.Add(new InvoiceItemWithDetails(item, source.Single(di => (di.invoice.invoiceDetail).Contains(item)).invoice.invoiceHeader));
             }
 
             InvoicesTable.Clear();
-            foreach (var packDataPackItem in source) InvoicesTable.Add(packDataPackItem);
+            foreach (var dataPackItem in source)
+            {
+                InvoicesTable.Add(dataPackItem);
+            }
             _convertedInvoices = source;
         }
 
@@ -154,23 +194,32 @@ namespace Martin_app
 
         private void Initialize()
         {
-            ExistingInvoiceNum.Text = Settings.Default.ExistingInvoceNumber.ToString();
-            DPHValue.Text = Settings.Default.DPH.ToString();
+            _existingInvoceNumber = Settings.Default.ExistingInvoceNumber;
+            _dphValue = Settings.Default.DPH;
+            _defaultEmail = Settings.Default.DefaultEmail;
+
+            ExistingInvoiceNum.Text = ExistingInvoceNumber.ToString();
+            DPHValue.Text = DPH.ToString();
+            DefaultEmailBox.Text = DefaultEmail;
             Rates = GetActualCurrencyRates();
 
-            string json = File.ReadAllText(ProductCodeByAmazonNameJson);
-            ProductCodeByAmazonName = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
+            ProductCodeByItemName = DeserializeJsonDictionary(ProductCodeByItemNameJson);
+            ProductNumberByItemName = DeserializeJsonDictionary(ProductNumberByItemNameJson);
+            ShippingNameByItemName = DeserializeJsonDictionary(ShippingNameByItemNameJson);
+        }
 
-            json = File.ReadAllText(ProductNumberByNameJson);
-            ProductNumberByName = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
+        private Dictionary<string, string> DeserializeJsonDictionary(string fileName)
+        {
+            string json = File.ReadAllText(fileName);
+            return JsonConvert.DeserializeObject<Dictionary<string, string>>(json) ?? new Dictionary<string, string>();
         }
 
         private Dictionary<string, decimal> GetActualCurrencyRates()
         {
             string downloadString;
-            using (WebClient webClient = new WebClient() { Encoding = XmlEncoding })
+            using (var webClient = new WebClient() { Encoding = XmlEncoding })
             {
-                string str = DateTime.Today.AddDays(-1.0).ToString("dd.MM.yyyy");
+                string str = DateTime.Today.AddDays(-1).ToString("dd.MM.yyyy");
                 downloadString = webClient.DownloadString("http://www.cnb.cz/cs/financni_trhy/devizovy_trh/kurzy_devizoveho_trhu/denni_kurz.txt?date=" + str);
             }
             if (string.IsNullOrEmpty(downloadString))
@@ -207,7 +256,6 @@ namespace Martin_app
             string invoiceType = "issuedInvoice";
             string accountingIds = "3Fv";
 
-            string shipping = "Shipping";
             string headerSymPar = valuesFromAmazon["order-id"];
             uint invoiceNumber = (uint)(ExistingInvoceNumber + index);
             var packDataPackItem = PrepareDatapackItem();
@@ -222,24 +270,24 @@ namespace Martin_app
             decimal currencyPriceHighSum = priceSum * currencyRate;
             string salesChannel = valuesFromAmazon["sales-channel"];
             string clientName = FormatClientName(valuesFromAmazon["recipient-name"], headerSymPar);
-            string city = FormatCity(valuesFromAmazon["ship-city"], valuesFromAmazon["ship-state"], valuesFromAmazon["ship-postal-code"], headerSymPar);
+            string city = FormatCity(valuesFromAmazon["ship-city"], valuesFromAmazon["ship-state"], string.Empty, headerSymPar);
             string fullAddress = FormatFullAddress(valuesFromAmazon["ship-address-1"], valuesFromAmazon["ship-address-2"], valuesFromAmazon["ship-address-3"], headerSymPar);
             string phoneNumber = FormatPhoneNumber(valuesFromAmazon["ship-phone-number"], valuesFromAmazon["buyer-phone-number"], headerSymPar);
             string shipCountry = valuesFromAmazon["ship-country"];
             string classification = SetClassification(shipCountry);
-
             string productName = FormatNameOfItem(valuesFromAmazon["product-name"]);
+            string shipping = GetShippingTypeName(shipCountry, productName);
+
             string stockItemIds = GetItemCodeByName(productName);
 
-            //FormatDate(valuesFromAmazon["purchase-date"]);
             DateTime today = DateTime.Today;
             DateTime taxDate = CalculateTaxDate(today, classification);
             DateTime dueDate = CalculateDueDate(today);
             packDataPackItem.id = userId;
             packDataPackItem.invoice.invoiceHeader.invoiceType = invoiceType;
             packDataPackItem.invoice.invoiceHeader.number.numberRequested = invoiceNumber;
-            packDataPackItem.invoice.invoiceHeader.symVar = invoiceNumber;
-            packDataPackItem.invoice.invoiceHeader.symPar = headerSymPar;
+            packDataPackItem.invoice.invoiceHeader.symVar = headerSymPar;
+            packDataPackItem.invoice.invoiceHeader.symPar = string.Empty;
             packDataPackItem.invoice.invoiceHeader.date = today;
             packDataPackItem.invoice.invoiceHeader.dateTax = taxDate;
             packDataPackItem.invoice.invoiceHeader.dateAccounting = today;
@@ -252,132 +300,136 @@ namespace Martin_app
             packDataPackItem.invoice.invoiceHeader.partnerIdentity.address.city = city;
             packDataPackItem.invoice.invoiceHeader.partnerIdentity.address.street = fullAddress;
             packDataPackItem.invoice.invoiceHeader.partnerIdentity.address.country.ids = shipCountry;
-            packDataPackItem.invoice.invoiceHeader.partnerIdentity.address.phone = phoneNumber;
+            packDataPackItem.invoice.invoiceHeader.partnerIdentity.address.zip = valuesFromAmazon["ship-postal-code"];
+            packDataPackItem.invoice.invoiceHeader.partnerIdentity.address.phone = string.Empty;
+            packDataPackItem.invoice.invoiceHeader.partnerIdentity.address.mobilPhone = phoneNumber;
+            packDataPackItem.invoice.invoiceHeader.partnerIdentity.address.email = DefaultEmail;
             packDataPackItem.invoice.invoiceHeader.paymentType.ids = salesChannel;
             packDataPackItem.invoice.invoiceHeader.centre.ids = GetSavedCenter(productName);
             packDataPackItem.invoice.invoiceHeader.liquidation.amountHome = priceSum * currencyRate;
             packDataPackItem.invoice.invoiceHeader.liquidation.amountForeign = priceSum;
             var invoiceInvoiceItemList = new List<InvoiceXML.invoiceInvoiceItem>();
-            var invoiceInvoiceItem1 = new InvoiceXML.invoiceInvoiceItem();
-            decimal num8 = decimal.Parse(valuesFromAmazon["quantity-purchased"]);
-            invoiceInvoiceItem1.quantity = num8;
-            invoiceInvoiceItem1.payVAT = true;
-            invoiceInvoiceItem1.discountPercentage = decimal.Zero;
-            invoiceInvoiceItem1.foreignCurrency = new InvoiceXML.invoiceInvoiceItemForeignCurrency();
-            invoiceInvoiceItem1.homeCurrency = new InvoiceXML.invoiceInvoiceItemHomeCurrency();
-            invoiceInvoiceItem1.stockItem = new InvoiceXML.invoiceInvoiceItemStockItem();
-            invoiceInvoiceItem1.stockItem.stockItem = new InvoiceXML.stockItem();
-            invoiceInvoiceItem1.stockItem.store = new InvoiceXML.store();
+            var invoiceItem = new InvoiceXML.invoiceInvoiceItem();
+            decimal quantity = decimal.Parse(valuesFromAmazon["quantity-purchased"]);
+            invoiceItem.quantity = quantity;
+            invoiceItem.payVAT = true;
+            invoiceItem.discountPercentage = 0;
+            invoiceItem.foreignCurrency = new InvoiceXML.invoiceInvoiceItemForeignCurrency();
+            invoiceItem.homeCurrency = new InvoiceXML.invoiceInvoiceItemHomeCurrency();
+            invoiceItem.stockItem = new InvoiceXML.invoiceInvoiceItemStockItem();
+            invoiceItem.stockItem.stockItem = new InvoiceXML.stockItem();
+            invoiceItem.stockItem.store = new InvoiceXML.store();
             if (classification == "UVzboží")
             {
-                invoiceInvoiceItem1.rateVAT = "none";
-                invoiceInvoiceItem1.foreignCurrency.unitPrice = itemPrice / num8;
-                invoiceInvoiceItem1.foreignCurrency.price = invoiceInvoiceItem1.foreignCurrency.unitPrice * num8;
-                invoiceInvoiceItem1.foreignCurrency.priceSum = invoiceInvoiceItem1.foreignCurrency.price;
-                invoiceInvoiceItem1.foreignCurrency.priceVAT = decimal.Zero;
-                invoiceInvoiceItem1.homeCurrency.unitPrice = invoiceInvoiceItem1.foreignCurrency.unitPrice * currencyRate;
-                invoiceInvoiceItem1.homeCurrency.price = invoiceInvoiceItem1.foreignCurrency.price * currencyRate;
-                invoiceInvoiceItem1.homeCurrency.priceSum *= currencyRate;
-                invoiceInvoiceItem1.homeCurrency.priceVAT = decimal.Zero;
+                invoiceItem.rateVAT = "none";
+                invoiceItem.foreignCurrency.unitPrice = itemPrice / quantity;
+                invoiceItem.foreignCurrency.price = invoiceItem.foreignCurrency.unitPrice * quantity;
+                invoiceItem.foreignCurrency.priceSum = invoiceItem.foreignCurrency.price;
+                invoiceItem.foreignCurrency.priceVAT = 0;
+                invoiceItem.homeCurrency.unitPrice = invoiceItem.foreignCurrency.unitPrice * currencyRate;
+                invoiceItem.homeCurrency.price = invoiceItem.foreignCurrency.price * currencyRate;
+                invoiceItem.homeCurrency.priceSum *= currencyRate;
+                invoiceItem.homeCurrency.priceVAT = 0;
             }
             else
             {
-                invoiceInvoiceItem1.rateVAT = "high";
-                invoiceInvoiceItem1.foreignCurrency.unitPrice = itemPrice / num8;
-                invoiceInvoiceItem1.foreignCurrency.price = invoiceInvoiceItem1.foreignCurrency.unitPrice * num8 * (decimal.One - DPH);
-                invoiceInvoiceItem1.foreignCurrency.priceVAT = invoiceInvoiceItem1.foreignCurrency.unitPrice * num8 * DPH;
-                invoiceInvoiceItem1.foreignCurrency.priceSum = invoiceInvoiceItem1.foreignCurrency.unitPrice * num8;
-                invoiceInvoiceItem1.homeCurrency.unitPrice = invoiceInvoiceItem1.foreignCurrency.unitPrice * currencyRate;
-                invoiceInvoiceItem1.homeCurrency.price = invoiceInvoiceItem1.foreignCurrency.price * currencyRate;
-                invoiceInvoiceItem1.homeCurrency.priceVAT = invoiceInvoiceItem1.foreignCurrency.priceVAT * currencyRate;
-                invoiceInvoiceItem1.homeCurrency.priceSum = invoiceInvoiceItem1.foreignCurrency.priceSum * currencyRate;
+                invoiceItem.rateVAT = "high";
+                invoiceItem.foreignCurrency.unitPrice = itemPrice / quantity;
+                invoiceItem.foreignCurrency.price = invoiceItem.foreignCurrency.unitPrice * quantity * (1 - DPH);
+                invoiceItem.foreignCurrency.priceVAT = invoiceItem.foreignCurrency.unitPrice * quantity * DPH;
+                invoiceItem.foreignCurrency.priceSum = invoiceItem.foreignCurrency.unitPrice * quantity;
+                invoiceItem.homeCurrency.unitPrice = invoiceItem.foreignCurrency.unitPrice * currencyRate;
+                invoiceItem.homeCurrency.price = invoiceItem.foreignCurrency.price * currencyRate;
+                invoiceItem.homeCurrency.priceVAT = invoiceItem.foreignCurrency.priceVAT * currencyRate;
+                invoiceItem.homeCurrency.priceSum = invoiceItem.foreignCurrency.priceSum * currencyRate;
             }
-            invoiceInvoiceItem1.code = stockItemIds;
-            invoiceInvoiceItem1.text = productName;
-            invoiceInvoiceItem1.stockItem.store.ids = "Zboží";
-            invoiceInvoiceItem1.stockItem.stockItem.ids = stockItemIds;
-            invoiceInvoiceItem1.PDP = false;
-            var invoiceInvoiceItem2 = new InvoiceXML.invoiceInvoiceItem();
-            invoiceInvoiceItem2.text = shipping;
-            invoiceInvoiceItem2.quantity = decimal.One;
-            invoiceInvoiceItem2.payVAT = true;
-            invoiceInvoiceItem2.discountPercentage = decimal.Zero;
-            invoiceInvoiceItem2.foreignCurrency = new InvoiceXML.invoiceInvoiceItemForeignCurrency();
-            invoiceInvoiceItem2.homeCurrency = new InvoiceXML.invoiceInvoiceItemHomeCurrency();
+            invoiceItem.code = stockItemIds;
+            invoiceItem.text = productName;
+            invoiceItem.stockItem.store.ids = "Zboží";
+            invoiceItem.stockItem.stockItem.ids = stockItemIds;
+            invoiceItem.PDP = false;
+            var invoiceItemShipping = new InvoiceXML.invoiceInvoiceItem();
+            invoiceItemShipping.text = shipping;
+            invoiceItemShipping.IsShipping = true;
+            invoiceItemShipping.quantity = 1;
+            invoiceItemShipping.payVAT = true;
+            invoiceItemShipping.discountPercentage = 0;
+            invoiceItemShipping.foreignCurrency = new InvoiceXML.invoiceInvoiceItemForeignCurrency();
+            invoiceItemShipping.homeCurrency = new InvoiceXML.invoiceInvoiceItemHomeCurrency();
             if (classification == "UVzboží")
             {
-                invoiceInvoiceItem2.rateVAT = "none";
-                invoiceInvoiceItem2.foreignCurrency.unitPrice = shippingPrice;
-                invoiceInvoiceItem2.foreignCurrency.price = invoiceInvoiceItem2.foreignCurrency.unitPrice;
-                invoiceInvoiceItem2.foreignCurrency.priceSum = invoiceInvoiceItem2.foreignCurrency.price;
-                invoiceInvoiceItem2.foreignCurrency.priceVAT = decimal.Zero;
-                invoiceInvoiceItem2.homeCurrency.unitPrice = invoiceInvoiceItem2.foreignCurrency.unitPrice * currencyRate;
-                invoiceInvoiceItem2.homeCurrency.price = invoiceInvoiceItem2.foreignCurrency.price * currencyRate;
-                invoiceInvoiceItem2.homeCurrency.priceSum *= currencyRate;
-                invoiceInvoiceItem2.homeCurrency.priceVAT = decimal.Zero;
+                invoiceItemShipping.rateVAT = "none";
+                invoiceItemShipping.foreignCurrency.unitPrice = shippingPrice;
+                invoiceItemShipping.foreignCurrency.price = invoiceItemShipping.foreignCurrency.unitPrice;
+                invoiceItemShipping.foreignCurrency.priceSum = invoiceItemShipping.foreignCurrency.price;
+                invoiceItemShipping.foreignCurrency.priceVAT = 0;
+                invoiceItemShipping.homeCurrency.unitPrice = invoiceItemShipping.foreignCurrency.unitPrice * currencyRate;
+                invoiceItemShipping.homeCurrency.price = invoiceItemShipping.foreignCurrency.price * currencyRate;
+                invoiceItemShipping.homeCurrency.priceSum *= currencyRate;
+                invoiceItemShipping.homeCurrency.priceVAT = 0;
             }
             else
             {
-                invoiceInvoiceItem2.rateVAT = "high";
-                invoiceInvoiceItem2.foreignCurrency.unitPrice = shippingPrice;
-                invoiceInvoiceItem2.foreignCurrency.price = invoiceInvoiceItem2.foreignCurrency.unitPrice * num8 * (decimal.One - DPH);
-                invoiceInvoiceItem2.foreignCurrency.priceVAT = invoiceInvoiceItem2.foreignCurrency.unitPrice * num8 * DPH;
-                invoiceInvoiceItem2.foreignCurrency.priceSum = invoiceInvoiceItem2.foreignCurrency.unitPrice * num8;
-                invoiceInvoiceItem2.homeCurrency.unitPrice = invoiceInvoiceItem2.foreignCurrency.unitPrice * currencyRate;
-                invoiceInvoiceItem2.homeCurrency.price = invoiceInvoiceItem2.foreignCurrency.price * currencyRate;
-                invoiceInvoiceItem2.homeCurrency.priceVAT = invoiceInvoiceItem2.foreignCurrency.priceVAT * currencyRate;
-                invoiceInvoiceItem2.homeCurrency.priceSum = invoiceInvoiceItem2.foreignCurrency.priceSum * currencyRate;
+                invoiceItemShipping.rateVAT = "high";
+                invoiceItemShipping.foreignCurrency.unitPrice = shippingPrice;
+                invoiceItemShipping.foreignCurrency.price = invoiceItemShipping.foreignCurrency.unitPrice * quantity * (1 - DPH);
+                invoiceItemShipping.foreignCurrency.priceVAT = invoiceItemShipping.foreignCurrency.unitPrice * quantity * DPH;
+                invoiceItemShipping.foreignCurrency.priceSum = invoiceItemShipping.foreignCurrency.unitPrice * quantity;
+                invoiceItemShipping.homeCurrency.unitPrice = invoiceItemShipping.foreignCurrency.unitPrice * currencyRate;
+                invoiceItemShipping.homeCurrency.price = invoiceItemShipping.foreignCurrency.price * currencyRate;
+                invoiceItemShipping.homeCurrency.priceVAT = invoiceItemShipping.foreignCurrency.priceVAT * currencyRate;
+                invoiceItemShipping.homeCurrency.priceSum = invoiceItemShipping.foreignCurrency.priceSum * currencyRate;
             }
-            invoiceInvoiceItem2.PDP = false;
-            invoiceInvoiceItemList.Add(invoiceInvoiceItem1);
-            invoiceInvoiceItemList.Add(invoiceInvoiceItem2);
-            if (promotionDiscount != decimal.Zero)
+            invoiceItemShipping.PDP = false;
+            invoiceInvoiceItemList.Add(invoiceItem);
+            invoiceInvoiceItemList.Add(invoiceItemShipping);
+            if (promotionDiscount != 0)
             {
-                var invoiceInvoiceItem3 = new InvoiceXML.invoiceInvoiceItem();
-                invoiceInvoiceItem3.text = "Discount";
-                invoiceInvoiceItem3.quantity = decimal.One;
-                invoiceInvoiceItem3.payVAT = true;
-                invoiceInvoiceItem3.discountPercentage = decimal.Zero;
-                invoiceInvoiceItem3.foreignCurrency = new InvoiceXML.invoiceInvoiceItemForeignCurrency();
-                invoiceInvoiceItem3.homeCurrency = new InvoiceXML.invoiceInvoiceItemHomeCurrency();
+                var invoiceItemDiscount = new InvoiceXML.invoiceInvoiceItem();
+                invoiceItemDiscount.text = "Discount";
+                invoiceItemDiscount.quantity = 1;
+                invoiceItemDiscount.payVAT = true;
+                invoiceItemDiscount.discountPercentage = 0;
+                invoiceItemDiscount.foreignCurrency = new InvoiceXML.invoiceInvoiceItemForeignCurrency();
+                invoiceItemDiscount.homeCurrency = new InvoiceXML.invoiceInvoiceItemHomeCurrency();
                 if (classification == "UVzboží")
                 {
-                    invoiceInvoiceItem3.rateVAT = "none";
-                    invoiceInvoiceItem3.foreignCurrency.unitPrice = promotionDiscount;
-                    invoiceInvoiceItem3.foreignCurrency.price = invoiceInvoiceItem3.foreignCurrency.unitPrice;
-                    invoiceInvoiceItem3.foreignCurrency.priceSum = invoiceInvoiceItem3.foreignCurrency.price;
-                    invoiceInvoiceItem3.foreignCurrency.priceVAT = decimal.Zero;
-                    invoiceInvoiceItem3.homeCurrency.unitPrice = invoiceInvoiceItem3.foreignCurrency.unitPrice * currencyRate;
-                    invoiceInvoiceItem3.homeCurrency.price = invoiceInvoiceItem3.foreignCurrency.price * currencyRate;
-                    invoiceInvoiceItem3.homeCurrency.priceSum *= currencyRate;
-                    invoiceInvoiceItem3.homeCurrency.priceVAT = decimal.Zero;
+                    invoiceItemDiscount.rateVAT = "none";
+                    invoiceItemDiscount.foreignCurrency.unitPrice = promotionDiscount;
+                    invoiceItemDiscount.foreignCurrency.price = invoiceItemDiscount.foreignCurrency.unitPrice;
+                    invoiceItemDiscount.foreignCurrency.priceSum = invoiceItemDiscount.foreignCurrency.price;
+                    invoiceItemDiscount.foreignCurrency.priceVAT = 0;
+                    invoiceItemDiscount.homeCurrency.unitPrice = invoiceItemDiscount.foreignCurrency.unitPrice * currencyRate;
+                    invoiceItemDiscount.homeCurrency.price = invoiceItemDiscount.foreignCurrency.price * currencyRate;
+                    invoiceItemDiscount.homeCurrency.priceSum *= currencyRate;
+                    invoiceItemDiscount.homeCurrency.priceVAT = 0;
                 }
                 else
                 {
-                    invoiceInvoiceItem3.rateVAT = "high";
-                    invoiceInvoiceItem3.foreignCurrency.unitPrice = promotionDiscount;
-                    invoiceInvoiceItem3.foreignCurrency.price = invoiceInvoiceItem3.foreignCurrency.unitPrice * num8 * (decimal.One - DPH);
-                    invoiceInvoiceItem3.foreignCurrency.priceVAT = invoiceInvoiceItem3.foreignCurrency.unitPrice * num8 * DPH;
-                    invoiceInvoiceItem3.foreignCurrency.priceSum = invoiceInvoiceItem3.foreignCurrency.unitPrice * num8;
-                    invoiceInvoiceItem3.homeCurrency.unitPrice = invoiceInvoiceItem3.foreignCurrency.unitPrice * currencyRate;
-                    invoiceInvoiceItem3.homeCurrency.price = invoiceInvoiceItem3.foreignCurrency.price * currencyRate;
-                    invoiceInvoiceItem3.homeCurrency.priceVAT = invoiceInvoiceItem3.foreignCurrency.priceVAT * currencyRate;
-                    invoiceInvoiceItem3.homeCurrency.priceSum = invoiceInvoiceItem3.foreignCurrency.priceSum * currencyRate;
+                    invoiceItemDiscount.rateVAT = "high";
+                    invoiceItemDiscount.foreignCurrency.unitPrice = promotionDiscount;
+                    invoiceItemDiscount.foreignCurrency.price = invoiceItemDiscount.foreignCurrency.unitPrice * quantity * (1 - DPH);
+                    invoiceItemDiscount.foreignCurrency.priceVAT = invoiceItemDiscount.foreignCurrency.unitPrice * quantity * DPH;
+                    invoiceItemDiscount.foreignCurrency.priceSum = invoiceItemDiscount.foreignCurrency.unitPrice * quantity;
+                    invoiceItemDiscount.homeCurrency.unitPrice = invoiceItemDiscount.foreignCurrency.unitPrice * currencyRate;
+                    invoiceItemDiscount.homeCurrency.price = invoiceItemDiscount.foreignCurrency.price * currencyRate;
+                    invoiceItemDiscount.homeCurrency.priceVAT = invoiceItemDiscount.foreignCurrency.priceVAT * currencyRate;
+                    invoiceItemDiscount.homeCurrency.priceSum = invoiceItemDiscount.foreignCurrency.priceSum * currencyRate;
                 }
-                invoiceInvoiceItem3.PDP = false;
-                invoiceInvoiceItemList.Add(invoiceInvoiceItem3);
+                invoiceItemDiscount.PDP = false;
+                invoiceInvoiceItemList.Add(invoiceItemDiscount);
             }
             packDataPackItem.invoice.invoiceDetail = invoiceInvoiceItemList.ToArray();
-            packDataPackItem.invoice.invoiceSummary.homeCurrency.priceNone = decimal.Zero;
-            packDataPackItem.invoice.invoiceSummary.homeCurrency.priceLow = decimal.Zero;
-            packDataPackItem.invoice.invoiceSummary.homeCurrency.priceLowVAT = decimal.Zero;
-            packDataPackItem.invoice.invoiceSummary.homeCurrency.priceLowSum = decimal.Zero;
-            packDataPackItem.invoice.invoiceSummary.homeCurrency.priceHigh = decimal.Zero;
-            packDataPackItem.invoice.invoiceSummary.homeCurrency.priceHighVAT = decimal.Zero;
-            packDataPackItem.invoice.invoiceSummary.homeCurrency.priceHighSum = decimal.Zero;
-            packDataPackItem.invoice.invoiceSummary.homeCurrency.price3 = decimal.Zero;
-            packDataPackItem.invoice.invoiceSummary.homeCurrency.price3VAT = decimal.Zero;
-            packDataPackItem.invoice.invoiceSummary.homeCurrency.price3Sum = decimal.Zero;
+            packDataPackItem.invoice.invoiceSummary.homeCurrency.priceNone = 0;
+            packDataPackItem.invoice.invoiceSummary.homeCurrency.priceLow = 0;
+            packDataPackItem.invoice.invoiceSummary.homeCurrency.priceLowVAT = 0;
+            packDataPackItem.invoice.invoiceSummary.homeCurrency.priceLowSum = 0;
+            packDataPackItem.invoice.invoiceSummary.homeCurrency.priceHigh = 0;
+            packDataPackItem.invoice.invoiceSummary.homeCurrency.priceHighVAT = 0;
+            packDataPackItem.invoice.invoiceSummary.homeCurrency.priceHighSum = 0;
+            packDataPackItem.invoice.invoiceSummary.homeCurrency.price3 = 0;
+            packDataPackItem.invoice.invoiceSummary.homeCurrency.price3VAT = 0;
+            packDataPackItem.invoice.invoiceSummary.homeCurrency.price3Sum = 0;
             if (classification == "UVzboží")
             {
                 packDataPackItem.invoice.invoiceSummary.homeCurrency.priceNone = priceSum * currencyRate;
@@ -395,20 +447,36 @@ namespace Martin_app
             return packDataPackItem;
         }
 
+        private string GetShippingTypeName(string shipCountry, string productName)
+        {
+            string defaultShippingName = DefaultShippingNames.First();
+            if (!_euContries.Contains(shipCountry))
+            {
+                return defaultShippingName;
+            }
+
+            if (!ShippingNameByItemName.ContainsKey(productName))
+            {
+                return defaultShippingName;
+            }
+
+            return ShippingNameByItemName[productName];
+        }
+
         private string GetItemCodeByName(string productName)
         {
-            string defaultCode = "1108A";
-            if (!ProductCodeByAmazonName.ContainsKey(productName)) return defaultCode;
+            string defaultCode = "----";
+            if (!ProductCodeByItemName.ContainsKey(productName)) return defaultCode;
 
-            return ProductCodeByAmazonName[productName];
+            return ProductCodeByItemName[productName];
         }
 
         private string GetSavedCenter(string productName)
         {
-            string defaultCentreIds = "DER";
-            if (!ProductNumberByName.ContainsKey(productName)) return defaultCentreIds;
+            string defaultCentreIds = "----";
+            if (!ProductNumberByItemName.ContainsKey(productName)) return defaultCentreIds;
 
-            return ProductNumberByName[productName];
+            return ProductNumberByItemName[productName];
         }
 
         private string FormatCity(
@@ -491,14 +559,14 @@ namespace Martin_app
 
         private decimal GetCurrencyRate(string currency)
         {
-            return Rates.Single((r => r.Key.Equals(currency, StringComparison.InvariantCultureIgnoreCase))).Value;
+            return Rates.Single(r => r.Key.Equals(currency, StringComparison.InvariantCultureIgnoreCase)).Value;
         }
 
         private InvoiceXML.dataPackDataPackItem PrepareDatapackItem()
         {
             InvoiceXML.dataPack dataPack;
             using (StreamReader streamReader = new StreamReader("InvoiceBasic", XmlEncoding))
-                dataPack = (InvoiceXML.dataPack)new XmlSerializer(typeof(InvoiceXML.dataPack)).Deserialize((TextReader)streamReader);
+                dataPack = (InvoiceXML.dataPack)new XmlSerializer(typeof(InvoiceXML.dataPack)).Deserialize(streamReader);
             return dataPack.dataPackItem[0];
         }
 
@@ -553,13 +621,8 @@ namespace Martin_app
                 application = "Transformace",
                 note = "Uživatelský export",
                 dataPackItem = dataItems.ToArray(),
-                version = new decimal(20, 0, 0, false, (byte)1)
+                version = 2
             };
-        }
-
-        private static DateTime FormatDate(string dataString)
-        {
-            return DateTime.Parse(dataString.Remove(10, dataString.Length - 10));
         }
 
         private static DateTime CalculateTaxDate(DateTime conversionDate, string classification)
@@ -574,16 +637,10 @@ namespace Martin_app
             return purchaseDate.AddDays(3.0);
         }
 
-        private static string SetClassification(string shipCountry)
+        private string SetClassification(string shipCountry)
         {
-            var euContries = new[]
-            {
-                "BE", "BG", "CZ", "DK", "EE", "FI", "FR", "IE", "IT", "CY", "LT", "LV", "LU", "HU", "HR", "MT", "DE",
-                "NL", "PL", "PT", "AT", "RO", "GR", "SK", "SI", "ES", "SE", "GB", "EU"
-            };
-            return (euContries).Contains(shipCountry) ? "UDA5" : "UVzboží";
+            return (_euContries).Contains(shipCountry) ? "UDA5" : "UVzboží";
         }
-
 
         private static List<Dictionary<string, string>> GetParametersFromAmazonReport()
         {
@@ -596,8 +653,6 @@ namespace Martin_app
             bool? dialogResult = openFileDialog.ShowDialog();
 
             if (dialogResult == false) return null;
-
-            //string fileName = openFileDialog.FileName;
 
             var dictList = new List<Dictionary<string, string>>();
             foreach (var fileName in openFileDialog.FileNames)
@@ -685,7 +740,12 @@ namespace Martin_app
             ExistingInvoceNumber = existingInvoceNumber;
         }
 
-        public void ButtonConvert_Click(object sender, RoutedEventArgs e)
+        private void DefaultEmail_LostFocus(object sender, RoutedEventArgs e)
+        {
+            DefaultEmail = DefaultEmailBox.Text;
+        }
+
+        public void ButtonSelectInvoice_Click(object sender, RoutedEventArgs e)
         {
             ConvertAmazonToPohoda();
         }
@@ -696,15 +756,24 @@ namespace Martin_app
             var convertedInvoices = _convertedInvoices;
             if (convertedInvoices != null && convertedInvoices.Any())
             {
+                foreach (var invoiceItemWithDetails in InvoiceItemsAll)
+                {
+                    if (invoiceItemWithDetails.Item.IsShipping
+                        && !DefaultShippingNames.Any(s => Equals(s.Trim(), invoiceItemWithDetails.Item.text.Trim())))
+                    {
+                        invoiceItemWithDetails.Header.carrier.ids = "Zásilkovna";
+                    }
+                }
                 ExportToXML(_convertedInvoices);
             }
             else
             {
                 MessageBox.Show("Zadne faktury nebyly konvertovany!");
             }
+            SaveSettings();
         }
 
-        private void FixItems(IEnumerable<InvoiceItemWithDetailes> invoiceItemsAll)
+        private void FixItems(IEnumerable<InvoiceItemWithDetails> invoiceItemsAll)
         {
             foreach (var itemWithDetailes in invoiceItemsAll)
             {
@@ -717,57 +786,74 @@ namespace Martin_app
 
         private void TopDataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
-            if (e.EditAction == DataGridEditAction.Commit)
+            ProcessCustomChangedDataForProduct(e, 3, ProductCodeByItemName, (element) =>
             {
-                if (!(e.Column is DataGridBoundColumn)) return;
+                var dataContextItem = (InvoiceItemWithDetails)e.Row.DataContext;
+                return dataContextItem.Item.text;
+            });
+            ProcessCustomChangedDataForProduct(e, 2, ShippingNameByItemName, (element) =>
+            {
+                var dataContextItem = (InvoiceItemWithDetails)e.Row.DataContext;
+                var symVar = dataContextItem.Header.symVar;
 
-                if (e.Column.DisplayIndex == 3)
-                {
-                    string productCode = (e.EditingElement as TextBox).Text;
-                    var dataContextItem = (InvoiceItemWithDetailes) e.Row.DataContext;
-                    string productName = dataContextItem.Item.text;
-                    if (ProductCodeByAmazonName.ContainsKey(productName))
-                    {
-                        if (!ProductCodeByAmazonName[productName].Equals(productCode)) ProductCodeByAmazonName[productName] = productCode;
-                    }
-                    else
-                    {
-                        ProductCodeByAmazonName.Add(productName, productCode);
-                    }
-                }
-            }
+                // invoiceHeader is common for items in single Invoice, so it can be used for search
+                var shippedItem = InvoiceItemsAll.FirstOrDefault(itemWithDetail =>
+                    itemWithDetail.Header.symVar == symVar && itemWithDetail != dataContextItem);
+                return shippedItem?.Item.text ?? string.Empty;
+            });
         }
 
         private void BottomDataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
+            ProcessCustomChangedDataForProduct(e, 3, ProductNumberByItemName, (element) =>
+            {
+                var dataContextItem = (InvoiceXML.dataPackDataPackItem)e.Row.DataContext;
+                return dataContextItem.invoice.invoiceDetail.FirstOrDefault()?.text ?? string.Empty;
+            });
+        }
+
+        private void ProcessCustomChangedDataForProduct(
+            DataGridCellEditEndingEventArgs e, 
+            int columnIndex,
+            IDictionary<string, string> rememberedDictionary, 
+            Func<FrameworkElement, string> productNameGetter)
+        {
             if (e.EditAction == DataGridEditAction.Commit)
             {
                 if (!(e.Column is DataGridBoundColumn)) return;
 
-                if (e.Column.DisplayIndex == 3)
+                if (e.Column.DisplayIndex == columnIndex)
                 {
-                    string productNumber = (e.EditingElement as TextBox).Text;
-                    var dataContextItem = (InvoiceXML.dataPackDataPackItem)e.Row.DataContext;
-                    string productName = dataContextItem.invoice.invoiceDetail.FirstOrDefault()?.text ?? string.Empty;
-                    if (ProductNumberByName.ContainsKey(productName))
+                    string productName = productNameGetter(e.EditingElement);
+                    string customValue = (e.EditingElement as TextBox).Text;
+                    if (rememberedDictionary.ContainsKey(productName))
                     {
-                        if (!ProductNumberByName[productName].Equals(productNumber)) ProductNumberByName[productName] = productNumber;
+                        if (!rememberedDictionary[productName].Equals(customValue))
+                            rememberedDictionary[productName] = customValue;
                     }
                     else
                     {
-                        ProductNumberByName.Add(productName, productNumber);
+                        rememberedDictionary.Add(productName, customValue);
                     }
                 }
             }
         }
 
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private void Window_Closing(object sender, CancelEventArgs e)
         {
-            string json = JsonConvert.SerializeObject(ProductCodeByAmazonName);
-            File.WriteAllText(ProductCodeByAmazonNameJson, json);
+        }
 
-            json = JsonConvert.SerializeObject(ProductNumberByName);
-            File.WriteAllText(ProductNumberByNameJson, json);
+        private void SaveSettings()
+        {
+            SerializeDictionaryToJson(ProductCodeByItemName, ProductCodeByItemNameJson);
+            SerializeDictionaryToJson(ProductNumberByItemName, ProductNumberByItemNameJson);
+            SerializeDictionaryToJson(ShippingNameByItemName, ShippingNameByItemNameJson);
+        }
+
+        private void SerializeDictionaryToJson(Dictionary<string, string> map, string fileName)
+        {
+            string json = JsonConvert.SerializeObject(map);
+            File.WriteAllText(fileName, json);
         }
     }
 }

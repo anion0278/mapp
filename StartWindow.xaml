@@ -28,17 +28,19 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Margin="20">
-            <Button  x:Name="ButtonConvert" Content="Zvolit fakturu" Width="75" Click="ButtonConvert_Click"/>
+            <Button  x:Name="ButtonConvert" Content="Zvolit fakturu" Width="75" Click="ButtonSelectInvoice_Click"/>
             <Label Content="Posledni existujici cislo v systemu:" HorizontalAlignment="Center"/>
-            <TextBox  x:Name="ExistingInvoiceNum" Height="23" VerticalAlignment="Center" Width="61" LostFocus="ExistingInvoiceNum_LostFocus"/>
+            <TextBox  x:Name="ExistingInvoiceNum" Height="23" VerticalAlignment="Center" Width="150" LostFocus="ExistingInvoiceNum_LostFocus"/>
             <Label Content="DPH:" HorizontalAlignment="Center"/>
-            <TextBox  x:Name="DPHValue" Height="23" VerticalAlignment="Center" Width="61" LostFocus="DPHValue_LostFocus"/>
+            <TextBox  x:Name="DPHValue" Height="23" VerticalAlignment="Center" Width="150" LostFocus="DPHValue_LostFocus"/>
+            <Label Content="Default email:" HorizontalAlignment="Center"/>
+            <TextBox  x:Name="DefaultEmailBox" Height="23" VerticalAlignment="Center" Width="150" LostFocus="DefaultEmail_LostFocus" />
             <Button  x:Name="ButtonExport" Content="Konvertovat..." Width="75" Margin="10" Click="ButtonExport_Click"/>
         </StackPanel>
         <DataGrid Name="TopDataGrid" Grid.Row="1" Margin="5" AutoGenerateColumns="false" CanUserAddRows="false"
               ItemsSource="{Binding InvoiceItemsAll}" CellEditEnding="TopDataGrid_CellEditEnding">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Cislo (Amazon)" Width="0.6*" IsReadOnly="true" Binding="{Binding Header.symPar}"/>
+                <DataGridTextColumn Header="Cislo (Amazon)" Width="0.6*" IsReadOnly="true" Binding="{Binding Header.symVar}"/>
                 <DataGridTextColumn Header="Puvod" Width="0.4*" IsReadOnly="true" Binding="{Binding Header.paymentType.ids}"/>
                 <DataGridTextColumn Header="Nazev produktu (Amazon)" Width="*" Binding="{Binding Item.text}">
                     <DataGridBoundColumn.ElementStyle>
@@ -51,16 +53,22 @@
                     <DataGridBoundColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="Background" Value="DarkOrange"/>
+                            <Style.Triggers>
+                                <Trigger  Property="Text" Value="----">
+                                    <Setter Property="Background" Value="Red"/>
+                                </Trigger>
+                            </Style.Triggers>
                         </Style>
                     </DataGridBoundColumn.ElementStyle>
                 </DataGridTextColumn>
+                <DataGridTextColumn Header="Mnozstvi" Width="80" Binding="{Binding ItemQuantity}" />
             </DataGrid.Columns>
         </DataGrid>
         <DataGrid Name="BottomDataGrid" Grid.Row="2" Margin="5" AutoGenerateColumns="false" CanUserAddRows="false"
               ItemsSource="{Binding InvoicesTable}" CellEditEnding="BottomDataGrid_CellEditEnding">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Cislo (Amazon)" Width="0.6*" IsReadOnly="true"
-                            Binding="{Binding invoice.invoiceHeader.symPar}"/>
+                            Binding="{Binding invoice.invoiceHeader.symVar}"/>
                 <DataGridTextColumn Header="Puvod" Width="0.4*" IsReadOnly="true"
                             Binding="{Binding invoice.invoiceHeader.paymentType.ids}"/>
                 <DataGridTextColumn Header="Produkty" Width="*" IsReadOnly="true"
@@ -69,6 +77,11 @@
                     <DataGridBoundColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="Background" Value="Orange"/>
+                            <Style.Triggers>
+                                <Trigger  Property="Text" Value="----">
+                                    <Setter Property="Background" Value="Red"/>
+                                </Trigger>
+                            </Style.Triggers>
                         </Style>
                     </DataGridBoundColumn.ElementStyle>
                 </DataGridTextColumn>

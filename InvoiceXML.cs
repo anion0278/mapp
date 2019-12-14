@@ -246,7 +246,7 @@ namespace Martin_App
             });
             private string invoiceTypeField;
             private InvoiceXML.invoiceInvoiceHeaderNumber numberField;
-            private uint symVarField;
+            private string symVarField;
             private string symParField;
             private DateTime dateField;
             private DateTime dateTaxField;
@@ -261,8 +261,11 @@ namespace Martin_App
             private InvoiceXML.invoiceInvoiceHeaderAccount accountField;
             private ushort symConstField;
             private InvoiceXML.invoiceInvoiceHeaderCentre centreField;
+            private invoiceInvoiceHeaderCarrier carrierField;
             private InvoiceXML.invoiceInvoiceHeaderLiquidation liquidationField;
             private bool markRecordField;
+
+            
 
             public string invoiceType
             {
@@ -288,7 +291,7 @@ namespace Martin_App
                 }
             }
 
-            public uint symVar
+            public string symVar
             {
                 get
                 {
@@ -472,6 +475,18 @@ namespace Martin_App
                 }
             }
 
+            public invoiceInvoiceHeaderCarrier carrier
+            {
+                get
+                {
+                    return this.carrierField;
+                }
+                set
+                {
+                    this.carrierField = value;
+                }
+            }
+
             public InvoiceXML.invoiceInvoiceHeaderLiquidation liquidation
             {
                 get
@@ -618,6 +633,7 @@ namespace Martin_App
             private string dicField;
             private InvoiceXML.addressCountry countryField;
             private string phoneField;
+            private string mobilPhoneField;
             private string emailField;
 
             public string company
@@ -776,6 +792,19 @@ namespace Martin_App
                     this.phoneField = value;
                 }
             }
+
+            public string mobilPhone
+            {
+                get
+                {
+                    return this.mobilPhoneField;
+                }
+                set
+                {
+                    this.mobilPhoneField = value;
+                }
+            }
+
 
             public string email
             {
@@ -956,6 +985,27 @@ namespace Martin_App
             }
         }
 
+        [XmlTypeAttribute(AnonymousType = true, Namespace = "http://www.stormware.cz/schema/version_2/invoice.xsd")]
+        public partial class invoiceInvoiceHeaderCarrier
+        {
+
+            private string idsField;
+
+            /// <remarks/>
+            [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://www.stormware.cz/schema/version_2/type.xsd")]
+            public string ids
+            {
+                get
+                {
+                    return this.idsField;
+                }
+                set
+                {
+                    this.idsField = value;
+                }
+            }
+        }
+
         [XmlType(AnonymousType = true, Namespace = "http://www.stormware.cz/schema/version_2/invoice.xsd")]
         public class invoiceInvoiceHeaderLiquidation
         {
@@ -1009,6 +1059,8 @@ namespace Martin_App
             private string codeField;
             private InvoiceXML.invoiceInvoiceItemStockItem stockItemField;
             private bool pDPField;
+
+            public bool IsShipping { get; set; } = false;
 
             public string text
             {

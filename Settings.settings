@@ -8,5 +8,8 @@
     <Setting Name="ExistingInvoceNumber" Type="System.UInt32" Scope="User">
       <Value Profile="(Default)">290100436</Value>
     </Setting>
+    <Setting Name="DefaultEmail" Type="System.String" Scope="User">
+      <Value Profile="(Default)">info@czechdrawing.com</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
