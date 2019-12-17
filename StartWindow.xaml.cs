@@ -301,8 +301,8 @@ namespace Martin_app
             packDataPackItem.invoice.invoiceHeader.partnerIdentity.address.street = fullAddress;
             packDataPackItem.invoice.invoiceHeader.partnerIdentity.address.country.ids = shipCountry;
             packDataPackItem.invoice.invoiceHeader.partnerIdentity.address.zip = valuesFromAmazon["ship-postal-code"];
-            packDataPackItem.invoice.invoiceHeader.partnerIdentity.address.phone = string.Empty;
-            packDataPackItem.invoice.invoiceHeader.partnerIdentity.address.mobilPhone = phoneNumber;
+            packDataPackItem.invoice.invoiceHeader.partnerIdentity.address.phone = phoneNumber;
+            //packDataPackItem.invoice.invoiceHeader.partnerIdentity.address.mobilPhone = phoneNumber;
             packDataPackItem.invoice.invoiceHeader.partnerIdentity.address.email = DefaultEmail;
             packDataPackItem.invoice.invoiceHeader.paymentType.ids = salesChannel;
             packDataPackItem.invoice.invoiceHeader.centre.ids = GetSavedCenter(productName);
@@ -756,14 +756,15 @@ namespace Martin_app
             var convertedInvoices = _convertedInvoices;
             if (convertedInvoices != null && convertedInvoices.Any())
             {
-                foreach (var invoiceItemWithDetails in InvoiceItemsAll)
-                {
-                    if (invoiceItemWithDetails.Item.IsShipping
-                        && !DefaultShippingNames.Any(s => Equals(s.Trim(), invoiceItemWithDetails.Item.text.Trim())))
-                    {
-                        invoiceItemWithDetails.Header.carrier.ids = "Zásilkovna";
-                    }
-                }
+                // dissabled for now
+                //foreach (var invoiceItemWithDetails in InvoiceItemsAll)
+                //{
+                //    if (invoiceItemWithDetails.Item.IsShipping
+                //        && !DefaultShippingNames.Any(s => Equals(s.Trim(), invoiceItemWithDetails.Item.text.Trim())))
+                //    {
+                //        invoiceItemWithDetails.Header.carrier.ids = "Zásilkovna";
+                //    }
+                //}
                 ExportToXML(_convertedInvoices);
             }
             else
