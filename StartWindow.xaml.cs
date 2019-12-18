@@ -621,7 +621,7 @@ namespace Martin_app
                 application = "Transformace",
                 note = "Uživatelský export",
                 dataPackItem = dataItems.ToArray(),
-                version = 2
+                version = new decimal(20, 0, 0, false, (byte)1)
             };
         }
 
