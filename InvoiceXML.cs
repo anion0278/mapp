@@ -1060,6 +1060,7 @@ namespace Martin_App
             private InvoiceXML.invoiceInvoiceItemStockItem stockItemField;
             private bool pDPField;
 
+            [XmlIgnore]
             public bool IsShipping { get; set; } = false;
 
             public string text

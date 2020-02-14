@@ -53,7 +53,7 @@ namespace Martin_app
             "NL", "PL", "PT", "AT", "RO", "GR", "SK", "SI", "ES", "SE", "GB", "EU"
         };
 
-        private string[] DefaultShippingNames = {"Shipping", "Registered shipping"};
+        private string[] DefaultShippingNames = { "Shipping", "Registered shipping" };
 
         public Dictionary<string, string> ProductNumberByItemName { get; set; }
         private string ProductNumberByItemNameJson = "ProductNumberByName.json";
@@ -130,7 +130,7 @@ namespace Martin_app
             MessageBox.Show("Unhandled error: " + e.Exception.Message);
         }
 
-        private void ConvertAmazonToPohoda()
+        private void SelectAmazonReport()
         {
             var fromAmazonReports = GetParametersFromAmazonReport();
             if (fromAmazonReports == null) return;
@@ -286,8 +286,8 @@ namespace Martin_app
             packDataPackItem.id = userId;
             packDataPackItem.invoice.invoiceHeader.invoiceType = invoiceType;
             packDataPackItem.invoice.invoiceHeader.number.numberRequested = invoiceNumber;
-            packDataPackItem.invoice.invoiceHeader.symVar = headerSymPar;
-            packDataPackItem.invoice.invoiceHeader.symPar = string.Empty;
+            packDataPackItem.invoice.invoiceHeader.symVar = TransactionsReader.GetShortVariableCode(headerSymPar);
+            packDataPackItem.invoice.invoiceHeader.symPar = headerSymPar;
             packDataPackItem.invoice.invoiceHeader.date = today;
             packDataPackItem.invoice.invoiceHeader.dateTax = taxDate;
             packDataPackItem.invoice.invoiceHeader.dateAccounting = today;
@@ -657,7 +657,7 @@ namespace Martin_app
             var dictList = new List<Dictionary<string, string>>();
             foreach (var fileName in openFileDialog.FileNames)
             {
-                var validLines = GetOrderDataLinesFromSingleFile(fileName);
+                var validLines = GetOrderDataLinesFromSingleFile(fileName, "\t");
 
                 for (int lineIndex = 1; lineIndex < validLines.Count; lineIndex++)
                 {
@@ -674,13 +674,13 @@ namespace Martin_app
             return dictList;
         }
 
-        private static List<string[]> GetOrderDataLinesFromSingleFile(string fileName)
+        private static List<string[]> GetOrderDataLinesFromSingleFile(string fileName, string delimiter)
         {
             var lineItems = new List<string[]>();
             using (var textFieldParser = new TextFieldParser(fileName))
             {
                 textFieldParser.TextFieldType = FieldType.Delimited;
-                textFieldParser.SetDelimiters("\t");
+                textFieldParser.SetDelimiters(delimiter);
                 while (!textFieldParser.EndOfData)
                 {
                     string[] orderLine = textFieldParser.ReadFields();
@@ -747,7 +747,7 @@ namespace Martin_app
 
         public void ButtonSelectInvoice_Click(object sender, RoutedEventArgs e)
         {
-            ConvertAmazonToPohoda();
+            SelectAmazonReport();
         }
 
         private void ButtonExport_Click(object sender, RoutedEventArgs e)
@@ -756,7 +756,7 @@ namespace Martin_app
             var convertedInvoices = _convertedInvoices;
             if (convertedInvoices != null && convertedInvoices.Any())
             {
-                // dissabled for now
+                // disabled for now
                 //foreach (var invoiceItemWithDetails in InvoiceItemsAll)
                 //{
                 //    if (invoiceItemWithDetails.Item.IsShipping
@@ -814,9 +814,9 @@ namespace Martin_app
         }
 
         private void ProcessCustomChangedDataForProduct(
-            DataGridCellEditEndingEventArgs e, 
+            DataGridCellEditEndingEventArgs e,
             int columnIndex,
-            IDictionary<string, string> rememberedDictionary, 
+            IDictionary<string, string> rememberedDictionary,
             Func<FrameworkElement, string> productNameGetter)
         {
             if (e.EditAction == DataGridEditAction.Commit)
@@ -855,6 +855,44 @@ namespace Martin_app
         {
             string json = JsonConvert.SerializeObject(map);
             File.WriteAllText(fileName, json);
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            SelectTransactions();
+        }
+
+        private void SelectTransactions()
+        {
+            var openFileDialog = new OpenFileDialog
+            {
+                Multiselect = true,
+                Title = "Zvol soubor transakci",
+                Filter = "Transakce|*.csv"
+            };
+            bool? dialogResult = openFileDialog.ShowDialog();
+
+            if (dialogResult == false) return;
+
+            var reader = new TransactionsReader();
+
+            var transactions = new List<Transaction>();
+            foreach (var fileName in openFileDialog.FileNames)
+            {
+                transactions.AddRange(reader.ReadTransactions(fileName));
+            }
+
+
+            var saveFileDialog = new SaveFileDialog
+            {
+                Title = "Zvol umisteni vystupniho souboru",
+                FileName = "Transactions_" + DateAndTime.Today.ToString("dd-MM-yyyy") + ".gpc"
+            };
+            bool? result = saveFileDialog.ShowDialog();
+            if (result != true) return;
+
+            var converter = new GpcGenerator();
+            converter.SaveTransactions(transactions, saveFileDialog.FileName);
         }
     }
 }
