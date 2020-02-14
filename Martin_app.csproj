@@ -26,6 +26,39 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Data\2019DecMonthlyTransaction au.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\2019DecMonthlyTransaction ca.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\2019DecMonthlyTransaction de.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\2019DecMonthlyTransaction es.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\2019DecMonthlyTransaction fr.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\2019DecMonthlyTransaction gb.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\2019DecMonthlyTransaction it.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\2019DecMonthlyTransaction jp.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\2019DecMonthlyTransaction jp_utf8.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\2019DecMonthlyTransaction mx.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\2019DecMonthlyTransaction us.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="InvoiceBasic">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
