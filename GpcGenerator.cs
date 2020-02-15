@@ -30,7 +30,7 @@ namespace Martin_app
             using (System.IO.StreamWriter file = new System.IO.StreamWriter(fileName))
             {
                 file.WriteLine(firstLine);
-                foreach (var transaction in transactions)
+                foreach (var transaction in transactions.Where(t => !t.Type.Equals(TransactionTypes.ServiceFee)))
                 {
                     file.WriteLine(GetTransactionLine(transaction));
                 }
