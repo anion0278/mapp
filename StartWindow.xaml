@@ -87,6 +87,8 @@
                                 </Style>
                             </DataGridBoundColumn.ElementStyle>
                         </DataGridTextColumn>
+                        <DataGridTextColumn Header="Celni prohlaseni" Width="*" 
+                                            Binding="{Binding invoice.invoiceDetail, Converter={StaticResource ProductsConverter}}"/>
                     </DataGrid.Columns>
                 </DataGrid>
             </Grid>

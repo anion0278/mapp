@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -63,6 +64,9 @@ namespace Martin_app
 
         public Dictionary<string, string> ShippingNameByItemName { get; set; }
         private string ShippingNameByItemNameJson = "ShippingNameByItemName.json";
+
+        public Dictionary<string, string> ProductQuantityByItemName { get; set; }
+        private string ProductQuantityByItemNameJson = "ProductQuantityByAmazonName.json";
 
         private uint ExistingInvoceNumber
         {
@@ -140,16 +144,22 @@ namespace Martin_app
             {
                 var singleAmazonInvoice = FillDataPackItem(report, source.Count + 1);
                 var existingDataPack = source.FirstOrDefault((di => di.invoice.invoiceHeader.symVar == singleAmazonInvoice.invoice.invoiceHeader.symVar));
-                if (existingDataPack != null) AddItemsToExistingDataPack(existingDataPack, singleAmazonInvoice);
-                else source.Add(singleAmazonInvoice);
+                if (existingDataPack != null)
+                { AddItemsToExistingDataPack(existingDataPack, singleAmazonInvoice);}
+                else
+                { source.Add(singleAmazonInvoice);}
             }
 
             var invoiceInvoiceItems = source.SelectMany((di => di.invoice.invoiceDetail));
             InvoiceItemsAll.Clear();
             foreach (var invoiceItem in invoiceInvoiceItems)
             {
-                var item = invoiceItem;
-                InvoiceItemsAll.Add(new InvoiceItemWithDetails(item, source.Single(di => (di.invoice.invoiceDetail).Contains(item)).invoice.invoiceHeader));
+                var itemWithDetails = new InvoiceItemWithDetails(invoiceItem, source.Single(di => (di.invoice.invoiceDetail).Contains(invoiceItem)).invoice.invoiceHeader);
+                if (ProductQuantityByItemName.ContainsKey(itemWithDetails.Item.text))
+                {
+                    itemWithDetails.ItemQuantity = int.Parse(ProductQuantityByItemName[itemWithDetails.Item.text]);
+                }
+                InvoiceItemsAll.Add(itemWithDetails);
             }
 
             InvoicesTable.Clear();
@@ -203,16 +213,9 @@ namespace Martin_app
             DefaultEmailBox.Text = DefaultEmail;
             Rates = GetActualCurrencyRates();
 
-            ProductCodeByItemName = DeserializeJsonDictionary(ProductCodeByItemNameJson);
-            ProductNumberByItemName = DeserializeJsonDictionary(ProductNumberByItemNameJson);
-            ShippingNameByItemName = DeserializeJsonDictionary(ShippingNameByItemNameJson);
+            LoadSettings();
         }
 
-        private Dictionary<string, string> DeserializeJsonDictionary(string fileName)
-        {
-            string json = File.ReadAllText(fileName);
-            return JsonConvert.DeserializeObject<Dictionary<string, string>>(json) ?? new Dictionary<string, string>();
-        }
 
         private Dictionary<string, decimal> GetActualCurrencyRates()
         {
@@ -787,6 +790,13 @@ namespace Martin_app
 
         private void TopDataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
+            ProcessCustomChangedDataForProduct(e, 4, ProductQuantityByItemName, (element) =>
+            {
+                var dataContextItem = (InvoiceItemWithDetails)e.Row.DataContext;
+                string quantity = (e.EditingElement as TextBox).Text;
+                if (!int.TryParse(quantity, out _)) throw new ArgumentException("Hodnota musi byt cele cislo! Prozatim aplikace pada...");
+                return dataContextItem.Item.text; // TODO check if the number is integer !!
+            });
             ProcessCustomChangedDataForProduct(e, 3, ProductCodeByItemName, (element) =>
             {
                 var dataContextItem = (InvoiceItemWithDetails)e.Row.DataContext;
@@ -844,11 +854,26 @@ namespace Martin_app
         {
         }
 
+        private void LoadSettings()
+        {
+            ProductCodeByItemName = DeserializeJsonDictionary(ProductCodeByItemNameJson);
+            ProductNumberByItemName = DeserializeJsonDictionary(ProductNumberByItemNameJson);
+            ShippingNameByItemName = DeserializeJsonDictionary(ShippingNameByItemNameJson);
+            ProductQuantityByItemName = DeserializeJsonDictionary(ProductQuantityByItemNameJson);
+        }
+
         private void SaveSettings()
         {
             SerializeDictionaryToJson(ProductCodeByItemName, ProductCodeByItemNameJson);
             SerializeDictionaryToJson(ProductNumberByItemName, ProductNumberByItemNameJson);
             SerializeDictionaryToJson(ShippingNameByItemName, ShippingNameByItemNameJson);
+            SerializeDictionaryToJson(ProductQuantityByItemName, ProductQuantityByItemNameJson);
+        }
+
+        private Dictionary<string, string> DeserializeJsonDictionary(string fileName)
+        {
+            string json = File.ReadAllText(fileName);
+            return JsonConvert.DeserializeObject<Dictionary<string, string>>(json) ?? new Dictionary<string, string>();
         }
 
         private void SerializeDictionaryToJson(Dictionary<string, string> map, string fileName)
