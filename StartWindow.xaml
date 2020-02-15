@@ -88,7 +88,9 @@
                             </DataGridBoundColumn.ElementStyle>
                         </DataGridTextColumn>
                         <DataGridTextColumn Header="Celni prohlaseni" Width="*" 
-                                            Binding="{Binding invoice.invoiceDetail, Converter={StaticResource ProductsConverter}}"/>
+                                            Binding="{Binding invoice.invoiceHeader.partnerIdentity.address.mobilPhone}"/>
+                        <DataGridTextColumn Header="Typ" Width="*"  IsReadOnly="True"
+                                            Binding="{Binding invoice.invoiceHeader.classificationVAT.ids}"/>
                     </DataGrid.Columns>
                 </DataGrid>
             </Grid>

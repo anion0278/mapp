@@ -67,6 +67,9 @@ namespace Martin_app
 
         public Dictionary<string, string> ProductQuantityByItemName { get; set; }
         private string ProductQuantityByItemNameJson = "ProductQuantityByAmazonName.json";
+        
+        public Dictionary<string, string> CustomsDeclarationByItemName { get; set; }
+        private string CustomsDeclarationByItemNameJson = "CustomsDeclarationByAmazonName.json";
 
         private uint ExistingInvoceNumber
         {
@@ -305,7 +308,7 @@ namespace Martin_app
             packDataPackItem.invoice.invoiceHeader.partnerIdentity.address.country.ids = shipCountry;
             packDataPackItem.invoice.invoiceHeader.partnerIdentity.address.zip = valuesFromAmazon["ship-postal-code"];
             packDataPackItem.invoice.invoiceHeader.partnerIdentity.address.phone = phoneNumber;
-            //packDataPackItem.invoice.invoiceHeader.partnerIdentity.address.mobilPhone = phoneNumber;
+            packDataPackItem.invoice.invoiceHeader.partnerIdentity.address.mobilPhone = GetCustomsDeclaration(productName, classification);
             packDataPackItem.invoice.invoiceHeader.partnerIdentity.address.email = DefaultEmail;
             packDataPackItem.invoice.invoiceHeader.paymentType.ids = salesChannel;
             packDataPackItem.invoice.invoiceHeader.centre.ids = GetSavedCenter(productName);
@@ -433,7 +436,7 @@ namespace Martin_app
             packDataPackItem.invoice.invoiceSummary.homeCurrency.price3 = 0;
             packDataPackItem.invoice.invoiceSummary.homeCurrency.price3VAT = 0;
             packDataPackItem.invoice.invoiceSummary.homeCurrency.price3Sum = 0;
-            if (classification == "UVzboží")
+            if (classification == "UVzboží") // AWFUL! !
             {
                 packDataPackItem.invoice.invoiceSummary.homeCurrency.priceNone = priceSum * currencyRate;
             }
@@ -448,6 +451,13 @@ namespace Martin_app
             packDataPackItem.invoice.invoiceSummary.foreignCurrency.rate = currencyRate;
             packDataPackItem.invoice.invoiceSummary.foreignCurrency.priceSum = priceSum;
             return packDataPackItem;
+        }
+
+        private string GetCustomsDeclaration(string productName, string classification)
+        {
+            if (classification.EqualsIgnoreCase("UVzboží") && CustomsDeclarationByItemName.ContainsKey(productName))
+            { return CustomsDeclarationByItemName[productName];}
+            return string.Empty;
         }
 
         private string GetShippingTypeName(string shipCountry, string productName)
@@ -816,6 +826,11 @@ namespace Martin_app
 
         private void BottomDataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
+            ProcessCustomChangedDataForProduct(e, 4, CustomsDeclarationByItemName, (element) =>
+            {
+                var dataContextItem = (InvoiceXML.dataPackDataPackItem)e.Row.DataContext;
+                return dataContextItem.invoice.invoiceDetail.FirstOrDefault()?.text ?? string.Empty;
+            });
             ProcessCustomChangedDataForProduct(e, 3, ProductNumberByItemName, (element) =>
             {
                 var dataContextItem = (InvoiceXML.dataPackDataPackItem)e.Row.DataContext;
@@ -860,6 +875,7 @@ namespace Martin_app
             ProductNumberByItemName = DeserializeJsonDictionary(ProductNumberByItemNameJson);
             ShippingNameByItemName = DeserializeJsonDictionary(ShippingNameByItemNameJson);
             ProductQuantityByItemName = DeserializeJsonDictionary(ProductQuantityByItemNameJson);
+            CustomsDeclarationByItemName = DeserializeJsonDictionary(CustomsDeclarationByItemNameJson);
         }
 
         private void SaveSettings()
@@ -868,6 +884,7 @@ namespace Martin_app
             SerializeDictionaryToJson(ProductNumberByItemName, ProductNumberByItemNameJson);
             SerializeDictionaryToJson(ShippingNameByItemName, ShippingNameByItemNameJson);
             SerializeDictionaryToJson(ProductQuantityByItemName, ProductQuantityByItemNameJson);
+            SerializeDictionaryToJson(CustomsDeclarationByItemName, CustomsDeclarationByItemNameJson);
         }
 
         private Dictionary<string, string> DeserializeJsonDictionary(string fileName)
