@@ -67,7 +67,7 @@ namespace Martin_app
 
         public Dictionary<string, string> ProductQuantityByItemName { get; set; }
         private string ProductQuantityByItemNameJson = "ProductQuantityByAmazonName.json";
-        
+
         public Dictionary<string, string> CustomsDeclarationByItemName { get; set; }
         private string CustomsDeclarationByItemNameJson = "CustomsDeclarationByAmazonName.json";
 
@@ -135,6 +135,7 @@ namespace Martin_app
         private void Current_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
             MessageBox.Show("Unhandled error: " + e.Exception.Message);
+            MessageBox.Show("Unhandled error: " + e.Exception.StackTrace);
         }
 
         private void SelectAmazonReport()
@@ -148,9 +149,9 @@ namespace Martin_app
                 var singleAmazonInvoice = FillDataPackItem(report, source.Count + 1);
                 var existingDataPack = source.FirstOrDefault((di => di.invoice.invoiceHeader.symVar == singleAmazonInvoice.invoice.invoiceHeader.symVar));
                 if (existingDataPack != null)
-                { AddItemsToExistingDataPack(existingDataPack, singleAmazonInvoice);}
+                { AddItemsToExistingDataPack(existingDataPack, singleAmazonInvoice); }
                 else
-                { source.Add(singleAmazonInvoice);}
+                { source.Add(singleAmazonInvoice); }
             }
 
             var invoiceInvoiceItems = source.SelectMany((di => di.invoice.invoiceDetail));
@@ -190,19 +191,39 @@ namespace Martin_app
             shippingItem1.homeCurrency.price += shippingItem2.homeCurrency.price;
             shippingItem1.homeCurrency.priceSum += shippingItem2.homeCurrency.priceSum;
             shippingItem1.homeCurrency.priceVAT += shippingItem2.homeCurrency.priceVAT;
+
+            // same crazy stuff with discount - find a new and copy discount
+            var discountItem1 = GetDiscountItem(list);
+            var discountItem2 = GetDiscountItem(dataPackDataPackItem.invoice.invoiceDetail);
+            discountItem1.foreignCurrency.unitPrice += discountItem2.foreignCurrency.unitPrice;
+            discountItem1.foreignCurrency.price += discountItem2.foreignCurrency.price;
+            discountItem1.foreignCurrency.priceSum += discountItem2.foreignCurrency.priceSum;
+            discountItem1.foreignCurrency.priceVAT += discountItem2.foreignCurrency.priceVAT;
+            discountItem1.homeCurrency.unitPrice += discountItem2.homeCurrency.unitPrice;
+            discountItem1.homeCurrency.price += discountItem2.homeCurrency.price;
+            discountItem1.homeCurrency.priceSum += discountItem2.homeCurrency.priceSum;
+            discountItem1.homeCurrency.priceVAT += discountItem2.homeCurrency.priceVAT;
+
             existingDataPack.invoice.invoiceDetail = list.ToArray();
+        }
+
+        private static InvoiceXML.invoiceInvoiceItem GetDiscountItem(
+            IEnumerable<InvoiceXML.invoiceInvoiceItem> existingItems)
+        {
+            return existingItems.Single(item => item.text.EqualsIgnoreCase("discount"));
         }
 
         private static InvoiceXML.invoiceInvoiceItem GetShippingItem(
           IEnumerable<InvoiceXML.invoiceInvoiceItem> existingItems)
         {
-            return existingItems.Single((i =>
-            {
-                string text = i.text;
-                if (text == null) return false;
+            //return existingItems.Single((i =>
+            //{
+            //    string text = i.text;
+            //    if (text == null) return false;
 
-                return text.ToLower().Contains("shipping");
-            }));
+            //    return text.ToLower().Contains("shipping");
+            //}));
+            return existingItems.Single(item => item.IsShipping);
         }
 
         private void Initialize()
@@ -456,7 +477,7 @@ namespace Martin_app
         private string GetCustomsDeclaration(string productName, string classification)
         {
             if (classification.EqualsIgnoreCase("UVzboží") && CustomsDeclarationByItemName.ContainsKey(productName))
-            { return CustomsDeclarationByItemName[productName];}
+            { return CustomsDeclarationByItemName[productName]; }
             return string.Empty;
         }
 

@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.FileIO;
 
@@ -21,7 +22,7 @@ namespace Martin_app
             italyCulture.DateTimeFormat.TimeSeparator = ".";
             _languageSettings = new List<TransactionsFileLanguageSettings>
             {
-                new TransactionsFileLanguageSettings(new CultureInfo("en-AU"), "GMT+09:00")
+                new TransactionsFileLanguageSettings(new CultureInfo("en-AU"), @"(.*) GMT")
                 {
                     DistinctionPhrase = "All amounts in AUD, unless specified",
                     DateTimeParameter = "date/time", OrderIdParameter = "order id",
@@ -32,7 +33,7 @@ namespace Martin_app
                     Order = "Order", Refund = "Refund", Transfer = "Transfer", ServiceFee = "Service Fee",
                     LinesToSkip = 7
                     },
-                new TransactionsFileLanguageSettings(new CultureInfo("en-CA"), "PST")
+                new TransactionsFileLanguageSettings(new CultureInfo("en-CA"), @"(.*) (PST|PDT)")
                 {
                     DistinctionPhrase = "All amounts in CAD, unless specified",
                     DateTimeParameter = "date/time", OrderIdParameter = "order id",
@@ -43,7 +44,7 @@ namespace Martin_app
                     Order = "Order", Refund = "Refund", Transfer = "Transfer",ServiceFee = "Service Fee",
                     LinesToSkip = 7
                 },
-                new TransactionsFileLanguageSettings(new CultureInfo("de-DE"), "GMT+00:00")
+                new TransactionsFileLanguageSettings(new CultureInfo("de-DE"), @"(.*) GMT")
                 {
                     DistinctionPhrase = "Alle Beträge in Euro sofern nicht anders gekennzeichnet",
                     DateTimeParameter = "Datum/Uhrzeit", OrderIdParameter = "Bestellnummer",
@@ -51,10 +52,10 @@ namespace Martin_app
                     DescriptionParameter = "Beschreibung", ProductPriceParameter = "Umsätze",
                     ShippingPriceParameter = "Gutschrift für Versandkosten", QuantityParameter = "Menge",
                     TotalPriceParameter = "Gesamt",
-                    Order = "Bestellung", Refund = "Erstattung", Transfer = "Übertrag",ServiceFee = "Service Fee",
+                    Order = "Bestellung", Refund = "Erstattung", Transfer = "Übertrag",ServiceFee = "Servicegebühr",
                     LinesToSkip = 6
                 },
-                new TransactionsFileLanguageSettings(new CultureInfo("es-ES"), "GMT+00:00")
+                new TransactionsFileLanguageSettings(new CultureInfo("es-ES"), @"(.*) GMT")
                 {
                     DistinctionPhrase = "Todos los importes en EUR, a menos que se especifique lo contrario",
                     DateTimeParameter = "fecha y hora", OrderIdParameter = "número de pedido",
@@ -62,10 +63,10 @@ namespace Martin_app
                     DescriptionParameter = "descripción", ProductPriceParameter = "ventas de productos",
                     ShippingPriceParameter = "abonos de envío", QuantityParameter = "cantidad",
                     TotalPriceParameter = "total",
-                    Order = "Pedido", Refund = "Refund", Transfer = "Transferir",
+                    Order = "Pedido", Refund = "Reembolso", Transfer = "Transferir",
                     LinesToSkip = 6
                 },
-                new TransactionsFileLanguageSettings(new CultureInfo("fr-FR"), "UTC+00:00")
+                new TransactionsFileLanguageSettings(new CultureInfo("fr-FR"), @"(.*) UTC")
                 {
                     DistinctionPhrase = "Tous les montants sont en EUR, sauf mention contraire.",
                     DateTimeParameter = "date/heure", OrderIdParameter = "numéro de la commande",
@@ -76,7 +77,7 @@ namespace Martin_app
                     Order = "Commande", Refund = "Remboursement", Transfer = "Transfert",ServiceFee = "Service Fee",
                     LinesToSkip = 6
                 },
-                new TransactionsFileLanguageSettings(new CultureInfo("en-GB"), "GMT+00:00")
+                new TransactionsFileLanguageSettings(new CultureInfo("en-GB"), @"(.*) GMT")
                 {
                     DistinctionPhrase = "All amounts in GBP, unless specified",
                     DateTimeParameter = "date/time", OrderIdParameter = "order id",
@@ -87,7 +88,7 @@ namespace Martin_app
                     Order = "Order", Refund = "Refund", Transfer = "Transfer",ServiceFee = "Service Fee",
                     LinesToSkip = 6
                 },
-                new TransactionsFileLanguageSettings(italyCulture, "GMT+00.00")
+                new TransactionsFileLanguageSettings(italyCulture, @"(.*) GMT")
                 {
                     DistinctionPhrase = "Tutti gli importi sono espressi in EUR, se non diversamente specificato.",
                     DateTimeParameter = "Data/Ora:", OrderIdParameter = "Numero ordine",
@@ -95,10 +96,10 @@ namespace Martin_app
                     DescriptionParameter = "Descrizione", ProductPriceParameter = "Vendite",
                     ShippingPriceParameter = "Accrediti per le spedizioni", QuantityParameter = "Quantità",
                     TotalPriceParameter = "totale",
-                    Order = "Ordine", Refund = "Refund", Transfer = "Trasferimento", // TODO refund
+                    Order = "Ordine", Refund = "Rimborso", Transfer = "Trasferimento", // TODO refund
                     LinesToSkip = 6
                 },
-                new TransactionsFileLanguageSettings(new CultureInfo("ja-JP"), "JST")
+                new TransactionsFileLanguageSettings(new CultureInfo("ja-JP"), @"(.*)JST")
                 {
                     DistinctionPhrase = "指定のない場合、単位は円",
                     DateTimeParameter = "日付/時間", OrderIdParameter = "注文番号",
@@ -106,10 +107,10 @@ namespace Martin_app
                     DescriptionParameter = "説明", ProductPriceParameter = "商品売上",
                     ShippingPriceParameter = "配送料", QuantityParameter = "数量",
                     TotalPriceParameter = "合計",
-                    Order = "注文", Refund = "Refund", Transfer = "振込み", ServiceFee = "注文外料金",
+                    Order = "注文", Refund = "返金", Transfer = "振込み", ServiceFee = "注文外料金",
                     LinesToSkip = 6
                 },
-                new TransactionsFileLanguageSettings(new CultureInfo("es-MX"), "PST")
+                new TransactionsFileLanguageSettings(new CultureInfo("es-MX"), @"(.*) (PST|PDT)")
                 {
                     DistinctionPhrase = "Todos los importes en dólares, a menos que se especifique",
                     DateTimeParameter = "fecha/hora", OrderIdParameter = "Id. del pedido",
@@ -117,10 +118,10 @@ namespace Martin_app
                     DescriptionParameter = "descripción", ProductPriceParameter = "ventas de productos",
                     ShippingPriceParameter = "créditos de envío", QuantityParameter = "cantidad",
                     TotalPriceParameter = "total",
-                    Order = "Pedido", Refund = "Refund", Transfer = "Trasferir",ServiceFee = "Service Fee", // TODO Refund?
+                    Order = "Pedido", Refund = "Reembolso", Transfer = "Trasferir", ServiceFee = "Service Fee", // TODO Service fee
                     LinesToSkip = 6
                 },
-                new TransactionsFileLanguageSettings(new CultureInfo("en-US"), "PST")
+                new TransactionsFileLanguageSettings(new CultureInfo("en-US"), @"(.*) (PST|PDT)")
                 {
                     DistinctionPhrase = "All amounts in USD, unless specified",
                     DateTimeParameter = "date/time", OrderIdParameter = "order id",
@@ -163,14 +164,17 @@ namespace Martin_app
         }
 
         // TODO REMOVE!!
-        public DateTime ParseDate(string dateInput, string cutSubstring, CultureInfo culture)
+        public DateTime ParseDate(string dateInput, string datePattern, CultureInfo culture)
         {
-            return DateTime.Parse(dateInput.RemoveAll(cutSubstring), culture);
+            var match = Regex.Match(dateInput, datePattern);
+
+            return DateTime.Parse(match.Groups[1].Value, culture);
         }
 
         public DateTime ParseDate(string dateString, TransactionsFileLanguageSettings settings)
         {
-            return DateTime.Parse(dateString.RemoveAll(settings.DateSubstring), settings.DateCultureInfo);
+            var match = Regex.Match(dateString, settings.DateSubstring);
+            return DateTime.Parse(match.Groups[1].Value, settings.DateCultureInfo);
         }
 
         public IEnumerable<Transaction> ReadTransactions(string fileName)
@@ -180,7 +184,7 @@ namespace Martin_app
             var lines = GetFileLines(fileName);
 
             if (lines[1][0].Equals(japaneseCrazyEncoding))
-                lines = GetFileLines(fileName, "Shift-JIS");
+                lines = GetFileLines(fileName, "Shift-JIS"); 
 
             var languageSetting = GetLanguageSetting(lines);
 
@@ -205,7 +209,9 @@ namespace Martin_app
                 marketplaceStr = marketplaceStr.EqualsIgnoreCase("amazon.co.jp") ? "amazon.jp" : marketplaceStr;
 
                 if (!string.IsNullOrEmpty(transactionsDict[languageSetting.MarketplaceParameter][index]))
+                {
                     marketplace = GetValueFromDescription<AmazonMarketplace>(marketplaceStr);
+                }
 
                 string orderId = transactionsDict[languageSetting.OrderIdParameter][index];
                 if (string.IsNullOrEmpty(orderId))
@@ -232,6 +238,16 @@ namespace Martin_app
                     Marketplace = marketplace
                 };
                 transactions.Add(transaction);
+            }
+
+            var orders = transactions.Where(t => t.Type.Equals(TransactionTypes.Order)).ToList();
+            if (orders.Any())
+            {
+                var averageMarketplace = (AmazonMarketplace)orders.Average(t => (int)t.Marketplace);
+                foreach (var transaction in transactions.Except(orders))
+                {
+                    transaction.Marketplace = averageMarketplace;
+                }
             }
 
             return transactions;
@@ -262,13 +278,16 @@ namespace Martin_app
 
         public TransactionTypes ParseTransactionType(string transactionType, TransactionsFileLanguageSettings settings)
         {
+            // TODO multiple names for same order types... enums with same numbers
+            if (transactionType.EqualsIgnoreCase("Anpassung")) transactionType = settings.Order;
+
             // FIXME AWFUL CODE
             if (transactionType.EqualsIgnoreCase(settings.Order)) return TransactionTypes.Order;
             if (transactionType.EqualsIgnoreCase(settings.Transfer)) return TransactionTypes.Transfer;
             if (transactionType.EqualsIgnoreCase(settings.Refund)) return TransactionTypes.Refund;
             if (transactionType.EqualsIgnoreCase(settings.ServiceFee)) return TransactionTypes.ServiceFee;
 
-            throw new ArgumentException("Wrong transaction type!");
+            throw new ArgumentException($"Wrong transaction type! Name of transaction: {transactionType}");
         }
 
         private TransactionsFileLanguageSettings GetLanguageSetting(IReadOnlyList<string[]> dataLines)
