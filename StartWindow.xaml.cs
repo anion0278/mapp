@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -22,6 +23,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Xml;
 using System.Xml.Serialization;
+using WindowsInput;
+using WindowsInput.Native;
 using Martin_App;
 using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.FileIO;
@@ -70,6 +73,12 @@ namespace Martin_app
 
         public Dictionary<string, string> CustomsDeclarationByItemName { get; set; }
         private string CustomsDeclarationByItemNameJson = "CustomsDeclarationByAmazonName.json";
+
+        KeyboardHook _keyboardHook;
+
+        private bool _isCommandPressed = false;
+
+        private InputSimulator _keyboardSim = new InputSimulator();
 
         private uint ExistingInvoceNumber
         {
@@ -122,14 +131,73 @@ namespace Martin_app
             }
         }
 
+        private string _latestTrackingCode;
+        private string LatestTrackingCode
+        {
+            get
+            {
+                return _latestTrackingCode;
+            }
+            set
+            {
+                if (value == _latestTrackingCode) return;
+
+                _latestTrackingCode = value;
+                Settings.Default.LatestTrackingCode = _latestTrackingCode;
+                Settings.Default.Save();
+                TrackingCodeBox.Text = LatestTrackingCode;
+            }
+        }
+
         public StartWindow()
         {
+            _keyboardHook = new KeyboardHook();
+
             Settings.Default.Upgrade();
             Application.Current.DispatcherUnhandledException += Current_DispatcherUnhandledException;
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             InitializeComponent();
             Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
             Initialize();
+
+            _keyboardHook.KeyDown += keyboardHook_KeyDown;
+            _keyboardHook.KeyUp += keyboardHook_KeyUp;
+
+            //Installing the Keyboard Hooks
+            _keyboardHook.Install();
+        }
+
+        private void keyboardHook_KeyDown(KeyboardHook.VKeys key)
+        {
+            if (key == KeyboardHook.VKeys.F2)
+            {
+                _isCommandPressed = true;
+            }
+            if (key == KeyboardHook.VKeys.F4 && _isCommandPressed)
+            {
+                _keyboardSim.Keyboard.TextEntry($"RR{TrackingCodeBox.Text}CZ");
+                _keyboardSim.Keyboard.KeyPress(VirtualKeyCode.TAB);
+                _keyboardSim.Keyboard.Sleep(50);
+                _keyboardSim.Keyboard.TextEntry(DateTime.Now.ToString("dd.MM.yyyy"));
+                _keyboardSim.Keyboard.Sleep(50);
+                _keyboardSim.Keyboard.ModifiedKeyStroke(new[] {VirtualKeyCode.SHIFT}, VirtualKeyCode.TAB);
+                _keyboardSim.Keyboard.KeyPress(VirtualKeyCode.HOME);
+                for (int i = 0; i < 8; i++)
+                {
+                    _keyboardSim.Keyboard.KeyPress(VirtualKeyCode.RIGHT);
+                }
+                //MessageBox.Show("COMBO!");
+            }
+            //Console.WriteLine("[" + DateTime.Now.ToLongTimeString() + "] KeyDown Event {" + key.ToString() + "}");
+        }
+
+        private void keyboardHook_KeyUp(KeyboardHook.VKeys key)
+        {
+            if (key == KeyboardHook.VKeys.F2)
+            {
+                _isCommandPressed = false;
+            }
+            //Console.WriteLine("[" + DateTime.Now.ToLongTimeString() + "] KeyDown Event {" + key.ToString() + "}");
         }
 
         private void Current_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
@@ -195,14 +263,17 @@ namespace Martin_app
             // same crazy stuff with discount - find a new and copy discount
             var discountItem1 = GetDiscountItem(list);
             var discountItem2 = GetDiscountItem(dataPackDataPackItem.invoice.invoiceDetail);
-            discountItem1.foreignCurrency.unitPrice += discountItem2.foreignCurrency.unitPrice;
-            discountItem1.foreignCurrency.price += discountItem2.foreignCurrency.price;
-            discountItem1.foreignCurrency.priceSum += discountItem2.foreignCurrency.priceSum;
-            discountItem1.foreignCurrency.priceVAT += discountItem2.foreignCurrency.priceVAT;
-            discountItem1.homeCurrency.unitPrice += discountItem2.homeCurrency.unitPrice;
-            discountItem1.homeCurrency.price += discountItem2.homeCurrency.price;
-            discountItem1.homeCurrency.priceSum += discountItem2.homeCurrency.priceSum;
-            discountItem1.homeCurrency.priceVAT += discountItem2.homeCurrency.priceVAT;
+            if (discountItem1 != null && discountItem2 != null)
+            {
+                discountItem1.foreignCurrency.unitPrice += discountItem2.foreignCurrency.unitPrice;
+                discountItem1.foreignCurrency.price += discountItem2.foreignCurrency.price;
+                discountItem1.foreignCurrency.priceSum += discountItem2.foreignCurrency.priceSum;
+                discountItem1.foreignCurrency.priceVAT += discountItem2.foreignCurrency.priceVAT;
+                discountItem1.homeCurrency.unitPrice += discountItem2.homeCurrency.unitPrice;
+                discountItem1.homeCurrency.price += discountItem2.homeCurrency.price;
+                discountItem1.homeCurrency.priceSum += discountItem2.homeCurrency.priceSum;
+                discountItem1.homeCurrency.priceVAT += discountItem2.homeCurrency.priceVAT;
+            }
 
             existingDataPack.invoice.invoiceDetail = list.ToArray();
         }
@@ -210,19 +281,12 @@ namespace Martin_app
         private static InvoiceXML.invoiceInvoiceItem GetDiscountItem(
             IEnumerable<InvoiceXML.invoiceInvoiceItem> existingItems)
         {
-            return existingItems.Single(item => item.text.EqualsIgnoreCase("discount"));
+            return existingItems.SingleOrDefault(item => item.text.EqualsIgnoreCase("discount"));
         }
 
         private static InvoiceXML.invoiceInvoiceItem GetShippingItem(
           IEnumerable<InvoiceXML.invoiceInvoiceItem> existingItems)
         {
-            //return existingItems.Single((i =>
-            //{
-            //    string text = i.text;
-            //    if (text == null) return false;
-
-            //    return text.ToLower().Contains("shipping");
-            //}));
             return existingItems.Single(item => item.IsShipping);
         }
 
@@ -231,10 +295,12 @@ namespace Martin_app
             _existingInvoceNumber = Settings.Default.ExistingInvoceNumber;
             _dphValue = Settings.Default.DPH;
             _defaultEmail = Settings.Default.DefaultEmail;
-
+            _latestTrackingCode = Settings.Default.LatestTrackingCode;
+            
             ExistingInvoiceNum.Text = ExistingInvoceNumber.ToString();
             DPHValue.Text = DPH.ToString();
             DefaultEmailBox.Text = DefaultEmail;
+            TrackingCodeBox.Text = LatestTrackingCode;
             Rates = GetActualCurrencyRates();
 
             LoadSettings();
@@ -888,6 +954,9 @@ namespace Martin_app
 
         private void Window_Closing(object sender, CancelEventArgs e)
         {
+            _keyboardHook.KeyDown -= keyboardHook_KeyDown;
+            _keyboardHook.KeyUp -= keyboardHook_KeyUp;
+            _keyboardHook.Uninstall();
         }
 
         private void LoadSettings()
@@ -956,6 +1025,11 @@ namespace Martin_app
 
             var converter = new GpcGenerator();
             converter.SaveTransactions(transactions, saveFileDialog.FileName);
+        }
+
+        private void TrackingCodeBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            LatestTrackingCode = TrackingCodeBox.Text;
         }
     }
 }

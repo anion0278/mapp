@@ -7,6 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="FMUtils.KeyboardHook" Version="1.0.140.2145" />
+    <PackageReference Include="InputSimulator" Version="1.0.4" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="System.Text.Encoding" Version="4.3.0">
       <IncludeAssets>compile</IncludeAssets>
