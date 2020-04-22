@@ -11,5 +11,8 @@
     <Setting Name="DefaultEmail" Type="System.String" Scope="User">
       <Value Profile="(Default)">info@czechdrawing.com</Value>
     </Setting>
+    <Setting Name="LatestTrackingCode" Type="System.String" Scope="User">
+      <Value Profile="(Default)">123456</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

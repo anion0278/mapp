@@ -111,6 +111,29 @@
                 </DataGrid>-->
             </Grid>
         </TabItem>
+        <TabItem Header="Autovyplnovani">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Row="1">
+                    <Label Content="Nastaveni automatickeho vyplnovani (kod):" HorizontalAlignment="Center" />
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <Label Content="RR" />
+                        <TextBox MaxLength="6" Name="TrackingCodeBox" Text="123456" TextAlignment="Center" VerticalContentAlignment="Center" LostFocus="TrackingCodeBox_LostFocus"></TextBox>
+                        <Label Content="xxxCZ" />
+                    </StackPanel>
+                    <Label Content="Vkladani pomoci kombinace: (nejdrive)F2 + F4" HorizontalAlignment="Center" />
+                </StackPanel>
+                <StackPanel Grid.Row="2" Width="250" >
+                    <Label Content="Vyzkouseni (dej kurzor do prniho policka):" />
+                    <TextBox Margin="5" />
+                    <TextBox Margin="5" />
+                </StackPanel>
+            </Grid>
+        </TabItem>
     </TabControl>
-    
+
 </Window>
