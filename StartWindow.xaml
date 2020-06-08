@@ -63,7 +63,7 @@
                                 </Style>
                             </DataGridBoundColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Header="Mnozstvi" Width="80" Binding="{Binding ItemQuantity}" />
+                        <DataGridTextColumn Header="Mnozstvi v packu" Width="120" Binding="{Binding PackQuantityMultiplicator}" />
                     </DataGrid.Columns>
                 </DataGrid>
                 <DataGrid Name="BottomDataGrid" Grid.Row="2" Margin="5" AutoGenerateColumns="false" CanUserAddRows="false"

@@ -68,7 +68,7 @@ namespace Martin_app
         public Dictionary<string, string> ShippingNameByItemName { get; set; }
         private string ShippingNameByItemNameJson = "ShippingNameByItemName.json";
 
-        public Dictionary<string, string> ProductQuantityByItemName { get; set; }
+        public Dictionary<string, string> PackQuantityByItemName { get; set; }
         private string ProductQuantityByItemNameJson = "ProductQuantityByAmazonName.json";
 
         public Dictionary<string, string> CustomsDeclarationByItemName { get; set; }
@@ -222,14 +222,14 @@ namespace Martin_app
                 { source.Add(singleAmazonInvoice); }
             }
 
-            var invoiceInvoiceItems = source.SelectMany((di => di.invoice.invoiceDetail));
+            var invoiceInvoiceItems = source.SelectMany(di => di.invoice.invoiceDetail);
             InvoiceItemsAll.Clear();
             foreach (var invoiceItem in invoiceInvoiceItems)
             {
                 var itemWithDetails = new InvoiceItemWithDetails(invoiceItem, source.Single(di => (di.invoice.invoiceDetail).Contains(invoiceItem)).invoice.invoiceHeader);
-                if (ProductQuantityByItemName.ContainsKey(itemWithDetails.Item.text))
+                if (PackQuantityByItemName.ContainsKey(itemWithDetails.Item.text))
                 {
-                    itemWithDetails.ItemQuantity = int.Parse(ProductQuantityByItemName[itemWithDetails.Item.text]);
+                    itemWithDetails.PackQuantityMultiplicator = int.Parse(PackQuantityByItemName[itemWithDetails.Item.text]);
                 }
                 InvoiceItemsAll.Add(itemWithDetails);
             }
@@ -887,7 +887,7 @@ namespace Martin_app
 
         private void TopDataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
-            ProcessCustomChangedDataForProduct(e, 4, ProductQuantityByItemName, (element) =>
+            ProcessCustomChangedDataForProduct(e, 4, PackQuantityByItemName, (element) =>
             {
                 var dataContextItem = (InvoiceItemWithDetails)e.Row.DataContext;
                 string quantity = (e.EditingElement as TextBox).Text;
@@ -964,7 +964,7 @@ namespace Martin_app
             ProductCodeByItemName = DeserializeJsonDictionary(ProductCodeByItemNameJson);
             ProductNumberByItemName = DeserializeJsonDictionary(ProductNumberByItemNameJson);
             ShippingNameByItemName = DeserializeJsonDictionary(ShippingNameByItemNameJson);
-            ProductQuantityByItemName = DeserializeJsonDictionary(ProductQuantityByItemNameJson);
+            PackQuantityByItemName = DeserializeJsonDictionary(ProductQuantityByItemNameJson);
             CustomsDeclarationByItemName = DeserializeJsonDictionary(CustomsDeclarationByItemNameJson);
         }
 
@@ -973,7 +973,7 @@ namespace Martin_app
             SerializeDictionaryToJson(ProductCodeByItemName, ProductCodeByItemNameJson);
             SerializeDictionaryToJson(ProductNumberByItemName, ProductNumberByItemNameJson);
             SerializeDictionaryToJson(ShippingNameByItemName, ShippingNameByItemNameJson);
-            SerializeDictionaryToJson(ProductQuantityByItemName, ProductQuantityByItemNameJson);
+            SerializeDictionaryToJson(PackQuantityByItemName, ProductQuantityByItemNameJson);
             SerializeDictionaryToJson(CustomsDeclarationByItemName, CustomsDeclarationByItemNameJson);
         }
 

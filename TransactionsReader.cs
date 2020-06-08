@@ -30,6 +30,7 @@ namespace Martin_app
                     DescriptionParameter = "description", ProductPriceParameter = "product sales",
                     ShippingPriceParameter = "shipping credits", QuantityParameter = "quantity",
                     TotalPriceParameter = "total",
+                    PromotionRebateParameter = "promotional rebates",
                     Order = "Order", Refund = "Refund", Transfer = "Transfer", ServiceFee = "Service Fee",
                     LinesToSkip = 7
                     },
@@ -41,6 +42,7 @@ namespace Martin_app
                     DescriptionParameter = "description", ProductPriceParameter = "product sales",
                     ShippingPriceParameter = "shipping credits", QuantityParameter = "quantity",
                     TotalPriceParameter = "total",
+                    PromotionRebateParameter = "promotional rebates",
                     Order = "Order", Refund = "Refund", Transfer = "Transfer",ServiceFee = "Service Fee",
                     LinesToSkip = 7
                 },
@@ -52,6 +54,7 @@ namespace Martin_app
                     DescriptionParameter = "Beschreibung", ProductPriceParameter = "Umsätze",
                     ShippingPriceParameter = "Gutschrift für Versandkosten", QuantityParameter = "Menge",
                     TotalPriceParameter = "Gesamt",
+                    PromotionRebateParameter = "Rabatte aus Werbeaktionen",
                     Order = "Bestellung", Refund = "Erstattung", Transfer = "Übertrag",ServiceFee = "Servicegebühr",
                     LinesToSkip = 6
                 },
@@ -63,6 +66,7 @@ namespace Martin_app
                     DescriptionParameter = "descripción", ProductPriceParameter = "ventas de productos",
                     ShippingPriceParameter = "abonos de envío", QuantityParameter = "cantidad",
                     TotalPriceParameter = "total",
+                    PromotionRebateParameter = "devoluciones promocionales",
                     Order = "Pedido", Refund = "Reembolso", Transfer = "Transferir",
                     LinesToSkip = 6
                 },
@@ -74,6 +78,7 @@ namespace Martin_app
                     DescriptionParameter = "description", ProductPriceParameter = "ventes de produits",
                     ShippingPriceParameter = "crédits d'expédition", QuantityParameter = "quantité",
                     TotalPriceParameter = "total",
+                    PromotionRebateParameter = "Rabais promotionnels",
                     Order = "Commande", Refund = "Remboursement", Transfer = "Transfert",ServiceFee = "Service Fee",
                     LinesToSkip = 6
                 },
@@ -85,6 +90,7 @@ namespace Martin_app
                     DescriptionParameter = "description", ProductPriceParameter = "product sales",
                     ShippingPriceParameter = "postage credits", QuantityParameter = "quantity",
                     TotalPriceParameter = "total",
+                    PromotionRebateParameter = "promotional rebates",
                     Order = "Order", Refund = "Refund", Transfer = "Transfer",ServiceFee = "Service Fee",
                     LinesToSkip = 6
                 },
@@ -96,6 +102,7 @@ namespace Martin_app
                     DescriptionParameter = "Descrizione", ProductPriceParameter = "Vendite",
                     ShippingPriceParameter = "Accrediti per le spedizioni", QuantityParameter = "Quantità",
                     TotalPriceParameter = "totale",
+                    PromotionRebateParameter = "Sconti promozionali",
                     Order = "Ordine", Refund = "Rimborso", Transfer = "Trasferimento", // TODO refund
                     LinesToSkip = 6
                 },
@@ -107,6 +114,7 @@ namespace Martin_app
                     DescriptionParameter = "説明", ProductPriceParameter = "商品売上",
                     ShippingPriceParameter = "配送料", QuantityParameter = "数量",
                     TotalPriceParameter = "合計",
+                    PromotionRebateParameter = "プロモーション割引額",
                     Order = "注文", Refund = "返金", Transfer = "振込み", ServiceFee = "注文外料金",
                     LinesToSkip = 6
                 },
@@ -118,6 +126,7 @@ namespace Martin_app
                     DescriptionParameter = "descripción", ProductPriceParameter = "ventas de productos",
                     ShippingPriceParameter = "créditos de envío", QuantityParameter = "cantidad",
                     TotalPriceParameter = "total",
+                    PromotionRebateParameter = "descuentos promocionales",
                     Order = "Pedido", Refund = "Reembolso", Transfer = "Trasferir", ServiceFee = "Service Fee", // TODO Service fee
                     LinesToSkip = 6
                 },
@@ -129,6 +138,7 @@ namespace Martin_app
                     DescriptionParameter = "description", ProductPriceParameter = "product sales",
                     ShippingPriceParameter = "shipping credits", QuantityParameter = "quantity",
                     TotalPriceParameter = "total",
+                    PromotionRebateParameter = "promotional rebates",
                     Order = "Order", Refund = "Refund", Transfer = "Transfer",ServiceFee = "Service Fee",
                     LinesToSkip = 7
                 },
@@ -141,7 +151,7 @@ namespace Martin_app
             // TODO put somewhere else
 
             string filteredCode = fullVariableCode.RemoveAll("-");
-            return filteredCode.Substring(filteredCode.Length - 10, 10);
+            return filteredCode.Substring(filteredCode.Length - 10, 10).TrimStart('0'); // zeros don't get correctly imported into Pohoda
         }
 
         private IReadOnlyList<string[]> GetFileLines(string fileName, string encodingCode = "utf-8")
@@ -226,12 +236,15 @@ namespace Martin_app
                     productPrice = float.Parse(transactionsDict[languageSetting.TotalPriceParameter][index], languageSetting.DateCultureInfo);
                 }
 
+                double promotionRebate = float.Parse(transactionsDict[languageSetting.PromotionRebateParameter][index], languageSetting.DateCultureInfo);
+
                 var transaction = new Transaction()
                 {
                     Date = ParseDate(transactionsDict[languageSetting.DateTimeParameter][index], languageSetting),
                     OrderId = orderId,
                     ProductDescription = transactionsDict[languageSetting.DescriptionParameter][index],
                     ProductPrice = productPrice,
+                    PromotionRebate = promotionRebate,
                     ShippingPrice = float.Parse(transactionsDict[languageSetting.ShippingPriceParameter][index], languageSetting.DateCultureInfo),
                     Quantity = quantity,
                     Type = transactionType,

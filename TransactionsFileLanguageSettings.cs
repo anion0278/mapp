@@ -29,6 +29,7 @@ namespace Martin_app
         public string DescriptionParameter { get; set; }
         public string ShippingPriceParameter { get; set; }
         public string ProductPriceParameter { get; set; }
+        public string PromotionRebateParameter { get; set; }
         public string TransactionTypeParameter { get; set; }
 
         // TODO solve it some different way
