@@ -30,14 +30,14 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <StackPanel Grid.Row="0" Margin="20">
-                    <Button  x:Name="ButtonConvert" Content="Zvolit fakturu" Width="75" Click="ButtonSelectInvoice_Click"/>
+                    <Button  x:Name="ButtonConvert" Content="Zvolit fakturu" Width="150" Height="35" Click="ButtonSelectInvoice_Click"/>
                     <Label Content="Posledni existujici cislo v systemu:" HorizontalAlignment="Center"/>
                     <TextBox  x:Name="ExistingInvoiceNum" Height="23" VerticalAlignment="Center" Width="150" LostFocus="ExistingInvoiceNum_LostFocus"/>
                     <Label Content="DPH:" HorizontalAlignment="Center"/>
                     <TextBox  x:Name="DPHValue" Height="23" VerticalAlignment="Center" Width="150" LostFocus="DPHValue_LostFocus"/>
                     <Label Content="Default email:" HorizontalAlignment="Center"/>
                     <TextBox  x:Name="DefaultEmailBox" Height="23" VerticalAlignment="Center" Width="150" LostFocus="DefaultEmail_LostFocus" />
-                    <Button  x:Name="ButtonExport" Content="Konvertovat..." Width="75" Margin="10" Click="ButtonExport_Click"/>
+                    <Button  x:Name="ButtonExport" Content="Konvertovat..." Width="150" Height="35" Margin="10" Click="ButtonExport_Click"/>
                 </StackPanel>
                 <DataGrid Name="TopDataGrid" Grid.Row="1" Margin="5" AutoGenerateColumns="false" CanUserAddRows="false"
               ItemsSource="{Binding InvoiceItemsAll}" CellEditEnding="TopDataGrid_CellEditEnding">
@@ -63,7 +63,7 @@
                                 </Style>
                             </DataGridBoundColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Header="Mnozstvi v packu" Width="120" Binding="{Binding PackQuantityMultiplicator}" />
+                        <DataGridTextColumn Header="Mnozstvi v packu" Width="120" Binding="{Binding PackQuantityMultiplier}" />
                     </DataGrid.Columns>
                 </DataGrid>
                 <DataGrid Name="BottomDataGrid" Grid.Row="2" Margin="5" AutoGenerateColumns="false" CanUserAddRows="false"
@@ -103,7 +103,7 @@
                     <RowDefinition />
                 </Grid.RowDefinitions>
                 <StackPanel Grid.Row="1">
-                    <Button  Content="Konvertovat transakce" Width="200" Click="Button_Click" />
+                    <Button  Content="Konvertovat transakce" Width="200" Height="35" Click="Button_Click" />
                 </StackPanel>
                 <!--<DataGrid Grid.Row="2"  Name="TransactionsDataGrid" Grid.Row="2" Margin="5" AutoGenerateColumns="false" CanUserAddRows="false"
                           ItemsSource="{Binding InvoicesTable}" >

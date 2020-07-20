@@ -229,7 +229,7 @@ namespace Martin_app
                 var itemWithDetails = new InvoiceItemWithDetails(invoiceItem, source.Single(di => (di.invoice.invoiceDetail).Contains(invoiceItem)).invoice.invoiceHeader);
                 if (PackQuantityByItemName.ContainsKey(itemWithDetails.Item.text))
                 {
-                    itemWithDetails.PackQuantityMultiplicator = int.Parse(PackQuantityByItemName[itemWithDetails.Item.text]);
+                    itemWithDetails.PackQuantityMultiplier = int.Parse(PackQuantityByItemName[itemWithDetails.Item.text]);
                 }
                 InvoiceItemsAll.Add(itemWithDetails);
             }
@@ -379,7 +379,7 @@ namespace Martin_app
             packDataPackItem.id = userId;
             packDataPackItem.invoice.invoiceHeader.invoiceType = invoiceType;
             packDataPackItem.invoice.invoiceHeader.number.numberRequested = invoiceNumber;
-            packDataPackItem.invoice.invoiceHeader.symVar = TransactionsReader.GetShortVariableCode(headerSymPar);
+            packDataPackItem.invoice.invoiceHeader.symVar = TransactionsReader.GetShortVariableCode(headerSymPar, out _);
             packDataPackItem.invoice.invoiceHeader.symPar = headerSymPar;
             packDataPackItem.invoice.invoiceHeader.date = today;
             packDataPackItem.invoice.invoiceHeader.dateTax = taxDate;
