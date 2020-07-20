@@ -128,7 +128,7 @@ namespace Martin_app
                     TotalPriceParameter = "total",
                     PromotionRebateParameter = "descuentos promocionales",
                     Order = "Pedido", Refund = "Reembolso", Transfer = "Trasferir", ServiceFee = "Service Fee", // TODO Service fee
-                    LinesToSkip = 6
+                    LinesToSkip = 7
                 },
                 new TransactionsFileLanguageSettings(new CultureInfo("en-US"), @"(.*) (PST|PDT)")
                 {
@@ -146,12 +146,18 @@ namespace Martin_app
 
         }
 
-        public static string GetShortVariableCode(string fullVariableCode)
+        public static string GetShortVariableCode(string fullVariableCode, out int zerosRemoved)
         {
-            // TODO put somewhere else
+            // TODO put somewhere else, used in two places
+            zerosRemoved = 0;
 
             string filteredCode = fullVariableCode.RemoveAll("-");
-            return filteredCode.Substring(filteredCode.Length - 10, 10).TrimStart('0'); // zeros don't get correctly imported into Pohoda
+            filteredCode = filteredCode.Substring(filteredCode.Length - 10, 10); // zeros don't get correctly imported into Pohoda
+
+            var finalCode = filteredCode.TrimStart('0');
+            zerosRemoved = filteredCode.Length - finalCode.Length;
+
+            return finalCode;
         }
 
         private IReadOnlyList<string[]> GetFileLines(string fileName, string encodingCode = "utf-8")

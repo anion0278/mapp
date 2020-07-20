@@ -39,11 +39,15 @@ namespace Martin_app
 
         private string GetTransactionLine(Transaction transaction)
         {
+            var varCode = TransactionsReader.GetShortVariableCode(transaction.OrderId, out var zerosRemoved);
+
+            string type = ((int) transaction.Type).ToString();
+
             return string.Format(_transactionBase,
                 (int)transaction.Marketplace,
                 FormatPrice(transaction.TotalPrice),
-                (int)transaction.Type,
-                TransactionsReader.GetShortVariableCode(transaction.OrderId),
+                type.PadRight(type.Length + zerosRemoved, '0'),
+                varCode,
                 transaction.OrderId,
                 transaction.Date.ToString("ddMMyy"));
         }

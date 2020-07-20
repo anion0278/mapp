@@ -1,8 +1,10 @@
-﻿namespace Martin_App
+﻿using System;
+
+namespace Martin_App
 {
     public class InvoiceItemWithDetails
     {
-        private int _packQuantityMultiplicator;
+        private int _packQuantityMultiplier;
         private decimal _initialOrderQuantity;
 
         public InvoiceXML.invoiceInvoiceItem Item { get; set; }
@@ -13,21 +15,21 @@
             InvoiceXML.invoiceInvoiceItem item,
             InvoiceXML.invoiceInvoiceHeader header)
         {
-            _packQuantityMultiplicator = 1; // init !!
-            this.Item = item;
+            _packQuantityMultiplier = 1; // init !!
+            Item = item;
             _initialOrderQuantity = Item.quantity;
-            this.Header = header;
+            Header = header;
         }
 
-        public int PackQuantityMultiplicator
+        public int PackQuantityMultiplier
         {
-            get => _packQuantityMultiplicator;
+            get => _packQuantityMultiplier;
             set
             {
-                _packQuantityMultiplicator = value;
-                ItemQuantity = _initialOrderQuantity * _packQuantityMultiplicator; // can I use smth else instead of init val?
-                Item.foreignCurrency.unitPrice = Item.foreignCurrency.price / ItemQuantity;
-                Item.homeCurrency.unitPrice = Item.homeCurrency.price / ItemQuantity;
+                Item.foreignCurrency.unitPrice = Math.Round(Item.foreignCurrency.unitPrice * _packQuantityMultiplier / value, 6);
+                Item.homeCurrency.unitPrice = Math.Round(Item.homeCurrency.unitPrice * _packQuantityMultiplier / value, 6);
+                Item.quantity = (int)(Item.quantity / _packQuantityMultiplier * value);
+                _packQuantityMultiplier = value;
             }
         }
 
