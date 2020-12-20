@@ -37,17 +37,29 @@ namespace Martin_app
             }
         }
 
+        private string GetShortVariableCodeForRefund(string fullVariableCode)
+        {
+            // refunds are filled manually in pohoda, so there is no need to care about invoice symVar
+            string filteredCode = fullVariableCode.RemoveAll("-");
+            filteredCode = filteredCode.Substring(0, 10);
+            return filteredCode;
+        }
+
         private string GetTransactionLine(Transaction transaction)
         {
-            var varCode = TransactionsReader.GetShortVariableCode(transaction.OrderId, out var zerosRemoved);
+            var shortVariableCode = TransactionsReader.GetShortVariableCode(transaction.OrderId, out var zerosRemoved);
+            if (transaction.Type == TransactionTypes.Refund) // Refunds have short variable codes from first 10 symbols
+            {
+                shortVariableCode = GetShortVariableCodeForRefund(transaction.OrderId);
+            }
 
             string type = ((int) transaction.Type).ToString();
 
             return string.Format(_transactionBase,
                 (int)transaction.Marketplace,
                 FormatPrice(transaction.TotalPrice),
-                type.PadRight(type.Length + zerosRemoved, '0'),
-                varCode,
+                type.PadRight(type.Length + zerosRemoved, '0'), // in case that order ID contained zeros at the beginning
+                shortVariableCode,
                 transaction.OrderId,
                 transaction.Date.ToString("ddMMyy"));
         }
