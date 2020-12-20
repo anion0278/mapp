@@ -41,6 +41,7 @@ namespace Martin_app
         private uint _existingInvoceNumber;
         private decimal _dphValue;
         private readonly int MaxAddressNameLength = 60;
+        private readonly int MaxCityLength = 45;
         private readonly int MaxClientNameLength = 30;
         private IEnumerable<InvoiceXML.dataPackDataPackItem> _convertedInvoices;
         private Dictionary<string, decimal> Rates;
@@ -215,7 +216,7 @@ namespace Martin_app
             foreach (var report in fromAmazonReports)
             {
                 var singleAmazonInvoice = FillDataPackItem(report, source.Count + 1);
-                var existingDataPack = source.FirstOrDefault((di => di.invoice.invoiceHeader.symVar == singleAmazonInvoice.invoice.invoiceHeader.symVar));
+                var existingDataPack = source.FirstOrDefault(di => di.invoice.invoiceHeader.symVar == singleAmazonInvoice.invoice.invoiceHeader.symVar);
                 if (existingDataPack != null)
                 { AddItemsToExistingDataPack(existingDataPack, singleAmazonInvoice); }
                 else
@@ -390,7 +391,7 @@ namespace Martin_app
             packDataPackItem.invoice.invoiceHeader.classificationVAT.classificationVATType = classification == "UVzboží" ? "nonSubsume" : (string)null;
             packDataPackItem.invoice.invoiceHeader.text = "This is your invoice:";
             packDataPackItem.invoice.invoiceHeader.partnerIdentity.address.name = clientName;
-            packDataPackItem.invoice.invoiceHeader.partnerIdentity.address.city = city;
+            packDataPackItem.invoice.invoiceHeader.partnerIdentity.address.city = city; // 45 symbols max
             packDataPackItem.invoice.invoiceHeader.partnerIdentity.address.street = fullAddress;
             packDataPackItem.invoice.invoiceHeader.partnerIdentity.address.country.ids = shipCountry;
             packDataPackItem.invoice.invoiceHeader.partnerIdentity.address.zip = valuesFromAmazon["ship-postal-code"];
@@ -590,7 +591,7 @@ namespace Martin_app
             string message = "Nazev mesta/zeme je prilis dlouhy v objednavce C.: "
                              + amazonOrderNumber;
 
-            str = AskToChangeLongStringIfNeeded(message, str, MaxAddressNameLength);
+            str = AskToChangeLongStringIfNeeded(message, str, MaxCityLength);
 
             return str;
         }
