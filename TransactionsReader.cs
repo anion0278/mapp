@@ -116,6 +116,7 @@ namespace Martin_app
                     TotalPriceParameter = "合計",
                     PromotionRebateParameter = "プロモーション割引額",
                     Order = "注文", Refund = "返金", Transfer = "振込み", ServiceFee = "注文外料金",
+                    AdditionalPriceParameters = new []{ "商品の売上税", "配送料の税金"},
                     LinesToSkipBeforeColumnNames = 6
                 },
                 new TransactionsFileLanguageSettings(new CultureInfo("es-MX"), @"(.*) (PST|PDT)")
@@ -247,13 +248,24 @@ namespace Martin_app
                 if (string.IsNullOrEmpty(orderId))
                     orderId = "0000000000000000000";
 
-                double productPrice = float.Parse(transactionsDict[languageSetting.ProductPriceParameter][index],
+                double productPrice = double.Parse(transactionsDict[languageSetting.ProductPriceParameter][index],
                     languageSetting.DateCultureInfo);
 
                 var transactionType = ParseTransactionType(transactionsDict[languageSetting.TransactionTypeParameter][index], languageSetting);
                 if (transactionType == TransactionTypes.Transfer || transactionType == TransactionTypes.ServiceFee)
                 {
-                    productPrice = float.Parse(transactionsDict[languageSetting.TotalPriceParameter][index], languageSetting.DateCultureInfo);
+                    // V priprade Service Fee a Transferu product price je total price
+                    productPrice = double.Parse(transactionsDict[languageSetting.TotalPriceParameter][index], languageSetting.DateCultureInfo);
+                }
+
+                var addFees = new List<double>();
+                if (languageSetting.AdditionalPriceParameters != null)
+                {
+                    // JP case
+                    foreach (var feeParamName in languageSetting.AdditionalPriceParameters)
+                    {
+                        addFees.Add(double.Parse(transactionsDict[feeParamName][index]));
+                    }
                 }
 
                 double promotionRebate = float.Parse(transactionsDict[languageSetting.PromotionRebateParameter][index], languageSetting.DateCultureInfo);
@@ -268,7 +280,8 @@ namespace Martin_app
                     ShippingPrice = float.Parse(transactionsDict[languageSetting.ShippingPriceParameter][index], languageSetting.DateCultureInfo),
                     Quantity = quantity,
                     Type = transactionType,
-                    Marketplace = marketplace
+                    Marketplace = marketplace,
+                    AdditionalFees = addFees
                 };
                 transactions.Add(transaction);
             }

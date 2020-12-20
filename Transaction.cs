@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Martin_app
@@ -30,8 +31,13 @@ namespace Martin_app
 
         public double PromotionRebate { get; set; }
 
+        public IEnumerable<double> AdditionalFees { get; set; } 
+
         public double ShippingPrice { get; set; }
 
-        public double TotalPrice => ProductPrice + ShippingPrice + PromotionRebate;
+        // TODO rename, its not price but TOTAL of transaction
+        // in GPC only the price for item, shipping, sale(rebate) is relevant
+        // in JP case also some additional Fees
+        public double TotalPrice => ProductPrice + ShippingPrice + PromotionRebate + AdditionalFees.Sum();
     }
 }

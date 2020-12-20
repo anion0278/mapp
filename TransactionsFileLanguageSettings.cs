@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System.Collections.Generic;
+using System.Globalization;
 
 namespace Martin_app
 {
@@ -11,6 +12,11 @@ namespace Martin_app
             DateCultureInfo = dateCultureInfo;
             DateSubstring = dateSubstring;
         }
+
+        /// <summary>
+        /// For now - only for JP. They have 4 columns which should be summed for total price
+        /// </summary>
+        public IEnumerable<string> AdditionalPriceParameters { get; set; }
 
         /// <summary>
         /// Number of lines before the column-name-line.

@@ -60,7 +60,8 @@ namespace Martin_app
                 transaction.OrderId,
                 transaction.Date.ToString("ddMMyy"));
 
-            if (formatted.Length != 128) throw new DataMisalignedException("Konvertovany radek nema delku 30 symbolu! Chyba!");
+            int asserLen = 128;
+            if (formatted.Length != asserLen) throw new DataMisalignedException($"Konvertovany radek nema delku {asserLen} symbolu! Chyba!");
 
             return formatted;
         }
