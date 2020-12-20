@@ -14,12 +14,7 @@ namespace Martin_app
         private string _intitialLine =
             "0740000002001353907Czech Goods s.r.o.  01111900000013280900+00000016514842+000000461730770000000494070190011{0}FIO           ";
 
-        private string _transactionBase = "075000000200135390{0}000000000000000000000000000000000{1}{2}{3}00000000000000000000000000{4}000124{5}";
-
-        public GpcGenerator()
-        {
-                
-        }
+        private string _transactionBase = "07500000020013539{0}000000000000000000000000000000000{1}{2}{3}00000000000000000000000000{4}000124{5}";
 
         public void SaveTransactions(IEnumerable<Transaction> transactions, string fileName)
         {
@@ -55,13 +50,19 @@ namespace Martin_app
 
             string type = ((int) transaction.Type).ToString();
 
-            return string.Format(_transactionBase,
-                (int)transaction.Marketplace,
+            string marketPlace = ((int) transaction.Marketplace).ToString().PadLeft(2, '0');
+
+            string formatted = string.Format(_transactionBase,
+                marketPlace,
                 FormatPrice(transaction.TotalPrice),
                 type.PadRight(type.Length + zerosRemoved, '0'), // in case that order ID contained zeros at the beginning
                 shortVariableCode,
                 transaction.OrderId,
                 transaction.Date.ToString("ddMMyy"));
+
+            if (formatted.Length != 128) throw new DataMisalignedException("Konvertovany radek nema delku 30 symbolu! Chyba!");
+
+            return formatted;
         }
 
         private string FormatPrice(double price)
@@ -82,24 +83,26 @@ namespace Martin_app
     public enum AmazonMarketplace
     {
         [Description("amazon.com")]
-        AmazonCom,
+        AmazonCom = 0,
         [Description("amazon.ca")]
-        AmazonCa,
+        AmazonCa = 1,
         [Description("amazon.com.mx")]
-        AmazonComMx,
+        AmazonComMx = 2,
         [Description("amazon.jp")]
-        AmazonJp,
+        AmazonJp = 3,
         [Description("amazon.com.au")]
-        AmazonComAu,
+        AmazonComAu = 4,
         [Description("amazon.co.uk")]
-        AmazonCoUk,
+        AmazonCoUk = 5,
         [Description("amazon.de")]
-        AmazonDe,
+        AmazonDe = 6,
         [Description("amazon.es")]
-        AmazonEs,
+        AmazonEs = 7,
         [Description("amazon.fr")]
-        AmazonFr,
+        AmazonFr = 8,
         [Description("amazon.it")]
-        AmazonIt,
+        AmazonIt = 9,
+        [Description("amazon.nl")]
+        AmazonNl = 10,
     }
 }

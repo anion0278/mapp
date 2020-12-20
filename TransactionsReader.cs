@@ -32,7 +32,7 @@ namespace Martin_app
                     TotalPriceParameter = "total",
                     PromotionRebateParameter = "promotional rebates",
                     Order = "Order", Refund = "Refund", Transfer = "Transfer", ServiceFee = "Service Fee",
-                    LinesToSkip = 7
+                    LinesToSkipBeforeColumnNames = 7
                     },
                 new TransactionsFileLanguageSettings(new CultureInfo("en-CA"), @"(.*) (PST|PDT)")
                 {
@@ -44,7 +44,7 @@ namespace Martin_app
                     TotalPriceParameter = "total",
                     PromotionRebateParameter = "promotional rebates",
                     Order = "Order", Refund = "Refund", Transfer = "Transfer",ServiceFee = "Service Fee",
-                    LinesToSkip = 7
+                    LinesToSkipBeforeColumnNames = 7
                 },
                 new TransactionsFileLanguageSettings(new CultureInfo("de-DE"), @"(.*) GMT")
                 {
@@ -56,7 +56,7 @@ namespace Martin_app
                     TotalPriceParameter = "Gesamt",
                     PromotionRebateParameter = "Rabatte aus Werbeaktionen",
                     Order = "Bestellung", Refund = "Erstattung", Transfer = "Übertrag",ServiceFee = "Servicegebühr",
-                    LinesToSkip = 6
+                    LinesToSkipBeforeColumnNames = 6
                 },
                 new TransactionsFileLanguageSettings(new CultureInfo("es-ES"), @"(.*) GMT")
                 {
@@ -68,7 +68,7 @@ namespace Martin_app
                     TotalPriceParameter = "total",
                     PromotionRebateParameter = "devoluciones promocionales",
                     Order = "Pedido", Refund = "Reembolso", Transfer = "Transferir",
-                    LinesToSkip = 6
+                    LinesToSkipBeforeColumnNames = 6
                 },
                 new TransactionsFileLanguageSettings(new CultureInfo("fr-FR"), @"(.*) UTC")
                 {
@@ -80,7 +80,7 @@ namespace Martin_app
                     TotalPriceParameter = "total",
                     PromotionRebateParameter = "Rabais promotionnels",
                     Order = "Commande", Refund = "Remboursement", Transfer = "Transfert",ServiceFee = "Service Fee",
-                    LinesToSkip = 6
+                    LinesToSkipBeforeColumnNames = 6
                 },
                 new TransactionsFileLanguageSettings(new CultureInfo("en-GB"), @"(.*) GMT")
                 {
@@ -92,7 +92,7 @@ namespace Martin_app
                     TotalPriceParameter = "total",
                     PromotionRebateParameter = "promotional rebates",
                     Order = "Order", Refund = "Refund", Transfer = "Transfer",ServiceFee = "Service Fee",
-                    LinesToSkip = 6
+                    LinesToSkipBeforeColumnNames = 6
                 },
                 new TransactionsFileLanguageSettings(italyCulture, @"(.*) GMT")
                 {
@@ -104,7 +104,7 @@ namespace Martin_app
                     TotalPriceParameter = "totale",
                     PromotionRebateParameter = "Sconti promozionali",
                     Order = "Ordine", Refund = "Rimborso", Transfer = "Trasferimento", // TODO refund
-                    LinesToSkip = 6
+                    LinesToSkipBeforeColumnNames = 6
                 },
                 new TransactionsFileLanguageSettings(new CultureInfo("ja-JP"), @"(.*)JST")
                 {
@@ -116,7 +116,7 @@ namespace Martin_app
                     TotalPriceParameter = "合計",
                     PromotionRebateParameter = "プロモーション割引額",
                     Order = "注文", Refund = "返金", Transfer = "振込み", ServiceFee = "注文外料金",
-                    LinesToSkip = 6
+                    LinesToSkipBeforeColumnNames = 6
                 },
                 new TransactionsFileLanguageSettings(new CultureInfo("es-MX"), @"(.*) (PST|PDT)")
                 {
@@ -128,7 +128,7 @@ namespace Martin_app
                     TotalPriceParameter = "total",
                     PromotionRebateParameter = "descuentos promocionales",
                     Order = "Pedido", Refund = "Reembolso", Transfer = "Trasferir", ServiceFee = "Service Fee", // TODO Service fee
-                    LinesToSkip = 7
+                    LinesToSkipBeforeColumnNames = 7
                 },
                 new TransactionsFileLanguageSettings(new CultureInfo("en-US"), @"(.*) (PST|PDT)")
                 {
@@ -140,7 +140,19 @@ namespace Martin_app
                     TotalPriceParameter = "total",
                     PromotionRebateParameter = "promotional rebates",
                     Order = "Order", Refund = "Refund", Transfer = "Transfer",ServiceFee = "Service Fee",
-                    LinesToSkip = 7
+                    LinesToSkipBeforeColumnNames = 7
+                },
+                new TransactionsFileLanguageSettings(new CultureInfo("nl-NL"), @"(.*) GMT")
+                {
+                    DistinctionPhrase = "Alle bedragen in EUR, tenzij anders vermeld",
+                    DateTimeParameter = "datum/tijd", OrderIdParameter = "bestelnummer",
+                    TransactionTypeParameter = "type", MarketplaceParameter = "marketplace",
+                    DescriptionParameter = "beschrijving", ProductPriceParameter = "verkoop van producten",
+                    ShippingPriceParameter = "Verzendtegoeden", QuantityParameter = "aantal",
+                    TotalPriceParameter = "totaal",
+                    PromotionRebateParameter = "promotiekortingen",
+                    Order = "Bestelling", Refund = "Terugbetaling", Transfer = "Overdracht",ServiceFee = "Servicekosten",
+                    LinesToSkipBeforeColumnNames = 6
                 },
             };
 
@@ -206,7 +218,7 @@ namespace Martin_app
 
             var languageSetting = GetLanguageSetting(lines);
 
-            var validLines = lines.Skip(languageSetting.LinesToSkip).ToList();
+            var validLines = lines.Skip(languageSetting.LinesToSkipBeforeColumnNames).ToList();
 
             var transactionsDict = new Dictionary<string, string[]>();
             for (int columnIndex = 0; columnIndex < validLines[0].Length; ++columnIndex)

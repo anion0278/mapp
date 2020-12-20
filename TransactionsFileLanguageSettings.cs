@@ -12,7 +12,10 @@ namespace Martin_app
             DateSubstring = dateSubstring;
         }
 
-        public int LinesToSkip { get; set; }
+        /// <summary>
+        /// Number of lines before the column-name-line.
+        /// </summary>
+        public int LinesToSkipBeforeColumnNames { get; set; }
 
         public CultureInfo DateCultureInfo { get; }
 
