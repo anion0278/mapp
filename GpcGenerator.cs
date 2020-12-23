@@ -53,7 +53,7 @@ namespace Martin_app
             // in case that order ID contained zeros at the beginning
             type = type.PadRight(type.Length + zerosRemoved, '0');
 
-            string marketPlace = ((int) transaction.Marketplace).ToString().PadLeft(2, '0');
+            string marketPlace = transaction.MarketplaceId.ToString().PadLeft(2, '0');
 
             string orderId = transaction.OrderId.PadRight(19, '0');
 
@@ -69,8 +69,8 @@ namespace Martin_app
                 orderId,
                 date);
 
-            int asserLen = 128;
-            if (formatted.Length != asserLen) throw new DataMisalignedException($"Konvertovany radek nema delku {asserLen} symbolu! Chyba!");
+            int assertLen = 128;
+            if (formatted.Length != assertLen) throw new DataMisalignedException($"Konvertovany radek nema delku {assertLen} symbolu! Chyba!");
 
             return formatted;
         }
@@ -89,33 +89,4 @@ namespace Martin_app
 
     }
 
-
-    public enum AmazonMarketplace
-    {
-        [Description("amazon.com")]
-        AmazonCom = 0,
-        [Description("amazon.ca")]
-        AmazonCa = 1,
-        [Description("amazon.com.mx")]
-        AmazonComMx = 2,
-        [Description("amazon.jp")]
-        AmazonJp = 3,
-        [Description("amazon.com.au")]
-        AmazonComAu = 4,
-        [Description("amazon.co.uk")]
-        AmazonCoUk = 5,
-        [Description("amazon.de")]
-        AmazonDe = 6,
-        [Description("amazon.es")]
-        AmazonEs = 7,
-        [Description("amazon.fr")]
-        AmazonFr = 8,
-        [Description("amazon.it")]
-        AmazonIt = 9,
-        [Description("amazon.nl")]
-        AmazonNl = 10,
-        
-        [Description("Europe/Prague")]
-        PayPal = 21,
-    }
 }
