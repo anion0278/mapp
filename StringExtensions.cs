@@ -14,7 +14,5 @@ namespace Martin_app
         {
             return firstStr.Equals(secondStr, StringComparison.InvariantCultureIgnoreCase);
         }
-
-
     }
 }
