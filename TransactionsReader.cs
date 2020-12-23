@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Xml.Serialization;
 using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.FileIO;
 
@@ -25,135 +26,141 @@ namespace Martin_app
                 new TransactionsFileLanguageSettings(new CultureInfo("en-AU"), @"(.*) GMT")
                 {
                     DistinctionPhrase = "All amounts in AUD, unless specified",
-                    DateTimeParameter = "date/time", OrderIdParameter = "order id",
-                    TransactionTypeParameter = "type", MarketplaceParameter = "marketplace",
-                    DescriptionParameter = "description", ProductPriceParameter = "product sales",
-                    ShippingPriceParameter = "shipping credits", QuantityParameter = "quantity",
-                    TotalPriceParameter = "total",
-                    PromotionRebateParameter = "promotional rebates",
-                    Order = "Order", Refund = "Refund", Transfer = "Transfer", ServiceFee = "Service Fee",
+                    DateTimeColumnNames = new []{"date/time"}, OrderIdColumnName = "order id",
+                    TransactionTypeColumnName = "type", MarketplaceColumnName = "marketplace",
+                    DebugDescriptionColumnName = "description", 
+                    ValueComponentsColumnName = new []{"product sales", "shipping credits","promotional rebates"},
+                    TotalPriceColumnName = "total",
+                    OrderTypeNames = new []{"Order"}, RefundTypeNames = new []{"Refund"}, TransferTypeNames = new []{"Transfer"}, ServiceFeeTypeNames = new []{"Service Fee"},
                     LinesToSkipBeforeColumnNames = 7
                     },
                 new TransactionsFileLanguageSettings(new CultureInfo("en-CA"), @"(.*) (PST|PDT)")
                 {
                     DistinctionPhrase = "All amounts in CAD, unless specified",
-                    DateTimeParameter = "date/time", OrderIdParameter = "order id",
-                    TransactionTypeParameter = "type", MarketplaceParameter = "marketplace",
-                    DescriptionParameter = "description", ProductPriceParameter = "product sales",
-                    ShippingPriceParameter = "shipping credits", QuantityParameter = "quantity",
-                    TotalPriceParameter = "total",
-                    PromotionRebateParameter = "promotional rebates",
-                    Order = "Order", Refund = "Refund", Transfer = "Transfer",ServiceFee = "Service Fee",
+                    DateTimeColumnNames = new []{"date/time"}, OrderIdColumnName = "order id",
+                    TransactionTypeColumnName = "type", MarketplaceColumnName = "marketplace",
+                    DebugDescriptionColumnName = "description",
+                    ValueComponentsColumnName = new []{ "product sales", "shipping credits", "promotional rebates"},
+                    TotalPriceColumnName = "total",
+                    OrderTypeNames = new []{"Order"}, RefundTypeNames = new []{"Refund"}, TransferTypeNames = new []{"Transfer"},ServiceFeeTypeNames = new[] { "Service Fee" },
                     LinesToSkipBeforeColumnNames = 7
                 },
                 new TransactionsFileLanguageSettings(new CultureInfo("de-DE"), @"(.*) GMT")
                 {
                     DistinctionPhrase = "Alle Beträge in Euro sofern nicht anders gekennzeichnet",
-                    DateTimeParameter = "Datum/Uhrzeit", OrderIdParameter = "Bestellnummer",
-                    TransactionTypeParameter = "Typ", MarketplaceParameter = "Marketplace",
-                    DescriptionParameter = "Beschreibung", ProductPriceParameter = "Umsätze",
-                    ShippingPriceParameter = "Gutschrift für Versandkosten", QuantityParameter = "Menge",
-                    TotalPriceParameter = "Gesamt",
-                    PromotionRebateParameter = "Rabatte aus Werbeaktionen",
-                    Order = "Bestellung", Refund = "Erstattung", Transfer = "Übertrag",ServiceFee = "Servicegebühr",
+                    DateTimeColumnNames = new []{"Datum/Uhrzeit"}, OrderIdColumnName = "Bestellnummer",
+                    TransactionTypeColumnName = "Typ", MarketplaceColumnName = "Marketplace",
+                    DebugDescriptionColumnName = "Beschreibung",
+                    ValueComponentsColumnName = new []{ "Umsätze", "Gutschrift für Versandkosten", "Rabatte aus Werbeaktionen"},
+                    TotalPriceColumnName = "Gesamt",
+                    OrderTypeNames = new []{ "Anpassung", "Bestellung" }, RefundTypeNames = new []{"Erstattung"}, TransferTypeNames = new []{"Übertrag"},ServiceFeeTypeNames = new[] { "Servicegebühr" },
                     LinesToSkipBeforeColumnNames = 6
                 },
                 new TransactionsFileLanguageSettings(new CultureInfo("es-ES"), @"(.*) GMT")
                 {
                     DistinctionPhrase = "Todos los importes en EUR, a menos que se especifique lo contrario",
-                    DateTimeParameter = "fecha y hora", OrderIdParameter = "número de pedido",
-                    TransactionTypeParameter = "tipo", MarketplaceParameter = "web de Amazon",
-                    DescriptionParameter = "descripción", ProductPriceParameter = "ventas de productos",
-                    ShippingPriceParameter = "abonos de envío", QuantityParameter = "cantidad",
-                    TotalPriceParameter = "total",
-                    PromotionRebateParameter = "devoluciones promocionales",
-                    Order = "Pedido", Refund = "Reembolso", Transfer = "Transferir",
+                    DateTimeColumnNames = new []{ "fecha y hora" }, OrderIdColumnName = "número de pedido",
+                    TransactionTypeColumnName = "tipo", MarketplaceColumnName = "web de Amazon",
+                    DebugDescriptionColumnName = "descripción",
+                    ValueComponentsColumnName = new []{ "ventas de productos","abonos de envío", "devoluciones promocionales"},
+                    TotalPriceColumnName = "total",
+                    OrderTypeNames = new []{ "Pedido"}, RefundTypeNames = new []{ "Reembolso"}, TransferTypeNames = new []{ "Transferir"},
                     LinesToSkipBeforeColumnNames = 6
                 },
                 new TransactionsFileLanguageSettings(new CultureInfo("fr-FR"), @"(.*) UTC")
                 {
                     DistinctionPhrase = "Tous les montants sont en EUR, sauf mention contraire.",
-                    DateTimeParameter = "date/heure", OrderIdParameter = "numéro de la commande",
-                    TransactionTypeParameter = "type", MarketplaceParameter = "Marketplace",
-                    DescriptionParameter = "description", ProductPriceParameter = "ventes de produits",
-                    ShippingPriceParameter = "crédits d'expédition", QuantityParameter = "quantité",
-                    TotalPriceParameter = "total",
-                    PromotionRebateParameter = "Rabais promotionnels",
-                    Order = "Commande", Refund = "Remboursement", Transfer = "Transfert",ServiceFee = "Service Fee",
+                    DateTimeColumnNames = new []{"date/heure"}, OrderIdColumnName = "numéro de la commande",
+                    TransactionTypeColumnName = "type", MarketplaceColumnName = "Marketplace",
+                    DebugDescriptionColumnName = "description",
+                    ValueComponentsColumnName = new []{ "ventes de produits", "crédits d'expédition", "Rabais promotionnels"},
+                    TotalPriceColumnName = "total",
+                    OrderTypeNames = new []{"Commande"}, RefundTypeNames = new []{"Remboursement"}, TransferTypeNames = new []{"Transfert"},ServiceFeeTypeNames = new []{"Service Fee"},
                     LinesToSkipBeforeColumnNames = 6
                 },
                 new TransactionsFileLanguageSettings(new CultureInfo("en-GB"), @"(.*) GMT")
                 {
                     DistinctionPhrase = "All amounts in GBP, unless specified",
-                    DateTimeParameter = "date/time", OrderIdParameter = "order id",
-                    TransactionTypeParameter = "type", MarketplaceParameter = "marketplace",
-                    DescriptionParameter = "description", ProductPriceParameter = "product sales",
-                    ShippingPriceParameter = "postage credits", QuantityParameter = "quantity",
-                    TotalPriceParameter = "total",
-                    PromotionRebateParameter = "promotional rebates",
-                    Order = "Order", Refund = "Refund", Transfer = "Transfer",ServiceFee = "Service Fee",
+                    DateTimeColumnNames = new []{"date/time"}, OrderIdColumnName = "order id",
+                    TransactionTypeColumnName = "type", MarketplaceColumnName = "marketplace",
+                    DebugDescriptionColumnName = "description",
+                    ValueComponentsColumnName = new []{ "product sales", "postage credits", "promotional rebates"},
+                    TotalPriceColumnName = "total",
+                    OrderTypeNames = new []{"Order"}, RefundTypeNames = new []{"Refund"}, TransferTypeNames = new []{"Transfer"},ServiceFeeTypeNames = new []{"Service Fee"},
                     LinesToSkipBeforeColumnNames = 6
                 },
                 new TransactionsFileLanguageSettings(italyCulture, @"(.*) GMT")
                 {
                     DistinctionPhrase = "Tutti gli importi sono espressi in EUR, se non diversamente specificato.",
-                    DateTimeParameter = "Data/Ora:", OrderIdParameter = "Numero ordine",
-                    TransactionTypeParameter = "Tipo", MarketplaceParameter = "Marketplace",
-                    DescriptionParameter = "Descrizione", ProductPriceParameter = "Vendite",
-                    ShippingPriceParameter = "Accrediti per le spedizioni", QuantityParameter = "Quantità",
-                    TotalPriceParameter = "totale",
-                    PromotionRebateParameter = "Sconti promozionali",
-                    Order = "Ordine", Refund = "Rimborso", Transfer = "Trasferimento", // TODO refund
+                    DateTimeColumnNames = new []{"Data/Ora:"}, OrderIdColumnName = "Numero ordine",
+                    TransactionTypeColumnName = "Tipo", MarketplaceColumnName = "Marketplace",
+                    DebugDescriptionColumnName = "Descrizione",
+                    ValueComponentsColumnName = new []{ "Vendite","Accrediti per le spedizioni", "Sconti promozionali"},
+                    TotalPriceColumnName = "totale",
+                    OrderTypeNames = new []{"Ordine"}, RefundTypeNames = new []{"Rimborso"}, TransferTypeNames = new []{"Trasferimento"}, ServiceFeeTypeNames = new []{"Service Fee"},
                     LinesToSkipBeforeColumnNames = 6
                 },
                 new TransactionsFileLanguageSettings(new CultureInfo("ja-JP"), @"(.*)JST")
                 {
                     DistinctionPhrase = "指定のない場合、単位は円",
-                    DateTimeParameter = "日付/時間", OrderIdParameter = "注文番号",
-                    TransactionTypeParameter = "トランザクションの種類", MarketplaceParameter = "Amazon 出品サービス",
-                    DescriptionParameter = "説明", ProductPriceParameter = "商品売上",
-                    ShippingPriceParameter = "配送料", QuantityParameter = "数量",
-                    TotalPriceParameter = "合計",
-                    PromotionRebateParameter = "プロモーション割引額",
-                    Order = "注文", Refund = "返金", Transfer = "振込み", ServiceFee = "注文外料金",
-                    AdditionalPriceParameters = new []{ "商品の売上税", "配送料の税金"},
+                    DateTimeColumnNames = new []{"日付/時間"}, OrderIdColumnName = "注文番号",
+                    TransactionTypeColumnName = "トランザクションの種類", MarketplaceColumnName = "Amazon 出品サービス",
+                    DebugDescriptionColumnName = "説明",
+                    ValueComponentsColumnName = new []{ "商品売上","配送料", "プロモーション割引額", "商品の売上税", "配送料の税金"},
+                    TotalPriceColumnName = "合計",
+                    OrderTypeNames = new []{"注文"}, RefundTypeNames = new []{"返金"}, TransferTypeNames = new []{"振込み"}, ServiceFeeTypeNames = new []{"注文外料金"},
                     LinesToSkipBeforeColumnNames = 6
                 },
                 new TransactionsFileLanguageSettings(new CultureInfo("es-MX"), @"(.*) (PST|PDT)")
                 {
                     DistinctionPhrase = "Todos los importes en dólares, a menos que se especifique",
-                    DateTimeParameter = "fecha/hora", OrderIdParameter = "Id. del pedido",
-                    TransactionTypeParameter = "tipo", MarketplaceParameter = "marketplace",
-                    DescriptionParameter = "descripción", ProductPriceParameter = "ventas de productos",
-                    ShippingPriceParameter = "créditos de envío", QuantityParameter = "cantidad",
-                    TotalPriceParameter = "total",
-                    PromotionRebateParameter = "descuentos promocionales",
-                    Order = "Pedido", Refund = "Reembolso", Transfer = "Trasferir", ServiceFee = "Service Fee", // TODO Service fee
+                    DateTimeColumnNames = new []{"fecha/hora"}, OrderIdColumnName = "Id. del pedido",
+                    TransactionTypeColumnName = "tipo", MarketplaceColumnName = "marketplace",
+                    DebugDescriptionColumnName = "descripción",
+                    ValueComponentsColumnName = new []{ "ventas de productos", "créditos de envío", "descuentos promocionales"},
+                    TotalPriceColumnName = "total",
+                    OrderTypeNames = new []{"Pedido"}, RefundTypeNames = new []{"Reembolso"}, TransferTypeNames = new []{"Trasferir"}, ServiceFeeTypeNames = new []{"Service Fee"}, // TODO Service fee
                     LinesToSkipBeforeColumnNames = 7
                 },
                 new TransactionsFileLanguageSettings(new CultureInfo("en-US"), @"(.*) (PST|PDT)")
                 {
                     DistinctionPhrase = "All amounts in USD, unless specified",
-                    DateTimeParameter = "date/time", OrderIdParameter = "order id",
-                    TransactionTypeParameter = "type", MarketplaceParameter = "marketplace",
-                    DescriptionParameter = "description", ProductPriceParameter = "product sales",
-                    ShippingPriceParameter = "shipping credits", QuantityParameter = "quantity",
-                    TotalPriceParameter = "total",
-                    PromotionRebateParameter = "promotional rebates",
-                    Order = "Order", Refund = "Refund", Transfer = "Transfer",ServiceFee = "Service Fee",
+                    DateTimeColumnNames = new []{"date/time"}, OrderIdColumnName = "order id",
+                    TransactionTypeColumnName = "type", MarketplaceColumnName = "marketplace",
+                    DebugDescriptionColumnName = "description",
+                    ValueComponentsColumnName = new []{ "product sales", "shipping credits", "promotional rebates"},
+                    TotalPriceColumnName = "total",
+                    OrderTypeNames = new []{"Order"}, RefundTypeNames = new []{"Refund"}, TransferTypeNames = new []{"Transfer"},ServiceFeeTypeNames = new []{"Service Fee"},
                     LinesToSkipBeforeColumnNames = 7
                 },
                 new TransactionsFileLanguageSettings(new CultureInfo("nl-NL"), @"(.*) GMT")
                 {
                     DistinctionPhrase = "Alle bedragen in EUR, tenzij anders vermeld",
-                    DateTimeParameter = "datum/tijd", OrderIdParameter = "bestelnummer",
-                    TransactionTypeParameter = "type", MarketplaceParameter = "marketplace",
-                    DescriptionParameter = "beschrijving", ProductPriceParameter = "verkoop van producten",
-                    ShippingPriceParameter = "Verzendtegoeden", QuantityParameter = "aantal",
-                    TotalPriceParameter = "totaal",
-                    PromotionRebateParameter = "promotiekortingen",
-                    Order = "Bestelling", Refund = "Terugbetaling", Transfer = "Overdracht",ServiceFee = "Servicekosten",
+                    DateTimeColumnNames = new []{"datum/tijd"}, OrderIdColumnName = "bestelnummer",
+                    TransactionTypeColumnName = "type", MarketplaceColumnName = "marketplace",
+                    DebugDescriptionColumnName = "beschrijving",
+                    ValueComponentsColumnName = new []{ "verkoop van producten","Verzendtegoeden","promotiekortingen"},
+                    TotalPriceColumnName = "totaal",
+                    OrderTypeNames = new []{"Bestelling"}, RefundTypeNames = new []{"Terugbetaling"}, TransferTypeNames = new []{"Overdracht"},ServiceFeeTypeNames = new []{"Servicekosten"},
                     LinesToSkipBeforeColumnNames = 6
+                },
+                new TransactionsFileLanguageSettings(new CultureInfo("en-US"), @"(.*)")
+                {
+                    DistinctionPhrase = "Date",
+                    DateTimeColumnNames = new []{"Date", "Time"}, OrderIdColumnName = "Transaction ID",
+                    TransactionTypeColumnName = "Description", MarketplaceColumnName = "Time Zone", // TODO very wrong
+                    DebugDescriptionColumnName = "From Email Address", // TODO can be none
+                    
+                    ValueComponentsColumnName = new []{ "Gross", "Sales Tax"},
+
+                    TotalPriceColumnName = "Gross",
+
+                    OrderTypeNames = new []{"eBay Auction Payment", "Express Checkout Payment", "General Payment", "Mobile Payment", "Website Payment"}, 
+                    RefundTypeNames = new []{"Payment Refund"}, 
+                    TransferTypeNames = new []{"General Withdrawal - Bank Account"},
+                    ServiceFeeTypeNames = new []{"General Currency Conversion", "Tax collected by partner", "Cancellation of Hold for Dispute Resolution", "Hold on Balance for Dispute Investigation", "PreApproved Payment Bill User Payment"},
+
+                    LinesToSkipBeforeColumnNames = 0
                 },
             };
 
@@ -231,57 +238,53 @@ namespace Martin_app
             var transactions = new List<Transaction>();
             for (int index = 0; index < transactionsDict.First().Value.Count(); index++)
             {
-                int.TryParse(transactionsDict[languageSetting.QuantityParameter][index], out var quantity);
-
                 AmazonMarketplace marketplace = 0;
 
                 // FFFF!!! japanese have not decided whether its amazon.co.jp or amazon.jp
-                string marketplaceStr = transactionsDict[languageSetting.MarketplaceParameter][index];
+                string marketplaceStr = transactionsDict[languageSetting.MarketplaceColumnName][index];
                 marketplaceStr = marketplaceStr.EqualsIgnoreCase("amazon.co.jp") ? "amazon.jp" : marketplaceStr;
 
-                if (!string.IsNullOrEmpty(transactionsDict[languageSetting.MarketplaceParameter][index]))
+                if (!string.IsNullOrEmpty(transactionsDict[languageSetting.MarketplaceColumnName][index]))
                 {
                     marketplace = GetValueFromDescription<AmazonMarketplace>(marketplaceStr);
                 }
 
-                string orderId = transactionsDict[languageSetting.OrderIdParameter][index];
+                string orderId = transactionsDict[languageSetting.OrderIdColumnName][index];
                 if (string.IsNullOrEmpty(orderId))
                     orderId = "0000000000000000000";
 
-                double productPrice = double.Parse(transactionsDict[languageSetting.ProductPriceParameter][index],
-                    languageSetting.DateCultureInfo);
+                // PRICE
 
-                var transactionType = ParseTransactionType(transactionsDict[languageSetting.TransactionTypeParameter][index], languageSetting);
+                double transactionTotalValue = 0;
+                foreach (var compColumnName in languageSetting.ValueComponentsColumnName)
+                {
+                    transactionTotalValue += double.Parse(transactionsDict[compColumnName][index], languageSetting.DateCultureInfo);
+                }
+
+                var transactionType = ParseTransactionType(transactionsDict[languageSetting.TransactionTypeColumnName][index], languageSetting);
                 if (transactionType == TransactionTypes.Transfer || transactionType == TransactionTypes.ServiceFee)
                 {
                     // V priprade Service Fee a Transferu product price je total price
-                    productPrice = double.Parse(transactionsDict[languageSetting.TotalPriceParameter][index], languageSetting.DateCultureInfo);
+                    transactionTotalValue = double.Parse(transactionsDict[languageSetting.TotalPriceColumnName][index], languageSetting.DateCultureInfo);
                 }
 
-                var addFees = new List<double>();
-                if (languageSetting.AdditionalPriceParameters != null)
+                // DATE 
+                string dateComplete = String.Empty;
+                foreach (var columnName in languageSetting.DateTimeColumnNames)
                 {
-                    // JP case
-                    foreach (var feeParamName in languageSetting.AdditionalPriceParameters)
-                    {
-                        addFees.Add(double.Parse(transactionsDict[feeParamName][index]));
-                    }
+                    dateComplete += transactionsDict[columnName][index] + " ";
                 }
 
-                double promotionRebate = float.Parse(transactionsDict[languageSetting.PromotionRebateParameter][index], languageSetting.DateCultureInfo);
+                var date = ParseDate(dateComplete, languageSetting);
 
                 var transaction = new Transaction()
                 {
-                    Date = ParseDate(transactionsDict[languageSetting.DateTimeParameter][index], languageSetting),
+                    Date = date,
                     OrderId = orderId,
-                    ProductDescription = transactionsDict[languageSetting.DescriptionParameter][index],
-                    ProductPrice = productPrice,
-                    PromotionRebate = promotionRebate,
-                    ShippingPrice = float.Parse(transactionsDict[languageSetting.ShippingPriceParameter][index], languageSetting.DateCultureInfo),
-                    Quantity = quantity,
+                    ProductDescription = transactionsDict[languageSetting.DebugDescriptionColumnName][index],
+                    TransactionValue = transactionTotalValue,
                     Type = transactionType,
                     Marketplace = marketplace,
-                    AdditionalFees = addFees
                 };
                 transactions.Add(transaction);
             }
@@ -298,6 +301,7 @@ namespace Martin_app
 
             return transactions;
         }
+
 
         public T GetValueFromDescription<T>(string description)
         {
@@ -324,14 +328,15 @@ namespace Martin_app
 
         public TransactionTypes ParseTransactionType(string transactionType, TransactionsFileLanguageSettings settings)
         {
-            // TODO multiple names for same order types... enums with same numbers
-            if (transactionType.EqualsIgnoreCase("Anpassung")) transactionType = settings.Order;
-
-            // FIXME AWFUL CODE
-            if (transactionType.EqualsIgnoreCase(settings.Order)) return TransactionTypes.Order;
-            if (transactionType.EqualsIgnoreCase(settings.Transfer)) return TransactionTypes.Transfer;
-            if (transactionType.EqualsIgnoreCase(settings.Refund)) return TransactionTypes.Refund;
-            if (transactionType.EqualsIgnoreCase(settings.ServiceFee)) return TransactionTypes.ServiceFee;
+            // TODO refactoring AWFUL CODE
+            if (settings.OrderTypeNames.Any(n => n.EqualsIgnoreCase(transactionType)))
+                return TransactionTypes.Order;
+            if (settings.TransferTypeNames.Any(n => n.EqualsIgnoreCase(transactionType)))
+                return TransactionTypes.Transfer;
+            if (settings.RefundTypeNames.Any(n => n.EqualsIgnoreCase(transactionType)))
+                return TransactionTypes.Refund;
+            if (settings.ServiceFeeTypeNames.Any(n => n.EqualsIgnoreCase(transactionType)))
+                return TransactionTypes.ServiceFee;
 
             throw new ArgumentException($"Wrong transaction type! Name of transaction: {transactionType}");
         }
@@ -340,15 +345,21 @@ namespace Martin_app
         {
             // TODO handle possible exception on higher level
             // put into factory
-            return _languageSettings.Single(s => s.DistinctionPhrase.EqualsIgnoreCase(dataLines[1].First()));
+            foreach (var marketPlace in _languageSettings)
+            {
+                var found = dataLines.SingleOrDefault(l => l.First().EqualsIgnoreCase(marketPlace.DistinctionPhrase));
+                if (found != null)
+                {
+                    return marketPlace;
+                }
+            }
+            throw new ArgumentException("Nerozpoznany typ souboru");
         }
-
 
         public static string GetEnumDescription(Enum value)
         {
-            FieldInfo fi = value.GetType().GetField(value.ToString());
-
-            DescriptionAttribute[] attributes = fi.GetCustomAttributes(typeof(DescriptionAttribute), false) as DescriptionAttribute[];
+            var fi = value.GetType().GetField(value.ToString());
+            var attributes = fi.GetCustomAttributes(typeof(DescriptionAttribute), false) as DescriptionAttribute[];
 
             if (attributes != null && attributes.Any())
             {

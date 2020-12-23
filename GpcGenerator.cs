@@ -46,19 +46,28 @@ namespace Martin_app
             if (transaction.Type == TransactionTypes.Refund) // Refunds have short variable codes from first 10 symbols
             {
                 shortVariableCode = GetShortVariableCodeForRefund(transaction.OrderId);
+                zerosRemoved = 0;
             }
 
             string type = ((int) transaction.Type).ToString();
+            // in case that order ID contained zeros at the beginning
+            type = type.PadRight(type.Length + zerosRemoved, '0');
 
             string marketPlace = ((int) transaction.Marketplace).ToString().PadLeft(2, '0');
 
+            string orderId = transaction.OrderId.PadRight(19, '0');
+
+            string price = FormatPrice(transaction.TransactionValue);
+
+            string date = transaction.Date.ToString("ddMMyy");
+
             string formatted = string.Format(_transactionBase,
                 marketPlace,
-                FormatPrice(transaction.TotalPrice),
-                type.PadRight(type.Length + zerosRemoved, '0'), // in case that order ID contained zeros at the beginning
+                price,
+                type, 
                 shortVariableCode,
-                transaction.OrderId,
-                transaction.Date.ToString("ddMMyy"));
+                orderId,
+                date);
 
             int asserLen = 128;
             if (formatted.Length != asserLen) throw new DataMisalignedException($"Konvertovany radek nema delku {asserLen} symbolu! Chyba!");
@@ -105,5 +114,8 @@ namespace Martin_app
         AmazonIt = 9,
         [Description("amazon.nl")]
         AmazonNl = 10,
+        
+        [Description("Europe/Prague")]
+        PayPal = 21,
     }
 }
