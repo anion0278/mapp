@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Dynamic;
 using System.Globalization;
 
 namespace Martin_app
 {
-    public class TransactionsFileLanguageSettings
+    public class TransactionsFileLanguageSettings // TODO rename - not language settings, but MarketPlaceSettings
     {
         public string Name => DateCultureInfo.Name;
 
@@ -12,11 +13,6 @@ namespace Martin_app
             DateCultureInfo = dateCultureInfo;
             DateSubstring = dateSubstring;
         }
-
-        /// <summary>
-        /// For now - only for JP. They have 4 columns which should be summed for total price
-        /// </summary>
-        public IEnumerable<string> AdditionalPriceParameters { get; set; }
 
         /// <summary>
         /// Number of lines before the column-name-line.
@@ -30,22 +26,30 @@ namespace Martin_app
 
         public string DateSubstring { get; }
 
-        public string MarketplaceParameter { get; set; }
+        public string MarketplaceColumnName { get; set; } // TODO there is no need in this, since we know it beforehand by DistinctionPhrase 
+        // WE ONLY NEED Bank number (currently from enum)
 
-        public string OrderIdParameter { get; set; }
-        public string QuantityParameter { get; set; }
-        public string DateTimeParameter { get; set; }
-        public string DescriptionParameter { get; set; }
-        public string ShippingPriceParameter { get; set; }
-        public string ProductPriceParameter { get; set; }
-        public string PromotionRebateParameter { get; set; }
-        public string TransactionTypeParameter { get; set; }
+        public string OrderIdColumnName { get; set; }
+        public IEnumerable<string> DateTimeColumnNames { get; set; } // TODO should be of type TransactionParameter: columnNames, ParseType(enum) 
+        
+        /// <summary>
+        /// Only for debug
+        /// </summary>
+        public string DebugDescriptionColumnName { get; set; }
+        
+        //public string ShippingPriceColumnName { get; set; } // TODO into priceComponents Ienum
+        //public string ProductPriceColumnName { get; set; }
+        //public string PromotionRebateColumnNames { get; set; }
+
+        public IEnumerable<string> ValueComponentsColumnName { get; set; }
+
+        public string TransactionTypeColumnName { get; set; }
 
         // TODO solve it some different way
-        public string Transfer { get; set; }
-        public string Refund { get; set; }
-        public string Order { get; set; }
-        public string ServiceFee { get; set; }
-        public string TotalPriceParameter { get; set; }
+        public IEnumerable<string> TransferTypeNames { get; set; }
+        public IEnumerable<string> RefundTypeNames { get; set; }
+        public IEnumerable<string> OrderTypeNames { get; set; }
+        public IEnumerable<string> ServiceFeeTypeNames { get; set; }
+        public string TotalPriceColumnName { get; set; }
     }
 }
