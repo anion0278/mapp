@@ -1,0 +1,22 @@
+[
+  {
+    "version": "2.4.0.0",
+    "url": "http://rbsoft.org/downloads/AutoUpdaterTest.zip",
+    "changelog": "https://github.com/ravibpatel/AutoUpdater.NET/releases",
+    "mandatory": {
+      "value": true,
+      "minVersion": "1.0.0.0",
+      "mode": 1
+    }
+  }, 
+  {
+    "version": "2.5.0.0",
+    "url": "http://rbsoft.org/downloads/AutoUpdaterTest.zip",
+    "changelog": "https://github.com/ravibpatel/AutoUpdater.NET/releases",
+    "mandatory": {
+      "value": true,
+      "minVersion": "2.4.0.0",
+      "mode": 1
+    }
+  }
+]
