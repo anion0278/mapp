@@ -9,8 +9,10 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Security;
 using System.Text;
+using System.Text.Json;
 using System.Threading;
 using System.Windows;
 using System.Windows.Automation.Peers;
@@ -21,15 +23,16 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using System.Xml;
 using System.Xml.Serialization;
 using WindowsInput;
 using WindowsInput.Native;
+using AutoUpdaterDotNET;
 using Martin_App;
 using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.FileIO;
 using Microsoft.Win32;
-using Newtonsoft.Json;
 using Formatting = System.Xml.Formatting;
 using Path = System.IO.Path;
 
@@ -52,7 +55,7 @@ namespace Martin_app
 
         public ObservableCollection<InvoiceItemWithDetails> InvoiceItemsAll { get; set; } = new ObservableCollection<InvoiceItemWithDetails>();
 
-        public string[] _euContries =
+        public string[] _euContries = // TODO from settings
         {
             "BE", "BG", "CZ", "DK", "EE", "FI", "FR", "IE", "IT", "CY", "LT", "LV", "LU", "HU", "HR", "MT", "DE",
             "NL", "PL", "PT", "AT", "RO", "GR", "SK", "SI", "ES", "SE", "GB", "EU"
@@ -293,6 +296,7 @@ namespace Martin_app
 
         private void Initialize()
         {
+            CheckUpdate();
             _existingInvoceNumber = Settings.Default.ExistingInvoceNumber;
             _dphValue = Settings.Default.DPH;
             _defaultEmail = Settings.Default.DefaultEmail;
@@ -981,12 +985,12 @@ namespace Martin_app
         private Dictionary<string, string> DeserializeJsonDictionary(string fileName)
         {
             string json = File.ReadAllText(fileName);
-            return JsonConvert.DeserializeObject<Dictionary<string, string>>(json) ?? new Dictionary<string, string>();
+            return JsonSerializer.Deserialize<Dictionary<string, string>>(json) ?? new Dictionary<string, string>();
         }
 
         private void SerializeDictionaryToJson(Dictionary<string, string> map, string fileName)
         {
-            string json = JsonConvert.SerializeObject(map);
+            string json = JsonSerializer.Serialize(map);
             File.WriteAllText(fileName, json);
         }
 
@@ -1031,6 +1035,28 @@ namespace Martin_app
         private void TrackingCodeBox_LostFocus(object sender, RoutedEventArgs e)
         {
             LatestTrackingCode = TrackingCodeBox.Text;
+        }
+
+
+        private void CheckUpdate()
+        {
+            var assembly = Assembly.GetEntryAssembly();
+            this.Title += " v" + assembly.GetName().Version.ToString(3);
+            AutoUpdater.LetUserSelectRemindLater = true;
+            AutoUpdater.RemindLaterTimeSpan = RemindLaterFormat.Minutes;
+            AutoUpdater.RemindLaterAt = 1;
+            AutoUpdater.ReportErrors = true;
+            DispatcherTimer timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(50) };
+            // Google drive direct link
+            AutoUpdater.Start("https://drive.google.com/uc?export=download&id=1-PSWAe11BVc49FNiABnMzwmCcR_n-Vi1");
+
+            timer.Tick += delegate
+            {
+                MessageBox.Show("checking");
+                AutoUpdater.Start("https://drive.google.com/uc?export=download&id=1-PSWAe11BVc49FNiABnMzwmCcR_n-Vi1");
+                MessageBox.Show("checked");
+            };
+            timer.Start();
         }
     }
 }
