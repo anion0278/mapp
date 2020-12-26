@@ -1,21 +1,11 @@
 [
   {
-    "CurrentVersion": "2.4.0.0",
-    "DownloadURL": "http://rbsoft.org/downloads/AutoUpdaterTest.zip",
-    "ChangelogURL": "https://github.com/ravibpatel/AutoUpdater.NET/releases",
+    "CurrentVersion": "2.0.0.0",
+    "DownloadURL": "https://github.com/anion0278/mapp/releases/download/v2.0.0/mapp_v2.0.0_binaries.zip",
+    "ChangelogURL": "https://github.com/anion0278/mapp/releases/tag/v2.0.0",
     "Mandatory": {
       "Value": true,
       "MinimumVersion": "1.0.0.0",
-      "UpdateMode": 1
-    }
-  },
-  {
-    "CurrentVersion": "2.5.0.0",
-    "DownloadURL": "http://rbsoft.org/downloads/AutoUpdaterTest.zip",
-    "ChangelogURL": "https://github.com/ravibpatel/AutoUpdater.NET/releases",
-    "Mandatory": {
-      "Value": true,
-      "MinimumVersion": "2.4.0.0",
       "UpdateMode": 1
     }
   }
