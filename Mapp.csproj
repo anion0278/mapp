@@ -7,6 +7,8 @@
     <ApplicationIcon>icon.ico</ApplicationIcon>
     <AssemblyVersion>2.0.0.*</AssemblyVersion>
     <Deterministic>false</Deterministic>
+    <PackageId>Mapp</PackageId>
+    <AssemblyName>Mapp</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

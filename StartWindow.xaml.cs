@@ -12,6 +12,7 @@ using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Security;
+using System.Security.AccessControl;
 using System.Text;
 using System.Text.Json;
 using System.Threading;
@@ -30,6 +31,7 @@ using System.Xml.Serialization;
 using WindowsInput;
 using WindowsInput.Native;
 using AutoUpdaterDotNET;
+using Mapp;
 using Martin_App;
 using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.FileIO;
@@ -1042,11 +1044,16 @@ namespace Martin_app
 
         private void CheckUpdate()
         {
+            // TODO remove admin rules request
+            //var ac = new FileInfo(@"Martin_app.exe").GetAccessControl();
+            //AutoUpdater.RunUpdateAsAdmin = false;
+
             AutoUpdater.ShowSkipButton = false;
             AutoUpdater.UpdateFormSize = new System.Drawing.Size(600, 400);
             AutoUpdater.ParseUpdateInfoEvent += AutoUpdater_ParseUpdateInfoEvent;
             AutoUpdater.Start("https://raw.githubusercontent.com/anion0278/mapp/master/UpdatesDefinitions.json");
         }
+
 
         private void AutoUpdater_ParseUpdateInfoEvent(ParseUpdateInfoEventArgs args)
         {
@@ -1057,7 +1064,6 @@ namespace Martin_app
 
             if (!applicableUpdates.Any())
             {
-                args.UpdateInfo.IsUpdateAvailable = false;
                 return;
             }
 
