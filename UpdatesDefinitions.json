@@ -1,22 +1,22 @@
 [
   {
-    "version": "2.4.0.0",
-    "url": "http://rbsoft.org/downloads/AutoUpdaterTest.zip",
-    "changelog": "https://github.com/ravibpatel/AutoUpdater.NET/releases",
-    "mandatory": {
-      "value": true,
-      "minVersion": "1.0.0.0",
-      "mode": 1
+    "CurrentVersion": "2.4.0.0",
+    "DownloadURL": "http://rbsoft.org/downloads/AutoUpdaterTest.zip",
+    "ChangelogURL": "https://github.com/ravibpatel/AutoUpdater.NET/releases",
+    "Mandatory": {
+      "Value": true,
+      "MinimumVersion": "1.0.0.0",
+      "UpdateMode": 1
     }
-  }, 
+  },
   {
-    "version": "2.5.0.0",
-    "url": "http://rbsoft.org/downloads/AutoUpdaterTest.zip",
-    "changelog": "https://github.com/ravibpatel/AutoUpdater.NET/releases",
-    "mandatory": {
-      "value": true,
-      "minVersion": "2.4.0.0",
-      "mode": 1
+    "CurrentVersion": "2.5.0.0",
+    "DownloadURL": "http://rbsoft.org/downloads/AutoUpdaterTest.zip",
+    "ChangelogURL": "https://github.com/ravibpatel/AutoUpdater.NET/releases",
+    "Mandatory": {
+      "Value": true,
+      "MinimumVersion": "2.4.0.0",
+      "UpdateMode": 1
     }
   }
 ]
