@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -296,6 +297,9 @@ namespace Martin_app
 
         private void Initialize()
         {
+            var assembly = Assembly.GetEntryAssembly();
+            Title += " v" + assembly.GetName().Version.ToString(3);
+
             CheckUpdate();
             _existingInvoceNumber = Settings.Default.ExistingInvoceNumber;
             _dphValue = Settings.Default.DPH;
@@ -1019,7 +1023,6 @@ namespace Martin_app
                 transactions.AddRange(reader.ReadTransactions(fileName));
             }
 
-
             var saveFileDialog = new SaveFileDialog
             {
                 Title = "Zvol umisteni vystupniho souboru",
@@ -1037,26 +1040,26 @@ namespace Martin_app
             LatestTrackingCode = TrackingCodeBox.Text;
         }
 
-
         private void CheckUpdate()
         {
-            var assembly = Assembly.GetEntryAssembly();
-            this.Title += " v" + assembly.GetName().Version.ToString(3);
-            AutoUpdater.LetUserSelectRemindLater = true;
-            AutoUpdater.RemindLaterTimeSpan = RemindLaterFormat.Minutes;
-            AutoUpdater.RemindLaterAt = 1;
-            AutoUpdater.ReportErrors = true;
-            DispatcherTimer timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(50) };
-            // Google drive direct link
-            AutoUpdater.Start("https://drive.google.com/uc?export=download&id=1-PSWAe11BVc49FNiABnMzwmCcR_n-Vi1");
+            AutoUpdater.ShowSkipButton = false;
+            AutoUpdater.UpdateFormSize = new System.Drawing.Size(600, 400);
+            AutoUpdater.ParseUpdateInfoEvent += AutoUpdater_ParseUpdateInfoEvent;
+            AutoUpdater.Start("https://raw.githubusercontent.com/anion0278/mapp/master/UpdatesDefinitions.json");
+        }
 
-            timer.Tick += delegate
+        private void AutoUpdater_ParseUpdateInfoEvent(ParseUpdateInfoEventArgs args)
+        {
+            var allUpdates = JsonSerializer.Deserialize<IEnumerable<UpdateInfoEventArgs>>(args.RemoteData);
+            var applicableUpdates = allUpdates.Where(au =>
+                new Version(au.CurrentVersion) > Assembly.GetEntryAssembly().GetName().Version).ToList();
+
+            if (applicableUpdates.Count > 1)
             {
-                MessageBox.Show("checking");
-                AutoUpdater.Start("https://drive.google.com/uc?export=download&id=1-PSWAe11BVc49FNiABnMzwmCcR_n-Vi1");
-                MessageBox.Show("checked");
-            };
-            timer.Start();
+                MessageBox.Show($"Bylo nalezeno {applicableUpdates.Count} kumulativnich aktualizaci, budou nainstalovany postupne.");
+            }
+
+            args.UpdateInfo = applicableUpdates.OrderBy(a => new Version(a.CurrentVersion)).First();
         }
     }
 }
