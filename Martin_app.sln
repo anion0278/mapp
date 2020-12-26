@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29326.143
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Martin_app", "Martin_app.csproj", "{162BF9E6-2FF7-41D8-A7EF-BAC5D36DDBF8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mapp", "Shmap.csproj", "{162BF9E6-2FF7-41D8-A7EF-BAC5D36DDBF8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shmap.Business", "..\Shmap.Business\Shmap.Business.csproj", "{684CDA05-C153-4567-83DF-31F19A6CC944}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shmap.Business", "..\Shmap.Business\Shmap.Business.csproj", "{684CDA05-C153-4567-83DF-31F19A6CC944}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
