@@ -1051,12 +1051,20 @@ namespace Martin_app
         private void AutoUpdater_ParseUpdateInfoEvent(ParseUpdateInfoEventArgs args)
         {
             var allUpdates = JsonSerializer.Deserialize<IEnumerable<UpdateInfoEventArgs>>(args.RemoteData);
+            
             var applicableUpdates = allUpdates.Where(au =>
                 new Version(au.CurrentVersion) > Assembly.GetEntryAssembly().GetName().Version).ToList();
 
+            if (!applicableUpdates.Any())
+            {
+                args.UpdateInfo.IsUpdateAvailable = false;
+                return;
+            }
+
             if (applicableUpdates.Count > 1)
             {
-                MessageBox.Show($"Bylo nalezeno {applicableUpdates.Count} kumulativnich aktualizaci, budou nainstalovany postupne.");
+                MessageBox.Show(
+                    $"Bylo nalezeno {applicableUpdates.Count} kumulativnich aktualizaci, budou nainstalovany postupne.");
             }
 
             args.UpdateInfo = applicableUpdates.OrderBy(a => new Version(a.CurrentVersion)).First();
