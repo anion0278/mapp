@@ -5,7 +5,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>icon.ico</ApplicationIcon>
-    <AssemblyVersion>2.0.0.*</AssemblyVersion>
+    <AssemblyVersion>2.0.1.*</AssemblyVersion>
     <Deterministic>false</Deterministic>
     <PackageId>Mapp</PackageId>
     <AssemblyName>Mapp</AssemblyName>
