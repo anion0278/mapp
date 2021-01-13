@@ -139,6 +139,8 @@ namespace Martin_app
         }
 
         private string _latestTrackingCode;
+        private string _invoiceConverterConfigsDir = "Invoice Converter";
+
         private string LatestTrackingCode
         {
             get
@@ -312,13 +314,19 @@ namespace Martin_app
             DPHValue.Text = DPH.ToString();
             DefaultEmailBox.Text = DefaultEmail;
             TrackingCodeBox.Text = LatestTrackingCode;
-            Rates = GetActualCurrencyRates();
+            Rates = LoadFixedCurrencyRates(); // TODO make it possible to choose from settings
 
             LoadSettings();
         }
 
 
-        private Dictionary<string, decimal> GetActualCurrencyRates()
+        private Dictionary<string, decimal> LoadFixedCurrencyRates()
+        {
+            string fileContent = File.ReadAllText(Path.Join(_invoiceConverterConfigsDir, "fixed_currency_rates.csv"));
+            return ParseCurrencyRates(fileContent, 0, 0);
+        }
+
+        private Dictionary<string, decimal> DownloadLatestCurrencyRates()
         {
             string downloadString;
             using (var webClient = new WebClient() { Encoding = XmlEncoding })
@@ -327,8 +335,13 @@ namespace Martin_app
                 downloadString = webClient.DownloadString("http://www.cnb.cz/cs/financni_trhy/devizovy_trh/kurzy_devizoveho_trhu/denni_kurz.txt?date=" + str);
             }
             if (string.IsNullOrEmpty(downloadString))
-                throw new ArgumentNullException("Could not get Currency Rate!");
+                throw new ArgumentNullException("Nepodarilo se stahnout aktualni kurzy men!");
 
+            return ParseCurrencyRates(downloadString, 2, 2);
+        }
+
+        private static Dictionary<string, decimal> ParseCurrencyRates(string downloadString, int skipLines, int skipColumns)
+        {
             var strArrayList = new List<string[]>();
             using (TextFieldParser textFieldParser = new TextFieldParser(new StringReader(downloadString)))
             {
@@ -340,13 +353,16 @@ namespace Martin_app
                     strArrayList.Add(strArray);
                 }
             }
-            Dictionary<string, decimal> dictionary = new Dictionary<string, decimal>();
-            for (int index = 2; index < strArrayList.Count; ++index)
+
+            var ratesDict = new Dictionary<string, decimal>();
+            for (int index = skipLines; index < strArrayList.Count; ++index)
             {
-                decimal num = decimal.Parse(ToInvariantFormat(strArrayList[index][4])) / decimal.Parse(ToInvariantFormat(strArrayList[index][2]));
-                dictionary.Add(strArrayList[index][3], num);
+                decimal num = decimal.Parse(ToInvariantFormat(strArrayList[index][skipColumns+2])) /
+                              decimal.Parse(ToInvariantFormat(strArrayList[index][skipColumns]));
+                ratesDict.Add(strArrayList[index][skipColumns+1], num);
             }
-            return dictionary;
+
+            return ratesDict;
         }
 
         private static string ToInvariantFormat(string input)
