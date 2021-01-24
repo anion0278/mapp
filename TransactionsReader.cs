@@ -85,14 +85,6 @@ namespace Martin_app
             return lineItems;
         }
 
-        // TODO REMOVE!!
-        public DateTime ParseDate(string dateInput, string datePattern, CultureInfo culture)
-        {
-            var match = Regex.Match(dateInput, datePattern);
-
-            return DateTime.Parse(match.Groups[1].Value, culture);
-        }
-
         public DateTime ParseDate(string dateString, MarketPlaceTransactionsConfig settings)
         {
             var match = Regex.Match(dateString, settings.DateSubstring);
@@ -107,9 +99,19 @@ namespace Martin_app
             if (lines[1][0].Equals(japaneseCrazyEncoding))
                 lines = GetFileLines(fileName, "Shift-JIS"); 
 
-            var languageSetting = GetLanguageSetting(lines);
+            var marketPlaceSetting = GetMarketPlaceSetting(lines);
 
-            var validLines = lines.Skip(languageSetting.LinesToSkipBeforeColumnNames).ToList();
+            int linesToSkip;
+            try
+            {
+                linesToSkip = lines.ToList()
+                    .FindIndex(s => s.Intersect(marketPlaceSetting.DateTimeColumnNames).Any());
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Could not find start of the data columns", ex);
+            }
+            var validLines = lines.Skip(linesToSkip).ToList();
 
             var transactionsDict = new Dictionary<string, string[]>();
             for (int columnIndex = 0; columnIndex < validLines[0].Length; ++columnIndex)
@@ -121,33 +123,33 @@ namespace Martin_app
             var transactions = new List<Transaction>();
             for (int index = 0; index < transactionsDict.First().Value.Count(); index++)
             {
-                string orderId = transactionsDict[languageSetting.OrderIdColumnName][index];
+                string orderId = transactionsDict[marketPlaceSetting.OrderIdColumnName][index];
                 if (string.IsNullOrEmpty(orderId))
                     orderId = "0000000000000000000";
 
                 // PRICE
 
                 double transactionTotalValue = 0;
-                foreach (var compColumnName in languageSetting.ValueComponentsColumnName)
+                foreach (var compColumnName in marketPlaceSetting.ValueComponentsColumnName)
                 {
-                    transactionTotalValue += double.Parse(transactionsDict[compColumnName][index], languageSetting.DateCultureInfo);
+                    transactionTotalValue += double.Parse(transactionsDict[compColumnName][index], marketPlaceSetting.DateCultureInfo);
                 }
 
-                var transactionType = ParseTransactionType(transactionsDict[languageSetting.TransactionTypeColumnName][index], languageSetting);
+                var transactionType = ParseTransactionType(transactionsDict[marketPlaceSetting.TransactionTypeColumnName][index], marketPlaceSetting);
                 if (transactionType == TransactionTypes.Transfer || transactionType == TransactionTypes.ServiceFee)
                 {
                     // V priprade Service Fee a Transferu product price je total price
-                    transactionTotalValue = double.Parse(transactionsDict[languageSetting.TotalPriceColumnName][index], languageSetting.DateCultureInfo);
+                    transactionTotalValue = double.Parse(transactionsDict[marketPlaceSetting.TotalPriceColumnName][index], marketPlaceSetting.DateCultureInfo);
                 }
 
                 // DATE 
                 string dateComplete = String.Empty;
-                foreach (var columnName in languageSetting.DateTimeColumnNames)
+                foreach (var columnName in marketPlaceSetting.DateTimeColumnNames)
                 {
                     dateComplete += transactionsDict[columnName][index] + " ";
                 }
 
-                var date = ParseDate(dateComplete, languageSetting);
+                var date = ParseDate(dateComplete, marketPlaceSetting);
 
                 var transaction = new Transaction()
                 {
@@ -155,7 +157,7 @@ namespace Martin_app
                     OrderId = orderId,
                     TransactionValue = transactionTotalValue,
                     Type = transactionType,
-                    MarketplaceId = languageSetting.MarketPlaceId,
+                    MarketplaceId = marketPlaceSetting.MarketPlaceId,
                 };
                 transactions.Add(transaction);
             }
@@ -173,30 +175,6 @@ namespace Martin_app
             return transactions;
         }
 
-
-        public T GetValueFromDescription<T>(string description)
-        {
-            var type = typeof(T);
-            if (!type.IsEnum) throw new InvalidOperationException();
-            foreach (var field in type.GetFields())
-            {
-                var attribute = Attribute.GetCustomAttribute(field,
-                    typeof(DescriptionAttribute)) as DescriptionAttribute;
-                if (attribute != null)
-                {
-                    if (attribute.Description.EqualsIgnoreCase(description))
-                        return (T)field.GetValue(null);
-                }
-                else
-                {
-                    if (field.Name == description)
-                        return (T)field.GetValue(null);
-                }
-            }
-            throw new ArgumentException("Not found.", nameof(description));
-            // or return default(T);
-        }
-
         public TransactionTypes ParseTransactionType(string transactionType, MarketPlaceTransactionsConfig settings)
         {
             // TODO refactoring AWFUL CODE
@@ -212,7 +190,7 @@ namespace Martin_app
             throw new ArgumentException($"Wrong transaction type! Name of transaction: {transactionType}");
         }
 
-        private MarketPlaceTransactionsConfig GetLanguageSetting(IReadOnlyList<string[]> dataLines)
+        private MarketPlaceTransactionsConfig GetMarketPlaceSetting(IReadOnlyList<string[]> dataLines)
         {
             // TODO handle possible exception on higher level
             // put into factory
@@ -225,19 +203,6 @@ namespace Martin_app
                 }
             }
             throw new ArgumentException("Nerozpoznany typ souboru");
-        }
-
-        public static string GetEnumDescription(Enum value)
-        {
-            var fi = value.GetType().GetField(value.ToString());
-            var attributes = fi.GetCustomAttributes(typeof(DescriptionAttribute), false) as DescriptionAttribute[];
-
-            if (attributes != null && attributes.Any())
-            {
-                return attributes.First().Description;
-            }
-
-            return value.ToString();
         }
     }
 }
