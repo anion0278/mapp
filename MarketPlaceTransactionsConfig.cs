@@ -15,11 +15,6 @@ namespace Martin_app
             MarketPlaceId = marketPlaceId;
         }
 
-        /// <summary>
-        /// Number of lines before the column-name-line.
-        /// </summary>
-        public int LinesToSkipBeforeColumnNames { get; set; }
-
         public string DateCultureInfoName { get; }
 
         private string _timeSeparatorOverride = null;
@@ -79,10 +74,8 @@ namespace Martin_app
 
     public class MarketPlaceTransactionsConfigDTO
     {
-        protected MarketPlaceTransactionsConfigDTO()
+        public MarketPlaceTransactionsConfigDTO() // TODO why cannot be protected ? (exception)
         {}
-
-        public int LinesToSkipBeforeColumnNames { get; set; }
 
         public int MarketPlaceId { get; set; }
         
