@@ -38,6 +38,8 @@ namespace Martin_App
             get { return Item.quantity; }
             set { Item.quantity = value; }
         }
+
+        public string AmazonSkuCode => Item.amazonSkuCode;
     }
 }
 

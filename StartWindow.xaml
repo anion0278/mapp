@@ -7,7 +7,7 @@
         xmlns:sys="clr-namespace:System;assembly=System.Runtime"
         xmlns:martinApp="clr-namespace:Martin_App"
         mc:Ignorable="d"
-        Title="Amazon Invoice Converter" Height="600" Width="650"
+        Title="Amazon Invoice Converter" Height="600" Width="950"
         DataContext="{Binding RelativeSource={RelativeSource Self}}" Closing="Window_Closing">
     <FrameworkElement.Resources>
         <!--<x:Array Type="{x:Type sys:String}" x:Key="ShippingTypes">
@@ -20,6 +20,7 @@
         </x:Array>-->
         <!--<martinApp:ItemTextToStringConverter x:Key="StringConverter"/>-->
         <martinApp:ProductsListConverter x:Key="ProductsConverter"/>
+        <martinApp:ProductsListToSkuConverter x:Key="ProductsToSkuConverter"/>
     </FrameworkElement.Resources>
     <TabControl>
         <TabItem Header="Amazon - konverter">
@@ -51,6 +52,7 @@
                                 </Style>
                             </DataGridBoundColumn.ElementStyle>
                         </DataGridTextColumn>
+                        <DataGridTextColumn Header="SKU (Amazon)" IsReadOnly="True" Width="*" Binding="{Binding Item.amazonSkuCode}" />
                         <DataGridTextColumn Header="Kod zbozi (!)" Width="*" Binding="{Binding Item.code}">
                             <DataGridBoundColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
@@ -73,8 +75,8 @@
                             Binding="{Binding invoice.invoiceHeader.symVar}"/>
                         <DataGridTextColumn Header="Puvod" Width="0.4*" IsReadOnly="true"
                             Binding="{Binding invoice.invoiceHeader.paymentType.ids}"/>
-                        <DataGridTextColumn Header="Produkty" Width="*" IsReadOnly="true"
-                            Binding="{Binding invoice.invoiceDetail, Converter={StaticResource ProductsConverter}}"/>
+                        <DataGridTextColumn Header="Produkty" Width="*" IsReadOnly="true" Binding="{Binding invoice.invoiceDetail, Converter={StaticResource ProductsConverter}}"/>
+                        <DataGridTextColumn Header="SKU kody" Width="*" IsReadOnly="true" Binding="{Binding invoice.invoiceDetail, Converter={StaticResource ProductsToSkuConverter}}"/>
                         <DataGridTextColumn Header="Kod z skladu (!)" Width="*" Binding="{Binding invoice.invoiceHeader.centre.ids}">
                             <DataGridBoundColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
@@ -89,7 +91,7 @@
                         </DataGridTextColumn>
                         <DataGridTextColumn Header="Celni prohlaseni" Width="*" 
                                             Binding="{Binding invoice.invoiceHeader.partnerIdentity.address.mobilPhone}"/>
-                        <DataGridTextColumn Header="Typ" Width="*"  IsReadOnly="True"
+                        <DataGridTextColumn Header="Typ VAT" Width="*"  IsReadOnly="True"
                                             Binding="{Binding invoice.invoiceHeader.classificationVAT.ids}"/>
                     </DataGrid.Columns>
                 </DataGrid>
