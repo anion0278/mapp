@@ -66,20 +66,20 @@ namespace Martin_app
 
         private string[] DefaultShippingNames = { "Shipping", "Registered shipping" };
 
-        public Dictionary<string, string> ProductNumberByItemName { get; set; }
-        private string ProductNumberByItemNameJson = "ProductNumberByName.json";
+        public Dictionary<string, string> ProdWarehouseSectionByAmazonProdCode { get; set; } // TODO fix names
+        private string ProdWarehouseSectionByAmazonProdCodeJson;
 
-        public Dictionary<string, string> ProductCodeByItemName { get; set; }
-        private string ProductCodeByItemNameJson = "ProductCodeByAmazonName.json";
+        public Dictionary<string, string> PohodaProdCodeByAmazonProdCode { get; set; } // TODO decide - SKU or AmazonProdCode
+        private string PohodaProdCodeByAmazonProdCodeJson;
 
         public Dictionary<string, string> ShippingNameByItemName { get; set; }
-        private string ShippingNameByItemNameJson = "ShippingNameByItemName.json";
+        private string ShippingNameByItemNameJson;
 
         public Dictionary<string, string> PackQuantityByItemName { get; set; }
-        private string ProductQuantityByItemNameJson = "ProductQuantityByAmazonName.json";
+        private string ProductQuantityByItemNameJson;
 
         public Dictionary<string, string> CustomsDeclarationByItemName { get; set; }
-        private string CustomsDeclarationByItemNameJson = "CustomsDeclarationByAmazonName.json";
+        private string CustomsDeclarationByItemNameJson;
 
         KeyboardHook _keyboardHook;
 
@@ -161,6 +161,11 @@ namespace Martin_app
         public StartWindow()
         {
             _keyboardHook = new KeyboardHook();
+            ProductQuantityByItemNameJson = Path.Combine(_invoiceConverterConfigsDir, "AutocompleteProdQuantityByAmazonProdName.json");
+            ShippingNameByItemNameJson = Path.Combine(_invoiceConverterConfigsDir, "AutocompleteShippingTypeByAmazonProdName.json");
+            PohodaProdCodeByAmazonProdCodeJson = Path.Combine(_invoiceConverterConfigsDir, "AutocompletePohodaProdCodeByAmazonProdCode.json");
+            ProdWarehouseSectionByAmazonProdCodeJson = Path.Combine(_invoiceConverterConfigsDir, "AutocompleteProdWarehouseSectionByAmazonProdCode.json");
+            CustomsDeclarationByItemNameJson = Path.Combine(_invoiceConverterConfigsDir, "AutocompleteCustomsDeclarationByAmazonProdName.json");
 
             Settings.Default.Upgrade();
             Application.Current.DispatcherUnhandledException += Current_DispatcherUnhandledException;
@@ -209,7 +214,7 @@ namespace Martin_app
             //Console.WriteLine("[" + DateTime.Now.ToLongTimeString() + "] KeyDown Event {" + key.ToString() + "}");
         }
 
-        private void Current_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+        private void Current_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
             MessageBox.Show("Unhandled error: " + e.Exception.Message);
             MessageBox.Show("Unhandled error: " + e.Exception.StackTrace);
@@ -220,25 +225,27 @@ namespace Martin_app
             var fromAmazonReports = GetParametersFromAmazonReport();
             if (fromAmazonReports == null) return;
 
+            ////////////////////////////////////////////////////////////////////  MERGING amazon invoices                  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             var source = new List<InvoiceXML.dataPackDataPackItem>();
             foreach (var report in fromAmazonReports)
             {
                 var singleAmazonInvoice = FillDataPackItem(report, source.Count + 1);
                 var existingDataPack = source.FirstOrDefault(di => di.invoice.invoiceHeader.symVar == singleAmazonInvoice.invoice.invoiceHeader.symVar);
                 if (existingDataPack != null)
-                { AddItemsToExistingDataPack(existingDataPack, singleAmazonInvoice); }
+                { MergeInvoiceItemsToExistingDataPack(existingDataPack, singleAmazonInvoice); }
                 else
                 { source.Add(singleAmazonInvoice); }
             }
+            ////////////////////////////////////////////////////////////////////!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
             var invoiceInvoiceItems = source.SelectMany(di => di.invoice.invoiceDetail);
             InvoiceItemsAll.Clear();
             foreach (var invoiceItem in invoiceInvoiceItems)
             {
                 var itemWithDetails = new InvoiceItemWithDetails(invoiceItem, source.Single(di => (di.invoice.invoiceDetail).Contains(invoiceItem)).invoice.invoiceHeader);
-                if (PackQuantityByItemName.ContainsKey(itemWithDetails.Item.text))
+                if (!itemWithDetails.Item.IsShipping && PackQuantityByItemName.ContainsKey(itemWithDetails.Item.amazonSkuCode)) // TODO SAME STUFF AS in TopDataGrid_CellEditEnding -> Item.amazonSkuCode, should be abstracted !!! otherwise with each change it will be required to find all those places
                 {
-                    itemWithDetails.PackQuantityMultiplier = int.Parse(PackQuantityByItemName[itemWithDetails.Item.text]);
+                    itemWithDetails.PackQuantityMultiplier = int.Parse(PackQuantityByItemName[itemWithDetails.Item.amazonSkuCode]);
                 }
                 InvoiceItemsAll.Add(itemWithDetails);
             }
@@ -251,14 +258,15 @@ namespace Martin_app
             _convertedInvoices = source;
         }
 
-        private void AddItemsToExistingDataPack(
+        private void MergeInvoiceItemsToExistingDataPack(
           InvoiceXML.dataPackDataPackItem existingDataPack,
           InvoiceXML.dataPackDataPackItem dataPackDataPackItem)
         {
             var list = (existingDataPack.invoice.invoiceDetail).ToList();
             var invoiceInvoiceItem = (dataPackDataPackItem.invoice.invoiceDetail).First();
             list.Insert(list.Count - 1, invoiceInvoiceItem);
-            var shippingItem1 = GetShippingItem(list);
+
+            var shippingItem1 = GetShippingItem(list); // summarizing shipping form (multiple) items to single Invoice
             var shippingItem2 = GetShippingItem(dataPackDataPackItem.invoice.invoiceDetail);
             shippingItem1.foreignCurrency.unitPrice += shippingItem2.foreignCurrency.unitPrice;
             shippingItem1.foreignCurrency.price += shippingItem2.foreignCurrency.price;
@@ -270,7 +278,7 @@ namespace Martin_app
             shippingItem1.homeCurrency.priceVAT += shippingItem2.homeCurrency.priceVAT;
 
             // same crazy stuff with discount - find a new and copy discount
-            var discountItem1 = GetDiscountItem(list);
+            var discountItem1 = GetDiscountItem(list); // summarizing discounts form (multiple) items to single Invoice
             var discountItem2 = GetDiscountItem(dataPackDataPackItem.invoice.invoiceDetail);
             if (discountItem1 != null && discountItem2 != null)
             {
@@ -303,6 +311,20 @@ namespace Martin_app
         {
             var assembly = Assembly.GetEntryAssembly();
             Title += " v" + assembly.GetName().Version.ToString(3);
+
+            //if (Settings.Default.IsMainWindowMaximized)
+            //{
+            //    this.WindowState = WindowState.Maximized;
+            //}
+
+            //if (!Settings.Default.MainWindowSize.IsEmpty)
+            //{
+            //    this.Top = Settings.Default.MainWindowTopLeftCorner.Height;
+            //    this.Left = Settings.Default.MainWindowTopLeftCorner.Width;
+
+            //    this.Height = Settings.Default.MainWindowSize.Height;
+            //    this.Width = Settings.Default.MainWindowSize.Width;
+            //}
 
             CheckUpdate();
             _existingInvoceNumber = Settings.Default.ExistingInvoceNumber;
@@ -396,9 +418,10 @@ namespace Martin_app
             string shipCountry = valuesFromAmazon["ship-country"];
             string classification = SetClassification(shipCountry);
             string productName = FormatNameOfItem(valuesFromAmazon["product-name"]);
-            string shipping = GetShippingTypeName(shipCountry, productName);
+            string sku = valuesFromAmazon["sku"];
+            string shipping = GetShippingType(shipCountry, sku);
 
-            string stockItemIds = GetItemCodeByName(productName);
+            string stockItemIds = GetItemCodeBySku(sku);
 
             DateTime today = DateTime.Today;
             DateTime taxDate = CalculateTaxDate(today, classification);
@@ -422,10 +445,10 @@ namespace Martin_app
             packDataPackItem.invoice.invoiceHeader.partnerIdentity.address.country.ids = shipCountry;
             packDataPackItem.invoice.invoiceHeader.partnerIdentity.address.zip = valuesFromAmazon["ship-postal-code"];
             packDataPackItem.invoice.invoiceHeader.partnerIdentity.address.phone = phoneNumber;
-            packDataPackItem.invoice.invoiceHeader.partnerIdentity.address.mobilPhone = GetCustomsDeclaration(productName, classification);
+            packDataPackItem.invoice.invoiceHeader.partnerIdentity.address.mobilPhone = GetCustomsDeclarationBySku(sku, classification);
             packDataPackItem.invoice.invoiceHeader.partnerIdentity.address.email = DefaultEmail;
             packDataPackItem.invoice.invoiceHeader.paymentType.ids = salesChannel;
-            packDataPackItem.invoice.invoiceHeader.centre.ids = GetSavedCenter(productName);
+            packDataPackItem.invoice.invoiceHeader.centre.ids = GetSavedCenterBySku(sku);
             packDataPackItem.invoice.invoiceHeader.liquidation.amountHome = priceSum * currencyRate;
             packDataPackItem.invoice.invoiceHeader.liquidation.amountForeign = priceSum;
             var invoiceInvoiceItemList = new List<InvoiceXML.invoiceInvoiceItem>();
@@ -439,6 +462,8 @@ namespace Martin_app
             invoiceItem.stockItem = new InvoiceXML.invoiceInvoiceItemStockItem();
             invoiceItem.stockItem.stockItem = new InvoiceXML.stockItem();
             invoiceItem.stockItem.store = new InvoiceXML.store();
+            invoiceItem.amazonSkuCode = sku;
+
             if (classification == "UVzboží")
             {
                 invoiceItem.rateVAT = "none";
@@ -567,14 +592,14 @@ namespace Martin_app
             return packDataPackItem;
         }
 
-        private string GetCustomsDeclaration(string productName, string classification)
+        private string GetCustomsDeclarationBySku(string sku, string classification)
         {
-            if (classification.EqualsIgnoreCase("UVzboží") && CustomsDeclarationByItemName.ContainsKey(productName))
-            { return CustomsDeclarationByItemName[productName]; }
+            if (classification.EqualsIgnoreCase("UVzboží") && CustomsDeclarationByItemName.ContainsKey(sku))
+            { return CustomsDeclarationByItemName[sku]; }
             return string.Empty;
         }
 
-        private string GetShippingTypeName(string shipCountry, string productName)
+        private string GetShippingType(string shipCountry, string sku)
         {
             string defaultShippingName = DefaultShippingNames.First();
             if (!_euContries.Contains(shipCountry))
@@ -582,28 +607,28 @@ namespace Martin_app
                 return defaultShippingName;
             }
 
-            if (!ShippingNameByItemName.ContainsKey(productName))
+            if (!ShippingNameByItemName.ContainsKey(sku))
             {
                 return defaultShippingName;
             }
 
-            return ShippingNameByItemName[productName];
+            return ShippingNameByItemName[sku];
         }
 
-        private string GetItemCodeByName(string productName)
+        private string GetItemCodeBySku(string sku)
         {
             string defaultCode = "----";
-            if (!ProductCodeByItemName.ContainsKey(productName)) return defaultCode;
+            if (!PohodaProdCodeByAmazonProdCode.ContainsKey(sku)) return defaultCode;
 
-            return ProductCodeByItemName[productName];
+            return PohodaProdCodeByAmazonProdCode[sku];
         }
 
-        private string GetSavedCenter(string productName)
+        private string GetSavedCenterBySku(string sku)
         {
             string defaultCentreIds = "----";
-            if (!ProductNumberByItemName.ContainsKey(productName)) return defaultCentreIds;
+            if (!ProdWarehouseSectionByAmazonProdCode.ContainsKey(sku)) return defaultCentreIds;
 
-            return ProductNumberByItemName[productName];
+            return ProdWarehouseSectionByAmazonProdCode[sku];
         }
 
         private string FormatCity(
@@ -681,7 +706,7 @@ namespace Martin_app
 
         private static string FormatNameOfItem(string itemName)
         {
-            return itemName;
+            return itemName; // FIXME 
         }
 
         private decimal GetCurrencyRate(string currency)
@@ -692,7 +717,7 @@ namespace Martin_app
         private InvoiceXML.dataPackDataPackItem PrepareDatapackItem()
         {
             InvoiceXML.dataPack dataPack;
-            using (StreamReader streamReader = new StreamReader("InvoiceBasic", XmlEncoding))
+            using (StreamReader streamReader = new StreamReader(Path.Combine(_invoiceConverterConfigsDir, "InvoiceBasic"), XmlEncoding))
                 dataPack = (InvoiceXML.dataPack)new XmlSerializer(typeof(InvoiceXML.dataPack)).Deserialize(streamReader);
             return dataPack.dataPackItem[0];
         }
@@ -739,7 +764,8 @@ namespace Martin_app
 
         private static InvoiceXML.dataPack PrepareInvoice(IEnumerable<InvoiceXML.dataPackDataPackItem> dataItems)
         {
-            return new InvoiceXML.dataPack()
+            // TODO CHECK DATA 
+            return new ()
             {
                 ico = 5448034,
                 id = "Usr01",
@@ -748,7 +774,7 @@ namespace Martin_app
                 application = "Transformace",
                 note = "Uživatelský export",
                 dataPackItem = dataItems.ToArray(),
-                version = new decimal(20, 0, 0, false, (byte)1)
+                version = new decimal(20, 0, 0, false, 1)
             };
         }
 
@@ -914,17 +940,17 @@ namespace Martin_app
 
         private void TopDataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
-            ProcessCustomChangedDataForProduct(e, 4, PackQuantityByItemName, (element) =>
+            ProcessCustomChangedDataForProduct(e, 5, PackQuantityByItemName, (element) => // TODO its VERY BAD to rely on column NUMBER
             {
                 var dataContextItem = (InvoiceItemWithDetails)e.Row.DataContext;
                 string quantity = (e.EditingElement as TextBox).Text;
                 if (!int.TryParse(quantity, out _)) throw new ArgumentException("Hodnota musi byt cele cislo! Prozatim aplikace pada...");
-                return dataContextItem.Item.text; // TODO check if the number is integer !!
+                return dataContextItem.Item.amazonSkuCode; // TODO check if the number is integer !!
             });
-            ProcessCustomChangedDataForProduct(e, 3, ProductCodeByItemName, (element) =>
+            ProcessCustomChangedDataForProduct(e, 4, PohodaProdCodeByAmazonProdCode, (element) =>
             {
                 var dataContextItem = (InvoiceItemWithDetails)e.Row.DataContext;
-                return dataContextItem.Item.text;
+                return dataContextItem.Item.amazonSkuCode;
             });
             ProcessCustomChangedDataForProduct(e, 2, ShippingNameByItemName, (element) =>
             {
@@ -934,21 +960,22 @@ namespace Martin_app
                 // invoiceHeader is common for items in single Invoice, so it can be used for search
                 var shippedItem = InvoiceItemsAll.FirstOrDefault(itemWithDetail =>
                     itemWithDetail.Header.symVar == symVar && itemWithDetail != dataContextItem);
-                return shippedItem?.Item.text ?? string.Empty;
+                return shippedItem?.Item.amazonSkuCode ?? string.Empty; // DRY principle for Item.amazonSkuCode
             });
         }
 
         private void BottomDataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
-            ProcessCustomChangedDataForProduct(e, 4, CustomsDeclarationByItemName, (element) =>
+            // for both CustomDeclarations and Warehouse code we use the first Item's SKU to remember settings
+            ProcessCustomChangedDataForProduct(e, 5, CustomsDeclarationByItemName, (element) =>
             {
                 var dataContextItem = (InvoiceXML.dataPackDataPackItem)e.Row.DataContext;
-                return dataContextItem.invoice.invoiceDetail.FirstOrDefault()?.text ?? string.Empty;
+                return dataContextItem.invoice.invoiceDetail.FirstOrDefault()?.amazonSkuCode ?? string.Empty;
             });
-            ProcessCustomChangedDataForProduct(e, 3, ProductNumberByItemName, (element) =>
+            ProcessCustomChangedDataForProduct(e, 4, ProdWarehouseSectionByAmazonProdCode, (element) =>
             {
                 var dataContextItem = (InvoiceXML.dataPackDataPackItem)e.Row.DataContext;
-                return dataContextItem.invoice.invoiceDetail.FirstOrDefault()?.text ?? string.Empty;
+                return dataContextItem.invoice.invoiceDetail.FirstOrDefault()?.amazonSkuCode ?? string.Empty;
             });
         }
 
@@ -964,16 +991,16 @@ namespace Martin_app
 
                 if (e.Column.DisplayIndex == columnIndex)
                 {
-                    string productName = productNameGetter(e.EditingElement);
+                    string productSku = productNameGetter(e.EditingElement); 
                     string customValue = (e.EditingElement as TextBox).Text;
-                    if (rememberedDictionary.ContainsKey(productName))
+                    if (rememberedDictionary.ContainsKey(productSku))
                     {
-                        if (!rememberedDictionary[productName].Equals(customValue))
-                            rememberedDictionary[productName] = customValue;
+                        if (!rememberedDictionary[productSku].Equals(customValue))
+                            rememberedDictionary[productSku] = customValue;
                     }
                     else
                     {
-                        rememberedDictionary.Add(productName, customValue);
+                        rememberedDictionary.Add(productSku, customValue);
                     }
                 }
             }
@@ -981,6 +1008,21 @@ namespace Martin_app
 
         private void Window_Closing(object sender, CancelEventArgs e)
         {
+            //if (this.WindowState == WindowState.Maximized)
+            //{
+            //    Settings.Default.IsMainWindowMaximized = true;
+            //    Settings.Default.Save();
+            //    Settings.Default.Reload();
+            //}
+            //else
+            //{
+            //    Settings.Default.IsMainWindowMaximized = false;
+            //    Settings.Default.MainWindowTopLeftCorner = new System.Drawing.Size((int)Left, (int)Top);
+            //    Settings.Default.MainWindowSize = new System.Drawing.Size((int)Width, (int)Height);
+            //    Settings.Default.Save();
+            //    Settings.Default.Reload();
+            //}
+
             _keyboardHook.KeyDown -= keyboardHook_KeyDown;
             _keyboardHook.KeyUp -= keyboardHook_KeyUp;
             _keyboardHook.Uninstall();
@@ -988,8 +1030,9 @@ namespace Martin_app
 
         private void LoadSettings()
         {
-            ProductCodeByItemName = DeserializeJsonDictionary(ProductCodeByItemNameJson);
-            ProductNumberByItemName = DeserializeJsonDictionary(ProductNumberByItemNameJson);
+            // TODO fix names
+            PohodaProdCodeByAmazonProdCode = DeserializeJsonDictionary(PohodaProdCodeByAmazonProdCodeJson);
+            ProdWarehouseSectionByAmazonProdCode = DeserializeJsonDictionary(ProdWarehouseSectionByAmazonProdCodeJson);
             ShippingNameByItemName = DeserializeJsonDictionary(ShippingNameByItemNameJson);
             PackQuantityByItemName = DeserializeJsonDictionary(ProductQuantityByItemNameJson);
             CustomsDeclarationByItemName = DeserializeJsonDictionary(CustomsDeclarationByItemNameJson);
@@ -997,8 +1040,8 @@ namespace Martin_app
 
         private void SaveSettings()
         {
-            SerializeDictionaryToJson(ProductCodeByItemName, ProductCodeByItemNameJson);
-            SerializeDictionaryToJson(ProductNumberByItemName, ProductNumberByItemNameJson);
+            SerializeDictionaryToJson(PohodaProdCodeByAmazonProdCode, PohodaProdCodeByAmazonProdCodeJson);
+            SerializeDictionaryToJson(ProdWarehouseSectionByAmazonProdCode, ProdWarehouseSectionByAmazonProdCodeJson);
             SerializeDictionaryToJson(ShippingNameByItemName, ShippingNameByItemNameJson);
             SerializeDictionaryToJson(PackQuantityByItemName, ProductQuantityByItemNameJson);
             SerializeDictionaryToJson(CustomsDeclarationByItemName, CustomsDeclarationByItemNameJson);
@@ -1006,6 +1049,7 @@ namespace Martin_app
 
         private Dictionary<string, string> DeserializeJsonDictionary(string fileName)
         {
+            // TODO Handle file absence, show msg
             string json = File.ReadAllText(fileName);
             return JsonSerializer.Deserialize<Dictionary<string, string>>(json) ?? new Dictionary<string, string>();
         }

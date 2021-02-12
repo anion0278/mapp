@@ -1061,6 +1061,9 @@ namespace Martin_App
             private bool pDPField;
 
             [XmlIgnore]
+            public string amazonSkuCode { get; set; } 
+
+            [XmlIgnore]
             public bool IsShipping { get; set; } = false;
 
             public string text
