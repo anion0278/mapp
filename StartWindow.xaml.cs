@@ -225,7 +225,7 @@ namespace Martin_app
             var fromAmazonReports = GetParametersFromAmazonReport();
             if (fromAmazonReports == null) return;
 
-            ////////////////////////////////////////////////////////////////////  MERGING amazon invoices                  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            ////////////////////////////////////////////////////////////////////  MERGING amazon invoices !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             var source = new List<InvoiceXML.dataPackDataPackItem>();
             foreach (var report in fromAmazonReports)
             {
@@ -243,7 +243,7 @@ namespace Martin_app
             foreach (var invoiceItem in invoiceInvoiceItems)
             {
                 var itemWithDetails = new InvoiceItemWithDetails(invoiceItem, source.Single(di => (di.invoice.invoiceDetail).Contains(invoiceItem)).invoice.invoiceHeader);
-                if (!itemWithDetails.Item.IsShipping && PackQuantityByItemName.ContainsKey(itemWithDetails.Item.amazonSkuCode)) // TODO SAME STUFF AS in TopDataGrid_CellEditEnding -> Item.amazonSkuCode, should be abstracted !!! otherwise with each change it will be required to find all those places
+                if (!itemWithDetails.Item.IsShipping && itemWithDetails.Item.amazonSkuCode != null && PackQuantityByItemName.ContainsKey(itemWithDetails.Item.amazonSkuCode)) // TODO SAME STUFF AS in TopDataGrid_CellEditEnding -> Item.amazonSkuCode, should be abstracted !!! otherwise with each change it will be required to find all those places
                 {
                     itemWithDetails.PackQuantityMultiplier = int.Parse(PackQuantityByItemName[itemWithDetails.Item.amazonSkuCode]);
                 }
