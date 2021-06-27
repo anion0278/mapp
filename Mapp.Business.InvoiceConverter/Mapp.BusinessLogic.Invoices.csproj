@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0-windows</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Mapp.BusinessLogic.Currency\Mapp.BusinessLogic.Currency.csproj" />
+    <ProjectReference Include="..\Mapp.BusinessLogic.Transactions\Mapp.BusinessLogic.Transactions.csproj" />
+    <ProjectReference Include="..\Mapp.CommonServices.Extensions\Mapp.CommonServices.csproj" />
+    <ProjectReference Include="..\Mapp.DataAccess\Mapp.DataAccess.csproj" />
+  </ItemGroup>
+
+</Project>
