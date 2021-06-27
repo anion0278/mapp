@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0-windows</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Shmap.BusinessLogic.Currency\Shmap.BusinessLogic.Currency.csproj" />
+    <ProjectReference Include="..\Shmap.BusinessLogic.Transactions\Shmap.BusinessLogic.Transactions.csproj" />
+    <ProjectReference Include="..\Shmap.CommonServices.Extensions\Shmap.CommonServices.csproj" />
+    <ProjectReference Include="..\Shmap.DataAccess\Shmap.DataAccess.csproj" />
+  </ItemGroup>
+
+</Project>
