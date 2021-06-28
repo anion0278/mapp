@@ -7,13 +7,13 @@ namespace Mapp
         private int _packQuantityMultiplier;
         private decimal _initialOrderQuantity;
 
-        public InvoiceXML.invoiceInvoiceItem Item { get; set; }
+        public InvoiceXml.invoiceInvoiceItem Item { get; set; }
 
-        public InvoiceXML.invoiceInvoiceHeader Header { get; }
+        public InvoiceXml.invoiceInvoiceHeader Header { get; }
 
         public InvoiceItemWithDetails(
-            InvoiceXML.invoiceInvoiceItem item,
-            InvoiceXML.invoiceInvoiceHeader header)
+            InvoiceXml.invoiceInvoiceItem item,
+            InvoiceXml.invoiceInvoiceHeader header)
         {
             _packQuantityMultiplier = 1; // init !!
             Item = item;

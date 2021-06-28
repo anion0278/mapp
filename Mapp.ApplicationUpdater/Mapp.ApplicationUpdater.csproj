@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Autoupdater.NET.Official" Version="1.6.4" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Mapp.BusinessLogic.AutocompletionHelper\Mapp.BusinessLogic.AutocompletionHelper.csproj" />
     <ProjectReference Include="..\Mapp.CommonServices.Extensions\Mapp.CommonServices.csproj" />
     <ProjectReference Include="..\Mapp.DataAccess\Mapp.DataAccess.csproj" />

@@ -4,13 +4,13 @@ using System.Xml.Serialization;
 
 namespace Mapp
 {
-    public class InvoiceXML
+    public class InvoiceXml
     {
         [XmlType(AnonymousType = true, Namespace = "http://www.stormware.cz/schema/version_2/data.xsd")]
         [XmlRoot(IsNullable = false, Namespace = "http://www.stormware.cz/schema/version_2/data.xsd")]
         public class dataPack
         {
-            private InvoiceXML.dataPackDataPackItem[] dataPackItemField;
+            private InvoiceXml.dataPackDataPackItem[] dataPackItemField;
             private decimal versionField;
             private string idField;
             private uint icoField;
@@ -20,7 +20,7 @@ namespace Mapp
             private string noteField;
 
             [XmlElement("dataPackItem")]
-            public InvoiceXML.dataPackDataPackItem[] dataPackItem
+            public InvoiceXml.dataPackDataPackItem[] dataPackItem
             {
                 get
                 {
@@ -127,12 +127,12 @@ namespace Mapp
         [XmlType(AnonymousType = true, Namespace = "http://www.stormware.cz/schema/version_2/data.xsd")]
         public class dataPackDataPackItem
         {
-            private InvoiceXML.invoice invoiceField;
+            private InvoiceXml.invoice invoiceField;
             private decimal versionField;
             private string idField;
 
             [XmlElement(Namespace = "http://www.stormware.cz/schema/version_2/invoice.xsd")]
-            public InvoiceXML.invoice invoice
+            public InvoiceXml.invoice invoice
             {
                 get
                 {
@@ -180,12 +180,12 @@ namespace Mapp
             {
         new XmlQualifiedName("inv")
             });
-            private InvoiceXML.invoiceInvoiceHeader invoiceHeaderField;
-            private InvoiceXML.invoiceInvoiceItem[] invoiceDetailField;
-            private InvoiceXML.invoiceInvoiceSummary invoiceSummaryField;
+            private InvoiceXml.invoiceInvoiceHeader invoiceHeaderField;
+            private InvoiceXml.invoiceInvoiceItem[] invoiceDetailField;
+            private InvoiceXml.invoiceInvoiceSummary invoiceSummaryField;
             private decimal versionField;
 
-            public InvoiceXML.invoiceInvoiceHeader invoiceHeader
+            public InvoiceXml.invoiceInvoiceHeader invoiceHeader
             {
                 get
                 {
@@ -198,7 +198,7 @@ namespace Mapp
             }
 
             [XmlArrayItem("invoiceItem", IsNullable = false)]
-            public InvoiceXML.invoiceInvoiceItem[] invoiceDetail
+            public InvoiceXml.invoiceInvoiceItem[] invoiceDetail
             {
                 get
                 {
@@ -210,7 +210,7 @@ namespace Mapp
                 }
             }
 
-            public InvoiceXML.invoiceInvoiceSummary invoiceSummary
+            public InvoiceXml.invoiceInvoiceSummary invoiceSummary
             {
                 get
                 {
@@ -245,27 +245,29 @@ namespace Mapp
         new XmlQualifiedName("typ", "http://www.stormware.cz/schema/version_2/type.xsd")
             });
             private string invoiceTypeField;
-            private InvoiceXML.invoiceInvoiceHeaderNumber numberField;
+            private InvoiceXml.invoiceInvoiceHeaderNumber numberField;
             private string symVarField;
             private string symParField;
             private DateTime dateField;
             private DateTime dateTaxField;
             private DateTime dateAccountingField;
             private DateTime dateDueField;
-            private InvoiceXML.invoiceInvoiceHeaderAccounting accountingField;
-            private InvoiceXML.invoiceInvoiceHeaderClassificationVAT classificationVATField;
+            private InvoiceXml.invoiceInvoiceHeaderAccounting accountingField;
+            private InvoiceXml.invoiceInvoiceHeaderClassificationVAT classificationVATField;
             private string textField;
-            private InvoiceXML.invoiceInvoiceHeaderPartnerIdentity partnerIdentityField;
-            private InvoiceXML.invoiceInvoiceHeaderMyIdentity myIdentityField;
-            private InvoiceXML.invoiceInvoiceHeaderPaymentType paymentTypeField;
-            private InvoiceXML.invoiceInvoiceHeaderAccount accountField;
+            private InvoiceXml.invoiceInvoiceHeaderPartnerIdentity partnerIdentityField;
+            private InvoiceXml.invoiceInvoiceHeaderMyIdentity myIdentityField;
+            private InvoiceXml.invoiceInvoiceHeaderPaymentType paymentTypeField;
+            private InvoiceXml.invoiceInvoiceHeaderAccount accountField;
             private ushort symConstField;
-            private InvoiceXML.invoiceInvoiceHeaderCentre centreField;
+            private InvoiceXml.invoiceInvoiceHeaderCentre centreField;
             private invoiceInvoiceHeaderCarrier carrierField;
-            private InvoiceXML.invoiceInvoiceHeaderLiquidation liquidationField;
+            private InvoiceXml.invoiceInvoiceHeaderLiquidation liquidationField;
             private bool markRecordField;
+            private invoiceInvoiceHeaderMOSS mOSSField;
+            private invoiceInvoiceHeaderEvidentiaryResourcesMOSS evidentiaryResourcesMOSSField;
+            private bool histRateField;
 
-            
 
             public string invoiceType
             {
@@ -279,7 +281,7 @@ namespace Mapp
                 }
             }
 
-            public InvoiceXML.invoiceInvoiceHeaderNumber number
+            public InvoiceXml.invoiceInvoiceHeaderNumber number
             {
                 get
                 {
@@ -367,7 +369,7 @@ namespace Mapp
                 }
             }
 
-            public InvoiceXML.invoiceInvoiceHeaderAccounting accounting
+            public InvoiceXml.invoiceInvoiceHeaderAccounting accounting
             {
                 get
                 {
@@ -379,7 +381,7 @@ namespace Mapp
                 }
             }
 
-            public InvoiceXML.invoiceInvoiceHeaderClassificationVAT classificationVAT
+            public InvoiceXml.invoiceInvoiceHeaderClassificationVAT classificationVAT
             {
                 get
                 {
@@ -403,7 +405,7 @@ namespace Mapp
                 }
             }
 
-            public InvoiceXML.invoiceInvoiceHeaderPartnerIdentity partnerIdentity
+            public InvoiceXml.invoiceInvoiceHeaderPartnerIdentity partnerIdentity
             {
                 get
                 {
@@ -415,7 +417,7 @@ namespace Mapp
                 }
             }
 
-            public InvoiceXML.invoiceInvoiceHeaderMyIdentity myIdentity
+            public InvoiceXml.invoiceInvoiceHeaderMyIdentity myIdentity
             {
                 get
                 {
@@ -427,7 +429,7 @@ namespace Mapp
                 }
             }
 
-            public InvoiceXML.invoiceInvoiceHeaderPaymentType paymentType
+            public InvoiceXml.invoiceInvoiceHeaderPaymentType paymentType
             {
                 get
                 {
@@ -439,7 +441,7 @@ namespace Mapp
                 }
             }
 
-            public InvoiceXML.invoiceInvoiceHeaderAccount account
+            public InvoiceXml.invoiceInvoiceHeaderAccount account
             {
                 get
                 {
@@ -463,7 +465,7 @@ namespace Mapp
                 }
             }
 
-            public InvoiceXML.invoiceInvoiceHeaderCentre centre
+            public InvoiceXml.invoiceInvoiceHeaderCentre centre
             {
                 get
                 {
@@ -487,7 +489,33 @@ namespace Mapp
                 }
             }
 
-            public InvoiceXML.invoiceInvoiceHeaderLiquidation liquidation
+            /// <remarks/>
+            public invoiceInvoiceHeaderMOSS MOSS
+            {
+                get
+                {
+                    return this.mOSSField;
+                }
+                set
+                {
+                    this.mOSSField = value;
+                }
+            }
+
+
+            public invoiceInvoiceHeaderEvidentiaryResourcesMOSS evidentiaryResourcesMOSS
+            {
+                get
+                {
+                    return this.evidentiaryResourcesMOSSField;
+                }
+                set
+                {
+                    this.evidentiaryResourcesMOSSField = value;
+                }
+            }
+
+            public InvoiceXml.invoiceInvoiceHeaderLiquidation liquidation
             {
                 get
                 {
@@ -496,6 +524,18 @@ namespace Mapp
                 set
                 {
                     this.liquidationField = value;
+                }
+            }
+
+            public bool histRate
+            {
+                get
+                {
+                    return this.histRateField;
+                }
+                set
+                {
+                    this.histRateField = value;
                 }
             }
 
@@ -586,11 +626,11 @@ namespace Mapp
         [XmlType(AnonymousType = true, Namespace = "http://www.stormware.cz/schema/version_2/invoice.xsd")]
         public class invoiceInvoiceHeaderPartnerIdentity
         {
-            private InvoiceXML.address addressField;
-            private InvoiceXML.shipToAddress shipToAddressField;
+            private InvoiceXml.address addressField;
+            private InvoiceXml.shipToAddress shipToAddressField;
 
             [XmlElement(Namespace = "http://www.stormware.cz/schema/version_2/type.xsd")]
-            public InvoiceXML.address address
+            public InvoiceXml.address address
             {
                 get
                 {
@@ -603,7 +643,7 @@ namespace Mapp
             }
 
             [XmlElement(Namespace = "http://www.stormware.cz/schema/version_2/type.xsd")]
-            public InvoiceXML.shipToAddress shipToAddress
+            public InvoiceXml.shipToAddress shipToAddress
             {
                 get
                 {
@@ -631,7 +671,7 @@ namespace Mapp
             private uint icoField;
             private bool icoFieldSpecified;
             private string dicField;
-            private InvoiceXML.addressCountry countryField;
+            private InvoiceXml.addressCountry countryField;
             private string phoneField;
             private string mobilPhoneField;
             private string emailField;
@@ -769,7 +809,7 @@ namespace Mapp
                 }
             }
 
-            public InvoiceXML.addressCountry country
+            public InvoiceXml.addressCountry country
             {
                 get
                 {
@@ -898,10 +938,10 @@ namespace Mapp
         [XmlType(AnonymousType = true, Namespace = "http://www.stormware.cz/schema/version_2/invoice.xsd")]
         public class invoiceInvoiceHeaderMyIdentity
         {
-            private InvoiceXML.address addressField;
+            private InvoiceXml.address addressField;
 
             [XmlElement(Namespace = "http://www.stormware.cz/schema/version_2/type.xsd")]
-            public InvoiceXML.address address
+            public InvoiceXml.address address
             {
                 get
                 {
@@ -1006,6 +1046,54 @@ namespace Mapp
             }
         }
 
+        /// <remarks/>
+        [System.SerializableAttribute()]
+        [System.ComponentModel.DesignerCategoryAttribute("code")]
+        [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "http://www.stormware.cz/schema/version_2/invoice.xsd")]
+        public partial class invoiceInvoiceHeaderMOSS
+        {
+
+            private string idsField;
+
+            /// <remarks/>
+            [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://www.stormware.cz/schema/version_2/type.xsd")]
+            public string ids
+            {
+                get
+                {
+                    return this.idsField;
+                }
+                set
+                {
+                    this.idsField = value;
+                }
+            }
+        }
+
+        /// <remarks/>
+        [System.SerializableAttribute()]
+        [System.ComponentModel.DesignerCategoryAttribute("code")]
+        [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "http://www.stormware.cz/schema/version_2/invoice.xsd")]
+        public partial class invoiceInvoiceHeaderEvidentiaryResourcesMOSS
+        {
+
+            private string idsField;
+
+            /// <remarks/>
+            [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://www.stormware.cz/schema/version_2/type.xsd")]
+            public string ids
+            {
+                get
+                {
+                    return this.idsField;
+                }
+                set
+                {
+                    this.idsField = value;
+                }
+            }
+        }
+
         [XmlType(AnonymousType = true, Namespace = "http://www.stormware.cz/schema/version_2/invoice.xsd")]
         public class invoiceInvoiceHeaderLiquidation
         {
@@ -1054,10 +1142,10 @@ namespace Mapp
             private bool payVATField;
             private string rateVATField;
             private decimal discountPercentageField;
-            private InvoiceXML.invoiceInvoiceItemHomeCurrency homeCurrencyField;
-            private InvoiceXML.invoiceInvoiceItemForeignCurrency foreignCurrencyField;
+            private InvoiceXml.invoiceInvoiceItemHomeCurrency homeCurrencyField;
+            private InvoiceXml.invoiceInvoiceItemForeignCurrency foreignCurrencyField;
             private string codeField;
-            private InvoiceXML.invoiceInvoiceItemStockItem stockItemField;
+            private InvoiceXml.invoiceInvoiceItemStockItem stockItemField;
             private bool pDPField;
 
             [XmlIgnore]
@@ -1150,7 +1238,7 @@ namespace Mapp
                 }
             }
 
-            public InvoiceXML.invoiceInvoiceItemHomeCurrency homeCurrency
+            public InvoiceXml.invoiceInvoiceItemHomeCurrency homeCurrency
             {
                 get
                 {
@@ -1162,7 +1250,7 @@ namespace Mapp
                 }
             }
 
-            public InvoiceXML.invoiceInvoiceItemForeignCurrency foreignCurrency
+            public InvoiceXml.invoiceInvoiceItemForeignCurrency foreignCurrency
             {
                 get
                 {
@@ -1186,7 +1274,7 @@ namespace Mapp
                 }
             }
 
-            public InvoiceXML.invoiceInvoiceItemStockItem stockItem
+            public InvoiceXml.invoiceInvoiceItemStockItem stockItem
             {
                 get
                 {
@@ -1336,11 +1424,11 @@ namespace Mapp
         [XmlType(AnonymousType = true, Namespace = "http://www.stormware.cz/schema/version_2/invoice.xsd")]
         public class invoiceInvoiceItemStockItem
         {
-            private InvoiceXML.store storeField;
-            private InvoiceXML.stockItem stockItemField;
+            private InvoiceXml.store storeField;
+            private InvoiceXml.stockItem stockItemField;
 
             [XmlElement(Namespace = "http://www.stormware.cz/schema/version_2/type.xsd")]
-            public InvoiceXML.store store
+            public InvoiceXml.store store
             {
                 get
                 {
@@ -1353,7 +1441,7 @@ namespace Mapp
             }
 
             [XmlElement(Namespace = "http://www.stormware.cz/schema/version_2/type.xsd")]
-            public InvoiceXML.stockItem stockItem
+            public InvoiceXml.stockItem stockItem
             {
                 get
                 {
@@ -1414,8 +1502,8 @@ namespace Mapp
             });
             private string roundingDocumentField;
             private string roundingVATField;
-            private InvoiceXML.invoiceInvoiceSummaryHomeCurrency homeCurrencyField;
-            private InvoiceXML.invoiceInvoiceSummaryForeignCurrency foreignCurrencyField;
+            private InvoiceXml.invoiceInvoiceSummaryHomeCurrency homeCurrencyField;
+            private InvoiceXml.invoiceInvoiceSummaryForeignCurrency foreignCurrencyField;
 
             public string roundingDocument
             {
@@ -1441,7 +1529,7 @@ namespace Mapp
                 }
             }
 
-            public InvoiceXML.invoiceInvoiceSummaryHomeCurrency homeCurrency
+            public InvoiceXml.invoiceInvoiceSummaryHomeCurrency homeCurrency
             {
                 get
                 {
@@ -1453,7 +1541,7 @@ namespace Mapp
                 }
             }
 
-            public InvoiceXML.invoiceInvoiceSummaryForeignCurrency foreignCurrency
+            public InvoiceXml.invoiceInvoiceSummaryForeignCurrency foreignCurrency
             {
                 get
                 {
@@ -1479,7 +1567,7 @@ namespace Mapp
             private decimal price3Field;
             private decimal price3VATField;
             private decimal price3SumField;
-            private InvoiceXML.round roundField;
+            private InvoiceXml.round roundField;
 
             [XmlElement(Namespace = "http://www.stormware.cz/schema/version_2/type.xsd")]
             public decimal priceNone
@@ -1612,7 +1700,7 @@ namespace Mapp
             }
 
             [XmlElement(Namespace = "http://www.stormware.cz/schema/version_2/type.xsd")]
-            public InvoiceXML.round round
+            public InvoiceXml.round round
             {
                 get
                 {
@@ -1647,13 +1735,13 @@ namespace Mapp
         [XmlType(AnonymousType = true, Namespace = "http://www.stormware.cz/schema/version_2/invoice.xsd")]
         public class invoiceInvoiceSummaryForeignCurrency
         {
-            private InvoiceXML.currency currencyField;
+            private InvoiceXml.currency currencyField;
             private decimal rateField;
             private byte amountField;
             private decimal priceSumField;
 
             [XmlElement(Namespace = "http://www.stormware.cz/schema/version_2/type.xsd")]
-            public InvoiceXML.currency currency
+            public InvoiceXml.currency currency
             {
                 get
                 {

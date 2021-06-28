@@ -8,7 +8,7 @@ namespace Mapp
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            InvoiceXML.invoiceInvoiceItem invoiceInvoiceItem = value as InvoiceXML.invoiceInvoiceItem;
+            InvoiceXml.invoiceInvoiceItem invoiceInvoiceItem = value as InvoiceXml.invoiceInvoiceItem;
             if (invoiceInvoiceItem.stockItem == null)
                 return (object)invoiceInvoiceItem.text;
             return (object)string.Empty;

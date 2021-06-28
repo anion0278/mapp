@@ -82,7 +82,7 @@
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="Background" Value="Orange"/>
                                     <Style.Triggers>
-                                        <Trigger  Property="Text" Value="----">
+                                        <Trigger  Property="Text" Value="----"> 
                                             <Setter Property="Background" Value="Red"/>
                                         </Trigger>
                                     </Style.Triggers>

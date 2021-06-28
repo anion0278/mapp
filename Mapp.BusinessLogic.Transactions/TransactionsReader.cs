@@ -1,20 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Globalization;
-using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Xml.Serialization;
 using AutoMapper;
 using Mapp.CommonServices;
 using Mapp.DataAccess;
 using Mapp.Models;
 using Microsoft.VisualBasic.FileIO;
 
-namespace Mapp
+namespace Mapp.BusinessLogic.Transactions
 {
     public class TransactionsReader
     {

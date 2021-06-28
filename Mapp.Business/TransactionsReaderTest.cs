@@ -5,6 +5,7 @@ using System.Runtime.Serialization;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using Mapp;
+using Mapp.BusinessLogic.Transactions;
 using Mapp.DataAccess;
 using Xunit;
 using 
