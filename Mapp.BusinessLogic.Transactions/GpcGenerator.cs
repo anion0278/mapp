@@ -1,14 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Reflection;
-using System.Security.Cryptography.X509Certificates;
-using System.Windows.Markup;
 using Shmap.CommonServices;
-using Microsoft.Win32;
 
-namespace Mapp
+namespace Shmap.BusinessLogic.Transactions
 {
     public class GpcGenerator
     {

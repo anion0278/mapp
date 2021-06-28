@@ -24,25 +24,25 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="TestData\aggregation of discounts\amazon.txt">
+    <None Update="TestData\discounts aggregation\amazon.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="TestData\aggregation of discounts\converted.xml">
+    <None Update="TestData\discounts aggregation\converted.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="TestData\TestSettings\Invoice Converter\AutocompleteCustomsDeclarationByAmazonProdName.json">
+    <None Update="TestData\TestSettings\Invoice Converter\AutocompleteCustomsDeclarationBySku.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="TestData\TestSettings\Invoice Converter\AutocompletePohodaProdCodeByAmazonProdCode.json">
+    <None Update="TestData\TestSettings\Invoice Converter\AutocompletePohodaProdCodeBySku.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="TestData\TestSettings\Invoice Converter\AutocompleteProdQuantityByAmazonProdName.json">
+    <None Update="TestData\TestSettings\Invoice Converter\AutocompleteProdQuantityBySku.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="TestData\TestSettings\Invoice Converter\AutocompleteProdWarehouseSectionByAmazonProdCode.json">
+    <None Update="TestData\TestSettings\Invoice Converter\AutocompleteProdWarehouseSectionBySku.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="TestData\TestSettings\Invoice Converter\AutocompleteShippingTypeByAmazonProdName.json">
+    <None Update="TestData\TestSettings\Invoice Converter\AutocompleteShippingTypeBySku.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="TestData\TestSettings\Invoice Converter\fixed_currency_rates.csv">

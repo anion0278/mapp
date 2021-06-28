@@ -6,6 +6,7 @@ using Shmap.BusinessLogic.Currency;
 using Shmap.CommonServices;
 using Shmap.DataAccess;
 using Mapp;
+using Shmap.BusinessLogic.Transactions;
 
 namespace Shmap.BusinessLogic.Invoices
 {
@@ -23,14 +24,14 @@ namespace Shmap.BusinessLogic.Invoices
         private readonly int MaxAddressNameLength = 60;
         private readonly int MaxCityLength = 45;
         private readonly int MaxClientNameLength = 30;
-        private IEnumerable<InvoiceXML.dataPackDataPackItem> _convertedInvoices;
+        private IEnumerable<InvoiceXml.dataPackDataPackItem> _convertedInvoices;
         private Dictionary<string, decimal> Rates;
 
         private string[] DefaultShippingNames = { "Shipping", "Registered shipping" };
         public string[] _euContries = // TODO from settings
         {
             "BE", "BG", "CZ", "DK", "EE", "FI", "FR", "IE", "IT", "CY", "LT", "LV", "LU", "HU", "HR", "MT", "DE",
-            "NL", "PL", "PT", "AT", "RO", "GR", "SK", "SI", "ES", "SE", "GB", "EU"
+            "NL", "PL", "PT", "AT", "RO", "GR", "SK", "SI", "ES", "SE", "EU"
         };
 
 
@@ -39,7 +40,7 @@ namespace Shmap.BusinessLogic.Invoices
         public string DefaultEmail { get; set; }
         public string LatestTrackingCode { get; set; }
         
-        public ObservableCollection<InvoiceXML.dataPackDataPackItem> InvoicesTable { get; set; } = new();
+        public ObservableCollection<InvoiceXml.dataPackDataPackItem> InvoicesTable { get; set; } = new();
 
         public ObservableCollection<InvoiceItemWithDetails> InvoiceItemsAll { get; set; } = new();
 
@@ -56,8 +57,8 @@ namespace Shmap.BusinessLogic.Invoices
         }
 
         private void MergeInvoiceItemsToExistingDataPack(
-          InvoiceXML.dataPackDataPackItem existingDataPack,
-          InvoiceXML.dataPackDataPackItem dataPackDataPackItem)
+          InvoiceXml.dataPackDataPackItem existingDataPack,
+          InvoiceXml.dataPackDataPackItem dataPackDataPackItem)
         {
             var list = (existingDataPack.invoice.invoiceDetail).ToList();
             var invoiceInvoiceItem = (dataPackDataPackItem.invoice.invoiceDetail).First();
@@ -92,35 +93,35 @@ namespace Shmap.BusinessLogic.Invoices
             existingDataPack.invoice.invoiceDetail = list.ToArray();
         }
 
-        private static InvoiceXML.invoiceInvoiceItem GetDiscountItem(
-            IEnumerable<InvoiceXML.invoiceInvoiceItem> existingItems)
+        private static InvoiceXml.invoiceInvoiceItem GetDiscountItem(
+            IEnumerable<InvoiceXml.invoiceInvoiceItem> existingItems)
         {
             return existingItems.SingleOrDefault(item => item.text.EqualsIgnoreCase("discount"));
         }
 
-        private static InvoiceXML.invoiceInvoiceItem GetShippingItem(
-          IEnumerable<InvoiceXML.invoiceInvoiceItem> existingItems)
+        private static InvoiceXml.invoiceInvoiceItem GetShippingItem(
+          IEnumerable<InvoiceXml.invoiceInvoiceItem> existingItems)
         {
             return existingItems.Single(item => item.IsShipping);
         }
 
-        public void LoadAmazonReports(IEnumerable<string> reportsFileNames)
+        public void LoadAmazonReports(IEnumerable<string> reportsFileNames, DateTime toDate)
         {
             var dataFromAmazonReports = _invoicesXmlManager.LoadAmazonReports(reportsFileNames);
 
             if (dataFromAmazonReports == null) return;
 
-            var source = MerginInvoicesOfSameOrders(dataFromAmazonReports);
+            var source = MerginInvoicesOfSameOrders(dataFromAmazonReports, toDate);
 
             var invoiceInvoiceItems = source.SelectMany(di => di.invoice.invoiceDetail);
             InvoiceItemsAll.Clear();
             foreach (var invoiceItem in invoiceInvoiceItems)
             {
                 var itemWithDetails = new InvoiceItemWithDetails(invoiceItem, source.Single(di => (di.invoice.invoiceDetail).Contains(invoiceItem)).invoice.invoiceHeader);
-                if (!itemWithDetails.Item.IsShipping && itemWithDetails.Item.amazonSkuCode != null && _autocompleteData.PackQuantityByItemName.ContainsKey(itemWithDetails.Item.amazonSkuCode)) 
+                if (!itemWithDetails.Item.IsShipping && itemWithDetails.Item.amazonSkuCode != null && _autocompleteData.PackQuantitySku.ContainsKey(itemWithDetails.Item.amazonSkuCode)) 
                     // TODO SAME STUFF AS in TopDataGrid_CellEditEnding -> Item.amazonSkuCode, should be abstracted !!! otherwise with each change it will be required to find all those places
                 {
-                    itemWithDetails.PackQuantityMultiplier = int.Parse(_autocompleteData.PackQuantityByItemName[itemWithDetails.Item.amazonSkuCode]);
+                    itemWithDetails.PackQuantityMultiplier = int.Parse(_autocompleteData.PackQuantitySku[itemWithDetails.Item.amazonSkuCode]);
                 }
                 InvoiceItemsAll.Add(itemWithDetails);
             }
@@ -133,12 +134,12 @@ namespace Shmap.BusinessLogic.Invoices
             _convertedInvoices = source;
         }
 
-        private List<InvoiceXML.dataPackDataPackItem> MerginInvoicesOfSameOrders(IEnumerable<Dictionary<string, string>> dataFromAmazonReports)
+        private List<InvoiceXml.dataPackDataPackItem> MerginInvoicesOfSameOrders(IEnumerable<Dictionary<string, string>> dataFromAmazonReports, DateTime toDate)
         {
-            var source = new List<InvoiceXML.dataPackDataPackItem>();
+            var source = new List<InvoiceXml.dataPackDataPackItem>();
             foreach (var report in dataFromAmazonReports)
             {
-                var singleAmazonInvoice = FillDataPackItem(report, source.Count + 1);
+                var singleAmazonInvoice = FillDataPackItem(report, source.Count + 1, toDate);
                 var existingDataPack = source.FirstOrDefault(di =>
                     di.invoice.invoiceHeader.symVar == singleAmazonInvoice.invoice.invoiceHeader.symVar);
                 if (existingDataPack != null)
@@ -155,7 +156,7 @@ namespace Shmap.BusinessLogic.Invoices
         }
 
 
-        private InvoiceXML.dataPackDataPackItem FillDataPackItem(Dictionary<string, string> valuesFromAmazon, int index)
+        private InvoiceXml.dataPackDataPackItem FillDataPackItem(Dictionary<string, string> valuesFromAmazon, int index, DateTime toDate)
         {
             string invoiceType = "issuedInvoice";
             string accountingIds = "3Fv";
@@ -179,13 +180,13 @@ namespace Shmap.BusinessLogic.Invoices
             string phoneNumber = FormatPhoneNumber(valuesFromAmazon["ship-phone-number"], valuesFromAmazon["buyer-phone-number"], headerSymPar);
             string shipCountry = valuesFromAmazon["ship-country"];
             string classification = SetClassification(shipCountry);
-            string productName = FormatNameOfItem(valuesFromAmazon["product-name"]);
+            string productName = valuesFromAmazon["product-name"];
             string sku = valuesFromAmazon["sku"];
             string shipping = GetShippingType(shipCountry, sku);
 
             string stockItemIds = GetItemCodeBySku(sku);
 
-            DateTime today = DateTime.Today;
+            DateTime today = toDate;
             DateTime taxDate = CalculateTaxDate(today, classification);
             DateTime dueDate = CalculateDueDate(today);
             packDataPackItem.id = userId;
@@ -213,17 +214,19 @@ namespace Shmap.BusinessLogic.Invoices
             packDataPackItem.invoice.invoiceHeader.centre.ids = GetSavedCenterBySku(sku);
             packDataPackItem.invoice.invoiceHeader.liquidation.amountHome = priceSum * currencyRate;
             packDataPackItem.invoice.invoiceHeader.liquidation.amountForeign = priceSum;
-            var invoiceInvoiceItemList = new List<InvoiceXML.invoiceInvoiceItem>();
-            var invoiceItem = new InvoiceXML.invoiceInvoiceItem();
+            packDataPackItem.invoice.invoiceHeader.histRate = true; // always true
+
+            var invoiceInvoiceItemList = new List<InvoiceXml.invoiceInvoiceItem>();
+            var invoiceItem = new InvoiceXml.invoiceInvoiceItem();
             decimal quantity = decimal.Parse(valuesFromAmazon["quantity-purchased"]);
             invoiceItem.quantity = quantity;
             invoiceItem.payVAT = true;
             invoiceItem.discountPercentage = 0;
-            invoiceItem.foreignCurrency = new InvoiceXML.invoiceInvoiceItemForeignCurrency();
-            invoiceItem.homeCurrency = new InvoiceXML.invoiceInvoiceItemHomeCurrency();
-            invoiceItem.stockItem = new InvoiceXML.invoiceInvoiceItemStockItem();
-            invoiceItem.stockItem.stockItem = new InvoiceXML.stockItem();
-            invoiceItem.stockItem.store = new InvoiceXML.store();
+            invoiceItem.foreignCurrency = new InvoiceXml.invoiceInvoiceItemForeignCurrency();
+            invoiceItem.homeCurrency = new InvoiceXml.invoiceInvoiceItemHomeCurrency();
+            invoiceItem.stockItem = new InvoiceXml.invoiceInvoiceItemStockItem();
+            invoiceItem.stockItem.stockItem = new InvoiceXml.stockItem();
+            invoiceItem.stockItem.store = new InvoiceXml.store();
             invoiceItem.amazonSkuCode = sku;
 
             if (classification == "UVzboží")
@@ -255,14 +258,14 @@ namespace Shmap.BusinessLogic.Invoices
             invoiceItem.stockItem.store.ids = "Zboží";
             invoiceItem.stockItem.stockItem.ids = stockItemIds;
             invoiceItem.PDP = false;
-            var invoiceItemShipping = new InvoiceXML.invoiceInvoiceItem();
+            var invoiceItemShipping = new InvoiceXml.invoiceInvoiceItem();
             invoiceItemShipping.text = shipping;
             invoiceItemShipping.IsShipping = true;
             invoiceItemShipping.quantity = 1;
             invoiceItemShipping.payVAT = true;
             invoiceItemShipping.discountPercentage = 0;
-            invoiceItemShipping.foreignCurrency = new InvoiceXML.invoiceInvoiceItemForeignCurrency();
-            invoiceItemShipping.homeCurrency = new InvoiceXML.invoiceInvoiceItemHomeCurrency();
+            invoiceItemShipping.foreignCurrency = new InvoiceXml.invoiceInvoiceItemForeignCurrency();
+            invoiceItemShipping.homeCurrency = new InvoiceXml.invoiceInvoiceItemHomeCurrency();
             if (classification == "UVzboží")
             {
                 invoiceItemShipping.rateVAT = "none";
@@ -292,13 +295,13 @@ namespace Shmap.BusinessLogic.Invoices
             invoiceInvoiceItemList.Add(invoiceItemShipping);
             if (promotionDiscount != 0)
             {
-                var invoiceItemDiscount = new InvoiceXML.invoiceInvoiceItem();
+                var invoiceItemDiscount = new InvoiceXml.invoiceInvoiceItem();
                 invoiceItemDiscount.text = "Discount";
                 invoiceItemDiscount.quantity = 1;
                 invoiceItemDiscount.payVAT = true;
                 invoiceItemDiscount.discountPercentage = 0;
-                invoiceItemDiscount.foreignCurrency = new InvoiceXML.invoiceInvoiceItemForeignCurrency();
-                invoiceItemDiscount.homeCurrency = new InvoiceXML.invoiceInvoiceItemHomeCurrency();
+                invoiceItemDiscount.foreignCurrency = new InvoiceXml.invoiceInvoiceItemForeignCurrency();
+                invoiceItemDiscount.homeCurrency = new InvoiceXml.invoiceInvoiceItemHomeCurrency();
                 if (classification == "UVzboží")
                 {
                     invoiceItemDiscount.rateVAT = "none";
@@ -356,8 +359,8 @@ namespace Shmap.BusinessLogic.Invoices
 
         private string GetCustomsDeclarationBySku(string sku, string classification)
         {
-            if (classification.EqualsIgnoreCase("UVzboží") && _autocompleteData.CustomsDeclarationByItemName.ContainsKey(sku)) // awful!
-            { return _autocompleteData.CustomsDeclarationByItemName[sku]; }
+            if (classification.EqualsIgnoreCase("UVzboží") && _autocompleteData.CustomsDeclarationBySku.ContainsKey(sku)) // awful!
+            { return _autocompleteData.CustomsDeclarationBySku[sku]; }
             return string.Empty;
         }
 
@@ -369,12 +372,12 @@ namespace Shmap.BusinessLogic.Invoices
                 return defaultShippingName;
             }
 
-            if (!_autocompleteData.ShippingNameByItemName.ContainsKey(sku))
+            if (!_autocompleteData.ShippingNameBySku.ContainsKey(sku))
             {
                 return defaultShippingName;
             }
 
-            return _autocompleteData.ShippingNameByItemName[sku];
+            return _autocompleteData.ShippingNameBySku[sku];
         }
 
         public void ProcessInvoices(string fileName)
@@ -384,7 +387,7 @@ namespace Shmap.BusinessLogic.Invoices
             FixItems(InvoiceItemsAll);
             if (_convertedInvoices == null || !_convertedInvoices.Any())
             {
-                //TODO MessageBox.Show("Zadne faktury nebyly konvertovany!");
+                UserNotification.Invoke(this,"Zadne faktury nebyly konvertovany!"); // TODO solve using OperationResult
                 return;
             }
 
@@ -396,21 +399,20 @@ namespace Shmap.BusinessLogic.Invoices
 
         private string GetItemCodeBySku(string sku)
         {
-            string defaultCode = "----";
-            if (!_autocompleteData.PohodaProdCodeByAmazonProdCode.ContainsKey(sku)) return defaultCode;
+            if (!_autocompleteData.PohodaProdCodeBySku.ContainsKey(sku)) return ApplicationConstants.EmptyItemCode;
 
-            return _autocompleteData.PohodaProdCodeByAmazonProdCode[sku];
+            return _autocompleteData.PohodaProdCodeBySku[sku];
         }
 
         private string GetSavedCenterBySku(string sku)
         {
-            string defaultCentreIds = "----";
-            if (!_autocompleteData.ProdWarehouseSectionByAmazonProdCode.ContainsKey(sku)) return defaultCentreIds;
+            string defaultCentreIds = ApplicationConstants.EmptyItemCode;
+            if (!_autocompleteData.ProdWarehouseSectionBySku.ContainsKey(sku)) return defaultCentreIds;
 
-            return _autocompleteData.ProdWarehouseSectionByAmazonProdCode[sku];
+            return _autocompleteData.ProdWarehouseSectionBySku[sku];
         }
 
-        private void UpdateExistingInvoiceNumber(InvoiceXML.dataPack invoice)
+        private void UpdateExistingInvoiceNumber(InvoiceXml.dataPack invoice)
         {
             ExistingInvoiceNumber += (uint)(invoice.dataPackItem).Count();
         }
@@ -442,11 +444,6 @@ namespace Shmap.BusinessLogic.Invoices
                 if (itemWithDetailes.Item.text.Length > MaxItemNameLength)
                     itemWithDetailes.Item.text = itemWithDetailes.Item.text.Substring(0, MaxItemNameLength);
             }
-        }
-
-        private static string FormatNameOfItem(string itemName)
-        {
-            return itemName; // FIXME 
         }
 
         private decimal GetCurrencyRate(string currency)

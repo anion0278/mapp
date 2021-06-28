@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Dynamic;
+﻿using System.Collections.Generic;
 using System.Globalization;
 
-namespace Mapp
+namespace Shmap.BusinessLogic.Transactions
 {
     public class MarketPlaceTransactionsConfig 
     {
@@ -69,7 +67,4 @@ namespace Mapp
         public IEnumerable<string> ServiceFeeTypeNames { get; set; }
         public string TotalPriceColumnName { get; set; }
     }
-
-
-    
 }

@@ -4,7 +4,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -17,6 +19,8 @@ using Shmap.BusinessLogic.Currency;
 using Shmap.BusinessLogic.Invoices;
 using Shmap.DataAccess;
 using Mapp;
+using Shmap.BusinessLogic.Transactions;
+using Shmap.CommonServices;
 using Microsoft.Win32;
 
 
@@ -103,26 +107,26 @@ namespace Mapp
             };
             bool? dialogResult = openFileDialog.ShowDialog();
 
-            if (dialogResult == false) return null;
+            if (dialogResult == false) return null;// TODO exception if cancel
 
             return openFileDialog.FileNames;
         }
 
         private void TopDataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
-            ProcessCustomChangedDataForProduct(e, 5, _autocompleteData.PackQuantityByItemName, (element) => // TODO its VERY BAD to rely on column NUMBER
+            ProcessCustomChangedDataForProduct(e, 5, _autocompleteData.PackQuantitySku, (element) => // TODO its VERY BAD to rely on column NUMBER
             {
                 var dataContextItem = (InvoiceItemWithDetails)e.Row.DataContext;
                 string quantity = (e.EditingElement as TextBox).Text;
                 if (!int.TryParse(quantity, out _)) throw new ArgumentException("Hodnota musi byt cele cislo! Prozatim aplikace pada...");
                 return dataContextItem.Item.amazonSkuCode; // TODO check if the number is integer !!
             });
-            ProcessCustomChangedDataForProduct(e, 4, _autocompleteData.PohodaProdCodeByAmazonProdCode, (element) =>
+            ProcessCustomChangedDataForProduct(e, 4, _autocompleteData.PohodaProdCodeBySku, (element) =>
             {
                 var dataContextItem = (InvoiceItemWithDetails)e.Row.DataContext;
                 return dataContextItem.Item.amazonSkuCode;
             });
-            ProcessCustomChangedDataForProduct(e, 2, _autocompleteData.ShippingNameByItemName, (element) =>
+            ProcessCustomChangedDataForProduct(e, 2, _autocompleteData.ShippingNameBySku, (element) =>
             {
                 var dataContextItem = (InvoiceItemWithDetails)e.Row.DataContext;
                 var symVar = dataContextItem.Header.symVar;
@@ -137,14 +141,14 @@ namespace Mapp
         private void BottomDataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
             // for both CustomDeclarations and Warehouse code we use the first Item's SKU to remember settings
-            ProcessCustomChangedDataForProduct(e, 5, _autocompleteData.CustomsDeclarationByItemName, (_) =>
+            ProcessCustomChangedDataForProduct(e, 5, _autocompleteData.CustomsDeclarationBySku, (_) =>
             {
-                var dataContextItem = (InvoiceXML.dataPackDataPackItem)e.Row.DataContext;
+                var dataContextItem = (InvoiceXml.dataPackDataPackItem)e.Row.DataContext;
                 return dataContextItem.invoice.invoiceDetail.FirstOrDefault()?.amazonSkuCode ?? string.Empty;
             });
-            ProcessCustomChangedDataForProduct(e, 4, _autocompleteData.ProdWarehouseSectionByAmazonProdCode, (_) =>
+            ProcessCustomChangedDataForProduct(e, 4, _autocompleteData.ProdWarehouseSectionBySku, (_) =>
             {
-                var dataContextItem = (InvoiceXML.dataPackDataPackItem)e.Row.DataContext;
+                var dataContextItem = (InvoiceXml.dataPackDataPackItem)e.Row.DataContext;
                 return dataContextItem.invoice.invoiceDetail.FirstOrDefault()?.amazonSkuCode ?? string.Empty;
             });
         }
@@ -163,14 +167,17 @@ namespace Mapp
                 {
                     string productSku = productNameGetter(e.EditingElement); 
                     string customValue = (e.EditingElement as TextBox).Text;
-                    if (rememberedDictionary.ContainsKey(productSku))
+                    if (productSku != null && customValue != ApplicationConstants.EmptyItemCode && !string.IsNullOrEmpty(customValue)) // TODO - fix. VERY BAD
                     {
-                        if (!rememberedDictionary[productSku].Equals(customValue))
-                            rememberedDictionary[productSku] = customValue;
-                    }
-                    else
-                    {
-                        rememberedDictionary.Add(productSku, customValue);
+                        if (rememberedDictionary.ContainsKey(productSku))
+                        {
+                            if (!rememberedDictionary[productSku].Equals(customValue))
+                                rememberedDictionary[productSku] = customValue;
+                        }
+                        else
+                        {
+                            rememberedDictionary.Add(productSku, customValue);
+                        }
                     }
                 }
             }
@@ -228,8 +235,7 @@ namespace Mapp
 
         public void ButtonSelectInvoice_Click(object sender, RoutedEventArgs e)
         {
-            //_invoiceXmlXmlManager.LoadAmazonReports(GetAmazonReportFiles());
-            InvoiceConverter.LoadAmazonReports(GetAmazonReportFiles());
+            InvoiceConverter.LoadAmazonReports(GetAmazonReportFiles(), DateTime.Today);
         }
          
         private void ButtonExport_Click(object sender, RoutedEventArgs e)
@@ -244,7 +250,13 @@ namespace Mapp
             if (dialogResult != true) return;
 
             InvoiceConverter.ProcessInvoices(saveFileDialog.FileName);
+            OpenFileFolder(saveFileDialog.FileName);
             UpdateTextBoxes();
+        }
+
+        private static void OpenFileFolder(string fileName)
+        {
+            Process.Start("explorer.exe", Path.GetDirectoryName(fileName));
         }
 
         private void TransactionsButton_Click(object sender, RoutedEventArgs e)
@@ -272,6 +284,7 @@ namespace Mapp
 
             var converter = new GpcGenerator();
             converter.SaveTransactions(transactions, saveFileDialog.FileName);
+            OpenFileFolder(saveFileDialog.FileName);
         }
 
         private string AskToChangeLongStringIfNeeded(string message, string str, int maxLength)

@@ -5,28 +5,28 @@ namespace Shmap.DataAccess
 {
     public interface IAutocompleteData
     {
-        public Dictionary<string, string> ProdWarehouseSectionByAmazonProdCode { get; set; } // TODO fix names
+        public Dictionary<string, string> ProdWarehouseSectionBySku { get; set; } // TODO fix names
 
-        public Dictionary<string, string> PohodaProdCodeByAmazonProdCode { get; set; } // TODO decide - SKU or AmazonProdCode
+        public Dictionary<string, string> PohodaProdCodeBySku { get; set; } // TODO decide - SKU or AmazonProdCode
 
-        public Dictionary<string, string> ShippingNameByItemName { get; set; }
+        public Dictionary<string, string> ShippingNameBySku { get; set; }
 
-        public Dictionary<string, string> PackQuantityByItemName { get; set; }
+        public Dictionary<string, string> PackQuantitySku { get; set; }
 
-        public Dictionary<string, string> CustomsDeclarationByItemName { get; set; }
+        public Dictionary<string, string> CustomsDeclarationBySku { get; set; }
     }
 
     internal class AutocompleteData: IAutocompleteData
     {
-        public Dictionary<string, string> ProdWarehouseSectionByAmazonProdCode { get; set; } // TODO fix names
+        public Dictionary<string, string> ProdWarehouseSectionBySku { get; set; } // TODO fix names
 
-        public Dictionary<string, string> PohodaProdCodeByAmazonProdCode { get; set; } // TODO decide - SKU or AmazonProdCode
+        public Dictionary<string, string> PohodaProdCodeBySku { get; set; } // TODO decide - SKU or AmazonProdCode
 
-        public Dictionary<string, string> ShippingNameByItemName { get; set; }
+        public Dictionary<string, string> ShippingNameBySku { get; set; }
 
-        public Dictionary<string, string> PackQuantityByItemName { get; set; }
+        public Dictionary<string, string> PackQuantitySku { get; set; }
 
-        public Dictionary<string, string> CustomsDeclarationByItemName { get; set; }
+        public Dictionary<string, string> CustomsDeclarationBySku { get; set; }
     }
 
     public class AutocompleteDataLoader
@@ -34,32 +34,38 @@ namespace Shmap.DataAccess
         private readonly IJsonManager _jsonManager;
         private string _invoiceConverterConfigsDir;
 
-        private string ShippingNameByItemNameJson;
-        private string ProdWarehouseSectionByAmazonProdCodeJson;
-        private string PohodaProdCodeByAmazonProdCodeJson;
-        private string ProductQuantityByItemNameJson;
-        private string CustomsDeclarationByItemNameJson;
+        private string ShippingNameBySkuJson;
+        private string ProdWarehouseSectionBySkuJson;
+        private string PohodaProdCodeBySkuJson;
+        private string ProductQuantityBySkuJson;
+        private string CustomsDeclarationBySkuJson;
 
         public AutocompleteDataLoader(IJsonManager jsonManager, string invoiceConverterConfigsDir)
         {
             _jsonManager = jsonManager;
             _invoiceConverterConfigsDir = invoiceConverterConfigsDir;
-            ProductQuantityByItemNameJson = Path.Combine(_invoiceConverterConfigsDir, "AutocompleteProdQuantityByAmazonProdName.json");
-            ShippingNameByItemNameJson = Path.Combine(_invoiceConverterConfigsDir, "AutocompleteShippingTypeByAmazonProdName.json");
-            PohodaProdCodeByAmazonProdCodeJson = Path.Combine(_invoiceConverterConfigsDir, "AutocompletePohodaProdCodeByAmazonProdCode.json");
-            ProdWarehouseSectionByAmazonProdCodeJson = Path.Combine(_invoiceConverterConfigsDir, "AutocompleteProdWarehouseSectionByAmazonProdCode.json");
-            CustomsDeclarationByItemNameJson = Path.Combine(_invoiceConverterConfigsDir, "AutocompleteCustomsDeclarationByAmazonProdName.json");
         }
 
         public IAutocompleteData LoadSettings()
         {
+            PohodaProdCodeBySkuJson = Path.Combine(_invoiceConverterConfigsDir, "AutocompletePohodaProdCodeBySku.json");
+            ProdWarehouseSectionBySkuJson =
+                Path.Combine(_invoiceConverterConfigsDir, "AutocompleteProdWarehouseSectionBySku.json");
+            ShippingNameBySkuJson =
+                Path.Combine(_invoiceConverterConfigsDir, "AutocompleteShippingTypeBySku.json");
+            ProductQuantityBySkuJson =
+                Path.Combine(_invoiceConverterConfigsDir, "AutocompleteProdQuantityBySku.json");
+            CustomsDeclarationBySkuJson =
+                Path.Combine(_invoiceConverterConfigsDir, "AutocompleteCustomsDeclarationBySku.json");
+
             var autocompleteData = new AutocompleteData
             {
-                PohodaProdCodeByAmazonProdCode = _jsonManager.DeserializeJsonDictionary(PohodaProdCodeByAmazonProdCodeJson),
-                ProdWarehouseSectionByAmazonProdCode = _jsonManager.DeserializeJsonDictionary(ProdWarehouseSectionByAmazonProdCodeJson),
-                ShippingNameByItemName = _jsonManager.DeserializeJsonDictionary(ShippingNameByItemNameJson),
-                PackQuantityByItemName = _jsonManager.DeserializeJsonDictionary(ProductQuantityByItemNameJson),
-                CustomsDeclarationByItemName = _jsonManager.DeserializeJsonDictionary(CustomsDeclarationByItemNameJson)
+                // TODO intelligible exception if some files are missing
+                PohodaProdCodeBySku = _jsonManager.DeserializeJsonDictionary(PohodaProdCodeBySkuJson),
+                ProdWarehouseSectionBySku = _jsonManager.DeserializeJsonDictionary(ProdWarehouseSectionBySkuJson),
+                ShippingNameBySku = _jsonManager.DeserializeJsonDictionary(ShippingNameBySkuJson),
+                PackQuantitySku = _jsonManager.DeserializeJsonDictionary(ProductQuantityBySkuJson),
+                CustomsDeclarationBySku = _jsonManager.DeserializeJsonDictionary(CustomsDeclarationBySkuJson)
             };
             // TODO fix names
             return autocompleteData;
@@ -67,11 +73,11 @@ namespace Shmap.DataAccess
 
         public void SaveSettings(IAutocompleteData data)
         {
-            _jsonManager.SerializeDictionaryToJson(data.PohodaProdCodeByAmazonProdCode, PohodaProdCodeByAmazonProdCodeJson);
-            _jsonManager.SerializeDictionaryToJson(data.ProdWarehouseSectionByAmazonProdCode, ProdWarehouseSectionByAmazonProdCodeJson);
-            _jsonManager.SerializeDictionaryToJson(data.ShippingNameByItemName, ShippingNameByItemNameJson);
-            _jsonManager.SerializeDictionaryToJson(data.PackQuantityByItemName, ProductQuantityByItemNameJson);
-            _jsonManager.SerializeDictionaryToJson(data.CustomsDeclarationByItemName, CustomsDeclarationByItemNameJson);
+            _jsonManager.SerializeDictionaryToJson(data.PohodaProdCodeBySku, PohodaProdCodeBySkuJson);
+            _jsonManager.SerializeDictionaryToJson(data.ProdWarehouseSectionBySku, ProdWarehouseSectionBySkuJson);
+            _jsonManager.SerializeDictionaryToJson(data.ShippingNameBySku, ShippingNameBySkuJson);
+            _jsonManager.SerializeDictionaryToJson(data.PackQuantitySku, ProductQuantityBySkuJson);
+            _jsonManager.SerializeDictionaryToJson(data.CustomsDeclarationBySku, CustomsDeclarationBySkuJson);
         }
 
     }

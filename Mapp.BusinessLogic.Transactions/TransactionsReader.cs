@@ -1,20 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Globalization;
-using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Xml.Serialization;
 using AutoMapper;
 using Shmap.CommonServices;
 using Shmap.DataAccess;
 using Shmap.Models;
 using Microsoft.VisualBasic.FileIO;
 
-namespace Mapp
+namespace Shmap.BusinessLogic.Transactions
 {
     public class TransactionsReader
     {

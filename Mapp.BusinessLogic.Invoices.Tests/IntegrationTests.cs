@@ -12,9 +12,9 @@ namespace Shmap.BusinessLogic.Invoices.Tests
     public class IntegrationTests // Charact. tests?
     {
         [Fact]
-        public void Multiple_Discounts_Aggregation()
+        public void Discounts_Aggregation()
         {
-            IntegrationTestBase("aggregation of discounts", 290100449);
+            IntegrationTestBase("discounts aggregation", 290100449);
         }
 
         [Fact]
@@ -26,7 +26,7 @@ namespace Shmap.BusinessLogic.Invoices.Tests
         [Fact]
         public void Empty_Line()
         {
-            IntegrationTestBase("empty line", 290100436);
+            IntegrationTestBase("empty line", 290100442);
         }
 
         [Fact]
@@ -84,9 +84,9 @@ namespace Shmap.BusinessLogic.Invoices.Tests
             InvoiceConverter.DPH = (decimal)0.1736;
             InvoiceConverter.DefaultEmail = "info@czechdrawing.com";
 
-            InvoiceConverter.LoadAmazonReports(new[] { inputAmazonReportFilePath });
+            InvoiceConverter.LoadAmazonReports(new[] { inputAmazonReportFilePath }, DateTime.Parse("27.06.2021"));
 
-            string resultFile = Path.GetFullPath(expectedResultFilePath) + "result.xml";
+            string resultFile = Path.Join(Path.GetDirectoryName(expectedResultFilePath),"result.xml");
             InvoiceConverter.ProcessInvoices(resultFile);
 
             string expectedResult = File.ReadAllText(expectedResultFilePath); // TODO save to memory

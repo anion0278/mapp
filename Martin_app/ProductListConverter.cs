@@ -10,7 +10,7 @@ namespace Mapp
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return (object)string.Join(Environment.NewLine, (value as IEnumerable<InvoiceXML.invoiceInvoiceItem>).Select(p => p.text));
+            return (object)string.Join(Environment.NewLine, (value as IEnumerable<InvoiceXml.invoiceInvoiceItem>).Select(p => p.text));
         }
 
         public object ConvertBack(
@@ -26,7 +26,7 @@ namespace Mapp
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return (object)string.Join(Environment.NewLine, (value as IEnumerable<InvoiceXML.invoiceInvoiceItem>).Select(p => p.amazonSkuCode));
+            return (object)string.Join(Environment.NewLine, (value as IEnumerable<InvoiceXml.invoiceInvoiceItem>).Select(p => p.amazonSkuCode));
         }
 
         public object ConvertBack(

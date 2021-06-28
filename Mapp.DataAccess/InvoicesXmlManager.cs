@@ -25,16 +25,16 @@ namespace Shmap.DataAccess
             _invoiceConverterConfigsDir = invoiceConverterConfigsDir;
         }
 
-        public InvoiceXML.dataPackDataPackItem PrepareDatapackItem()
+        public InvoiceXml.dataPackDataPackItem PrepareDatapackItem()
         {
-            InvoiceXML.dataPack dataPack;
+            InvoiceXml.dataPack dataPack;
             using (StreamReader streamReader = new StreamReader(Path.Combine(_invoiceConverterConfigsDir, "InvoiceBasic"), XmlEncoding))
-                dataPack = (InvoiceXML.dataPack)new XmlSerializer(typeof(InvoiceXML.dataPack)).Deserialize(streamReader);
+                dataPack = (InvoiceXml.dataPack)new XmlSerializer(typeof(InvoiceXml.dataPack)).Deserialize(streamReader);
             return dataPack.dataPackItem[0];
         }
 
 
-        public void SerializeXmlInvoice(string fileName, InvoiceXML.dataPack invoice)
+        public void SerializeXmlInvoice(string fileName, InvoiceXml.dataPack invoice)
         {
             var settings = new XmlWriterSettings();
             settings.Encoding = XmlEncoding;
@@ -51,7 +51,7 @@ namespace Shmap.DataAccess
             FixNamespaces(fileName);
         }
 
-        public InvoiceXML.dataPack PrepareInvoice(IEnumerable<InvoiceXML.dataPackDataPackItem> dataItems)
+        public InvoiceXml.dataPack PrepareInvoice(IEnumerable<InvoiceXml.dataPackDataPackItem> dataItems)
         {
             // TODO CHECK DATA 
             return new()
@@ -141,10 +141,10 @@ namespace Shmap.DataAccess
     {
         IEnumerable<Dictionary<string, string>> LoadAmazonReports(IEnumerable<string> fileNames);
 
-        void SerializeXmlInvoice(string fileName, InvoiceXML.dataPack invoice);
+        void SerializeXmlInvoice(string fileName, InvoiceXml.dataPack invoice);
 
-        InvoiceXML.dataPackDataPackItem PrepareDatapackItem();
+        InvoiceXml.dataPackDataPackItem PrepareDatapackItem();
 
-        InvoiceXML.dataPack PrepareInvoice(IEnumerable<InvoiceXML.dataPackDataPackItem> dataItems);
+        InvoiceXml.dataPack PrepareInvoice(IEnumerable<InvoiceXml.dataPackDataPackItem> dataItems);
     }
 }
