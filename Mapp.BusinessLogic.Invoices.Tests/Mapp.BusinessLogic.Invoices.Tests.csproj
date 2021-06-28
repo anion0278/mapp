@@ -93,6 +93,9 @@
     <None Update="TestData\quantity\converted.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="TestData\TestSettings\Invoice Converter\vat_by_country.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

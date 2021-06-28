@@ -81,7 +81,7 @@
           <inv:quantity>1</inv:quantity>
           <inv:coefficient>0</inv:coefficient>
           <inv:payVAT>true</inv:payVAT>
-          <inv:rateVAT>none</inv:rateVAT>
+          <inv:rateVAT>historyHigh</inv:rateVAT>
           <inv:discountPercentage>0</inv:discountPercentage>
           <inv:homeCurrency>
             <typ:unitPrice>427.52613</typ:unitPrice>
@@ -111,7 +111,7 @@
           <inv:quantity>1</inv:quantity>
           <inv:coefficient>0</inv:coefficient>
           <inv:payVAT>true</inv:payVAT>
-          <inv:rateVAT>none</inv:rateVAT>
+          <inv:rateVAT>historyHigh</inv:rateVAT>
           <inv:discountPercentage>0</inv:discountPercentage>
           <inv:homeCurrency>
             <typ:unitPrice>128.10813</typ:unitPrice>

@@ -7,11 +7,11 @@ using Microsoft.VisualBasic.FileIO;
 
 namespace Shmap.DataAccess
 {
-    public class CurrencyLoader
+    public class CsvLoader
     {
         private string _invoiceConverterConfigsDir;
 
-        public CurrencyLoader(string invoiceConverterConfigsDir)
+        public CsvLoader(string invoiceConverterConfigsDir)
         {
             _invoiceConverterConfigsDir = invoiceConverterConfigsDir;
         }
@@ -20,6 +20,12 @@ namespace Shmap.DataAccess
         {
             string fileContent = File.ReadAllText(Path.Join(_invoiceConverterConfigsDir, "fixed_currency_rates.csv"));
             return ParseCurrencyRates(fileContent, 0, 0);
+        }
+
+        public Dictionary<string, decimal> LoadCountryVatRates()
+        {
+            string fileContent = File.ReadAllText(Path.Join(_invoiceConverterConfigsDir, "vat_by_country.csv"));
+            return ParseVatRates(fileContent);
         }
 
         private Dictionary<string, decimal> ParseCurrencyRates(string downloadString, int skipLines, int skipColumns)
@@ -42,6 +48,30 @@ namespace Shmap.DataAccess
                 decimal num = decimal.Parse(ToInvariantFormat(strArrayList[index][skipColumns + 2])) /
                               decimal.Parse(ToInvariantFormat(strArrayList[index][skipColumns]));
                 ratesDict.Add(strArrayList[index][skipColumns + 1], num);
+            }
+
+            return ratesDict;
+        }
+
+        private Dictionary<string, decimal> ParseVatRates(string downloadString)
+        {
+            var strArrayList = new List<string[]>();
+            using (TextFieldParser textFieldParser = new TextFieldParser(new StringReader(downloadString)))
+            {
+                textFieldParser.TextFieldType = FieldType.Delimited;
+                textFieldParser.SetDelimiters("|");
+                while (!textFieldParser.EndOfData)
+                {
+                    string[] strArray = textFieldParser.ReadFields();
+                    strArrayList.Add(strArray);
+                }
+            }
+
+            var ratesDict = new Dictionary<string, decimal>();
+            for (int index = 0; index < strArrayList.Count; ++index)
+            {
+                decimal vat = decimal.Parse(ToInvariantFormat(strArrayList[index][1])) / (decimal) 100.0;
+                ratesDict.Add(strArrayList[index][0], vat);
             }
 
             return ratesDict;

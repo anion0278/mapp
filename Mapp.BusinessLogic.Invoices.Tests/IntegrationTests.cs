@@ -11,6 +11,8 @@ namespace Shmap.BusinessLogic.Invoices.Tests
 {
     public class IntegrationTests // Charact. tests?
     {
+        // TODO add multi-file import test
+
         [Fact]
         public void Discounts_Aggregation()
         {
@@ -69,7 +71,7 @@ namespace Shmap.BusinessLogic.Invoices.Tests
 
             var _jsonManager = new JsonManager();
             var _invoiceXmlXmlManager = new InvoicesXmlManager(invoiceDir) { UserNotification = (_, _) => { } };
-            var _currencyLoader = new CurrencyLoader(invoiceDir);
+            var _currencyLoader = new CsvLoader(invoiceDir);
             var _autocompleteDataLoader = new AutocompleteDataLoader(_jsonManager, invoiceDir);
             var _autocompleteData = _autocompleteDataLoader.LoadSettings();
             var InvoiceConverter = new InvoiceConverter(
@@ -81,7 +83,7 @@ namespace Shmap.BusinessLogic.Invoices.Tests
                 _autocompleteDataLoader);
 
             InvoiceConverter.ExistingInvoiceNumber = (uint) startingOrderNumber;
-            InvoiceConverter.DPH = (decimal)0.1736;
+            InvoiceConverter.CountryVat = (decimal)0.1736;
             InvoiceConverter.DefaultEmail = "info@czechdrawing.com";
 
             InvoiceConverter.LoadAmazonReports(new[] { inputAmazonReportFilePath }, DateTime.Parse("27.06.2021"));

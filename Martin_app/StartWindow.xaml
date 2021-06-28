@@ -34,8 +34,6 @@
                     <Button  x:Name="ButtonConvert" Content="Zvolit fakturu" Width="150" Height="35" Click="ButtonSelectInvoice_Click"/>
                     <Label Content="Posledni existujici cislo v systemu:" HorizontalAlignment="Center"/>
                     <TextBox  x:Name="ExistingInvoiceNum" Text="{Binding InvoiceConverter.ExistingInvoiceNumber}"  Height="23" VerticalAlignment="Center" Width="150" LostFocus="ExistingInvoiceNum_LostFocus"/>
-                    <Label Content="DPH:" HorizontalAlignment="Center"/>
-                    <TextBox  x:Name="DPHValue" Text="{Binding InvoiceConverter.DPH}" Height="23" Width="150" LostFocus="DPHValue_LostFocus"/>
                     <Label Content="Default email:" HorizontalAlignment="Center"/>
                     <TextBox  x:Name="DefaultEmailBox" Text="{Binding InvoiceConverter.DefaultEmail}" Height="23" VerticalAlignment="Center" Width="150" LostFocus="DefaultEmail_LostFocus" />
                     <Button  x:Name="ButtonExport" Content="Konvertovat..." Width="150" Height="35" Margin="10" Click="ButtonExport_Click"/>
