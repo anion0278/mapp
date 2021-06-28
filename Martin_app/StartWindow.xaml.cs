@@ -32,7 +32,7 @@ namespace Mapp
         private ApplicationUpdater.ApplicationUpdater _appUpdater;
         private IJsonManager _jsonManager;
         private IInvoicesXmlManager _invoiceXmlXmlManager;
-        private CurrencyLoader _currencyLoader;
+        private CsvLoader _csvLoader;
         public InvoiceConverter InvoiceConverter { get; }
         private IAutocompleteData _autocompleteData;
         private AutocompleteDataLoader _autocompleteDataLoader;
@@ -47,10 +47,10 @@ namespace Mapp
             _autoKeyboardInputHelper = new AutoKeyboardInputHelper();
             _appUpdater = new ApplicationUpdater.ApplicationUpdater(_jsonManager);
             _invoiceXmlXmlManager = new InvoicesXmlManager(invoiceDir){ UserNotification = (o, e) => MessageBox.Show(e) };
-            _currencyLoader = new CurrencyLoader(invoiceDir);
+            _csvLoader = new CsvLoader(invoiceDir);
             _autocompleteDataLoader = new AutocompleteDataLoader(_jsonManager, invoiceDir);
             _autocompleteData = _autocompleteDataLoader.LoadSettings();
-            InvoiceConverter = new InvoiceConverter(_autocompleteData, new CurrencyConverter(), _currencyLoader, _invoiceXmlXmlManager, AskToChangeLongStringIfNeeded, _autocompleteDataLoader);
+            InvoiceConverter = new InvoiceConverter(_autocompleteData, new CurrencyConverter(), _csvLoader, _invoiceXmlXmlManager, AskToChangeLongStringIfNeeded, _autocompleteDataLoader);
             _transactionsReader = new TransactionsReader(_jsonManager);
 
             if (Settings.Default.IsUpgradeNeeded)
@@ -65,7 +65,7 @@ namespace Mapp
             Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
 
             InvoiceConverter.ExistingInvoiceNumber = Settings.Default.ExistingInvoiceNumber;
-            InvoiceConverter.DPH = Settings.Default.DPH;
+            InvoiceConverter.CountryVat = Settings.Default.DPH;
             InvoiceConverter.DefaultEmail = Settings.Default.DefaultEmail;
             InvoiceConverter.LatestTrackingCode = Settings.Default.LatestTrackingCode; // TODO - move to correct assembly!
             
@@ -79,8 +79,6 @@ namespace Mapp
 
         private void UpdateTextBoxes() //not mvvm at all for now
         {
-           
-            DPHValue.Text = InvoiceConverter.DPH.ToString();
             ExistingInvoiceNum.Text = InvoiceConverter.ExistingInvoiceNumber.ToString();
             DefaultEmailBox.Text = InvoiceConverter.DefaultEmail.ToString();
             TrackingCodeBox.Text = InvoiceConverter.LatestTrackingCode.ToString();
@@ -188,35 +186,19 @@ namespace Mapp
             _autoKeyboardInputHelper.Dispose();
 
             Settings.Default.ExistingInvoiceNumber = InvoiceConverter.ExistingInvoiceNumber;
-            Settings.Default.DPH = InvoiceConverter.DPH;
+            Settings.Default.DPH = InvoiceConverter.CountryVat;
             Settings.Default.DefaultEmail = InvoiceConverter.DefaultEmail;
             Settings.Default.LatestTrackingCode= InvoiceConverter.LatestTrackingCode;
             Settings.Default.Save();
         }
 
-        private void DPHValue_LostFocus(object sender, RoutedEventArgs e)
-        {
-            decimal dphValue;
-            try
-            {
-                dphValue = decimal.Parse(_currencyLoader.ToInvariantFormat(DPHValue.Text));
-            }
-            catch (Exception ex)
-            {
-                ButtonConvert.IsEnabled = false;
-                MessageBox.Show("DPH je zadano spatne!");
-                return;
-            }
-            ButtonConvert.IsEnabled = true;
-            InvoiceConverter.DPH = dphValue;
-        }
-
+        
         private void ExistingInvoiceNum_LostFocus(object sender, RoutedEventArgs e)
         {
             uint existingInvoceNumber;
             try
             {
-                existingInvoceNumber = uint.Parse(_currencyLoader.ToInvariantFormat(ExistingInvoiceNum.Text));
+                existingInvoceNumber = uint.Parse(_csvLoader.ToInvariantFormat(ExistingInvoiceNum.Text));
             }
             catch (Exception ex)
             {
