@@ -46,9 +46,10 @@
     "Mandatory": {
       "Value": true,
       "MinimumVersion": "2.2.0.0",
-      "UpdateMode": 
+      "UpdateMode": 1
+    }
   },
-    {
+  {
     "CurrentVersion": "2.3.0.0",
     "DownloadURL": "https://github.com/anion0278/mapp/releases/download/v2.3.0a/mapp_v2.3.1a_binaries.zip",
     "ChangelogURL": "https://github.com/anion0278/mapp/releases/tag/v2.3.0a",
@@ -57,5 +58,5 @@
       "MinimumVersion": "1.0.0.0",
       "UpdateMode": 1
     }
-
+   }
 ]
