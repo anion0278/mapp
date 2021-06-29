@@ -46,8 +46,7 @@
     "Mandatory": {
       "Value": true,
       "MinimumVersion": "2.2.0.0",
-      "UpdateMode": 1
-    }
+      "UpdateMode": 
   },
     {
     "CurrentVersion": "2.3.0.0",
