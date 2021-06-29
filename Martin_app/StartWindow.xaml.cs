@@ -95,21 +95,6 @@ namespace Mapp
             return " v" + assembly.GetName().Version.ToString(3);
         }
 
-        private IEnumerable<string> GetAmazonReportFiles()
-        {
-            var openFileDialog = new OpenFileDialog
-            {
-                Multiselect = true,
-                Title = "Zvol Amazon report",
-                Filter = "Amazon Report|*.txt"
-            };
-            bool? dialogResult = openFileDialog.ShowDialog();
-
-            if (dialogResult == false) return null;// TODO exception if cancel
-
-            return openFileDialog.FileNames;
-        }
-
         private void TopDataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
             ProcessCustomChangedDataForProduct(e, 5, _autocompleteData.PackQuantitySku, (element) => // TODO its VERY BAD to rely on column NUMBER
@@ -217,7 +202,16 @@ namespace Mapp
 
         public void ButtonSelectInvoice_Click(object sender, RoutedEventArgs e)
         {
-            InvoiceConverter.LoadAmazonReports(GetAmazonReportFiles(), DateTime.Today);
+            var openFileDialog = new OpenFileDialog
+            {
+                Multiselect = true,
+                Title = "Zvol Amazon report",
+                Filter = "Amazon Report|*.txt"
+            };
+            bool? dialogResult = openFileDialog.ShowDialog();
+            if (dialogResult == false) return;
+
+            InvoiceConverter.LoadAmazonReports(openFileDialog.FileNames, DateTime.Today);
         }
          
         private void ButtonExport_Click(object sender, RoutedEventArgs e)
