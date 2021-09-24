@@ -1,0 +1,30 @@
+{
+  "MarketPlaceId":1,
+  "DistinctionPhrase":"All amounts in CAD, unless specified",
+  "DateSubstring":"(.*) ((p.m.)|(a.m.)) (PST|PDT)",
+  "TimeSeparatorOverride":null,
+  "DateCultureInfoName":"en-CA",
+  "OrderIdColumnName":"order id",
+  "TransactionTypeColumnName":"type",
+  "DateTimeColumnNames":[
+     "date/time"
+  ],
+  "ValueComponentsColumnName":[
+     "product sales",
+     "shipping credits",
+     "promotional rebates"
+  ],
+  "TransferTypeNames":[
+     "Transfer"
+  ],
+  "RefundTypeNames":[
+     "Refund"
+  ],
+  "OrderTypeNames":[
+     "Order"
+  ],
+  "ServiceFeeTypeNames":[
+     "Service Fee", ""
+  ],
+  "TotalPriceColumnName":"total"
+}

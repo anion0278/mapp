@@ -1,0 +1,31 @@
+{
+  "LinesToSkipBeforeColumnNames":7,
+  "MarketPlaceId":5,
+  "DistinctionPhrase":"All amounts in GBP, unless specified",
+  "DateSubstring":"(.*) UTC",
+  "TimeSeparatorOverride":null,
+  "DateCultureInfoName":"en-GB",
+  "OrderIdColumnName":"order id",
+  "TransactionTypeColumnName":"type",
+  "DateTimeColumnNames":[
+     "date/time"
+  ],
+  "ValueComponentsColumnName":[
+     "product sales",
+     "postage credits",
+     "promotional rebates"
+  ],
+  "TransferTypeNames":[
+     "Transfer"
+  ],
+  "RefundTypeNames":[
+     "Refund"
+  ],
+  "OrderTypeNames":[
+     "Order"
+  ],
+  "ServiceFeeTypeNames":[
+     "Service Fee"
+  ],
+  "TotalPriceColumnName":"total"
+}

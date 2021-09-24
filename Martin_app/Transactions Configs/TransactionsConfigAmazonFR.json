@@ -1,0 +1,30 @@
+{
+  "MarketPlaceId":8,
+  "DistinctionPhrase":"Tous les montants sont en EUR, sauf mention contraire.",
+  "DateSubstring":"(.*) UTC",
+  "TimeSeparatorOverride":null,
+  "DateCultureInfoName":"fr-FR",
+  "OrderIdColumnName":"numéro de la commande",
+  "TransactionTypeColumnName":"type",
+  "DateTimeColumnNames":[
+     "date/heure"
+  ],
+  "ValueComponentsColumnName":[
+     "ventes de produits",
+     "crédits d\u0027expédition",
+     "Rabais promotionnels"
+  ],
+  "TransferTypeNames":[
+     "Transfert"
+  ],
+  "RefundTypeNames":[
+     "Remboursement"
+  ],
+  "OrderTypeNames":[
+     "Commande"
+  ],
+  "ServiceFeeTypeNames":[
+     "Service Fee"
+  ],
+  "TotalPriceColumnName":"total"
+}

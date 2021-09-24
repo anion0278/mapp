@@ -2,7 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0-windows</TargetFramework>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <Deterministic>false</Deterministic>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\Martin_app\Properties\SharedAssemblyInfo.cs" Link="SharedAssemblyInfo.cs" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="InputSimulator" Version="1.0.4" />

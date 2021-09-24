@@ -17,7 +17,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Mapp.BusinessLogic.Transactions\Mapp.BusinessLogic.Transactions.csproj" />
-    <ProjectReference Include="..\Mapp\Mapp.csproj" />
   </ItemGroup>
 
 </Project>

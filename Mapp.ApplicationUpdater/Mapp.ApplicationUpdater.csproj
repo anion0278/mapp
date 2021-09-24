@@ -2,10 +2,16 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0-windows</TargetFramework>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <Deterministic>false</Deterministic>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Autoupdater.NET.Official" Version="1.6.4" />
+    <Compile Include="..\Martin_app\Properties\SharedAssemblyInfo.cs" Link="SharedAssemblyInfo.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Autoupdater.NET.Official" Version="1.7.0" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,0 +1,30 @@
+{
+  "MarketPlaceId":2,
+  "DistinctionPhrase":"Todos los importes en dólares, a menos que se especifique",
+  "DateSubstring":"(.*) GMT-8",
+  "TimeSeparatorOverride":null,
+  "DateCultureInfoName":"es-MX",
+  "OrderIdColumnName":"Id. del pedido",
+  "TransactionTypeColumnName":"tipo",
+  "DateTimeColumnNames":[
+     "fecha/hora"
+  ],
+  "ValueComponentsColumnName":[
+     "ventas de productos",
+     "créditos de envío",
+     "descuentos promocionales"
+  ],
+  "TransferTypeNames":[
+     "Trasferir"
+  ],
+  "RefundTypeNames":[
+     "Reembolso"
+  ],
+  "OrderTypeNames":[
+     "Pedido"
+  ],
+  "ServiceFeeTypeNames":[
+     "Service Fee"
+  ],
+  "TotalPriceColumnName":"total"
+}

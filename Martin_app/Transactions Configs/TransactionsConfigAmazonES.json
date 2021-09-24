@@ -1,0 +1,30 @@
+{
+  "MarketPlaceId":7,
+  "DistinctionPhrase":"Todos los importes en EUR, a menos que se especifique lo contrario",
+  "DateSubstring":"(.*) UTC",
+  "TimeSeparatorOverride":null,
+  "DateCultureInfoName":"es-ES",
+  "OrderIdColumnName":"número de pedido",
+  "TransactionTypeColumnName":"tipo",
+  "DateTimeColumnNames":[
+     "fecha y hora"
+  ],
+  "ValueComponentsColumnName":[
+     "ventas de productos",
+     "abonos de envío",
+     "devoluciones promocionales"
+  ],
+  "TransferTypeNames":[
+     "Transferir"
+  ],
+  "RefundTypeNames":[
+     "Reembolso"
+  ],
+  "OrderTypeNames":[
+     "Pedido"
+  ],
+  "ServiceFeeTypeNames":[
+     
+  ],
+  "TotalPriceColumnName":"total"
+}

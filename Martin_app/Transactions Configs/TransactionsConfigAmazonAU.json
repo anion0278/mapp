@@ -1,0 +1,30 @@
+{
+  "MarketPlaceId":4,
+  "DistinctionPhrase":"All amounts in AUD, unless specified",
+  "DateSubstring":"(.*) GMT",
+  "TimeSeparatorOverride":null,
+  "DateCultureInfoName":"en-AU",
+  "OrderIdColumnName":"order id",
+  "TransactionTypeColumnName":"type",
+  "DateTimeColumnNames":[
+     "date/time"
+  ],
+  "ValueComponentsColumnName":[
+     "product sales",
+     "shipping credits",
+     "promotional rebates"
+  ],
+  "TransferTypeNames":[
+     "Transfer"
+  ],
+  "RefundTypeNames":[
+     "Refund"
+  ],
+  "OrderTypeNames":[
+     "Order"
+  ],
+  "ServiceFeeTypeNames":[
+     "Service Fee"
+  ],
+  "TotalPriceColumnName":"total"
+}
