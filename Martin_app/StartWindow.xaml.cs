@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Configuration;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
@@ -37,15 +38,22 @@ namespace Mapp
         private IAutocompleteData _autocompleteData;
         private AutocompleteDataLoader _autocompleteDataLoader;
         private TransactionsReader _transactionsReader;
-
+        private AppSettings _currentSettings;
 
         public StartWindow()
         {
+            _currentSettings = AppSettings.Default;
+            _currentSettings.UpgradeSettingsIfRequired();
+
+            var vm = new StartWindowViewModel(_currentSettings);
+            DataContext = vm;
+
+
             string invoiceDir = "Invoice Converter";
             // TODO IOC container!!
             _jsonManager = new JsonManager();
             _autoKeyboardInputHelper = new AutoKeyboardInputHelper();
-            _appUpdater = new ApplicationUpdater.ApplicationUpdater(_jsonManager);
+            _appUpdater = new ApplicationUpdater.ApplicationUpdater(_jsonManager) { UserNotification = (o, e) => MessageBox.Show(e) };
             _invoiceXmlXmlManager = new InvoicesXmlManager(invoiceDir){ UserNotification = (o, e) => MessageBox.Show(e) };
             _csvLoader = new CsvLoader(invoiceDir);
             _autocompleteDataLoader = new AutocompleteDataLoader(_jsonManager, invoiceDir);
@@ -53,47 +61,38 @@ namespace Mapp
             InvoiceConverter = new InvoiceConverter(_autocompleteData, new CurrencyConverter(), _csvLoader, _invoiceXmlXmlManager, AskToChangeLongStringIfNeeded, _autocompleteDataLoader);
             _transactionsReader = new TransactionsReader(_jsonManager);
 
-            if (Settings.Default.IsUpgradeNeeded)
-            {
-                Settings.Default.Upgrade();
-                Settings.Default.IsUpgradeNeeded=false;
-                Settings.Default.Save();
-            }
-            Application.Current.DispatcherUnhandledException += Current_DispatcherUnhandledException;
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             InitializeComponent();
             Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
+            
 
-            InvoiceConverter.ExistingInvoiceNumber = Settings.Default.ExistingInvoiceNumber;
-            InvoiceConverter.CountryVat = Settings.Default.DPH;
-            InvoiceConverter.DefaultEmail = Settings.Default.DefaultEmail;
-            InvoiceConverter.LatestTrackingCode = Settings.Default.LatestTrackingCode; // TODO - move to correct assembly!
+            //TODO pass as argument
+            InvoiceConverter.ExistingInvoiceNumber = _currentSettings.ExistingInvoiceNumber;
+            InvoiceConverter.CountryVat = _currentSettings.DPH;
+            InvoiceConverter.DefaultEmail = _currentSettings.DefaultEmail;
+            InvoiceConverter.LatestTrackingCode = _currentSettings.LatestTrackingCode; // TODO - move to correct assembly!
             
             UpdateTextBoxes();
 
-            Title += FormatTitleAssemblyVersion(Assembly.GetEntryAssembly());
+            Title += FormatTitleAssemblyFileVersion(Assembly.GetEntryAssembly());
 
             _appUpdater.CheckUpdate();
-
         }
+
 
         private void UpdateTextBoxes() //not mvvm at all for now
         {
             ExistingInvoiceNum.Text = InvoiceConverter.ExistingInvoiceNumber.ToString();
-            DefaultEmailBox.Text = InvoiceConverter.DefaultEmail.ToString();
-            TrackingCodeBox.Text = InvoiceConverter.LatestTrackingCode.ToString();
+            DefaultEmailBox.Text = InvoiceConverter.DefaultEmail;
+            TrackingCodeBox.Text = InvoiceConverter.LatestTrackingCode;
         }
 
-        private void Current_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
+        private string FormatTitleAssemblyFileVersion(Assembly assembly) // TODO shared assembly info file?
         {
-            MessageBox.Show("Unhandled error: " + e.Exception.Message);
-            MessageBox.Show("Unhandled error: " + e.Exception.StackTrace);
+            var fileVersion = FileVersionInfo.GetVersionInfo(assembly.Location);
+            return " v" + fileVersion.FileVersion;
         }
 
-        private string FormatTitleAssemblyVersion(Assembly assembly) // TODO shared assembly info file?
-        {
-            return " v" + assembly.GetName().Version.ToString(3);
-        }
 
         private void TopDataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
@@ -170,11 +169,11 @@ namespace Mapp
         {
             _autoKeyboardInputHelper.Dispose();
 
-            Settings.Default.ExistingInvoiceNumber = InvoiceConverter.ExistingInvoiceNumber;
-            Settings.Default.DPH = InvoiceConverter.CountryVat;
-            Settings.Default.DefaultEmail = InvoiceConverter.DefaultEmail;
-            Settings.Default.LatestTrackingCode= InvoiceConverter.LatestTrackingCode;
-            Settings.Default.Save();
+            _currentSettings.ExistingInvoiceNumber = InvoiceConverter.ExistingInvoiceNumber;
+            _currentSettings.DPH = InvoiceConverter.CountryVat;
+            _currentSettings.DefaultEmail = InvoiceConverter.DefaultEmail;
+            _currentSettings.LatestTrackingCode= InvoiceConverter.LatestTrackingCode;
+            _currentSettings.Save();
         }
 
         
@@ -230,7 +229,7 @@ namespace Mapp
             UpdateTextBoxes();
         }
 
-        private static void OpenFileFolder(string fileName)
+        private void OpenFileFolder(string fileName)
         {
             Process.Start("explorer.exe", Path.GetDirectoryName(fileName));
         }

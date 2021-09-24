@@ -1,0 +1,30 @@
+{
+  "MarketPlaceId":10,
+  "DistinctionPhrase":"Alle bedragen in EUR, tenzij anders vermeld",
+  "DateSubstring":"(.*) GMT",
+  "TimeSeparatorOverride":null,
+  "DateCultureInfoName":"nl-NL",
+  "OrderIdColumnName":"bestelnummer",
+  "TransactionTypeColumnName":"type",
+  "DateTimeColumnNames":[
+     "datum/tijd"
+  ],
+  "ValueComponentsColumnName":[
+     "verkoop van producten",
+     "Verzendtegoeden",
+     "promotiekortingen"
+  ],
+  "TransferTypeNames":[
+     "Overdracht"
+  ],
+  "RefundTypeNames":[
+     "Terugbetaling"
+  ],
+  "OrderTypeNames":[
+     "Bestelling"
+  ],
+  "ServiceFeeTypeNames":[
+     "Servicekosten"
+  ],
+  "TotalPriceColumnName":"totaal"
+}

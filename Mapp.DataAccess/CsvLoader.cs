@@ -18,13 +18,30 @@ namespace Shmap.DataAccess
 
         public Dictionary<string, decimal> LoadFixedCurrencyRates()
         {
-            string fileContent = File.ReadAllText(Path.Join(_invoiceConverterConfigsDir, "fixed_currency_rates.csv"));
+            string fileContent;
+            try
+            {
+                fileContent = File.ReadAllText(Path.Join(_invoiceConverterConfigsDir, "fixed_currency_rates.csv"));
+            }
+            catch (Exception ex)
+            {
+                throw new SettingsDataAccessException("Fixed currency rates loading error!", ex);
+            }
+
             return ParseCurrencyRates(fileContent, 0, 0);
         }
 
         public Dictionary<string, decimal> LoadCountryVatRates()
         {
-            string fileContent = File.ReadAllText(Path.Join(_invoiceConverterConfigsDir, "vat_by_country.csv"));
+            string fileContent;
+            try
+            {
+                fileContent = File.ReadAllText(Path.Join(_invoiceConverterConfigsDir, "vat_by_country.csv"));
+            }
+            catch (Exception ex)
+            {
+                throw new SettingsDataAccessException("VAT settings loading error!", ex);
+            }
             return ParseVatRates(fileContent);
         }
 

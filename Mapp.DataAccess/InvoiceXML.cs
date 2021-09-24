@@ -1141,11 +1141,13 @@ namespace Mapp
             private decimal coefficientField;
             private bool payVATField;
             private string rateVATField;
+            private decimal percentVATField;
             private decimal discountPercentageField;
             private InvoiceXml.invoiceInvoiceItemHomeCurrency homeCurrencyField;
             private InvoiceXml.invoiceInvoiceItemForeignCurrency foreignCurrencyField;
             private string codeField;
             private InvoiceXml.invoiceInvoiceItemStockItem stockItemField;
+            private InvoiceXml.typeServiceMOSS typeServiceMOSSField;
             private bool pDPField;
 
             [XmlIgnore]
@@ -1226,6 +1228,20 @@ namespace Mapp
                 }
             }
 
+
+            /// <remarks/>
+            public decimal percentVAT
+            {
+                get
+                {
+                    return this.percentVATField;
+                }
+                set
+                {
+                    this.percentVATField = value;
+                }
+            }
+
             public decimal discountPercentage
             {
                 get
@@ -1271,6 +1287,18 @@ namespace Mapp
                 set
                 {
                     this.codeField = value;
+                }
+            }
+
+            public InvoiceXml.typeServiceMOSS typeServiceMOSS
+            {
+                get
+                {
+                    return this.typeServiceMOSSField;
+                }
+                set
+                {
+                    this.typeServiceMOSSField = value;
                 }
             }
 
@@ -1417,6 +1445,26 @@ namespace Mapp
                 set
                 {
                     this.priceSumField = value;
+                }
+            }
+        }
+
+
+        [XmlType(AnonymousType = true, Namespace = "http://www.stormware.cz/schema/version_2/type.xsd")]
+        [XmlRoot(IsNullable = true, Namespace = "http://www.stormware.cz/schema/version_2/type.xsd")]
+        public class typeServiceMOSS
+        {
+            private string idsField;
+                
+            public string ids
+            {
+                get
+                {
+                    return this.idsField;
+                }
+                set
+                {
+                    this.idsField = value;
                 }
             }
         }

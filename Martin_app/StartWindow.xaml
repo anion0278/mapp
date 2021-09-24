@@ -7,8 +7,8 @@
         xmlns:sys="clr-namespace:System;assembly=System.Runtime"
         xmlns:martinApp="clr-namespace:Mapp"
         mc:Ignorable="d"
-        Title="Amazon Invoice Converter" Height="600" Width="950"
-        DataContext="{Binding RelativeSource={RelativeSource Self}}" Closing="Window_Closing">
+        Title="Amazon Invoice Converter" Height="{Binding WindowHeight, Mode=TwoWay}" Width="{Binding WindowWidth, Mode=TwoWay}"
+        Closing="Window_Closing" WindowStartupLocation="Manual" WindowState="{Binding WindowState, Mode=TwoWay}" Top="{Binding WindowTop, Mode=TwoWay}" Left="{Binding WindowLeft, Mode=TwoWay}">
     <FrameworkElement.Resources>
         <!--<x:Array Type="{x:Type sys:String}" x:Key="ShippingTypes">
             <x:Static Member="sys:String.Empty"/>

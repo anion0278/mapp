@@ -10,7 +10,7 @@ namespace Shmap.ApplicationUpdater
     public class ApplicationUpdater : IInteractionRequester
     {
         private readonly IJsonManager _jsonManager;
-        public EventHandler<string> UserNotification { get; init; }
+        public EventHandler<string> UserNotification { get; init; } // TODO from ctor
         public EventHandler<string> UserInteraction { get; init; }
 
 
@@ -28,16 +28,17 @@ namespace Shmap.ApplicationUpdater
             AutoUpdater.ShowSkipButton = false;
             AutoUpdater.UpdateFormSize = new System.Drawing.Size(600, 400);
             AutoUpdater.ParseUpdateInfoEvent += AutoUpdater_ParseUpdateInfoEvent;
-            AutoUpdater.Start("https://raw.githubusercontent.com/anion0278/mapp/master/UpdatesDefinitions.json");
+            AutoUpdater.Start("https://raw.githubusercontent.com/anion0278/mapp/dev/UpdatesDefinitions.json");
         }
-
 
         private void AutoUpdater_ParseUpdateInfoEvent(ParseUpdateInfoEventArgs args)
         {
             var allUpdates = _jsonManager.DeserializeUpdates(args.RemoteData);
 
             var applicableUpdates = allUpdates.Where(au =>
-                new Version(au.CurrentVersion) > Assembly.GetEntryAssembly().GetName().Version).ToList();
+                new Version(au.CurrentVersion) > Assembly.GetEntryAssembly().GetName().Version).ToList(); // TODO we should check the same as we display in main Window (Title)
+
+            // TODO handle exception in Autoupdater, that is caused by null in args.UpdateInfo
 
             if (!applicableUpdates.Any())
             {
@@ -47,8 +48,6 @@ namespace Shmap.ApplicationUpdater
             if (applicableUpdates.Count > 1)
             {
                 UserNotification.Invoke(this, $"Bylo nalezeno {applicableUpdates.Count} kumulativnich aktualizaci, budou nainstalovany postupne.");
-                //MessageBox.Show(
-                //    $"Bylo nalezeno {applicableUpdates.Count} kumulativnich aktualizaci, budou nainstalovany postupne.");
             }
 
             args.UpdateInfo = applicableUpdates.OrderBy(a => new Version(a.CurrentVersion)).First();

@@ -1,0 +1,31 @@
+{
+  "LinesToSkipBeforeColumnNames":7,
+  "MarketPlaceId":9,
+  "DistinctionPhrase":"Tutti gli importi sono espressi in EUR, se non diversamente specificato.",
+  "DateSubstring":"(.*) UTC",
+  "TimeSeparatorOverride":".",
+  "DateCultureInfoName":"it-IT",
+  "OrderIdColumnName":"Numero ordine",
+  "TransactionTypeColumnName":"Tipo",
+  "DateTimeColumnNames":[
+     "Data/Ora:"
+  ],
+  "ValueComponentsColumnName":[
+     "Vendite",
+     "Accrediti per le spedizioni",
+     "Sconti promozionali"
+  ],
+  "TransferTypeNames":[
+     "Trasferimento"
+  ],
+  "RefundTypeNames":[
+     "Rimborso"
+  ],
+  "OrderTypeNames":[
+     "Ordine"
+  ],
+  "ServiceFeeTypeNames":[
+     "Service Fee"
+  ],
+  "TotalPriceColumnName":"totale"
+}

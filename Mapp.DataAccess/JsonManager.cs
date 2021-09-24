@@ -29,7 +29,16 @@ namespace Shmap.DataAccess
         public Dictionary<string, string> DeserializeJsonDictionary(string fileName)
         {
             // TODO Handle file absence, show msg
-            string json = File.ReadAllText(fileName);
+            string json;
+            try
+            {
+                json = File.ReadAllText(fileName);
+            }
+            catch (Exception ex)
+            {
+                throw new SettingsDataAccessException($"'{fileName}' loading error!", ex);
+            }
+
             return JsonSerializer.Deserialize<Dictionary<string, string>>(json) ?? new Dictionary<string, string>();
         }
 

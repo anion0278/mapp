@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using Shmap.BusinessLogic.Currency;
@@ -11,6 +12,16 @@ using Shmap.BusinessLogic.Transactions;
 
 namespace Shmap.BusinessLogic.Invoices
 {
+    //public enum InvoiceClassification
+    //{
+    //    [Description("UDA5")]
+    //    UDA5,
+    //    [Description("RDzasEU")]
+    //    RDzasEU,
+    //    [Description("UVzboží")]
+    //    UVzbozi
+    //}
+
     public class InvoiceConverter : IInteractionRequester
     {
         public EventHandler<string> UserNotification { get; init; }
@@ -60,47 +71,50 @@ namespace Shmap.BusinessLogic.Invoices
         }
 
         private void MergeInvoiceItemsToExistingDataPack(
-          InvoiceXml.dataPackDataPackItem existingDataPack,
-          InvoiceXml.dataPackDataPackItem dataPackDataPackItem)
+            InvoiceXml.dataPackDataPackItem existingDataPack,
+            InvoiceXml.dataPackDataPackItem newItem)
         {
-            var list = (existingDataPack.invoice.invoiceDetail).ToList();
-            var invoiceInvoiceItem = (dataPackDataPackItem.invoice.invoiceDetail).First();
-            list.Insert(list.Count - 1, invoiceInvoiceItem);
+            var existingItems = (existingDataPack.invoice.invoiceDetail).ToList();
+            var invoiceInvoiceItem = (newItem.invoice.invoiceDetail).First();
+            existingItems.Insert(existingItems.Count - 1, invoiceInvoiceItem);
 
-            var shippingItem1 = GetShippingItem(list); // summarizing shipping form (multiple) items to single Invoice
-            var shippingItem2 = GetShippingItem(dataPackDataPackItem.invoice.invoiceDetail);
-            shippingItem1.foreignCurrency.unitPrice += shippingItem2.foreignCurrency.unitPrice;
-            shippingItem1.foreignCurrency.price += shippingItem2.foreignCurrency.price;
-            shippingItem1.foreignCurrency.priceSum += shippingItem2.foreignCurrency.priceSum;
-            shippingItem1.foreignCurrency.priceVAT += shippingItem2.foreignCurrency.priceVAT;
-            shippingItem1.homeCurrency.unitPrice += shippingItem2.homeCurrency.unitPrice;
-            shippingItem1.homeCurrency.price += shippingItem2.homeCurrency.price;
-            shippingItem1.homeCurrency.priceSum += shippingItem2.homeCurrency.priceSum;
-            shippingItem1.homeCurrency.priceVAT += shippingItem2.homeCurrency.priceVAT;
+            AggregateItemsOfType(existingItems, newItem.invoice.invoiceDetail, itemGetter: GetShippingItem);
+            AggregateItemsOfType(existingItems, newItem.invoice.invoiceDetail, itemGetter: GetDiscountItem);
+            AggregateItemsOfType(existingItems, newItem.invoice.invoiceDetail, itemGetter: GetGiftWrapItem);
 
-            // same crazy stuff with discount - find a new and copy discount
-            var discountItem1 = GetDiscountItem(list); // summarizing discounts form (multiple) items to single Invoice
-            var discountItem2 = GetDiscountItem(dataPackDataPackItem.invoice.invoiceDetail);
-            if (discountItem1 != null && discountItem2 != null)
-            {
-                discountItem1.foreignCurrency.unitPrice += discountItem2.foreignCurrency.unitPrice;
-                discountItem1.foreignCurrency.price += discountItem2.foreignCurrency.price;
-                discountItem1.foreignCurrency.priceSum += discountItem2.foreignCurrency.priceSum;
-                discountItem1.foreignCurrency.priceVAT += discountItem2.foreignCurrency.priceVAT;
-                discountItem1.homeCurrency.unitPrice += discountItem2.homeCurrency.unitPrice;
-                discountItem1.homeCurrency.price += discountItem2.homeCurrency.price;
-                discountItem1.homeCurrency.priceSum += discountItem2.homeCurrency.priceSum;
-                discountItem1.homeCurrency.priceVAT += discountItem2.homeCurrency.priceVAT;
-            }
-
-            existingDataPack.invoice.invoiceDetail = list.ToArray();
+            existingDataPack.invoice.invoiceDetail = existingItems.ToArray();
         }
 
-        private static InvoiceXml.invoiceInvoiceItem GetDiscountItem(
+        private void AggregateItemsOfType(IEnumerable<InvoiceXml.invoiceInvoiceItem> existingItems, IEnumerable<InvoiceXml.invoiceInvoiceItem> newItem, Func<IEnumerable<InvoiceXml.invoiceInvoiceItem>, InvoiceXml.invoiceInvoiceItem> itemGetter)
+        {
+            // same crazy stuff with discount - find a new and copy discount
+            var item1 = itemGetter(existingItems); // summarizing discounts form (multiple) items to single Invoice
+            var item2 = itemGetter(newItem);
+            if (item1 != null && item2 != null)
+            {
+                item1.foreignCurrency.unitPrice += item2.foreignCurrency.unitPrice;
+                item1.foreignCurrency.price += item2.foreignCurrency.price;
+                item1.foreignCurrency.priceSum += item2.foreignCurrency.priceSum;
+                item1.foreignCurrency.priceVAT += item2.foreignCurrency.priceVAT;
+
+                item1.homeCurrency.unitPrice += item2.homeCurrency.unitPrice;
+                item1.homeCurrency.price += item2.homeCurrency.price;
+                item1.homeCurrency.priceSum += item2.homeCurrency.priceSum;
+                item1.homeCurrency.priceVAT += item2.homeCurrency.priceVAT;
+            }
+        }
+
+        private InvoiceXml.invoiceInvoiceItem GetDiscountItem(
             IEnumerable<InvoiceXml.invoiceInvoiceItem> existingItems)
         {
             return existingItems.SingleOrDefault(item => item.text.EqualsIgnoreCase("discount"));
         }
+
+        private InvoiceXml.invoiceInvoiceItem GetGiftWrapItem(IEnumerable<InvoiceXml.invoiceInvoiceItem> existingItems)
+        {
+            return existingItems.SingleOrDefault(item => item.text.ContainsIgnoreCase("gift wrap")); //baaaad. TODO solve case when there are different types of gift-wraps in one order. Green GW x 10 + Red GW x 5
+        }
+
 
         private static InvoiceXml.invoiceInvoiceItem GetShippingItem(
           IEnumerable<InvoiceXml.invoiceInvoiceItem> existingItems)
@@ -111,7 +125,6 @@ namespace Shmap.BusinessLogic.Invoices
         public void LoadAmazonReports(IEnumerable<string> reportsFileNames, DateTime toDate)
         {
             var dataFromAmazonReports = _invoicesXmlManager.LoadAmazonReports(reportsFileNames);
-
             if (dataFromAmazonReports == null) return;
 
             var source = MerginInvoicesOfSameOrders(dataFromAmazonReports, toDate);
@@ -169,26 +182,39 @@ namespace Shmap.BusinessLogic.Invoices
 
             if (!IsNonEuCountryByClassification(classification))
             {
-                CountryVat = GetVatByCountry(shipCountry);
+                CountryVat = GetInverseVatByCountry(shipCountry);
+            }
+
+            decimal giftWrapPrice = 0;
+            try
+            {
+                giftWrapPrice = GetPrice(valuesFromAmazon["gift-wrap-price"], valuesFromAmazon["gift-wrap-tax"], shipCountry);
+
+            }
+            catch
+            {
+                // no gift wrap
             }
 
             string headerSymPar = valuesFromAmazon["order-id"];
             uint invoiceNumber = (uint)(ExistingInvoiceNumber + index);
             var packDataPackItem = _invoicesXmlManager.PrepareDatapackItem();
             string userId = "Usr01 (" + index.ToString().PadLeft(3, '0') + ")";
-            decimal itemPrice = GetPrice(valuesFromAmazon["item-price"], valuesFromAmazon["item-tax"], classification);
-            decimal shippingPrice = GetPrice(valuesFromAmazon["shipping-price"], valuesFromAmazon["shipping-tax"], classification);
+            decimal itemPrice = GetPrice(valuesFromAmazon["item-price"], valuesFromAmazon["item-tax"], shipCountry);
+            decimal shippingPrice = GetPrice(valuesFromAmazon["shipping-price"], valuesFromAmazon["shipping-tax"], shipCountry);
             decimal promotionDiscount = decimal.Parse(valuesFromAmazon["item-promotion-discount"]);
             decimal shipPromotionDiscount = decimal.Parse(valuesFromAmazon["ship-promotion-discount"]);
             string currency = _currencyConverter.Convert(valuesFromAmazon["currency"]);
             decimal currencyRate = GetCurrencyRate(currency);
-            decimal priceSum = itemPrice + shippingPrice - promotionDiscount - shipPromotionDiscount;
+            decimal priceSum = itemPrice + shippingPrice - promotionDiscount - shipPromotionDiscount + giftWrapPrice;
             decimal currencyPriceHighSum = priceSum * currencyRate;
             string salesChannel = valuesFromAmazon["sales-channel"];
             string clientName = FormatClientName(valuesFromAmazon["recipient-name"], headerSymPar);
             string city = FormatCity(valuesFromAmazon["ship-city"], valuesFromAmazon["ship-state"], string.Empty, headerSymPar);
             string fullAddress = FormatFullAddress(valuesFromAmazon["ship-address-1"], valuesFromAmazon["ship-address-2"], valuesFromAmazon["ship-address-3"], headerSymPar);
             string phoneNumber = FormatPhoneNumber(valuesFromAmazon["ship-phone-number"], valuesFromAmazon["buyer-phone-number"], headerSymPar);
+
+          
 
             string productName = valuesFromAmazon["product-name"];
             string sku = valuesFromAmazon["sku"];
@@ -227,7 +253,7 @@ namespace Shmap.BusinessLogic.Invoices
             packDataPackItem.invoice.invoiceHeader.histRate = true; // always true
 
 
-            if (classification.EqualsIgnoreCase("UDzasEU")) // EU countries except CZ
+            if (classification.EqualsIgnoreCase("RDzasEU")) // EU countries except CZ
             {
                 packDataPackItem.invoice.invoiceHeader.MOSS = new InvoiceXml.invoiceInvoiceHeaderMOSS() { ids = shipCountry };
                 packDataPackItem.invoice.invoiceHeader.evidentiaryResourcesMOSS =
@@ -237,7 +263,7 @@ namespace Shmap.BusinessLogic.Invoices
             var invoiceInvoiceItemList = new List<InvoiceXml.invoiceInvoiceItem>();
 
             decimal quantity = decimal.Parse(valuesFromAmazon["quantity-purchased"]);
-            var invoiceItemProduct = CreateInvoiceItem(productName, classification, itemPrice / quantity, currencyRate, quantity);
+            var invoiceItemProduct = CreateInvoiceItem(productName, classification, itemPrice, currencyRate, quantity, shipCountry);
             invoiceItemProduct.code = stockItemIds;
             invoiceItemProduct.stockItem = new InvoiceXml.invoiceInvoiceItemStockItem();
             invoiceItemProduct.stockItem.stockItem = new InvoiceXml.stockItem();
@@ -247,14 +273,23 @@ namespace Shmap.BusinessLogic.Invoices
             invoiceItemProduct.amazonSkuCode = sku;
             invoiceInvoiceItemList.Add(invoiceItemProduct);
 
-            var invoiceItemShipping = CreateInvoiceItem(shipping, classification, shippingPrice, currencyRate, 1);
-            invoiceItemShipping.IsShipping = true;
+            var invoiceItemShipping = CreateInvoiceItem(shipping, classification, shippingPrice, currencyRate, 1, shipCountry);
+            invoiceItemShipping.IsShipping = true; // for now, because the name can be different
             invoiceInvoiceItemList.Add(invoiceItemShipping);
 
             if (promotionDiscount != 0)
             {
-                var invoiceItemDiscount = CreateInvoiceItem("Discount", classification, promotionDiscount, currencyRate, 1);
+                var invoiceItemDiscount = CreateInvoiceItem("Discount", classification, promotionDiscount, currencyRate, 1, shipCountry);
                 invoiceInvoiceItemList.Add(invoiceItemDiscount);
+            }
+
+
+            
+            if (giftWrapPrice != 0)
+            {
+                string giftWrapType = "Gift wrap " + valuesFromAmazon["gift-wrap-type"];
+                var invoiceItemGiftWrap = CreateInvoiceItem(giftWrapType, classification, giftWrapPrice, currencyRate, 1, shipCountry);
+                invoiceInvoiceItemList.Add(invoiceItemGiftWrap);
             }
 
             packDataPackItem.invoice.invoiceDetail = invoiceInvoiceItemList.ToArray();
@@ -286,48 +321,56 @@ namespace Shmap.BusinessLogic.Invoices
         }
 
         private InvoiceXml.invoiceInvoiceItem CreateInvoiceItem(string name, string classification, decimal price,
-            decimal currencyRate, decimal quantity)
+            decimal currencyRate, decimal quantity, string country)
         {
-            var invoiceItemShipping = new InvoiceXml.invoiceInvoiceItem();
-            invoiceItemShipping.text = name;
-            invoiceItemShipping.quantity = quantity;
-            invoiceItemShipping.payVAT = true;
-            invoiceItemShipping.discountPercentage = 0;
-            invoiceItemShipping.foreignCurrency = new InvoiceXml.invoiceInvoiceItemForeignCurrency();
-            invoiceItemShipping.homeCurrency = new InvoiceXml.invoiceInvoiceItemHomeCurrency();
-            invoiceItemShipping.PDP = false;
+            var invoiceItem = new InvoiceXml.invoiceInvoiceItem();
+            invoiceItem.text = name;
+            invoiceItem.quantity = quantity;
+            
+            invoiceItem.discountPercentage = 0;
+            invoiceItem.foreignCurrency = new InvoiceXml.invoiceInvoiceItemForeignCurrency();
+            invoiceItem.homeCurrency = new InvoiceXml.invoiceInvoiceItemHomeCurrency();
+            invoiceItem.PDP = false;
 
             if (IsNonEuCountryByClassification(classification)) // TODO CHECK if quantity here is correct
             {
-                invoiceItemShipping.rateVAT = "historyHigh";
-                invoiceItemShipping.foreignCurrency.unitPrice = price / quantity;
-                invoiceItemShipping.foreignCurrency.price = price;
-                invoiceItemShipping.foreignCurrency.priceSum = price;
-                invoiceItemShipping.foreignCurrency.priceVAT = 0;
+                invoiceItem.rateVAT = "historyHigh";
+                invoiceItem.foreignCurrency.unitPrice = price / quantity;
+                invoiceItem.foreignCurrency.price = price;
+                invoiceItem.foreignCurrency.priceSum = price;
+                invoiceItem.foreignCurrency.priceVAT = 0;
 
-                invoiceItemShipping.homeCurrency.unitPrice = invoiceItemShipping.foreignCurrency.unitPrice * currencyRate;
-                invoiceItemShipping.homeCurrency.price = invoiceItemShipping.foreignCurrency.price * currencyRate;
-                invoiceItemShipping.homeCurrency.priceSum = invoiceItemShipping.foreignCurrency.priceSum * currencyRate;
-                invoiceItemShipping.homeCurrency.priceVAT = 0;
+                invoiceItem.homeCurrency.unitPrice = invoiceItem.foreignCurrency.unitPrice * currencyRate;
+                invoiceItem.homeCurrency.price = invoiceItem.foreignCurrency.price * currencyRate;
+                invoiceItem.homeCurrency.priceSum = invoiceItem.foreignCurrency.priceSum * currencyRate;
+                invoiceItem.homeCurrency.priceVAT = 0;
+                invoiceItem.payVAT = false;
             }
             else
             {
-                invoiceItemShipping.rateVAT = "historyHigh";
-                invoiceItemShipping.foreignCurrency.unitPrice = price / quantity;
-                invoiceItemShipping.foreignCurrency.price = price * (1 - CountryVat); 
-                invoiceItemShipping.foreignCurrency.priceSum = invoiceItemShipping.foreignCurrency.price;
-                invoiceItemShipping.foreignCurrency.priceVAT = price * CountryVat;
-                
-                invoiceItemShipping.homeCurrency.unitPrice = invoiceItemShipping.foreignCurrency.unitPrice * currencyRate;
-                invoiceItemShipping.homeCurrency.price = invoiceItemShipping.foreignCurrency.price * currencyRate;  
-                invoiceItemShipping.homeCurrency.priceSum = invoiceItemShipping.foreignCurrency.priceSum * currencyRate;
-                invoiceItemShipping.homeCurrency.priceVAT = invoiceItemShipping.foreignCurrency.priceVAT * currencyRate;
+                invoiceItem.rateVAT = "historyHigh";
+                invoiceItem.foreignCurrency.unitPrice = price / quantity;
+                invoiceItem.foreignCurrency.price = price * (1 - CountryVat); 
+                invoiceItem.foreignCurrency.priceSum = invoiceItem.foreignCurrency.price;
+                invoiceItem.foreignCurrency.priceVAT = price * CountryVat;
+                invoiceItem.payVAT = true;
+
+                invoiceItem.homeCurrency.unitPrice = invoiceItem.foreignCurrency.unitPrice * currencyRate;
+                invoiceItem.homeCurrency.price = invoiceItem.foreignCurrency.price * currencyRate;  
+                invoiceItem.homeCurrency.priceSum = invoiceItem.foreignCurrency.priceSum * currencyRate;
+                invoiceItem.homeCurrency.priceVAT = invoiceItem.foreignCurrency.priceVAT * currencyRate;
             }
 
-            return invoiceItemShipping;
+            if (classification.EqualsIgnoreCase("RDzasEU")) // EU countries except CZ
+            {
+                invoiceItem.typeServiceMOSS = new InvoiceXml.typeServiceMOSS() {ids = "GD"};
+                invoiceItem.percentVAT = VatRates[country] * (decimal) 100.0;
+            }
+
+            return invoiceItem;
         }
 
-        private decimal GetVatByCountry(string shipCountry)
+        private decimal GetInverseVatByCountry(string shipCountry)
         {
             try
             {
@@ -340,10 +383,10 @@ namespace Shmap.BusinessLogic.Invoices
             }
         }
 
-        private decimal GetPrice(string price, string tax, string classification)
+        private decimal GetPrice(string price, string tax, string country)
         {
-            if (classification.EqualsIgnoreCase("GB") || classification.EqualsIgnoreCase("AU"))
-                return decimal.Parse(price) + decimal.Parse(tax);
+            if (country.EqualsIgnoreCase("GB") || country.EqualsIgnoreCase("AU"))
+                return decimal.Parse(price) - decimal.Parse(tax);
 
             return decimal.Parse(price);
         }
@@ -433,7 +476,7 @@ namespace Shmap.BusinessLogic.Invoices
         private string SetClassification(string shipCountry)
         {
             if (shipCountry.Equals("CZ")) return "UDA5"; // UDA5 only CZ
-            return (_euContries).Contains(shipCountry) ? "UDzasEU" : "UVzboží"; // UDzasEU - European Union countries, UVzboží - the rest
+            return (_euContries).Contains(shipCountry) ? "RDzasEU" : "UVzboží"; // UDzasEU - European Union countries, UVzboží - the rest
         }
 
         private void FixItems(IEnumerable<InvoiceItemWithDetails> invoiceItemsAll)
