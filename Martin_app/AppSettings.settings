@@ -2,11 +2,8 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Mapp" GeneratedClassName="AppSettings">
   <Profiles />
   <Settings>
-    <Setting Name="DPH" Type="System.decimal" Scope="User">
-      <Value Profile="(Default)">0.1736</Value>
-    </Setting>
     <Setting Name="ExistingInvoiceNumber" Type="System.UInt32" Scope="User">
-      <Value Profile="(Default)">290100436</Value>
+      <Value Profile="(Default)">300000000</Value>
     </Setting>
     <Setting Name="DefaultEmail" Type="System.String" Scope="User">
       <Value Profile="(Default)">info@czechdrawing.com</Value>
@@ -18,10 +15,13 @@
       <Value Profile="(Default)">900, 600</Value>
     </Setting>
     <Setting Name="IsMainWindowMaximized" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
+      <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="MainWindowTopLeftCorner" Type="System.Drawing.Point" Scope="User">
-      <Value Profile="(Default)">0, 0</Value>
+      <Value Profile="(Default)">200, 200</Value>
+    </Setting>
+    <Setting Name="OpenTargetFolderAfterConversion" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
     </Setting>
   </Settings>
 </SettingsFile>
