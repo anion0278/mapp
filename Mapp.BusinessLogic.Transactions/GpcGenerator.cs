@@ -5,7 +5,12 @@ using Mapp.CommonServices;
 
 namespace Mapp.BusinessLogic.Transactions
 {
-    public class GpcGenerator
+    public interface IGpcGenerator
+    {
+        void SaveTransactions(IEnumerable<Transaction> transactions, string fileName);
+    }
+
+    public class GpcGenerator : IGpcGenerator
     {
         private string _intitialLine =
             "0740000002001353907Czech Goods s.r.o.  01111900000013280900+00000016514842+000000461730770000000494070190011{0}FIO           ";
