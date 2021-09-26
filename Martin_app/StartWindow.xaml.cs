@@ -34,20 +34,19 @@ namespace Mapp
         private IJsonManager _jsonManager;
         private IInvoicesXmlManager _invoiceXmlXmlManager;
         private CsvLoader _csvLoader;
-        public InvoiceConverter InvoiceConverter { get; }
+        public IInvoiceConverter InvoiceConverter { get; }
         private IAutocompleteData _autocompleteData;
         private AutocompleteDataLoader _autocompleteDataLoader;
         private TransactionsReader _transactionsReader;
-        private AppSettings _currentSettings;
+        private readonly IConfigProvider _currentConfig;
+        private StartWindowViewModel _startWindowViewModel;
+        private IFileOperationService _fileOperationService;
 
         public StartWindow()
         {
-            _currentSettings = AppSettings.Default;
-            _currentSettings.UpgradeSettingsIfRequired();
-
-            var vm = new StartWindowViewModel(_currentSettings);
-            DataContext = vm;
-
+            var settings = AppSettings.Default;
+            settings.UpgradeSettingsIfRequired();
+            _currentConfig = new ConfigProvider(settings, true);
 
             string invoiceDir = "Invoice Converter";
             // TODO IOC container!!
@@ -61,30 +60,17 @@ namespace Mapp
             InvoiceConverter = new InvoiceConverter(_autocompleteData, new CurrencyConverter(), _csvLoader, _invoiceXmlXmlManager, AskToChangeLongStringIfNeeded, _autocompleteDataLoader);
             _transactionsReader = new TransactionsReader(_jsonManager);
 
+            Title += FormatTitleAssemblyFileVersion(Assembly.GetEntryAssembly());
+
+            _startWindowViewModel = new StartWindowViewModel(_currentConfig, InvoiceConverter, _autoKeyboardInputHelper);
+            DataContext = _startWindowViewModel;
+
+            _appUpdater.CheckUpdate();
+            _fileOperationService = new FileOperationsService();
+
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             InitializeComponent();
             Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
-            
-
-            //TODO pass as argument
-            InvoiceConverter.ExistingInvoiceNumber = _currentSettings.ExistingInvoiceNumber;
-            InvoiceConverter.CountryVat = _currentSettings.DPH;
-            InvoiceConverter.DefaultEmail = _currentSettings.DefaultEmail;
-            InvoiceConverter.LatestTrackingCode = _currentSettings.LatestTrackingCode; // TODO - move to correct assembly!
-            
-            UpdateTextBoxes();
-
-            Title += FormatTitleAssemblyFileVersion(Assembly.GetEntryAssembly());
-
-            _appUpdater.CheckUpdate();
-        }
-
-
-        private void UpdateTextBoxes() //not mvvm at all for now
-        {
-            ExistingInvoiceNum.Text = InvoiceConverter.ExistingInvoiceNumber.ToString();
-            DefaultEmailBox.Text = InvoiceConverter.DefaultEmail;
-            TrackingCodeBox.Text = InvoiceConverter.LatestTrackingCode;
         }
 
         private string FormatTitleAssemblyFileVersion(Assembly assembly) // TODO shared assembly info file?
@@ -168,98 +154,53 @@ namespace Mapp
         private void Window_Closing(object sender, CancelEventArgs e)
         {
             _autoKeyboardInputHelper.Dispose();
-
-            _currentSettings.ExistingInvoiceNumber = InvoiceConverter.ExistingInvoiceNumber;
-            _currentSettings.DPH = InvoiceConverter.CountryVat;
-            _currentSettings.DefaultEmail = InvoiceConverter.DefaultEmail;
-            _currentSettings.LatestTrackingCode= InvoiceConverter.LatestTrackingCode;
-            _currentSettings.Save();
-        }
-
-        
-        private void ExistingInvoiceNum_LostFocus(object sender, RoutedEventArgs e)
-        {
-            uint existingInvoceNumber;
-            try
-            {
-                existingInvoceNumber = uint.Parse(_csvLoader.ToInvariantFormat(ExistingInvoiceNum.Text));
-            }
-            catch (Exception ex)
-            {
-                ButtonConvert.IsEnabled = false;
-                MessageBox.Show("Invoice number je zadan spatne!");
-                return;
-            }
-            ButtonConvert.IsEnabled = true;
-            InvoiceConverter.ExistingInvoiceNumber = existingInvoceNumber;
-        }
-
-        private void DefaultEmail_LostFocus(object sender, RoutedEventArgs e)
-        {
-            InvoiceConverter.DefaultEmail = DefaultEmailBox.Text;
         }
 
         public void ButtonSelectInvoice_Click(object sender, RoutedEventArgs e)
         {
-            var openFileDialog = new OpenFileDialog
-            {
-                Multiselect = true,
-                Title = "Zvol Amazon report",
-                Filter = "Amazon Report|*.txt"
-            };
-            bool? dialogResult = openFileDialog.ShowDialog();
-            if (dialogResult == false) return;
+            var fileNames = _fileOperationService.OpenAmazonInvoices();
+            if (!fileNames.Any()) return;
 
-            InvoiceConverter.LoadAmazonReports(openFileDialog.FileNames, DateTime.Today);
+            var conversionContext = new InvoiceConversionContext()
+            {
+                ConvertToDate = DateTime.Today,
+                DefaultEmail = _currentConfig.DefaultEmail, // TODO decide whether to take it from config or from VM
+                ExistingInvoiceNumber = _currentConfig.ExistingInvoiceNumber,
+            };
+            InvoiceConverter.LoadAmazonReports(fileNames, conversionContext);
         }
          
         private void ButtonExport_Click(object sender, RoutedEventArgs e)
         {
-            var saveFileDialog = new SaveFileDialog
+            string fileName = _fileOperationService.SaveConvertedAmazonInvoices();
+            if (string.IsNullOrWhiteSpace(fileName)) return;
+
+            InvoiceConverter.ProcessInvoices(fileName, out uint processedInvoices);
+            _startWindowViewModel.ExistingInvoiceNumber += processedInvoices;
+
+            if (_currentConfig.OpenTargetFolderAfterConversion)
             {
-                Title = "Zvol vystupni slozku",
-                FileName = "PohodaInvoices_" + DateTime.Today.ToString("dd-MM-yyyy") + ".xml",
-                Filter = "Converted Amazon Report|*.xml"
-            };
-            bool? dialogResult = saveFileDialog.ShowDialog();
-            if (dialogResult != true) return;
-
-            InvoiceConverter.ProcessInvoices(saveFileDialog.FileName);
-            OpenFileFolder(saveFileDialog.FileName);
-            UpdateTextBoxes();
-        }
-
-        private void OpenFileFolder(string fileName)
-        {
-            Process.Start("explorer.exe", Path.GetDirectoryName(fileName));
+                _fileOperationService.OpenFileFolder(fileName);
+            }
         }
 
         private void TransactionsButton_Click(object sender, RoutedEventArgs e)
         {
-            var openFileDialog = new OpenFileDialog
-            {
-                Multiselect = true,
-                Title = "Zvol soubor transakci",
-                Filter = "Transactions|*.csv"
-            };
-            bool? dialogResult = openFileDialog.ShowDialog();
+            var fileNames = _fileOperationService.GetTransactionFileNames();
+            if (!fileNames.Any()) return;
 
-            if (dialogResult == false) return;
+            var transactions = _transactionsReader.ReadTransactionsFromMultipleFiles(fileNames);
 
-            var transactions = _transactionsReader.ReadTransactionsFromMultipleFiles(openFileDialog.FileNames);
-
-            var saveFileDialog = new SaveFileDialog
-            {
-                Title = "Zvol umisteni vystupniho souboru",
-                FileName = "Transactions_" + DateTime.Today.ToString("dd-MM-yyyy") + ".gpc",
-                Filter = "Converted Transactions|*.gpc"
-            };
-            bool? result = saveFileDialog.ShowDialog();
-            if (result != true) return;
+            string saveFileName = _fileOperationService.GetSaveFileNameForConvertedTransactions();
+            if (string.IsNullOrWhiteSpace(saveFileName)) return;
 
             var converter = new GpcGenerator();
-            converter.SaveTransactions(transactions, saveFileDialog.FileName);
-            OpenFileFolder(saveFileDialog.FileName);
+            converter.SaveTransactions(transactions, saveFileName);
+
+            if (_currentConfig.OpenTargetFolderAfterConversion)
+            {
+                _fileOperationService.OpenFileFolder(saveFileName);
+            }
         }
 
         private string AskToChangeLongStringIfNeeded(string message, string str, int maxLength)
@@ -281,18 +222,6 @@ namespace Mapp
             }
 
             return str;
-        }
-
-
-        private void TrackingCodeBox_LostFocus(object sender, RoutedEventArgs e)
-        {
-            InvoiceConverter.LatestTrackingCode = TrackingCodeBox.Text;
-        }
-
-
-        private void TrakingCodeBox_ChangedText(object sender, TextChangedEventArgs e)
-        {
-            _autoKeyboardInputHelper.TrackingCode = TrackingCodeBox.Text;
         }
     }
 }

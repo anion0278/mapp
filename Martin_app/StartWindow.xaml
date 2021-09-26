@@ -10,15 +10,6 @@
         Title="Amazon Invoice Converter" Height="{Binding WindowHeight, Mode=TwoWay}" Width="{Binding WindowWidth, Mode=TwoWay}"
         Closing="Window_Closing" WindowStartupLocation="Manual" WindowState="{Binding WindowState, Mode=TwoWay}" Top="{Binding WindowTop, Mode=TwoWay}" Left="{Binding WindowLeft, Mode=TwoWay}">
     <FrameworkElement.Resources>
-        <!--<x:Array Type="{x:Type sys:String}" x:Key="ShippingTypes">
-            <x:Static Member="sys:String.Empty"/>
-            <sys:String>Shipping</sys:String>
-            <sys:String>
-                Registered Shipping GLS
-            </sys:String>
-            <sys:String>Registered Shipping</sys:String>
-        </x:Array>-->
-        <!--<martinApp:ItemTextToStringConverter x:Key="StringConverter"/>-->
         <martinApp:ProductsListConverter x:Key="ProductsConverter"/>
         <martinApp:ProductsListToSkuConverter x:Key="ProductsToSkuConverter"/>
     </FrameworkElement.Resources>
@@ -33,10 +24,17 @@
                 <StackPanel Grid.Row="0" Margin="20">
                     <Button  x:Name="ButtonConvert" Content="Zvolit fakturu" Width="150" Height="35" Click="ButtonSelectInvoice_Click"/>
                     <Label Content="Posledni existujici cislo v systemu:" HorizontalAlignment="Center"/>
-                    <TextBox  x:Name="ExistingInvoiceNum" Text="{Binding InvoiceConverter.ExistingInvoiceNumber}"  Height="23" VerticalAlignment="Center" Width="150" LostFocus="ExistingInvoiceNum_LostFocus"/>
+                    <local:NumericTextBox  x:Name="ExistingInvoiceNum"
+                                           Text="{Binding ExistingInvoiceNumber, Mode=TwoWay}"
+                                           MaxLength="9" HorizontalContentAlignment="Center" Height="23" VerticalAlignment="Center" Width="150"/>
                     <Label Content="Default email:" HorizontalAlignment="Center"/>
-                    <TextBox  x:Name="DefaultEmailBox" Text="{Binding InvoiceConverter.DefaultEmail}" Height="23" VerticalAlignment="Center" Width="150" LostFocus="DefaultEmail_LostFocus" />
+                    <TextBox  x:Name="DefaultEmailBox" Text="{Binding DefaultEmail, Mode=TwoWay}" HorizontalContentAlignment="Center" Height="23" VerticalAlignment="Center" Width="150" />
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" >
+                        <Label Content="Otevrit cilovou slozku po konvertaci" HorizontalAlignment="Center" />
+                        <CheckBox VerticalAlignment="Center" IsChecked="{Binding OpenTargetFolderAfterConversion, Mode=TwoWay}"/>
+                    </StackPanel>
                     <Button  x:Name="ButtonExport" Content="Konvertovat..." Width="150" Height="35" Margin="10" Click="ButtonExport_Click"/>
+                    
                 </StackPanel>
                 <DataGrid Name="TopDataGrid" Grid.Row="1" Margin="5" AutoGenerateColumns="false" CanUserAddRows="false"
               ItemsSource="{Binding InvoiceConverter.InvoiceItemsAll}" CellEditEnding="TopDataGrid_CellEditEnding">
@@ -105,10 +103,6 @@
                 <StackPanel Grid.Row="1">
                     <Button  Content="Konvertovat transakce" Width="200" Height="35" Click="TransactionsButton_Click" />
                 </StackPanel>
-                <!--<DataGrid Grid.Row="2"  Name="TransactionsDataGrid" Grid.Row="2" Margin="5" AutoGenerateColumns="false" CanUserAddRows="false"
-                          ItemsSource="{Binding InvoicesTable}" >
-                    
-                </DataGrid>-->
             </Grid>
         </TabItem>
         <TabItem Header="Autovyplnovani">
@@ -122,7 +116,7 @@
                     <Label Content="Nastaveni automatickeho vyplnovani (kod):" HorizontalAlignment="Center" />
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                         <Label Content="RR" />
-                        <TextBox MaxLength="6" Name="TrackingCodeBox" Width="100" Text="{Binding InvoiceConverter.LatestTrackingCode}" TextAlignment="Center" VerticalContentAlignment="Center" LostFocus="TrackingCodeBox_LostFocus" TextChanged="TrakingCodeBox_ChangedText"></TextBox>
+                        <TextBox MaxLength="6" Name="TrackingCodeBox" Width="100" Text="{Binding LatestTrackingCode, Mode=TwoWay}" TextAlignment="Center" VerticalContentAlignment="Center"></TextBox>
                         <Label Content="xxxCZ" />
                     </StackPanel>
                     <Label Content="Vkladani pomoci kombinace: (nejdrive)F2 + F4" HorizontalAlignment="Center" />

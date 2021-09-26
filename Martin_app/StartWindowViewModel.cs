@@ -2,19 +2,27 @@
 using System.Drawing;
 using System.Windows;
 using GalaSoft.MvvmLight;
+using Shmap.BusinessLogic.AutocompletionHelper;
+using Shmap.BusinessLogic.Invoices;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
 
 namespace Mapp
 {
-    public class StartWindowViewModel: ViewModelBase
+    internal class StartWindowViewModel: ViewModelBase
     {
-        private readonly AppSettings _settings;
+        public IInvoiceConverter InvoiceConverter { get; }
+        private readonly IConfigProvider _configProvider;
+        private readonly IAutoKeyboardInputHelper _autoKeyboardInputHelper;
         private int _windowWidth;
         private int _windowHeight;
         private WindowState _windowState;
         private int _windowTop;
         private int _windowLeft;
+        private uint _existingInvoiceNumber;
+        private string _defaultEmail;
+        private string _latestTrackingCode;
+        private bool _openTargetFolderAfterConversion;
 
         public int WindowLeft
         {
@@ -22,10 +30,9 @@ namespace Mapp
             set
             {
                 Set(ref _windowLeft, value);
-                SaveWindowPosition();
+                SetWindowPositionConfig();
             }
         }
-
 
         public int WindowTop
         {
@@ -33,7 +40,7 @@ namespace Mapp
             set
             {
                 Set(ref _windowTop, value);
-                SaveWindowPosition();
+                SetWindowPositionConfig();
             }
         }
 
@@ -43,7 +50,7 @@ namespace Mapp
             set
             {
                 Set(ref _windowWidth, value);
-                SaveWindowSize();
+                SetWindowSizeConfig();
             }
         }
 
@@ -53,10 +60,9 @@ namespace Mapp
             set
             {
                 Set(ref _windowHeight, value);
-                SaveWindowSize();
+                SetWindowSizeConfig();
             }
         }
-
 
         public WindowState WindowState
         {
@@ -64,31 +70,80 @@ namespace Mapp
             set
             {
                 Set(ref _windowState, value);
-                _settings.IsMainWindowMaximized = value == WindowState.Maximized;
-                _settings.Save();
+                _configProvider.IsMainWindowMaximized = value == WindowState.Maximized;
             }
         }
 
-        public StartWindowViewModel(AppSettings settings)
+        public uint ExistingInvoiceNumber
         {
-            _settings = settings;
-            _windowHeight = _settings.MainWindowSize.Height;
-            _windowWidth = _settings.MainWindowSize.Width;
-            _windowState = _settings.IsMainWindowMaximized ? WindowState.Maximized : WindowState.Normal;
-            _windowLeft = _settings.MainWindowTopLeftCorner.X;
-            _windowTop = _settings.MainWindowTopLeftCorner.Y;
+            get => _existingInvoiceNumber;
+            set
+            {
+                Set(ref _existingInvoiceNumber, value);
+                _configProvider.ExistingInvoiceNumber = value; // TODO join methods, since names are same
+            }
         }
 
-        private void SaveWindowSize()
+        public string DefaultEmail
         {
-            _settings.MainWindowSize = new Size(WindowWidth, WindowHeight);
-            _settings.Save();
+            get { return _defaultEmail; }
+            set
+            {
+                Set(ref _defaultEmail, value);
+                _configProvider.DefaultEmail = value;
+            }
         }
 
-        private void SaveWindowPosition()
+        public string LatestTrackingCode
         {
-            _settings.MainWindowTopLeftCorner = new Point(_windowLeft, _windowTop);
-            _settings.Save();
+            get => _configProvider.LatestTrackingCode;
+            set
+            {
+                Set(ref _latestTrackingCode, value);
+                _configProvider.LatestTrackingCode = value;
+                _autoKeyboardInputHelper.TrackingCode = value; // TODO SOLVE in a better way
+            }
+        }
+
+        public bool OpenTargetFolderAfterConversion
+        {
+            get => _configProvider.OpenTargetFolderAfterConversion;
+            set
+            {
+                Set(ref _openTargetFolderAfterConversion, value);
+                _configProvider.OpenTargetFolderAfterConversion = value;
+            }
+        }
+
+
+        public StartWindowViewModel(IConfigProvider configProvider, IInvoiceConverter invoiceConverter, IAutoKeyboardInputHelper autoKeyboardInputHelper)
+        {
+            InvoiceConverter = invoiceConverter; // TODO FIXME
+            _configProvider = configProvider;
+            _autoKeyboardInputHelper = autoKeyboardInputHelper;
+
+            _windowHeight = _configProvider.MainWindowSize.Height;
+            _windowWidth = _configProvider.MainWindowSize.Width;
+            _windowState = _configProvider.IsMainWindowMaximized ? WindowState.Maximized : WindowState.Normal;
+            _windowLeft = _configProvider.MainWindowTopLeftCorner.X;
+            _windowTop = _configProvider.MainWindowTopLeftCorner.Y;
+            _existingInvoiceNumber = _configProvider.ExistingInvoiceNumber;
+            _defaultEmail = _configProvider.DefaultEmail;
+
+            _latestTrackingCode = _configProvider.LatestTrackingCode;
+            _autoKeyboardInputHelper.TrackingCode = _configProvider.LatestTrackingCode; // TODO Really bad
+        }
+
+        private void SetWindowSizeConfig()
+        {
+            _configProvider.MainWindowSize = new Size(WindowWidth, WindowHeight);
+            _configProvider.SaveConfig();
+        }
+
+        private void SetWindowPositionConfig()
+        {
+            _configProvider.MainWindowTopLeftCorner = new Point(_windowLeft, _windowTop);
+            _configProvider.SaveConfig();
         }
     }
 }

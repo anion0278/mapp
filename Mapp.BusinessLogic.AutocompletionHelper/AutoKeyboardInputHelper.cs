@@ -4,13 +4,18 @@ using WindowsInput.Native;
 
 namespace Shmap.BusinessLogic.AutocompletionHelper
 {
-    public class AutoKeyboardInputHelper: IDisposable
+    public interface IAutoKeyboardInputHelper
+    {
+        string TrackingCode { get; set; }
+    }
+
+    public class AutoKeyboardInputHelper: IAutoKeyboardInputHelper, IDisposable
     {
         private InputSimulator _keyboardSim = new InputSimulator();
         private KeyboardHook _keyboardHook;
         private bool _isCommandPressed = false;
 
-        public string TrackingCode { get; set; }
+        public string TrackingCode { get; set; }// TODO should be somehow connected with VM
 
         public AutoKeyboardInputHelper() 
         {

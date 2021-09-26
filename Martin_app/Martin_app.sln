@@ -27,6 +27,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shmap.BusinessLogic.Invoice
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{D20AE460-B73F-46A2-B618-83F253B3199F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shmap.Bootstrapper", "..\Shmap.Bootstrapper\Shmap.Bootstrapper.csproj", "{BEA75614-3D61-4B8C-8466-F8FE854A895B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -77,6 +79,10 @@ Global
 		{02854395-D914-42C3-95B6-8CC18F31C1A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{02854395-D914-42C3-95B6-8CC18F31C1A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{02854395-D914-42C3-95B6-8CC18F31C1A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BEA75614-3D61-4B8C-8466-F8FE854A895B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BEA75614-3D61-4B8C-8466-F8FE854A895B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BEA75614-3D61-4B8C-8466-F8FE854A895B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BEA75614-3D61-4B8C-8466-F8FE854A895B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

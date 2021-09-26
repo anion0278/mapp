@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -28,8 +29,11 @@ namespace Shmap.DataAccess
         public InvoiceXml.dataPackDataPackItem PrepareDatapackItem()
         {
             InvoiceXml.dataPack dataPack;
-            using (StreamReader streamReader = new StreamReader(Path.Combine(_invoiceConverterConfigsDir, "InvoiceBasic"), XmlEncoding))
+            using (var streamReader = new StreamReader(Path.Combine(_invoiceConverterConfigsDir, "InvoiceBasic"), XmlEncoding))
+            {
+                Debug.WriteLine("Following FileNotFoundException - is normal XmlSerializer behavior");
                 dataPack = (InvoiceXml.dataPack)new XmlSerializer(typeof(InvoiceXml.dataPack)).Deserialize(streamReader);
+            }
             return dataPack.dataPackItem[0];
         }
 

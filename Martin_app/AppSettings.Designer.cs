@@ -25,19 +25,7 @@ namespace Mapp {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0.1736")]
-        public decimal DPH {
-            get {
-                return ((decimal)(this["DPH"]));
-            }
-            set {
-                this["DPH"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("290100436")]
+        [global::System.Configuration.DefaultSettingValueAttribute("300000000")]
         public uint ExistingInvoiceNumber {
             get {
                 return ((uint)(this["ExistingInvoiceNumber"]));
@@ -85,7 +73,7 @@ namespace Mapp {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool IsMainWindowMaximized {
             get {
                 return ((bool)(this["IsMainWindowMaximized"]));
@@ -97,13 +85,25 @@ namespace Mapp {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0, 0")]
+        [global::System.Configuration.DefaultSettingValueAttribute("200, 200")]
         public global::System.Drawing.Point MainWindowTopLeftCorner {
             get {
                 return ((global::System.Drawing.Point)(this["MainWindowTopLeftCorner"]));
             }
             set {
                 this["MainWindowTopLeftCorner"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool OpenTargetFolderAfterConversion {
+            get {
+                return ((bool)(this["OpenTargetFolderAfterConversion"]));
+            }
+            set {
+                this["OpenTargetFolderAfterConversion"] = value;
             }
         }
     }
