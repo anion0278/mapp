@@ -5,19 +5,19 @@
       <inv:invoiceHeader xmlns:typ="http://www.stormware.cz/schema/version_2/type.xsd" xmlns:rsp="http://www.stormware.cz/schema/version_2/response.xsd" xmlns:rdc="http://www.stormware.cz/schema/version_2/documentresponse.xsd" xmlns:lst="http://www.stormware.cz/schema/version_2/list.xsd" xmlns:lStk="http://www.stormware.cz/schema/version_2/list_stock.xsd" xmlns:lAdb="http://www.stormware.cz/schema/version_2/list_addBook.xsd" xmlns:lCen="http://www.stormware.cz/schema/version_2/list_centre.xsd" xmlns:lAcv="http://www.stormware.cz/schema/version_2/list_activity.xsd" xmlns:acu="http://www.stormware.cz/schema/version_2/accountingunit.xsd" xmlns:vch="http://www.stormware.cz/schema/version_2/voucher.xsd" xmlns:int="http://www.stormware.cz/schema/version_2/intDoc.xsd" xmlns:stk="http://www.stormware.cz/schema/version_2/stock.xsd" xmlns:ord="http://www.stormware.cz/schema/version_2/order.xsd" xmlns:ofr="http://www.stormware.cz/schema/version_2/offer.xsd" xmlns:enq="http://www.stormware.cz/schema/version_2/enquiry.xsd" xmlns:vyd="http://www.stormware.cz/schema/version_2/vydejka.xsd" xmlns:pri="http://www.stormware.cz/schema/version_2/prijemka.xsd" xmlns:bal="http://www.stormware.cz/schema/version_2/balance.xsd" xmlns:pre="http://www.stormware.cz/schema/version_2/prevodka.xsd" xmlns:vyr="http://www.stormware.cz/schema/version_2/vyroba.xsd" xmlns:pro="http://www.stormware.cz/schema/version_2/prodejka.xsd" xmlns:con="http://www.stormware.cz/schema/version_2/contract.xsd" xmlns:adb="http://www.stormware.cz/schema/version_2/addressbook.xsd" xmlns:prm="http://www.stormware.cz/schema/version_2/parameter.xsd" xmlns:lCon="http://www.stormware.cz/schema/version_2/list_contract.xsd" xmlns:ctg="http://www.stormware.cz/schema/version_2/category.xsd" xmlns:ipm="http://www.stormware.cz/schema/version_2/intParam.xsd" xmlns:str="http://www.stormware.cz/schema/version_2/storage.xsd" xmlns:idp="http://www.stormware.cz/schema/version_2/individualPrice.xsd" xmlns:sup="http://www.stormware.cz/schema/version_2/supplier.xsd" xmlns:prn="http://www.stormware.cz/schema/version_2/print.xsd" xmlns:sEET="http://www.stormware.cz/schema/version_2/sendEET.xsd" xmlns:act="http://www.stormware.cz/schema/version_2/accountancy.xsd" xmlns:bnk="http://www.stormware.cz/schema/version_2/bank.xsd" xmlns:sto="http://www.stormware.cz/schema/version_2/store.xsd" xmlns:grs="http://www.stormware.cz/schema/version_2/groupStocks.xsd" xmlns:acp="http://www.stormware.cz/schema/version_2/actionPrice.xsd" xmlns:csh="http://www.stormware.cz/schema/version_2/cashRegister.xsd" xmlns:bka="http://www.stormware.cz/schema/version_2/bankAccount.xsd" xmlns:ilt="http://www.stormware.cz/schema/version_2/inventoryLists.xsd" xmlns:nms="http://www.stormware.cz/schema/version_2/numericalSeries.xsd" xmlns:pay="http://www.stormware.cz/schema/version_2/payment.xsd" xmlns:mKasa="http://www.stormware.cz/schema/version_2/mKasa.xsd" xmlns:gdp="http://www.stormware.cz/schema/version_2/GDPR.xsd" xmlns:est="http://www.stormware.cz/schema/version_2/establishment.xsd" xmlns:cen="http://www.stormware.cz/schema/version_2/centre.xsd" xmlns:acv="http://www.stormware.cz/schema/version_2/activity.xsd" xmlns:ftr="http://www.stormware.cz/schema/version_2/filter.xsd">
         <inv:invoiceType>issuedInvoice</inv:invoiceType>
         <inv:number>
-          <typ:numberRequested>290100443</typ:numberRequested>
+          <typ:numberRequested>294200517</typ:numberRequested>
         </inv:number>
         <inv:symVar>3764670714</inv:symVar>
         <inv:symPar>408-1365376-4670714</inv:symPar>
-        <inv:date>2021-06-27</inv:date>
-        <inv:dateTax>2021-06-27</inv:dateTax>
-        <inv:dateAccounting>2021-06-27</inv:dateAccounting>
-        <inv:dateDue>2021-06-30</inv:dateDue>
+        <inv:date>2021-09-26</inv:date>
+        <inv:dateTax>2021-09-26</inv:dateTax>
+        <inv:dateAccounting>2021-09-26</inv:dateAccounting>
+        <inv:dateDue>2021-09-29</inv:dateDue>
         <inv:accounting>
           <typ:ids>3Fv</typ:ids>
         </inv:accounting>
         <inv:classificationVAT>
-          <typ:ids>UDA5</typ:ids>
+          <typ:ids>RDzasEU</typ:ids>
         </inv:classificationVAT>
         <inv:text>This is your invoice:</inv:text>
         <inv:partnerIdentity>
@@ -65,8 +65,14 @@
         </inv:account>
         <inv:symConst>308</inv:symConst>
         <inv:centre>
-          <typ:ids>----</typ:ids>
+          <typ:ids>der</typ:ids>
         </inv:centre>
+        <inv:MOSS>
+          <typ:ids>FR</typ:ids>
+        </inv:MOSS>
+        <inv:evidentiaryResourcesMOSS>
+          <typ:ids>A</typ:ids>
+        </inv:evidentiaryResourcesMOSS>
         <inv:liquidation>
           <typ:amountHome>721.47505</typ:amountHome>
           <typ:amountForeign>27.49</typ:amountForeign>
@@ -80,50 +86,58 @@
           <inv:quantity>1</inv:quantity>
           <inv:coefficient>0</inv:coefficient>
           <inv:payVAT>true</inv:payVAT>
-          <inv:rateVAT>high</inv:rateVAT>
+          <inv:rateVAT>historyHigh</inv:rateVAT>
+          <inv:percentVAT>20.0</inv:percentVAT>
           <inv:discountPercentage>0</inv:discountPercentage>
           <inv:homeCurrency>
             <typ:unitPrice>445.11520</typ:unitPrice>
-            <typ:price>367.843201280</typ:price>
-            <typ:priceVAT>77.271998720</typ:priceVAT>
-            <typ:priceSum>445.11520</typ:priceSum>
+            <typ:price>370.92933333333333333333333332</typ:price>
+            <typ:priceVAT>74.185866666666666666666666681</typ:priceVAT>
+            <typ:priceSum>370.92933333333333333333333332</typ:priceSum>
           </inv:homeCurrency>
           <inv:foreignCurrency>
             <typ:unitPrice>16.96</typ:unitPrice>
-            <typ:price>14.015744</typ:price>
-            <typ:priceVAT>2.944256</typ:priceVAT>
-            <typ:priceSum>16.96</typ:priceSum>
+            <typ:price>14.133333333333333333333333333</typ:price>
+            <typ:priceVAT>2.8266666666666666666666666672</typ:priceVAT>
+            <typ:priceSum>14.133333333333333333333333333</typ:priceSum>
           </inv:foreignCurrency>
-          <inv:code>----</inv:code>
+          <inv:code>1113B</inv:code>
+          <inv:typeServiceMOSS>
+            <typ:ids>GD</typ:ids>
+          </inv:typeServiceMOSS>
           <inv:stockItem>
             <typ:store>
               <typ:ids>Zboží</typ:ids>
             </typ:store>
             <typ:stockItem>
-              <typ:ids>----</typ:ids>
+              <typ:ids>1113B</typ:ids>
             </typ:stockItem>
           </inv:stockItem>
           <inv:PDP>false</inv:PDP>
         </inv:invoiceItem>
         <inv:invoiceItem>
-          <inv:text>Shipping</inv:text>
+          <inv:text>Shipping (100g)</inv:text>
           <inv:quantity>1</inv:quantity>
           <inv:coefficient>0</inv:coefficient>
           <inv:payVAT>true</inv:payVAT>
-          <inv:rateVAT>high</inv:rateVAT>
+          <inv:rateVAT>historyHigh</inv:rateVAT>
+          <inv:percentVAT>20.0</inv:percentVAT>
           <inv:discountPercentage>0</inv:discountPercentage>
           <inv:homeCurrency>
             <typ:unitPrice>209.69755</typ:unitPrice>
-            <typ:price>173.294055320</typ:price>
-            <typ:priceVAT>36.403494680</typ:priceVAT>
-            <typ:priceSum>209.69755</typ:priceSum>
+            <typ:price>174.74795833333333333333333333</typ:price>
+            <typ:priceVAT>34.949591666666666666666666673</typ:priceVAT>
+            <typ:priceSum>174.74795833333333333333333333</typ:priceSum>
           </inv:homeCurrency>
           <inv:foreignCurrency>
             <typ:unitPrice>7.99</typ:unitPrice>
-            <typ:price>6.602936</typ:price>
-            <typ:priceVAT>1.387064</typ:priceVAT>
-            <typ:priceSum>7.99</typ:priceSum>
+            <typ:price>6.6583333333333333333333333331</typ:price>
+            <typ:priceVAT>1.3316666666666666666666666669</typ:priceVAT>
+            <typ:priceSum>6.6583333333333333333333333331</typ:priceSum>
           </inv:foreignCurrency>
+          <inv:typeServiceMOSS>
+            <typ:ids>GD</typ:ids>
+          </inv:typeServiceMOSS>
           <inv:PDP>false</inv:PDP>
         </inv:invoiceItem>
         <inv:invoiceItem>
@@ -131,20 +145,24 @@
           <inv:quantity>1</inv:quantity>
           <inv:coefficient>0</inv:coefficient>
           <inv:payVAT>true</inv:payVAT>
-          <inv:rateVAT>high</inv:rateVAT>
+          <inv:rateVAT>historyHigh</inv:rateVAT>
+          <inv:percentVAT>20.0</inv:percentVAT>
           <inv:discountPercentage>0</inv:discountPercentage>
           <inv:homeCurrency>
             <typ:unitPrice>-66.66230</typ:unitPrice>
-            <typ:price>-55.089724720</typ:price>
-            <typ:priceVAT>-11.572575280</typ:priceVAT>
-            <typ:priceSum>-66.66230</typ:priceSum>
+            <typ:price>-55.551916666666666666666666665</typ:price>
+            <typ:priceVAT>-11.110383333333333333333333335</typ:priceVAT>
+            <typ:priceSum>-55.551916666666666666666666665</typ:priceSum>
           </inv:homeCurrency>
           <inv:foreignCurrency>
             <typ:unitPrice>-2.54</typ:unitPrice>
-            <typ:price>-2.099056</typ:price>
-            <typ:priceVAT>-0.440944</typ:priceVAT>
-            <typ:priceSum>-2.54</typ:priceSum>
+            <typ:price>-2.1166666666666666666666666666</typ:price>
+            <typ:priceVAT>-0.4233333333333333333333333334</typ:priceVAT>
+            <typ:priceSum>-2.1166666666666666666666666666</typ:priceSum>
           </inv:foreignCurrency>
+          <inv:typeServiceMOSS>
+            <typ:ids>GD</typ:ids>
+          </inv:typeServiceMOSS>
           <inv:PDP>false</inv:PDP>
         </inv:invoiceItem>
       </inv:invoiceDetail>
@@ -156,8 +174,8 @@
           <typ:priceLow>0</typ:priceLow>
           <typ:priceLowVAT>0</typ:priceLowVAT>
           <typ:priceLowSum>0</typ:priceLowSum>
-          <typ:priceHigh>596.22505</typ:priceHigh>
-          <typ:priceHighVAT>125.25</typ:priceHighVAT>
+          <typ:priceHigh>601.22505</typ:priceHigh>
+          <typ:priceHighVAT>120.25</typ:priceHighVAT>
           <typ:priceHighSum>721.47505</typ:priceHighSum>
           <typ:price3>0</typ:price3>
           <typ:price3VAT>0</typ:price3VAT>
@@ -182,19 +200,19 @@
       <inv:invoiceHeader xmlns:typ="http://www.stormware.cz/schema/version_2/type.xsd" xmlns:rsp="http://www.stormware.cz/schema/version_2/response.xsd" xmlns:rdc="http://www.stormware.cz/schema/version_2/documentresponse.xsd" xmlns:lst="http://www.stormware.cz/schema/version_2/list.xsd" xmlns:lStk="http://www.stormware.cz/schema/version_2/list_stock.xsd" xmlns:lAdb="http://www.stormware.cz/schema/version_2/list_addBook.xsd" xmlns:lCen="http://www.stormware.cz/schema/version_2/list_centre.xsd" xmlns:lAcv="http://www.stormware.cz/schema/version_2/list_activity.xsd" xmlns:acu="http://www.stormware.cz/schema/version_2/accountingunit.xsd" xmlns:vch="http://www.stormware.cz/schema/version_2/voucher.xsd" xmlns:int="http://www.stormware.cz/schema/version_2/intDoc.xsd" xmlns:stk="http://www.stormware.cz/schema/version_2/stock.xsd" xmlns:ord="http://www.stormware.cz/schema/version_2/order.xsd" xmlns:ofr="http://www.stormware.cz/schema/version_2/offer.xsd" xmlns:enq="http://www.stormware.cz/schema/version_2/enquiry.xsd" xmlns:vyd="http://www.stormware.cz/schema/version_2/vydejka.xsd" xmlns:pri="http://www.stormware.cz/schema/version_2/prijemka.xsd" xmlns:bal="http://www.stormware.cz/schema/version_2/balance.xsd" xmlns:pre="http://www.stormware.cz/schema/version_2/prevodka.xsd" xmlns:vyr="http://www.stormware.cz/schema/version_2/vyroba.xsd" xmlns:pro="http://www.stormware.cz/schema/version_2/prodejka.xsd" xmlns:con="http://www.stormware.cz/schema/version_2/contract.xsd" xmlns:adb="http://www.stormware.cz/schema/version_2/addressbook.xsd" xmlns:prm="http://www.stormware.cz/schema/version_2/parameter.xsd" xmlns:lCon="http://www.stormware.cz/schema/version_2/list_contract.xsd" xmlns:ctg="http://www.stormware.cz/schema/version_2/category.xsd" xmlns:ipm="http://www.stormware.cz/schema/version_2/intParam.xsd" xmlns:str="http://www.stormware.cz/schema/version_2/storage.xsd" xmlns:idp="http://www.stormware.cz/schema/version_2/individualPrice.xsd" xmlns:sup="http://www.stormware.cz/schema/version_2/supplier.xsd" xmlns:prn="http://www.stormware.cz/schema/version_2/print.xsd" xmlns:sEET="http://www.stormware.cz/schema/version_2/sendEET.xsd" xmlns:act="http://www.stormware.cz/schema/version_2/accountancy.xsd" xmlns:bnk="http://www.stormware.cz/schema/version_2/bank.xsd" xmlns:sto="http://www.stormware.cz/schema/version_2/store.xsd" xmlns:grs="http://www.stormware.cz/schema/version_2/groupStocks.xsd" xmlns:acp="http://www.stormware.cz/schema/version_2/actionPrice.xsd" xmlns:csh="http://www.stormware.cz/schema/version_2/cashRegister.xsd" xmlns:bka="http://www.stormware.cz/schema/version_2/bankAccount.xsd" xmlns:ilt="http://www.stormware.cz/schema/version_2/inventoryLists.xsd" xmlns:nms="http://www.stormware.cz/schema/version_2/numericalSeries.xsd" xmlns:pay="http://www.stormware.cz/schema/version_2/payment.xsd" xmlns:mKasa="http://www.stormware.cz/schema/version_2/mKasa.xsd" xmlns:gdp="http://www.stormware.cz/schema/version_2/GDPR.xsd" xmlns:est="http://www.stormware.cz/schema/version_2/establishment.xsd" xmlns:cen="http://www.stormware.cz/schema/version_2/centre.xsd" xmlns:acv="http://www.stormware.cz/schema/version_2/activity.xsd" xmlns:ftr="http://www.stormware.cz/schema/version_2/filter.xsd">
         <inv:invoiceType>issuedInvoice</inv:invoiceType>
         <inv:number>
-          <typ:numberRequested>290100444</typ:numberRequested>
+          <typ:numberRequested>294200518</typ:numberRequested>
         </inv:number>
         <inv:symVar>6750161103</inv:symVar>
         <inv:symPar>171-7785675-0161103</inv:symPar>
-        <inv:date>2021-06-27</inv:date>
-        <inv:dateTax>2021-06-27</inv:dateTax>
-        <inv:dateAccounting>2021-06-27</inv:dateAccounting>
-        <inv:dateDue>2021-06-30</inv:dateDue>
+        <inv:date>2021-09-26</inv:date>
+        <inv:dateTax>2021-09-26</inv:dateTax>
+        <inv:dateAccounting>2021-09-26</inv:dateAccounting>
+        <inv:dateDue>2021-09-29</inv:dateDue>
         <inv:accounting>
           <typ:ids>3Fv</typ:ids>
         </inv:accounting>
         <inv:classificationVAT>
-          <typ:ids>UDA5</typ:ids>
+          <typ:ids>RDzasEU</typ:ids>
         </inv:classificationVAT>
         <inv:text>This is your invoice:</inv:text>
         <inv:partnerIdentity>
@@ -244,6 +262,12 @@
         <inv:centre>
           <typ:ids>----</typ:ids>
         </inv:centre>
+        <inv:MOSS>
+          <typ:ids>FR</typ:ids>
+        </inv:MOSS>
+        <inv:evidentiaryResourcesMOSS>
+          <typ:ids>A</typ:ids>
+        </inv:evidentiaryResourcesMOSS>
         <inv:liquidation>
           <typ:amountHome>734.33510</typ:amountHome>
           <typ:amountForeign>27.98</typ:amountForeign>
@@ -257,21 +281,25 @@
           <inv:quantity>1</inv:quantity>
           <inv:coefficient>0</inv:coefficient>
           <inv:payVAT>true</inv:payVAT>
-          <inv:rateVAT>high</inv:rateVAT>
+          <inv:rateVAT>historyHigh</inv:rateVAT>
+          <inv:percentVAT>20.0</inv:percentVAT>
           <inv:discountPercentage>0</inv:discountPercentage>
           <inv:homeCurrency>
             <typ:unitPrice>524.63755</typ:unitPrice>
-            <typ:price>433.560471320</typ:price>
-            <typ:priceVAT>91.077078680</typ:priceVAT>
-            <typ:priceSum>524.63755</typ:priceSum>
+            <typ:price>437.19795833333333333333333332</typ:price>
+            <typ:priceVAT>87.43959166666666666666666668</typ:priceVAT>
+            <typ:priceSum>437.19795833333333333333333332</typ:priceSum>
           </inv:homeCurrency>
           <inv:foreignCurrency>
             <typ:unitPrice>19.99</typ:unitPrice>
-            <typ:price>16.519736</typ:price>
-            <typ:priceVAT>3.470264</typ:priceVAT>
-            <typ:priceSum>19.99</typ:priceSum>
+            <typ:price>16.658333333333333333333333333</typ:price>
+            <typ:priceVAT>3.3316666666666666666666666673</typ:priceVAT>
+            <typ:priceSum>16.658333333333333333333333333</typ:priceSum>
           </inv:foreignCurrency>
           <inv:code>----</inv:code>
+          <inv:typeServiceMOSS>
+            <typ:ids>GD</typ:ids>
+          </inv:typeServiceMOSS>
           <inv:stockItem>
             <typ:store>
               <typ:ids>Zboží</typ:ids>
@@ -287,20 +315,24 @@
           <inv:quantity>1</inv:quantity>
           <inv:coefficient>0</inv:coefficient>
           <inv:payVAT>true</inv:payVAT>
-          <inv:rateVAT>high</inv:rateVAT>
+          <inv:rateVAT>historyHigh</inv:rateVAT>
+          <inv:percentVAT>20.0</inv:percentVAT>
           <inv:discountPercentage>0</inv:discountPercentage>
           <inv:homeCurrency>
             <typ:unitPrice>209.69755</typ:unitPrice>
-            <typ:price>173.294055320</typ:price>
-            <typ:priceVAT>36.403494680</typ:priceVAT>
-            <typ:priceSum>209.69755</typ:priceSum>
+            <typ:price>174.74795833333333333333333333</typ:price>
+            <typ:priceVAT>34.949591666666666666666666673</typ:priceVAT>
+            <typ:priceSum>174.74795833333333333333333333</typ:priceSum>
           </inv:homeCurrency>
           <inv:foreignCurrency>
             <typ:unitPrice>7.99</typ:unitPrice>
-            <typ:price>6.602936</typ:price>
-            <typ:priceVAT>1.387064</typ:priceVAT>
-            <typ:priceSum>7.99</typ:priceSum>
+            <typ:price>6.6583333333333333333333333331</typ:price>
+            <typ:priceVAT>1.3316666666666666666666666669</typ:priceVAT>
+            <typ:priceSum>6.6583333333333333333333333331</typ:priceSum>
           </inv:foreignCurrency>
+          <inv:typeServiceMOSS>
+            <typ:ids>GD</typ:ids>
+          </inv:typeServiceMOSS>
           <inv:PDP>false</inv:PDP>
         </inv:invoiceItem>
       </inv:invoiceDetail>
@@ -312,8 +344,8 @@
           <typ:priceLow>0</typ:priceLow>
           <typ:priceLowVAT>0</typ:priceLowVAT>
           <typ:priceLowSum>0</typ:priceLowSum>
-          <typ:priceHigh>606.85510</typ:priceHigh>
-          <typ:priceHighVAT>127.48</typ:priceHighVAT>
+          <typ:priceHigh>611.94510</typ:priceHigh>
+          <typ:priceHighVAT>122.39</typ:priceHighVAT>
           <typ:priceHighSum>734.33510</typ:priceHighSum>
           <typ:price3>0</typ:price3>
           <typ:price3VAT>0</typ:price3VAT>

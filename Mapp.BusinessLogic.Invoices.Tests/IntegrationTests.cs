@@ -14,51 +14,51 @@ namespace Shmap.BusinessLogic.Invoices.Tests
         // TODO add multi-file import test
 
         [Fact]
-        public void Discounts_Aggregation()
+        public void Autocomplete_Sku()
         {
-            IntegrationTestBase("discounts aggregation", 290100449);
+            IntegrationTestBase("autocomplete sku", 294200489);
         }
 
         [Fact]
-        public void Autocomplete_Sku()
+        public void Discounts_Aggregation()
         {
-            IntegrationTestBase("autocomplete sku", 290100450);
+            IntegrationTestBase("discounts aggregation", 294200515);
         }
 
         [Fact]
         public void Empty_Line()
         {
-            IntegrationTestBase("empty line", 290100442);
+            IntegrationTestBase("empty line", 294200516);
         }
 
         [Fact]
         public void General()
         {
-            IntegrationTestBase("general", 290100476);
+            IntegrationTestBase("general", 294200518);
         }
 
         [Fact]
         public void Hermes_Shipping()
         {
-            IntegrationTestBase("hermes shipping", 290100478);
+            IntegrationTestBase("hermes shipping", 294200521);
         }
 
         [Fact]
         public void Multi_Item_Order()
         {
-            IntegrationTestBase("multi-item order", 290100442);
+            IntegrationTestBase("multi-item order", 294200522);
         }
 
         [Fact]
         public void Order_Number_Zeros()
         {
-            IntegrationTestBase("order number zeros", 290100479);
+            IntegrationTestBase("order number zeros", 294200529);
         }
 
         [Fact]
         public void Quantity()
         {
-            IntegrationTestBase("quantity", 290100480);
+            IntegrationTestBase("quantity", 294200530);
         }
 
         private void IntegrationTestBase(string testCaseDataDirName, int startingOrderNumber)
@@ -82,14 +82,17 @@ namespace Shmap.BusinessLogic.Invoices.Tests
                 (msg, stringToChange, maxLen) => { return stringToChange; },
                 _autocompleteDataLoader);
 
-            InvoiceConverter.ExistingInvoiceNumber = (uint) startingOrderNumber;
-            InvoiceConverter.CountryVat = (decimal)0.1736;
-            InvoiceConverter.DefaultEmail = "info@czechdrawing.com";
+            var conversionContext = new InvoiceConversionContext()
+            {
+                ConvertToDate = DateTime.Parse("26.09.2021"),
+                DefaultEmail = "info@czechdrawing.com", 
+                ExistingInvoiceNumber = (uint)startingOrderNumber,
+            };
 
-            InvoiceConverter.LoadAmazonReports(new[] { inputAmazonReportFilePath }, DateTime.Parse("27.06.2021"));
+            InvoiceConverter.LoadAmazonReports(new[] { inputAmazonReportFilePath }, conversionContext);
 
             string resultFile = Path.Join(Path.GetDirectoryName(expectedResultFilePath),"result.xml");
-            InvoiceConverter.ProcessInvoices(resultFile);
+            InvoiceConverter.ProcessInvoices(resultFile, out _);
 
             string expectedResult = File.ReadAllText(expectedResultFilePath); // TODO save to memory
             string result = File.ReadAllText(resultFile);
