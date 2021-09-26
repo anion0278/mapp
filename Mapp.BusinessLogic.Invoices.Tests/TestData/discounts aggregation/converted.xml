@@ -5,14 +5,14 @@
       <inv:invoiceHeader xmlns:typ="http://www.stormware.cz/schema/version_2/type.xsd" xmlns:rsp="http://www.stormware.cz/schema/version_2/response.xsd" xmlns:rdc="http://www.stormware.cz/schema/version_2/documentresponse.xsd" xmlns:lst="http://www.stormware.cz/schema/version_2/list.xsd" xmlns:lStk="http://www.stormware.cz/schema/version_2/list_stock.xsd" xmlns:lAdb="http://www.stormware.cz/schema/version_2/list_addBook.xsd" xmlns:lCen="http://www.stormware.cz/schema/version_2/list_centre.xsd" xmlns:lAcv="http://www.stormware.cz/schema/version_2/list_activity.xsd" xmlns:acu="http://www.stormware.cz/schema/version_2/accountingunit.xsd" xmlns:vch="http://www.stormware.cz/schema/version_2/voucher.xsd" xmlns:int="http://www.stormware.cz/schema/version_2/intDoc.xsd" xmlns:stk="http://www.stormware.cz/schema/version_2/stock.xsd" xmlns:ord="http://www.stormware.cz/schema/version_2/order.xsd" xmlns:ofr="http://www.stormware.cz/schema/version_2/offer.xsd" xmlns:enq="http://www.stormware.cz/schema/version_2/enquiry.xsd" xmlns:vyd="http://www.stormware.cz/schema/version_2/vydejka.xsd" xmlns:pri="http://www.stormware.cz/schema/version_2/prijemka.xsd" xmlns:bal="http://www.stormware.cz/schema/version_2/balance.xsd" xmlns:pre="http://www.stormware.cz/schema/version_2/prevodka.xsd" xmlns:vyr="http://www.stormware.cz/schema/version_2/vyroba.xsd" xmlns:pro="http://www.stormware.cz/schema/version_2/prodejka.xsd" xmlns:con="http://www.stormware.cz/schema/version_2/contract.xsd" xmlns:adb="http://www.stormware.cz/schema/version_2/addressbook.xsd" xmlns:prm="http://www.stormware.cz/schema/version_2/parameter.xsd" xmlns:lCon="http://www.stormware.cz/schema/version_2/list_contract.xsd" xmlns:ctg="http://www.stormware.cz/schema/version_2/category.xsd" xmlns:ipm="http://www.stormware.cz/schema/version_2/intParam.xsd" xmlns:str="http://www.stormware.cz/schema/version_2/storage.xsd" xmlns:idp="http://www.stormware.cz/schema/version_2/individualPrice.xsd" xmlns:sup="http://www.stormware.cz/schema/version_2/supplier.xsd" xmlns:prn="http://www.stormware.cz/schema/version_2/print.xsd" xmlns:sEET="http://www.stormware.cz/schema/version_2/sendEET.xsd" xmlns:act="http://www.stormware.cz/schema/version_2/accountancy.xsd" xmlns:bnk="http://www.stormware.cz/schema/version_2/bank.xsd" xmlns:sto="http://www.stormware.cz/schema/version_2/store.xsd" xmlns:grs="http://www.stormware.cz/schema/version_2/groupStocks.xsd" xmlns:acp="http://www.stormware.cz/schema/version_2/actionPrice.xsd" xmlns:csh="http://www.stormware.cz/schema/version_2/cashRegister.xsd" xmlns:bka="http://www.stormware.cz/schema/version_2/bankAccount.xsd" xmlns:ilt="http://www.stormware.cz/schema/version_2/inventoryLists.xsd" xmlns:nms="http://www.stormware.cz/schema/version_2/numericalSeries.xsd" xmlns:pay="http://www.stormware.cz/schema/version_2/payment.xsd" xmlns:mKasa="http://www.stormware.cz/schema/version_2/mKasa.xsd" xmlns:gdp="http://www.stormware.cz/schema/version_2/GDPR.xsd" xmlns:est="http://www.stormware.cz/schema/version_2/establishment.xsd" xmlns:cen="http://www.stormware.cz/schema/version_2/centre.xsd" xmlns:acv="http://www.stormware.cz/schema/version_2/activity.xsd" xmlns:ftr="http://www.stormware.cz/schema/version_2/filter.xsd">
         <inv:invoiceType>issuedInvoice</inv:invoiceType>
         <inv:number>
-          <typ:numberRequested>290100450</typ:numberRequested>
+          <typ:numberRequested>294200516</typ:numberRequested>
         </inv:number>
         <inv:symVar>3510832202</inv:symVar>
         <inv:symPar>114-2810351-0832202</inv:symPar>
-        <inv:date>2021-06-27</inv:date>
-        <inv:dateTax>2021-07-02</inv:dateTax>
-        <inv:dateAccounting>2021-06-27</inv:dateAccounting>
-        <inv:dateDue>2021-06-30</inv:dateDue>
+        <inv:date>2021-09-26</inv:date>
+        <inv:dateTax>2021-10-01</inv:dateTax>
+        <inv:dateAccounting>2021-09-26</inv:dateAccounting>
+        <inv:dateDue>2021-09-29</inv:dateDue>
         <inv:accounting>
           <typ:ids>3Fv</typ:ids>
         </inv:accounting>
@@ -80,14 +80,15 @@
           <inv:text>KOH-I-NOOR 9477007003PS Paper Stump (Pack of 2)</inv:text>
           <inv:quantity>1</inv:quantity>
           <inv:coefficient>0</inv:coefficient>
-          <inv:payVAT>true</inv:payVAT>
-          <inv:rateVAT>none</inv:rateVAT>
+          <inv:payVAT>false</inv:payVAT>
+          <inv:rateVAT>historyHigh</inv:rateVAT>
+          <inv:percentVAT>0</inv:percentVAT>
           <inv:discountPercentage>0</inv:discountPercentage>
           <inv:homeCurrency>
             <typ:unitPrice>149.70900</typ:unitPrice>
             <typ:price>149.70900</typ:price>
             <typ:priceVAT>0</typ:priceVAT>
-            <typ:priceSum>0.000</typ:priceSum>
+            <typ:priceSum>149.70900</typ:priceSum>
           </inv:homeCurrency>
           <inv:foreignCurrency>
             <typ:unitPrice>7.00</typ:unitPrice>
@@ -110,14 +111,15 @@
           <inv:text>Shipping</inv:text>
           <inv:quantity>1</inv:quantity>
           <inv:coefficient>0</inv:coefficient>
-          <inv:payVAT>true</inv:payVAT>
-          <inv:rateVAT>none</inv:rateVAT>
+          <inv:payVAT>false</inv:payVAT>
+          <inv:rateVAT>historyHigh</inv:rateVAT>
+          <inv:percentVAT>0</inv:percentVAT>
           <inv:discountPercentage>0</inv:discountPercentage>
           <inv:homeCurrency>
             <typ:unitPrice>363.15126</typ:unitPrice>
             <typ:price>363.15126</typ:price>
             <typ:priceVAT>0</typ:priceVAT>
-            <typ:priceSum>0.000</typ:priceSum>
+            <typ:priceSum>363.15126</typ:priceSum>
           </inv:homeCurrency>
           <inv:foreignCurrency>
             <typ:unitPrice>16.98</typ:unitPrice>
@@ -131,14 +133,15 @@
           <inv:text>KOH-I-NOOR Kneadable Eraser</inv:text>
           <inv:quantity>1</inv:quantity>
           <inv:coefficient>0</inv:coefficient>
-          <inv:payVAT>true</inv:payVAT>
-          <inv:rateVAT>none</inv:rateVAT>
+          <inv:payVAT>false</inv:payVAT>
+          <inv:rateVAT>historyHigh</inv:rateVAT>
+          <inv:percentVAT>0</inv:percentVAT>
           <inv:discountPercentage>0</inv:discountPercentage>
           <inv:homeCurrency>
             <typ:unitPrice>63.94713</typ:unitPrice>
             <typ:price>63.94713</typ:price>
             <typ:priceVAT>0</typ:priceVAT>
-            <typ:priceSum>0.000</typ:priceSum>
+            <typ:priceSum>63.94713</typ:priceSum>
           </inv:homeCurrency>
           <inv:foreignCurrency>
             <typ:unitPrice>2.99</typ:unitPrice>
@@ -146,13 +149,13 @@
             <typ:priceVAT>0</typ:priceVAT>
             <typ:priceSum>2.99</typ:priceSum>
           </inv:foreignCurrency>
-          <inv:code>----</inv:code>
+          <inv:code>6422</inv:code>
           <inv:stockItem>
             <typ:store>
               <typ:ids>Zboží</typ:ids>
             </typ:store>
             <typ:stockItem>
-              <typ:ids>----</typ:ids>
+              <typ:ids>6422</typ:ids>
             </typ:stockItem>
           </inv:stockItem>
           <inv:PDP>false</inv:PDP>
@@ -161,14 +164,15 @@
           <inv:text>Koh-I-Noor Soft Eraser Pencil, White</inv:text>
           <inv:quantity>2</inv:quantity>
           <inv:coefficient>0</inv:coefficient>
-          <inv:payVAT>true</inv:payVAT>
-          <inv:rateVAT>none</inv:rateVAT>
+          <inv:payVAT>false</inv:payVAT>
+          <inv:rateVAT>historyHigh</inv:rateVAT>
+          <inv:percentVAT>0</inv:percentVAT>
           <inv:discountPercentage>0</inv:discountPercentage>
           <inv:homeCurrency>
             <typ:unitPrice>85.33413</typ:unitPrice>
             <typ:price>170.66826</typ:price>
             <typ:priceVAT>0</typ:priceVAT>
-            <typ:priceSum>0.000</typ:priceSum>
+            <typ:priceSum>170.66826</typ:priceSum>
           </inv:homeCurrency>
           <inv:foreignCurrency>
             <typ:unitPrice>3.99</typ:unitPrice>
@@ -176,13 +180,13 @@
             <typ:priceVAT>0</typ:priceVAT>
             <typ:priceSum>7.98</typ:priceSum>
           </inv:foreignCurrency>
-          <inv:code>----</inv:code>
+          <inv:code>6312/BL</inv:code>
           <inv:stockItem>
             <typ:store>
               <typ:ids>Zboží</typ:ids>
             </typ:store>
             <typ:stockItem>
-              <typ:ids>----</typ:ids>
+              <typ:ids>6312/BL</typ:ids>
             </typ:stockItem>
           </inv:stockItem>
           <inv:PDP>false</inv:PDP>
@@ -191,14 +195,15 @@
           <inv:text>Koh-I-Noor : Mechanical Clutch Pencil Leadholder for 0.5mm 5035</inv:text>
           <inv:quantity>1</inv:quantity>
           <inv:coefficient>0</inv:coefficient>
-          <inv:payVAT>true</inv:payVAT>
-          <inv:rateVAT>none</inv:rateVAT>
+          <inv:payVAT>false</inv:payVAT>
+          <inv:rateVAT>historyHigh</inv:rateVAT>
+          <inv:percentVAT>0</inv:percentVAT>
           <inv:discountPercentage>0</inv:discountPercentage>
           <inv:homeCurrency>
             <typ:unitPrice>278.03100</typ:unitPrice>
             <typ:price>278.03100</typ:price>
             <typ:priceVAT>0</typ:priceVAT>
-            <typ:priceSum>0.000</typ:priceSum>
+            <typ:priceSum>278.03100</typ:priceSum>
           </inv:homeCurrency>
           <inv:foreignCurrency>
             <typ:unitPrice>13.00</typ:unitPrice>
@@ -206,13 +211,13 @@
             <typ:priceVAT>0</typ:priceVAT>
             <typ:priceSum>13.00</typ:priceSum>
           </inv:foreignCurrency>
-          <inv:code>----</inv:code>
+          <inv:code>5035</inv:code>
           <inv:stockItem>
             <typ:store>
               <typ:ids>Zboží</typ:ids>
             </typ:store>
             <typ:stockItem>
-              <typ:ids>----</typ:ids>
+              <typ:ids>5035</typ:ids>
             </typ:stockItem>
           </inv:stockItem>
           <inv:PDP>false</inv:PDP>
@@ -221,14 +226,15 @@
           <inv:text>Discount</inv:text>
           <inv:quantity>1</inv:quantity>
           <inv:coefficient>0</inv:coefficient>
-          <inv:payVAT>true</inv:payVAT>
-          <inv:rateVAT>none</inv:rateVAT>
+          <inv:payVAT>false</inv:payVAT>
+          <inv:rateVAT>historyHigh</inv:rateVAT>
+          <inv:percentVAT>0</inv:percentVAT>
           <inv:discountPercentage>0</inv:discountPercentage>
           <inv:homeCurrency>
             <typ:unitPrice>-63.94713</typ:unitPrice>
             <typ:price>-63.94713</typ:price>
             <typ:priceVAT>0</typ:priceVAT>
-            <typ:priceSum>0.000</typ:priceSum>
+            <typ:priceSum>-63.94713</typ:priceSum>
           </inv:homeCurrency>
           <inv:foreignCurrency>
             <typ:unitPrice>-2.99</typ:unitPrice>
