@@ -4,7 +4,13 @@ using System.Linq;
 
 namespace Shmap.BusinessLogic.Currency
 {
-    public class CurrencyConverter
+    public interface ICurrencyConverter
+    {
+        string Convert(string amazonCurrency);
+        string GetAmazonName(string amazonName, List<ConvertableParameterPair> CurrencyPairs);
+    }
+
+    public class CurrencyConverter : ICurrencyConverter
     {
         public string Convert(string amazonCurrency)
         {

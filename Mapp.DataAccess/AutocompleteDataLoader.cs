@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using Shmap.CommonServices;
 
 namespace Shmap.DataAccess
 {
@@ -29,10 +30,16 @@ namespace Shmap.DataAccess
         public Dictionary<string, string> CustomsDeclarationBySku { get; set; }
     }
 
-    public class AutocompleteDataLoader
+    public interface IAutocompleteDataLoader
+    {
+        IAutocompleteData LoadSettings();
+        void SaveSettings(IAutocompleteData data);
+    }
+
+    public class AutocompleteDataLoader : IAutocompleteDataLoader
     {
         private readonly IJsonManager _jsonManager;
-        private string _invoiceConverterConfigsDir;
+        private readonly IConfigProvider _configProvider;
 
         private string ShippingNameBySkuJson;
         private string ProdWarehouseSectionBySkuJson;
@@ -40,25 +47,25 @@ namespace Shmap.DataAccess
         private string ProductQuantityBySkuJson;
         private string CustomsDeclarationBySkuJson;
 
-        public AutocompleteDataLoader(IJsonManager jsonManager, string invoiceConverterConfigsDir)
+        public AutocompleteDataLoader(IJsonManager jsonManager, IConfigProvider configProvider)
         {
             _jsonManager = jsonManager;
-            _invoiceConverterConfigsDir = invoiceConverterConfigsDir;
+            _configProvider = configProvider;
         }
 
         public IAutocompleteData LoadSettings()
         {
-            PohodaProdCodeBySkuJson = Path.Combine(_invoiceConverterConfigsDir, "AutocompletePohodaProdCodeBySku.json");
+            PohodaProdCodeBySkuJson = Path.Combine(_configProvider.InvoiceConverterConfigsDir, "AutocompletePohodaProdCodeBySku.json");
             ProdWarehouseSectionBySkuJson =
-                Path.Combine(_invoiceConverterConfigsDir, "AutocompleteProdWarehouseSectionBySku.json");
+                Path.Combine(_configProvider.InvoiceConverterConfigsDir, "AutocompleteProdWarehouseSectionBySku.json");
             ShippingNameBySkuJson =
-                Path.Combine(_invoiceConverterConfigsDir, "AutocompleteShippingTypeBySku.json");
+                Path.Combine(_configProvider.InvoiceConverterConfigsDir, "AutocompleteShippingTypeBySku.json");
             ProductQuantityBySkuJson =
-                Path.Combine(_invoiceConverterConfigsDir, "AutocompleteProdQuantityBySku.json");
+                Path.Combine(_configProvider.InvoiceConverterConfigsDir, "AutocompleteProdQuantityBySku.json");
             CustomsDeclarationBySkuJson =
-                Path.Combine(_invoiceConverterConfigsDir, "AutocompleteCustomsDeclarationBySku.json");
+                Path.Combine(_configProvider.InvoiceConverterConfigsDir, "AutocompleteCustomsDeclarationBySku.json");
 
-            var autocompleteData = new AutocompleteData
+            var autocompleteData = new AutocompleteData // TODO factory
             {
                 // TODO intelligible exception if some files are missing
                 PohodaProdCodeBySku = _jsonManager.DeserializeJsonDictionary(PohodaProdCodeBySkuJson),

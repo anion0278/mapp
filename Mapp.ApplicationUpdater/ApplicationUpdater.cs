@@ -7,16 +7,20 @@ using Shmap.DataAccess;
 
 namespace Shmap.ApplicationUpdater
 {
-    public class ApplicationUpdater : IInteractionRequester
+    public interface IApplicationUpdater
+    {
+        void CheckUpdate();
+    }
+
+    public class ApplicationUpdater : IApplicationUpdater
     {
         private readonly IJsonManager _jsonManager;
-        public EventHandler<string> UserNotification { get; init; } // TODO from ctor
-        public EventHandler<string> UserInteraction { get; init; }
+        private readonly IDialogService _dialogService;
 
-
-        public ApplicationUpdater(IJsonManager jsonManager)
+        public ApplicationUpdater(IJsonManager jsonManager, IDialogService dialogService)
         {
             _jsonManager = jsonManager;
+            _dialogService = dialogService;
         }
 
         public void CheckUpdate()
@@ -47,7 +51,7 @@ namespace Shmap.ApplicationUpdater
 
             if (applicableUpdates.Count > 1)
             {
-                UserNotification.Invoke(this, $"Bylo nalezeno {applicableUpdates.Count} kumulativnich aktualizaci, budou nainstalovany postupne.");
+                _dialogService.ShowMessage($"Bylo nalezeno {applicableUpdates.Count} kumulativnich aktualizaci, budou nainstalovany postupne.");
             }
 
             args.UpdateInfo = applicableUpdates.OrderBy(a => new Version(a.CurrentVersion)).First();

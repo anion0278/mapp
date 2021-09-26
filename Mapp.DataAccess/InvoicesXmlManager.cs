@@ -14,22 +14,22 @@ namespace Shmap.DataAccess
 {
     public class InvoicesXmlManager : IInvoicesXmlManager
     {
-        private readonly string _invoiceConverterConfigsDir;
+        private readonly IDialogService _dialogService;
+        private readonly IConfigProvider _configProvider;
 
-        public EventHandler<string> UserNotification { get; init; }
-        public EventHandler<string> UserInteraction { get; init; }
 
         private Encoding XmlEncoding = CodePagesEncodingProvider.Instance.GetEncoding("windows-1250");
 
-        public InvoicesXmlManager(string invoiceConverterConfigsDir)
+        public InvoicesXmlManager(IDialogService dialogService, IConfigProvider configProvider)
         {
-            _invoiceConverterConfigsDir = invoiceConverterConfigsDir;
+            _dialogService = dialogService;
+            _configProvider = configProvider;
         }
 
         public InvoiceXml.dataPackDataPackItem PrepareDatapackItem()
         {
             InvoiceXml.dataPack dataPack;
-            using (var streamReader = new StreamReader(Path.Combine(_invoiceConverterConfigsDir, "InvoiceBasic"), XmlEncoding))
+            using (var streamReader = new StreamReader(Path.Combine(_configProvider.InvoiceConverterConfigsDir, "InvoiceBasic"), XmlEncoding))
             {
                 Debug.WriteLine("Following FileNotFoundException - is normal XmlSerializer behavior");
                 dataPack = (InvoiceXml.dataPack)new XmlSerializer(typeof(InvoiceXml.dataPack)).Deserialize(streamReader);
@@ -124,13 +124,9 @@ namespace Shmap.DataAccess
                 var orderLine = lineItems[orderLineIndex];
                 if (orderLine.Count(string.IsNullOrEmpty) > orderLine.Length / 2)
                 {
-                    UserNotification.Invoke(this,$"Objednavka {orderLine[0]} na radku {orderLineIndex} " +
-                        $"ze souboru \'{Path.GetFileName(fileName)}\' obsahuje neplatny zaznam (prazdny). " +
-                        "Zaznam bude odstranen.");
-                    //MessageBox.Show(
-                    //    $"Objednavka {orderLine[0]} na radku {orderLineIndex} " +
-                    //    $"ze souboru \'{Path.GetFileName(fileName)}\' obsahuje neplatny zaznam (prazdny). " +
-                    //    "Zaznam bude odstranen."); /// SHOULD RETURN WARNINGS!!
+                    _dialogService.ShowMessage($"Objednavka {orderLine[0]} na radku {orderLineIndex} " +
+                                              $"ze souboru \'{Path.GetFileName(fileName)}\' obsahuje neplatny zaznam (prazdny). " +
+                                              "Zaznam bude odstranen.");
                     continue;
                 }
 
@@ -141,7 +137,7 @@ namespace Shmap.DataAccess
         }
     }
 
-    public interface IInvoicesXmlManager: IInteractionRequester
+    public interface IInvoicesXmlManager
     {
         IEnumerable<Dictionary<string, string>> LoadAmazonReports(IEnumerable<string> fileNames);
 

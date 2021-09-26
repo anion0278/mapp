@@ -4,12 +4,12 @@ using WindowsInput.Native;
 
 namespace Shmap.BusinessLogic.AutocompletionHelper
 {
-    public interface IAutoKeyboardInputHelper
+    public interface IAutoKeyboardInputHelper: IDisposable
     {
         string TrackingCode { get; set; }
     }
 
-    public class AutoKeyboardInputHelper: IAutoKeyboardInputHelper, IDisposable
+    public class AutoKeyboardInputHelper: IAutoKeyboardInputHelper
     {
         private InputSimulator _keyboardSim = new InputSimulator();
         private KeyboardHook _keyboardHook;

@@ -38,16 +38,13 @@ namespace Shmap.BusinessLogic.Invoices
         ObservableCollection<InvoiceItemWithDetails> InvoiceItemsAll { get; set; }
     }
 
-    public class InvoiceConverter : IInvoiceConverter, IInteractionRequester
+    public class InvoiceConverter : IInvoiceConverter
     {
-        public EventHandler<string> UserNotification { get; init; }
-        public EventHandler<string> UserInteraction { get; init; }
-
-        private readonly IAutocompleteData _autocompleteData;
-        private readonly CurrencyConverter _currencyConverter;
+        public readonly IAutocompleteData _autocompleteData;
+        private readonly ICurrencyConverter _currencyConverter;
         private readonly IInvoicesXmlManager _invoicesXmlManager;
-        private readonly Func<string, string, int, string> _askUserToChangeString;
-        private readonly AutocompleteDataLoader _autocompleteDataLoader;
+        private readonly IAutocompleteDataLoader _autocompleteDataLoader;
+        private readonly IDialogService _dialogService;
         private static readonly int MaxItemNameLength = 85;
         private readonly int MaxAddressNameLength = 60;
         private readonly int MaxCityLength = 45;
@@ -67,15 +64,19 @@ namespace Shmap.BusinessLogic.Invoices
 
         public ObservableCollection<InvoiceItemWithDetails> InvoiceItemsAll { get; set; } = new();
 
-        public InvoiceConverter(IAutocompleteData autocompleteData, CurrencyConverter currencyConverter,
-            CsvLoader csvLoader, IInvoicesXmlManager invoicesXmlManager,
-            Func<string, string, int, string> askUserToChangeString, AutocompleteDataLoader autocompleteDataLoader)
+        public InvoiceConverter(IAutocompleteData autocompleteData, 
+            ICurrencyConverter currencyConverter,
+            ICsvLoader csvLoader, 
+            IInvoicesXmlManager invoicesXmlManager,
+            IAutocompleteDataLoader autocompleteDataLoader,
+            IDialogService dialogService)
         {
             _autocompleteData = autocompleteData;
-            this._currencyConverter = currencyConverter;
+            _currencyConverter = currencyConverter;
             _invoicesXmlManager = invoicesXmlManager;
-            _askUserToChangeString = askUserToChangeString; // Awfull dirty hack for now
             _autocompleteDataLoader = autocompleteDataLoader;
+            _dialogService = dialogService;
+            autocompleteDataLoader.LoadSettings();
             Rates = csvLoader.LoadFixedCurrencyRates(); // TODO make it possible to choose from settings
             VatRates = csvLoader.LoadCountryVatRates(); // TODO make it possible to choose from settings
         }
@@ -436,7 +437,7 @@ namespace Shmap.BusinessLogic.Invoices
             FixItems(InvoiceItemsAll);
             if (_convertedInvoices == null || !_convertedInvoices.Any())
             {
-                UserNotification.Invoke(this, "Zadne faktury nebyly konvertovany!"); // TODO solve using OperationResult
+                _dialogService.ShowMessage("Zadne faktury nebyly konvertovany!"); // TODO solve using OperationResult
                 numberOfProcessedInvoices = 0;
                 return;
             }
@@ -513,7 +514,7 @@ namespace Shmap.BusinessLogic.Invoices
             string message = "Nazev mesta/zeme je prilis dlouhy v objednavce C.: "
                              + amazonOrderNumber;
 
-            str = _askUserToChangeString(message, str, MaxCityLength);
+            str = _dialogService.AskToChangeLongStringIfNeeded(message, str, MaxCityLength);
 
             return str;
         }
@@ -530,7 +531,7 @@ namespace Shmap.BusinessLogic.Invoices
         {
             string message = "Jmeno zakazniku je prilis dlouhe v objednavce C.: " + amazonOrderNumber;
 
-            name = _askUserToChangeString(message, name, MaxClientNameLength);
+            name = _dialogService.AskToChangeLongStringIfNeeded(message, name, MaxClientNameLength);
 
             return name;
         }
@@ -549,7 +550,7 @@ namespace Shmap.BusinessLogic.Invoices
 
             string message = "Addressa je prilis dlouha v objednavce C.: "
                              + amazonOrderNumber;
-            str = _askUserToChangeString(message, str, MaxAddressNameLength);
+            str = _dialogService.AskToChangeLongStringIfNeeded(message, str, MaxAddressNameLength);
             return str;
         }
     }

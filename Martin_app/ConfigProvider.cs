@@ -1,25 +1,17 @@
 ﻿using System;
 using System.Drawing;
 using System.Runtime.CompilerServices;
+using Shmap.CommonServices;
 
 namespace Mapp
 {
-    internal interface IConfigProvider
-    {
-        uint ExistingInvoiceNumber { get; set; }
-        string DefaultEmail { get; set; }
-        string LatestTrackingCode { get; set; }
-        bool IsMainWindowMaximized { get; set; }
-        Size MainWindowSize { get; set; }
-        Point MainWindowTopLeftCorner { get; set; }
-        bool OpenTargetFolderAfterConversion { get; set; }
-        void SaveConfig();
-    }
-
+  
     public class ConfigProvider: IConfigProvider
     {
         private readonly AppSettings _settings;
         private readonly bool _isAutosaveEnabled;
+
+        public string InvoiceConverterConfigsDir => "Invoice Converter";
 
         public bool IsMainWindowMaximized
         {
@@ -81,6 +73,7 @@ namespace Mapp
         public ConfigProvider(AppSettings settings, bool isAutosaveEnabled)
         {
             _settings = settings;
+            _settings.UpgradeSettingsIfRequired();
             _isAutosaveEnabled = isAutosaveEnabled;
         }
 

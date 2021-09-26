@@ -4,7 +4,9 @@ using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using Shmap.BusinessLogic.AutocompletionHelper;
 using Shmap.BusinessLogic.Currency;
+using Shmap.CommonServices;
 using Shmap.DataAccess;
+using Moq;
 using Xunit;
 
 namespace Shmap.BusinessLogic.Invoices.Tests
@@ -69,18 +71,26 @@ namespace Shmap.BusinessLogic.Invoices.Tests
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             string invoiceDir = "TestData\\TestSettings\\Invoice Converter";
 
+            var configMock = new Mock<IConfigProvider>();
+            configMock.Setup(m => m.InvoiceConverterConfigsDir).Returns(invoiceDir);
+
+            var dialogServiceMock = new Mock<IDialogService>();
+            dialogServiceMock
+                .Setup(m => m.AskToChangeLongStringIfNeeded(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()))
+                .Returns((string _, string s2, int _) => s2);
+
             var _jsonManager = new JsonManager();
-            var _invoiceXmlXmlManager = new InvoicesXmlManager(invoiceDir) { UserNotification = (_, _) => { } };
-            var _currencyLoader = new CsvLoader(invoiceDir);
-            var _autocompleteDataLoader = new AutocompleteDataLoader(_jsonManager, invoiceDir);
+            var _invoiceXmlXmlManager = new InvoicesXmlManager(Mock.Of<IDialogService>(), configMock.Object) ;
+            var _currencyLoader = new CsvLoader(configMock.Object);
+            var _autocompleteDataLoader = new AutocompleteDataLoader(_jsonManager, configMock.Object);
             var _autocompleteData = _autocompleteDataLoader.LoadSettings();
             var InvoiceConverter = new InvoiceConverter(
                 _autocompleteData,
                 new CurrencyConverter(),
                 _currencyLoader,
                 _invoiceXmlXmlManager,
-                (msg, stringToChange, maxLen) => { return stringToChange; },
-                _autocompleteDataLoader);
+                Mock.Of<IAutocompleteDataLoader>(),
+                dialogServiceMock.Object);
 
             var conversionContext = new InvoiceConversionContext()
             {

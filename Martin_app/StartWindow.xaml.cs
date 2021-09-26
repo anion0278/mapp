@@ -20,66 +20,61 @@ using Shmap.BusinessLogic.Currency;
 using Shmap.BusinessLogic.Invoices;
 using Shmap.DataAccess;
 using Mapp;
+using Shmap.ApplicationUpdater;
 using Shmap.BusinessLogic.Transactions;
 using Shmap.CommonServices;
 using Microsoft.Win32;
+using Unity;
 
 
 namespace Mapp
 {
     public partial class StartWindow : Window
     {
-        private AutoKeyboardInputHelper _autoKeyboardInputHelper;
-        private ApplicationUpdater.ApplicationUpdater _appUpdater;
-        private IJsonManager _jsonManager;
-        private IInvoicesXmlManager _invoiceXmlXmlManager;
-        private CsvLoader _csvLoader;
-        public IInvoiceConverter InvoiceConverter { get; }
-        private IAutocompleteData _autocompleteData;
-        private AutocompleteDataLoader _autocompleteDataLoader;
-        private TransactionsReader _transactionsReader;
-        private readonly IConfigProvider _currentConfig;
-        private StartWindowViewModel _startWindowViewModel;
-        private IFileOperationService _fileOperationService;
+        private readonly IAutoKeyboardInputHelper _autoKeyboardInputHelper;
+        private readonly IApplicationUpdater _appUpdater;
+        private readonly IAutocompleteData _autocompleteData;
+        private readonly IInvoiceConverter _invoiceConverter;
+
+        private IUnityContainer _container;
 
         public StartWindow()
         {
-            var settings = AppSettings.Default;
-            settings.UpgradeSettingsIfRequired();
-            _currentConfig = new ConfigProvider(settings, true);
+            _container = new UnityContainer();
+            //ServiceLocator.SetLocatorProvider(() => new UnityServiceLocator(_container)); // antipattern?
 
-            string invoiceDir = "Invoice Converter";
-            // TODO IOC container!!
-            _jsonManager = new JsonManager();
-            _autoKeyboardInputHelper = new AutoKeyboardInputHelper();
-            _appUpdater = new ApplicationUpdater.ApplicationUpdater(_jsonManager) { UserNotification = (o, e) => MessageBox.Show(e) };
-            _invoiceXmlXmlManager = new InvoicesXmlManager(invoiceDir){ UserNotification = (o, e) => MessageBox.Show(e) };
-            _csvLoader = new CsvLoader(invoiceDir);
-            _autocompleteDataLoader = new AutocompleteDataLoader(_jsonManager, invoiceDir);
-            _autocompleteData = _autocompleteDataLoader.LoadSettings();
-            InvoiceConverter = new InvoiceConverter(_autocompleteData, new CurrencyConverter(), _csvLoader, _invoiceXmlXmlManager, AskToChangeLongStringIfNeeded, _autocompleteDataLoader);
-            _transactionsReader = new TransactionsReader(_jsonManager);
+            _container.RegisterInstance<IConfigProvider>(new ConfigProvider(AppSettings.Default, true));
+            _container.RegisterType<IJsonManager, JsonManager>();
+            _container.RegisterType<IAutoKeyboardInputHelper, AutoKeyboardInputHelper>();
+            _container.RegisterType<IApplicationUpdater, ApplicationUpdater.ApplicationUpdater>();
+            _container.RegisterType<IInvoicesXmlManager, InvoicesXmlManager>();
+            _container.RegisterType<ICsvLoader, CsvLoader>();
+            _container.RegisterType<IAutocompleteDataLoader, AutocompleteDataLoader>();
+            _container.RegisterType<ICurrencyConverter, CurrencyConverter>();
+            _container.RegisterType<IInvoiceConverter, InvoiceConverter>();
+            _container.RegisterType<ITransactionsReader, TransactionsReader>();
+            _container.RegisterType<IGpcGenerator, GpcGenerator>();
+            _container.RegisterType<IFileOperationService, FileOperationsService>();
+            _container.RegisterType<IStartWindowViewModel, StartWindowViewModel>();
+            _container.RegisterType<IDialogService, DialogService>();
 
-            Title += FormatTitleAssemblyFileVersion(Assembly.GetEntryAssembly());
+            var autocompleteDataLoader = _container.Resolve<IAutocompleteDataLoader>();
+            _autocompleteData = autocompleteDataLoader.LoadSettings();
+            _container.RegisterInstance(_autocompleteData);
 
-            _startWindowViewModel = new StartWindowViewModel(_currentConfig, InvoiceConverter, _autoKeyboardInputHelper);
-            DataContext = _startWindowViewModel;
-
+            _invoiceConverter = _container.Resolve<IInvoiceConverter>();
+            _autoKeyboardInputHelper = _container.Resolve<IAutoKeyboardInputHelper>();
+            _appUpdater = _container.Resolve<IApplicationUpdater>();
             _appUpdater.CheckUpdate();
-            _fileOperationService = new FileOperationsService();
+
+            DataContext = _container.Resolve<IStartWindowViewModel>();
 
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-            InitializeComponent();
             Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
+            InitializeComponent();
         }
 
-        private string FormatTitleAssemblyFileVersion(Assembly assembly) // TODO shared assembly info file?
-        {
-            var fileVersion = FileVersionInfo.GetVersionInfo(assembly.Location);
-            return " v" + fileVersion.FileVersion;
-        }
-
-
+      
         private void TopDataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
             ProcessCustomChangedDataForProduct(e, 5, _autocompleteData.PackQuantitySku, (element) => // TODO its VERY BAD to rely on column NUMBER
@@ -100,7 +95,7 @@ namespace Mapp
                 var symVar = dataContextItem.Header.symVar;
 
                 // invoiceHeader is common for items in single Invoice, so it can be used for search
-                var shippedItem = InvoiceConverter.InvoiceItemsAll.FirstOrDefault(itemWithDetail =>
+                var shippedItem = _invoiceConverter.InvoiceItemsAll.FirstOrDefault(itemWithDetail =>
                     itemWithDetail.Header.symVar == symVar && itemWithDetail != dataContextItem);
                 return shippedItem?.Item.amazonSkuCode ?? string.Empty; // DRY principle for Item.amazonSkuCode
             });
@@ -133,7 +128,7 @@ namespace Mapp
 
                 if (e.Column.DisplayIndex == columnIndex)
                 {
-                    string productSku = productNameGetter(e.EditingElement); 
+                    string productSku = productNameGetter(e.EditingElement);
                     string customValue = (e.EditingElement as TextBox).Text;
                     if (productSku != null && customValue != ApplicationConstants.EmptyItemCode && !string.IsNullOrEmpty(customValue)) // TODO - fix. VERY BAD
                     {
@@ -154,74 +149,6 @@ namespace Mapp
         private void Window_Closing(object sender, CancelEventArgs e)
         {
             _autoKeyboardInputHelper.Dispose();
-        }
-
-        public void ButtonSelectInvoice_Click(object sender, RoutedEventArgs e)
-        {
-            var fileNames = _fileOperationService.OpenAmazonInvoices();
-            if (!fileNames.Any()) return;
-
-            var conversionContext = new InvoiceConversionContext()
-            {
-                ConvertToDate = DateTime.Today,
-                DefaultEmail = _currentConfig.DefaultEmail, // TODO decide whether to take it from config or from VM
-                ExistingInvoiceNumber = _currentConfig.ExistingInvoiceNumber,
-            };
-            InvoiceConverter.LoadAmazonReports(fileNames, conversionContext);
-        }
-         
-        private void ButtonExport_Click(object sender, RoutedEventArgs e)
-        {
-            string fileName = _fileOperationService.SaveConvertedAmazonInvoices();
-            if (string.IsNullOrWhiteSpace(fileName)) return;
-
-            InvoiceConverter.ProcessInvoices(fileName, out uint processedInvoices);
-            _startWindowViewModel.ExistingInvoiceNumber += processedInvoices;
-
-            if (_currentConfig.OpenTargetFolderAfterConversion)
-            {
-                _fileOperationService.OpenFileFolder(fileName);
-            }
-        }
-
-        private void TransactionsButton_Click(object sender, RoutedEventArgs e)
-        {
-            var fileNames = _fileOperationService.GetTransactionFileNames();
-            if (!fileNames.Any()) return;
-
-            var transactions = _transactionsReader.ReadTransactionsFromMultipleFiles(fileNames);
-
-            string saveFileName = _fileOperationService.GetSaveFileNameForConvertedTransactions();
-            if (string.IsNullOrWhiteSpace(saveFileName)) return;
-
-            var converter = new GpcGenerator();
-            converter.SaveTransactions(transactions, saveFileName);
-
-            if (_currentConfig.OpenTargetFolderAfterConversion)
-            {
-                _fileOperationService.OpenFileFolder(saveFileName);
-            }
-        }
-
-        private string AskToChangeLongStringIfNeeded(string message, string str, int maxLength)
-        {
-            message += $". Upravit manualne (Yes), nebo orezat dle maximalni delky {maxLength} (No)";
-            while (str.Length > maxLength)
-            {
-                var result = MessageBox.Show(message, "Upozorneni", MessageBoxButton.YesNo);
-                if (result == MessageBoxResult.Yes)
-                {
-                    var window = new ManualChange(maxLength, str);
-                    window.ShowDialog();
-                    str = window.CorrectedText;
-                }
-                else
-                {
-                    str = str.Substring(0, maxLength);
-                }
-            }
-
-            return str;
         }
     }
 }

@@ -11,7 +11,15 @@ using Microsoft.VisualBasic.FileIO;
 
 namespace Shmap.BusinessLogic.Transactions
 {
-    public class TransactionsReader
+    public interface ITransactionsReader
+    {
+        IEnumerable<Transaction> ReadTransactionsFromMultipleFiles(IEnumerable<string> fileNames);
+        DateTime ParseDate(string dateString, MarketPlaceTransactionsConfig settings);
+        IEnumerable<Transaction> ReadTransactions(string fileName);
+        TransactionTypes ParseTransactionType(string transactionType, MarketPlaceTransactionsConfig settings);
+    }
+
+    public class TransactionsReader : ITransactionsReader
     {
         private readonly IJsonManager _jsonManager;
         private readonly IEnumerable<MarketPlaceTransactionsConfig> _marketplaceConfigs;

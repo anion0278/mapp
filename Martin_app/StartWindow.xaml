@@ -7,7 +7,7 @@
         xmlns:sys="clr-namespace:System;assembly=System.Runtime"
         xmlns:martinApp="clr-namespace:Mapp"
         mc:Ignorable="d"
-        Title="Amazon Invoice Converter" Height="{Binding WindowHeight, Mode=TwoWay}" Width="{Binding WindowWidth, Mode=TwoWay}"
+        Title="{Binding WindowTitle}" Height="{Binding WindowHeight, Mode=TwoWay}" Width="{Binding WindowWidth, Mode=TwoWay}"
         Closing="Window_Closing" WindowStartupLocation="Manual" WindowState="{Binding WindowState, Mode=TwoWay}" Top="{Binding WindowTop, Mode=TwoWay}" Left="{Binding WindowLeft, Mode=TwoWay}">
     <FrameworkElement.Resources>
         <martinApp:ProductsListConverter x:Key="ProductsConverter"/>
@@ -22,7 +22,7 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <StackPanel Grid.Row="0" Margin="20">
-                    <Button  x:Name="ButtonConvert" Content="Zvolit fakturu" Width="150" Height="35" Click="ButtonSelectInvoice_Click"/>
+                    <Button  x:Name="ButtonConvert" Content="Zvolit fakturu" Width="150" Height="35" Command="{Binding SelectAmazonInvoicesCommand}"/>
                     <Label Content="Posledni existujici cislo v systemu:" HorizontalAlignment="Center"/>
                     <local:NumericTextBox  x:Name="ExistingInvoiceNum"
                                            Text="{Binding ExistingInvoiceNumber, Mode=TwoWay}"
@@ -33,7 +33,7 @@
                         <Label Content="Otevrit cilovou slozku po konvertaci" HorizontalAlignment="Center" />
                         <CheckBox VerticalAlignment="Center" IsChecked="{Binding OpenTargetFolderAfterConversion, Mode=TwoWay}"/>
                     </StackPanel>
-                    <Button  x:Name="ButtonExport" Content="Konvertovat..." Width="150" Height="35" Margin="10" Click="ButtonExport_Click"/>
+                    <Button  x:Name="ButtonExport" Content="Konvertovat..." Width="150" Height="35" Margin="10" Command="{Binding ExportConvertedAmazonInvoicesCommand }"/>
                     
                 </StackPanel>
                 <DataGrid Name="TopDataGrid" Grid.Row="1" Margin="5" AutoGenerateColumns="false" CanUserAddRows="false"
@@ -101,7 +101,7 @@
                     <RowDefinition />
                 </Grid.RowDefinitions>
                 <StackPanel Grid.Row="1">
-                    <Button  Content="Konvertovat transakce" Width="200" Height="35" Click="TransactionsButton_Click" />
+                    <Button  Content="Konvertovat transakce" Width="200" Height="35" Command="{Binding ConvertTransactionsCommand}" />
                 </StackPanel>
             </Grid>
         </TabItem>
