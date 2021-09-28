@@ -91,11 +91,11 @@ namespace Mapp
         {
             try
             {
-                _settings.Save();
+                _settings.Save(); 
             }
             catch (Exception ex)
             {
-                throw new SettingsDataAccessException("Problem with saving the settings file!", ex);
+                throw new SettingsDataAccessException("Problem with saving the settings file!", ex); // BUG this exception is somehow swollen by the app!
             }
         }
     }
