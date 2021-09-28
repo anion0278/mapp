@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using Shmap.CommonServices;
+using Shmap.Views;
 
 namespace Mapp
 {

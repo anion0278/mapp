@@ -1,8 +1,6 @@
-﻿
-using System;
-using System.ComponentModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Drawing;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
@@ -12,12 +10,13 @@ using Shmap.BusinessLogic.AutocompletionHelper;
 using Shmap.BusinessLogic.Invoices;
 using Shmap.BusinessLogic.Transactions;
 using Shmap.CommonServices;
+using Shmap.DataAccess;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
 
-namespace Mapp
+namespace Shmap.ViewModels
 {
-    internal interface IStartWindowViewModel
+    public interface IStartWindowViewModel
     {
         IInvoiceConverter InvoiceConverter { get; }
         RelayCommand SelectAmazonInvoicesCommand { get; }
@@ -42,6 +41,8 @@ namespace Mapp
         private readonly IFileOperationService _fileOperationService;
         private readonly ITransactionsReader _transactionsReader;
         private readonly IGpcGenerator _gpcGenerator;
+        private readonly IAutocompleteData _autocompleteData;
+        private readonly IDialogService _dialogService;
         private int _windowWidth;
         private int _windowHeight;
         private WindowState _windowState;
@@ -53,9 +54,27 @@ namespace Mapp
         private bool _openTargetFolderAfterConversion;
         private string _windowTitle;
 
-        public RelayCommand SelectAmazonInvoicesCommand { get; private set; }
-        public RelayCommand ExportConvertedAmazonInvoicesCommand { get; private set; }
-        public RelayCommand ConvertTransactionsCommand { get; private set; }
+        public RelayCommand SelectAmazonInvoicesCommand { get; }
+        public RelayCommand ExportConvertedAmazonInvoicesCommand { get; }
+        public RelayCommand ConvertTransactionsCommand { get; }
+        public RelayCommand WindowClosingCommand { get; }
+
+        public ObservableCollection<InvoiceItemWithDetailViewModel> _invoiceItems = new();
+
+        public ObservableCollection<InvoiceViewModel> _invoices = new();
+
+        public ObservableCollection<InvoiceItemWithDetailViewModel> InvoiceItems
+        {
+            get => _invoiceItems;
+            set => Set(ref _invoiceItems, value);
+        }
+
+
+        public ObservableCollection<InvoiceViewModel> Invoices
+        {
+            get => _invoices;
+            set => Set(ref _invoices, value);
+        }
 
         public int WindowLeft
         {
@@ -154,13 +173,22 @@ namespace Mapp
             set => Set(ref _windowTitle, value);
         }
 
+        public StartWindowViewModel() // Design-time ctor
+        {
+            _windowHeight = 600;
+            _windowWidth = 900;
+            _existingInvoiceNumber = 123456789;
+            _defaultEmail = "email@email.com";
+        }
 
         public StartWindowViewModel(IConfigProvider configProvider,
             IInvoiceConverter invoiceConverter,
             IAutoKeyboardInputHelper autoKeyboardInputHelper,
             IFileOperationService fileOperationService,
             ITransactionsReader transactionsReader, 
-            IGpcGenerator gpcGenerator)
+            IGpcGenerator gpcGenerator,
+            IAutocompleteData autocompleteData,
+            IDialogService dialogService)
         {
             InvoiceConverter = invoiceConverter; // TODO FIXME
             _configProvider = configProvider;
@@ -168,9 +196,12 @@ namespace Mapp
             _fileOperationService = fileOperationService;
             _transactionsReader = transactionsReader;
             _gpcGenerator = gpcGenerator;
+            _autocompleteData = autocompleteData;
+            _dialogService = dialogService;
             SelectAmazonInvoicesCommand = new RelayCommand(SelectAmazonInvoices, ()=>true);
             ExportConvertedAmazonInvoicesCommand = new RelayCommand(ExportConvertedAmazonInvoices, ()=>true);
             ConvertTransactionsCommand = new RelayCommand(ConvertTransactions, ()=>true);
+            WindowClosingCommand = new RelayCommand(OnWindowClosing, ()=>true);
 
             _windowTitle += FormatTitleAssemblyFileVersion(Assembly.GetEntryAssembly());
             _windowHeight = _configProvider.MainWindowSize.Height;
@@ -185,12 +216,16 @@ namespace Mapp
             _autoKeyboardInputHelper.TrackingCode = _configProvider.LatestTrackingCode; // TODO Really bad
         }
 
+        private void OnWindowClosing()
+        {
+            _autoKeyboardInputHelper.Dispose();
+        }
+
         private string FormatTitleAssemblyFileVersion(Assembly assembly) // TODO shared assembly info file?
         {
             var fileVersion = FileVersionInfo.GetVersionInfo(assembly.Location);
             return " v" + fileVersion.FileVersion;
         }
-
 
         private void ConvertTransactions()
         {
@@ -212,16 +247,29 @@ namespace Mapp
 
         private void SelectAmazonInvoices()
         {
+            InvoiceItems.Clear();
+            Invoices.Clear();
+
             var fileNames = _fileOperationService.OpenAmazonInvoices();
             if (!fileNames.Any()) return;
 
-            var conversionContext = new InvoiceConversionContext()
+            var conversionContext = new InvoiceConversionContext() // TODO injected factory
             {
                 ConvertToDate = DateTime.Today,
                 DefaultEmail = _configProvider.DefaultEmail, // TODO decide whether to take it from config or from VM
                 ExistingInvoiceNumber = _configProvider.ExistingInvoiceNumber,
             };
-            InvoiceConverter.LoadAmazonReports(fileNames, conversionContext);
+            var invoices = InvoiceConverter.LoadAmazonReports(fileNames, conversionContext).ToList();
+
+            foreach (var invoiceItem in invoices.SelectMany(di => di.InvoiceItems))
+            {
+                InvoiceItems.Add(new InvoiceItemWithDetailViewModel(invoiceItem, _autocompleteData));
+            }
+
+            foreach (var invoice in invoices)
+            {
+                Invoices.Add(new InvoiceViewModel(invoice, _autocompleteData));
+            }
         }
 
         private void ExportConvertedAmazonInvoices()
@@ -229,8 +277,18 @@ namespace Mapp
             string fileName = _fileOperationService.SaveConvertedAmazonInvoices();
             if (string.IsNullOrWhiteSpace(fileName)) return;
 
-            InvoiceConverter.ProcessInvoices(fileName, out uint processedInvoices);
-            ExistingInvoiceNumber += processedInvoices;
+            var invoices = Invoices.Select(i => i.ExportModel());
+            var invoiceItems = InvoiceItems.Select(i => i.ExportModel()).ToList(); 
+            // TODO how to avoid need for calling ToList (due to laziness of linq)?
+
+            if (invoices == null || !invoices.Any())
+            {
+                _dialogService.ShowMessage("Zadne faktury nebyly konvertovany!"); // TODO solve using OperationResult
+                return;
+            }
+
+            InvoiceConverter.ProcessInvoices(invoices, fileName);
+            ExistingInvoiceNumber += (uint)invoices.Count();
 
             if (_configProvider.OpenTargetFolderAfterConversion)
             {

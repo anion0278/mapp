@@ -1,4 +1,4 @@
-﻿<Window x:Class="Shmap.StartWindow"
+﻿<Window x:Class="Shmap.Views.StartWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -6,9 +6,18 @@
         xmlns:local="clr-namespace:Mapp"
         xmlns:sys="clr-namespace:System;assembly=System.Runtime"
         xmlns:martinApp="clr-namespace:Mapp"
+        xmlns:viewModels="clr-namespace:Shmap.ViewModels"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:command="http://www.galasoft.ch/mvvmlight"
         mc:Ignorable="d"
         Title="{Binding WindowTitle}" Height="{Binding WindowHeight, Mode=TwoWay}" Width="{Binding WindowWidth, Mode=TwoWay}"
-        Closing="Window_Closing" WindowStartupLocation="Manual" WindowState="{Binding WindowState, Mode=TwoWay}" Top="{Binding WindowTop, Mode=TwoWay}" Left="{Binding WindowLeft, Mode=TwoWay}">
+        WindowStartupLocation="Manual" WindowState="{Binding WindowState, Mode=TwoWay}" Top="{Binding WindowTop, Mode=TwoWay}" Left="{Binding WindowLeft, Mode=TwoWay}"
+        d:DataContext="{d:DesignInstance viewModels:StartWindowViewModel, IsDesignTimeCreatable=True}">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Closing">
+            <command:EventToCommand Command="{Binding Mode=OneWay, Path=WindowClosingCommand}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
     <FrameworkElement.Resources>
         <martinApp:ProductsListConverter x:Key="ProductsConverter"/>
         <martinApp:ProductsListToSkuConverter x:Key="ProductsToSkuConverter"/>
@@ -22,34 +31,34 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <StackPanel Grid.Row="0" Margin="20">
-                    <Button  x:Name="ButtonConvert" Content="Zvolit fakturu" Width="150" Height="35" Command="{Binding SelectAmazonInvoicesCommand}"/>
+                    <Button Content="Zvolit fakturu" Width="150" Height="35" Command="{Binding SelectAmazonInvoicesCommand}"/>
                     <Label Content="Posledni existujici cislo v systemu:" HorizontalAlignment="Center"/>
                     <local:NumericTextBox  x:Name="ExistingInvoiceNum"
                                            Text="{Binding ExistingInvoiceNumber, Mode=TwoWay}"
                                            MaxLength="9" HorizontalContentAlignment="Center" Height="23" VerticalAlignment="Center" Width="150"/>
                     <Label Content="Default email:" HorizontalAlignment="Center"/>
-                    <TextBox  x:Name="DefaultEmailBox" Text="{Binding DefaultEmail, Mode=TwoWay}" HorizontalContentAlignment="Center" Height="23" VerticalAlignment="Center" Width="150" />
+                    <TextBox Text="{Binding DefaultEmail, Mode=TwoWay}" HorizontalContentAlignment="Center" Height="23" VerticalAlignment="Center" Width="150" />
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" >
                         <Label Content="Otevrit cilovou slozku po konvertaci" HorizontalAlignment="Center" />
                         <CheckBox VerticalAlignment="Center" IsChecked="{Binding OpenTargetFolderAfterConversion, Mode=TwoWay}"/>
                     </StackPanel>
-                    <Button  x:Name="ButtonExport" Content="Konvertovat..." Width="150" Height="35" Margin="10" Command="{Binding ExportConvertedAmazonInvoicesCommand }"/>
-                    
+                    <Button Content="Konvertovat..." Width="150" Height="35" Margin="10" Command="{Binding ExportConvertedAmazonInvoicesCommand }"/>
+
                 </StackPanel>
                 <DataGrid Name="TopDataGrid" Grid.Row="1" Margin="5" AutoGenerateColumns="false" CanUserAddRows="false"
-              ItemsSource="{Binding InvoiceConverter.InvoiceItemsAll}" CellEditEnding="TopDataGrid_CellEditEnding">
+              ItemsSource="{Binding InvoiceItems}">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Cislo (Amazon)" Width="0.6*" IsReadOnly="true" Binding="{Binding Header.symVar}"/>
-                        <DataGridTextColumn Header="Puvod" Width="0.4*" IsReadOnly="true" Binding="{Binding Header.paymentType.ids}"/>
-                        <DataGridTextColumn Header="Nazev produktu (Amazon)" Width="*" Binding="{Binding Item.text}">
+                        <DataGridTextColumn Header="Cislo (Amazon)" Width="0.6*" IsReadOnly="true" Binding="{Binding AmazonNumber}"/>
+                        <DataGridTextColumn Header="Puvod" Width="0.4*" IsReadOnly="true" Binding="{Binding SalesChannel}"/>
+                        <DataGridTextColumn Header="Nazev produktu (Amazon)" Width="*" Binding="{Binding AmazonProductName}">
                             <DataGridBoundColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="Background" Value="Orange"/>
                                 </Style>
                             </DataGridBoundColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Header="SKU (Amazon)" IsReadOnly="True" Width="*" Binding="{Binding Item.amazonSkuCode}" />
-                        <DataGridTextColumn Header="Kod zbozi (!)" Width="*" Binding="{Binding Item.code}">
+                        <DataGridTextColumn Header="SKU (Amazon)" IsReadOnly="True" Width="*" Binding="{Binding AmazonSku}" />
+                        <DataGridTextColumn Header="Kod zbozi (!)" Width="*" Binding="{Binding WarehouseProductCode}">
                             <DataGridBoundColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="Background" Value="DarkOrange"/>
@@ -65,20 +74,20 @@
                     </DataGrid.Columns>
                 </DataGrid>
                 <DataGrid Name="BottomDataGrid" Grid.Row="2" Margin="5" AutoGenerateColumns="false" CanUserAddRows="false"
-              ItemsSource="{Binding InvoiceConverter.InvoicesTable}" CellEditEnding="BottomDataGrid_CellEditEnding">
+              ItemsSource="{Binding Invoices}" >
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Cislo (Amazon)" Width="0.6*" IsReadOnly="true"
-                            Binding="{Binding invoice.invoiceHeader.symVar}"/>
+                            Binding="{Binding AmazonNumber}"/>
                         <DataGridTextColumn Header="Puvod" Width="0.4*" IsReadOnly="true"
-                            Binding="{Binding invoice.invoiceHeader.paymentType.ids}"/>
-                        <DataGridTextColumn Header="Produkty" Width="*" IsReadOnly="true" Binding="{Binding invoice.invoiceDetail, Converter={StaticResource ProductsConverter}}"/>
-                        <DataGridTextColumn Header="SKU kody" Width="*" IsReadOnly="true" Binding="{Binding invoice.invoiceDetail, Converter={StaticResource ProductsToSkuConverter}}"/>
-                        <DataGridTextColumn Header="Kod z skladu (!)" Width="*" Binding="{Binding invoice.invoiceHeader.centre.ids}">
+                            Binding="{Binding SalesChannel}"/>
+                        <DataGridTextColumn Header="Produkty" Width="*" IsReadOnly="true" Binding="{Binding InvoiceProductNames, Converter={StaticResource ProductsConverter}}"/>
+                        <DataGridTextColumn Header="SKU kody" Width="*" IsReadOnly="true" Binding="{Binding AmazonSkuCodes, Converter={StaticResource ProductsToSkuConverter}}"/>
+                        <DataGridTextColumn Header="Kod z skladu (!)" Width="*" Binding="{Binding RelatedWarehouseSection}">
                             <DataGridBoundColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="Background" Value="Orange"/>
                                     <Style.Triggers>
-                                        <Trigger  Property="Text" Value="----"> 
+                                        <Trigger  Property="Text" Value="----">
                                             <Setter Property="Background" Value="Red"/>
                                         </Trigger>
                                     </Style.Triggers>
@@ -86,9 +95,20 @@
                             </DataGridBoundColumn.ElementStyle>
                         </DataGridTextColumn>
                         <DataGridTextColumn Header="Celni prohlaseni" Width="*" 
-                                            Binding="{Binding invoice.invoiceHeader.partnerIdentity.address.mobilPhone}"/>
+                                            Binding="{Binding CustomsDeclaration}">
+                            <DataGridBoundColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="Background" Value="DarkOrange"/>
+                                    <Style.Triggers>
+                                        <Trigger  Property="Text" Value="----">
+                                            <Setter Property="Background" Value="Red"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </DataGridBoundColumn.ElementStyle>
+                        </DataGridTextColumn>
                         <DataGridTextColumn Header="Typ VAT" Width="*"  IsReadOnly="True"
-                                            Binding="{Binding invoice.invoiceHeader.classificationVAT.ids}"/>
+                                            Binding="{Binding VatType}"/>
                     </DataGrid.Columns>
                 </DataGrid>
             </Grid>
@@ -101,7 +121,7 @@
                     <RowDefinition />
                 </Grid.RowDefinitions>
                 <StackPanel Grid.Row="1">
-                    <Button  Content="Konvertovat transakce" Width="200" Height="35" Command="{Binding ConvertTransactionsCommand}" />
+                    <Button Content="Konvertovat transakce" Width="200" Height="35" Command="{Binding ConvertTransactionsCommand}" />
                 </StackPanel>
             </Grid>
         </TabItem>

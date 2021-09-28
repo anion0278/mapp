@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Runtime.CompilerServices;
 using Shmap.CommonServices;
+using Shmap.DataAccess;
 
 namespace Mapp
 {
@@ -73,13 +74,29 @@ namespace Mapp
         public ConfigProvider(AppSettings settings, bool isAutosaveEnabled)
         {
             _settings = settings;
-            _settings.UpgradeSettingsIfRequired();
             _isAutosaveEnabled = isAutosaveEnabled;
+
+            try
+            {
+                _settings.UpgradeSettingsIfRequired();
+            }
+            catch (Exception ex)
+            {
+                throw new SettingsDataAccessException("Problem with upgrading the configuration data!", ex);
+            }
+
         }
 
         public void SaveConfig()
         {
-            _settings.Save();
+            try
+            {
+                _settings.Save();
+            }
+            catch (Exception ex)
+            {
+                throw new SettingsDataAccessException("Problem with saving the settings file!", ex);
+            }
         }
     }
 }

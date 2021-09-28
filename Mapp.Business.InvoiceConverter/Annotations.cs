@@ -270,7 +270,7 @@ namespace Shmap.BusinessLogic.Invoices.Annotations
   ///
   ///   string _name;
   /// 
-  ///   public string Name {
+  ///   public string ForeignCurrencyName {
   ///     get { return _name; }
   ///     set { _name = value; NotifyChanged("LastName"); /* Warning */ }
   ///   }

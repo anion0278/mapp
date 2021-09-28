@@ -14,6 +14,7 @@ namespace Shmap.BusinessLogic.AutocompletionHelper
         private InputSimulator _keyboardSim = new InputSimulator();
         private KeyboardHook _keyboardHook;
         private bool _isCommandPressed = false;
+        //public DateTime _lastAutoinputTime;
 
         public string TrackingCode { get; set; }// TODO should be somehow connected with VM
 
@@ -40,8 +41,11 @@ namespace Shmap.BusinessLogic.AutocompletionHelper
             {
                 _isCommandPressed = true;
             }
-            if (key == KeyboardHook.VKeys.F4 && _isCommandPressed)
+
+            //var elapsedTime = _lastAutoinputTime - DateTime.Now;
+            if (key == KeyboardHook.VKeys.F4 && _isCommandPressed ) /*&& elapsedTime.Seconds > 2*/
             {
+                //_lastAutoinputTime = DateTime.Now;
                 _keyboardSim.Keyboard.TextEntry($"RR{TrackingCode}CZ");
                 _keyboardSim.Keyboard.KeyPress(VirtualKeyCode.TAB);
                 _keyboardSim.Keyboard.Sleep(50);

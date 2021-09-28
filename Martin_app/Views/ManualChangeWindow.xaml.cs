@@ -1,16 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+﻿using System.Windows;
 
-namespace Mapp
+namespace Shmap.Views
 {
     /// <summary>
     /// Interaction logic for ManualChange.xaml
@@ -22,9 +12,10 @@ namespace Mapp
         public ManualChange(int maxLength, string initialText)
         {
             MaxLength = maxLength;
-            InitializeComponent();
             InitialText.Text = initialText;
             ChangedText.Text = initialText;
+
+            InitializeComponent();
         }
 
         public string CorrectedText => ChangedText.Text;

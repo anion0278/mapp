@@ -1,21 +1,22 @@
 ﻿using System;
+using System.ComponentModel;
 
 namespace Shmap.CommonServices
 {
     public static class CommonExtensions
     {
-        public static void Swap<T>(ref T lhs, ref T rhs)
-        {
-            T temp = lhs;
-            lhs = rhs;
-            rhs = temp;
-        }
 
-
-        public static bool MajorAndMinorEquals(this Version comparedVerison, Version currentVersion)
+        public static string GetDescriptionFromEnum(this Enum enumeration, bool useEnumValueNameAsDefault = false)
         {
-            return comparedVerison.Major.Equals(currentVersion.Major)
-                   && comparedVerison.Minor.Equals(currentVersion.Minor);
+            System.Reflection.FieldInfo fieldInfo = enumeration.GetType().GetField(enumeration.ToString());
+            var attributes = (DescriptionAttribute[])fieldInfo.GetCustomAttributes(typeof(DescriptionAttribute), false);
+            if (attributes.Length > 0)
+                return attributes[0].Description;
+
+            if (useEnumValueNameAsDefault)
+                return enumeration.ToString();
+
+            throw new InvalidOperationException($"No description attribute found for enum : {enumeration} !");
         }
 
     }

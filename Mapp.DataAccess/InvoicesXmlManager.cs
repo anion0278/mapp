@@ -18,7 +18,7 @@ namespace Shmap.DataAccess
         private readonly IConfigProvider _configProvider;
 
 
-        private Encoding XmlEncoding = CodePagesEncodingProvider.Instance.GetEncoding("windows-1250");
+        private readonly Encoding _xmlEncoding = CodePagesEncodingProvider.Instance.GetEncoding("windows-1250"); // pass encoding as param
 
         public InvoicesXmlManager(IDialogService dialogService, IConfigProvider configProvider)
         {
@@ -29,7 +29,7 @@ namespace Shmap.DataAccess
         public InvoiceXml.dataPackDataPackItem PrepareDatapackItem()
         {
             InvoiceXml.dataPack dataPack;
-            using (var streamReader = new StreamReader(Path.Combine(_configProvider.InvoiceConverterConfigsDir, "InvoiceBasic"), XmlEncoding))
+            using (var streamReader = new StreamReader(Path.Combine(_configProvider.InvoiceConverterConfigsDir, "InvoiceBasic"), _xmlEncoding))
             {
                 Debug.WriteLine("Following FileNotFoundException - is normal XmlSerializer behavior");
                 dataPack = (InvoiceXml.dataPack)new XmlSerializer(typeof(InvoiceXml.dataPack)).Deserialize(streamReader);
@@ -37,11 +37,130 @@ namespace Shmap.DataAccess
             return dataPack.dataPackItem[0];
         }
 
-
-        public void SerializeXmlInvoice(string fileName, InvoiceXml.dataPack invoice)
+        private InvoiceXml.dataPackDataPackItem FillDataPackItem(Invoice invoice)
         {
+            var packDataPackItem = PrepareDatapackItem();
+
+            packDataPackItem.id = invoice.UserId;
+
+            packDataPackItem.invoice.invoiceHeader.accounting.ids = "3Fv";
+            packDataPackItem.invoice.invoiceHeader.invoiceType = "issuedInvoice";
+
+            packDataPackItem.invoice.invoiceHeader.number.numberRequested = invoice.Number;
+            packDataPackItem.invoice.invoiceHeader.symVar = invoice.VariableSymbolShort;
+            packDataPackItem.invoice.invoiceHeader.symPar = invoice.VariableSymbolFull;
+            packDataPackItem.invoice.invoiceHeader.date = invoice.ConversionDate;
+            packDataPackItem.invoice.invoiceHeader.dateTax = invoice.DateTax;
+            packDataPackItem.invoice.invoiceHeader.dateAccounting = invoice.DateAccounting;
+            packDataPackItem.invoice.invoiceHeader.dateDue = invoice.DateDue;
+            packDataPackItem.invoice.invoiceHeader.classificationVAT.ids = invoice.Classification.GetDescriptionFromEnum();
+            packDataPackItem.invoice.invoiceHeader.classificationVAT.classificationVATType = invoice.VatType;
+            packDataPackItem.invoice.invoiceHeader.text = "This is your invoice:"; // TODO Remove?
+            packDataPackItem.invoice.invoiceHeader.paymentType.ids = invoice.SalesChannel;
+            packDataPackItem.invoice.invoiceHeader.centre.ids = invoice.RelatedWarehouseName;
+            packDataPackItem.invoice.invoiceHeader.histRate = true; // always true
+
+            packDataPackItem.invoice.invoiceHeader.partnerIdentity.address = FillPartnerInfo(invoice.ClientInfo);
+            SetCustomsDeclarationIntoMobilePhone(invoice, packDataPackItem); 
+
+            packDataPackItem.invoice.invoiceHeader.liquidation.amountHome = Math.Round(invoice.TotalPrice.AmountHome, 2);
+            packDataPackItem.invoice.invoiceHeader.liquidation.amountForeign = invoice.TotalPrice.AmountForeign;
+
+            packDataPackItem.invoice.invoiceSummary.foreignCurrency.amount = 1;
+            packDataPackItem.invoice.invoiceSummary.foreignCurrency.currency.ids = invoice.TotalPrice.ForeignCurrencyName;
+            packDataPackItem.invoice.invoiceSummary.foreignCurrency.rate = invoice.TotalPrice.Rate;
+            packDataPackItem.invoice.invoiceSummary.foreignCurrency.priceSum = invoice.TotalPrice.AmountForeign;
+
+            packDataPackItem.invoice.invoiceSummary.homeCurrency.priceNone = Math.Round(invoice.TotalPrice.AmountHome, 2);
+            packDataPackItem.invoice.invoiceSummary.homeCurrency.priceHighSum = Math.Round(invoice.TotalPrice.AmountHome, 2);
+
+            if (invoice.CountryVat != null)
+            {
+                packDataPackItem.invoice.invoiceSummary.homeCurrency.priceHigh = Math.Round(invoice.TotalPrice.AmountHome - invoice.TotalPriceVat.AmountHome, 2);
+                packDataPackItem.invoice.invoiceSummary.homeCurrency.priceHighVAT = Math.Round(invoice.TotalPriceVat.AmountHome, 2);
+            }
+
+            if (invoice.IsMoss) 
+            {
+                packDataPackItem.invoice.invoiceHeader.MOSS = new InvoiceXml.invoiceInvoiceHeaderMOSS() { ids = invoice.ShipCountryCode };
+                packDataPackItem.invoice.invoiceHeader.evidentiaryResourcesMOSS = new InvoiceXml.invoiceInvoiceHeaderEvidentiaryResourcesMOSS() { ids = "A" };
+            }
+
+            var invoiceInvoiceItemList = new List<InvoiceXml.invoiceInvoiceItem>();
+            invoiceInvoiceItemList.AddRange(invoice.InvoiceItems.Select(CreateInvoiceItem));
+            packDataPackItem.invoice.invoiceDetail = invoiceInvoiceItemList.ToArray();
+
+            return packDataPackItem;
+        }
+
+        private InvoiceXml.invoiceInvoiceItem CreateInvoiceItem(InvoiceItemBase invoiceItem)
+        {
+            var data = new InvoiceXml.invoiceInvoiceItem();
+            data.text = invoiceItem.Name;
+            data.quantity = invoiceItem.Quantity;
+
+            data.discountPercentage = 0;
+            data.foreignCurrency = new InvoiceXml.invoiceInvoiceItemForeignCurrency();
+            data.homeCurrency = new InvoiceXml.invoiceInvoiceItemHomeCurrency();
+            data.PDP = false;
+
+            data.rateVAT = "historyHigh";
+            data.foreignCurrency.unitPrice = Math.Round(invoiceItem.UnitPrice.AmountForeign, 2); // TODO make RoundToDefaultAccuracy - extension method
+            data.foreignCurrency.price = Math.Round(invoiceItem.TotalPrice.AmountForeign, 2);
+            data.foreignCurrency.priceSum = Math.Round(invoiceItem.TotalPrice.AmountForeign, 2);
+            data.foreignCurrency.priceVAT = Math.Round(invoiceItem.VatPrice.AmountForeign, 2);
+
+            data.homeCurrency.unitPrice = Math.Round(invoiceItem.UnitPrice.AmountHome, 2);
+            data.homeCurrency.price = Math.Round(invoiceItem.TotalPrice.AmountHome, 2);
+            data.homeCurrency.priceSum = Math.Round(invoiceItem.TotalPrice.AmountHome, 2);
+            data.homeCurrency.priceVAT = Math.Round(invoiceItem.VatPrice.AmountHome, 2);
+            data.payVAT = false;
+
+            if (invoiceItem.IsMoss) 
+            {
+                data.typeServiceMOSS = new InvoiceXml.typeServiceMOSS { ids = "GD" };
+                data.percentVAT = invoiceItem.PercentVat;
+            }
+
+            if (invoiceItem is not InvoiceProduct product) return data;
+
+            data.stockItem = new InvoiceXml.invoiceInvoiceItemStockItem();
+            data.stockItem.stockItem = new InvoiceXml.stockItem();
+            data.stockItem.store = new InvoiceXml.store();
+            data.code = product.WarehouseCode;
+            data.amazonSkuCode = product.AmazonSku;
+            data.stockItem.stockItem.ids = product.WarehouseCode;
+            data.stockItem.store.ids = "Zboží";
+
+            return data;
+        }
+
+        private static void SetCustomsDeclarationIntoMobilePhone(Invoice invoice, InvoiceXml.dataPackDataPackItem packDataPackItem)
+        {
+            packDataPackItem.invoice.invoiceHeader.partnerIdentity.address.mobilPhone = invoice.CustomsDeclaration;
+        }
+
+        private static InvoiceXml.address FillPartnerInfo(PartnerInfo partnerInfo)
+        {
+            var data = new InvoiceXml.address
+            {
+                name = partnerInfo.Name,
+                city = partnerInfo.Address.City, 
+                street = partnerInfo.Address.Street,
+                country = new InvoiceXml.addressCountry{ ids = partnerInfo.Address.Country },
+                zip = partnerInfo.Address.Zip,
+                phone = partnerInfo.Contact.Phone,
+                email = partnerInfo.Contact.Email
+            };
+            return data;
+        }
+
+        public void SerializeXmlInvoice(string fileName, IEnumerable<Invoice> invoices)
+        {
+            var invoice = PrepareInvoice(invoices);
+
             var settings = new XmlWriterSettings();
-            settings.Encoding = XmlEncoding;
+            settings.Encoding = _xmlEncoding;
             settings.NamespaceHandling = NamespaceHandling.Default;
             settings.Indent = true;
 
@@ -55,9 +174,8 @@ namespace Shmap.DataAccess
             FixNamespaces(fileName);
         }
 
-        public InvoiceXml.dataPack PrepareInvoice(IEnumerable<InvoiceXml.dataPackDataPackItem> dataItems)
+        public InvoiceXml.dataPack PrepareInvoice(IEnumerable<Invoice> invoices)
         {
-            // TODO CHECK DATA 
             return new()
             {
                 ico = 5448034,
@@ -66,7 +184,7 @@ namespace Shmap.DataAccess
                 programVersion = "12101.4 (7.1.2019)",
                 application = "Transformace",
                 note = "Uživatelský export",
-                dataPackItem = dataItems.ToArray(),
+                dataPackItem = invoices.Select(FillDataPackItem).ToArray(),
                 version = new decimal(20, 0, 0, false, 1)
             };
         }
@@ -74,10 +192,10 @@ namespace Shmap.DataAccess
         private void FixNamespaces(string resultFilePath)
         {
             File.WriteAllText(resultFilePath,
-                    File.ReadAllText(resultFilePath, XmlEncoding)
+                    File.ReadAllText(resultFilePath, _xmlEncoding)
                     .Replace("5448034", "05448034")
                     .Replace("<inv:invoiceItem xmlns:typ=\"http://www.stormware.cz/schema/version_2/type.xsd\">", "<inv:invoiceItem>")
-                    .Replace("<inv:invoiceDetail>", "<inv:invoiceDetail xmlns:rsp=\"http://www.stormware.cz/schema/version_2/response.xsd\" xmlns:rdc=\"http://www.stormware.cz/schema/version_2/documentresponse.xsd\" xmlns:typ=\"http://www.stormware.cz/schema/version_2/type.xsd\" xmlns:lst=\"http://www.stormware.cz/schema/version_2/list.xsd\" xmlns:lStk=\"http://www.stormware.cz/schema/version_2/list_stock.xsd\" xmlns:lAdb=\"http://www.stormware.cz/schema/version_2/list_addBook.xsd\" xmlns:lCen=\"http://www.stormware.cz/schema/version_2/list_centre.xsd\" xmlns:lAcv=\"http://www.stormware.cz/schema/version_2/list_activity.xsd\" xmlns:acu=\"http://www.stormware.cz/schema/version_2/accountingunit.xsd\" xmlns:vch=\"http://www.stormware.cz/schema/version_2/voucher.xsd\" xmlns:int=\"http://www.stormware.cz/schema/version_2/intDoc.xsd\" xmlns:stk=\"http://www.stormware.cz/schema/version_2/stock.xsd\" xmlns:ord=\"http://www.stormware.cz/schema/version_2/order.xsd\" xmlns:ofr=\"http://www.stormware.cz/schema/version_2/offer.xsd\" xmlns:enq=\"http://www.stormware.cz/schema/version_2/enquiry.xsd\" xmlns:vyd=\"http://www.stormware.cz/schema/version_2/vydejka.xsd\" xmlns:pri=\"http://www.stormware.cz/schema/version_2/prijemka.xsd\" xmlns:bal=\"http://www.stormware.cz/schema/version_2/balance.xsd\" xmlns:pre=\"http://www.stormware.cz/schema/version_2/prevodka.xsd\" xmlns:vyr=\"http://www.stormware.cz/schema/version_2/vyroba.xsd\" xmlns:pro=\"http://www.stormware.cz/schema/version_2/prodejka.xsd\" xmlns:con=\"http://www.stormware.cz/schema/version_2/contract.xsd\" xmlns:adb=\"http://www.stormware.cz/schema/version_2/addressbook.xsd\" xmlns:prm=\"http://www.stormware.cz/schema/version_2/parameter.xsd\" xmlns:lCon=\"http://www.stormware.cz/schema/version_2/list_contract.xsd\" xmlns:ctg=\"http://www.stormware.cz/schema/version_2/category.xsd\" xmlns:ipm=\"http://www.stormware.cz/schema/version_2/intParam.xsd\" xmlns:str=\"http://www.stormware.cz/schema/version_2/storage.xsd\" xmlns:idp=\"http://www.stormware.cz/schema/version_2/individualPrice.xsd\" xmlns:sup=\"http://www.stormware.cz/schema/version_2/supplier.xsd\" xmlns:prn=\"http://www.stormware.cz/schema/version_2/print.xsd\" xmlns:sEET=\"http://www.stormware.cz/schema/version_2/sendEET.xsd\" xmlns:act=\"http://www.stormware.cz/schema/version_2/accountancy.xsd\" xmlns:bnk=\"http://www.stormware.cz/schema/version_2/bank.xsd\" xmlns:sto=\"http://www.stormware.cz/schema/version_2/store.xsd\" xmlns:grs=\"http://www.stormware.cz/schema/version_2/groupStocks.xsd\" xmlns:acp=\"http://www.stormware.cz/schema/version_2/actionPrice.xsd\" xmlns:csh=\"http://www.stormware.cz/schema/version_2/cashRegister.xsd\" xmlns:bka=\"http://www.stormware.cz/schema/version_2/bankAccount.xsd\" xmlns:ilt=\"http://www.stormware.cz/schema/version_2/inventoryLists.xsd\" xmlns:nms=\"http://www.stormware.cz/schema/version_2/numericalSeries.xsd\" xmlns:pay=\"http://www.stormware.cz/schema/version_2/payment.xsd\" xmlns:mKasa=\"http://www.stormware.cz/schema/version_2/mKasa.xsd\" xmlns:gdp=\"http://www.stormware.cz/schema/version_2/GDPR.xsd\" xmlns:est=\"http://www.stormware.cz/schema/version_2/establishment.xsd\" xmlns:cen=\"http://www.stormware.cz/schema/version_2/centre.xsd\" xmlns:acv=\"http://www.stormware.cz/schema/version_2/activity.xsd\" xmlns:ftr=\"http://www.stormware.cz/schema/version_2/filter.xsd\">"), XmlEncoding);
+                    .Replace("<inv:invoiceDetail>", "<inv:invoiceDetail xmlns:rsp=\"http://www.stormware.cz/schema/version_2/response.xsd\" xmlns:rdc=\"http://www.stormware.cz/schema/version_2/documentresponse.xsd\" xmlns:typ=\"http://www.stormware.cz/schema/version_2/type.xsd\" xmlns:lst=\"http://www.stormware.cz/schema/version_2/list.xsd\" xmlns:lStk=\"http://www.stormware.cz/schema/version_2/list_stock.xsd\" xmlns:lAdb=\"http://www.stormware.cz/schema/version_2/list_addBook.xsd\" xmlns:lCen=\"http://www.stormware.cz/schema/version_2/list_centre.xsd\" xmlns:lAcv=\"http://www.stormware.cz/schema/version_2/list_activity.xsd\" xmlns:acu=\"http://www.stormware.cz/schema/version_2/accountingunit.xsd\" xmlns:vch=\"http://www.stormware.cz/schema/version_2/voucher.xsd\" xmlns:int=\"http://www.stormware.cz/schema/version_2/intDoc.xsd\" xmlns:stk=\"http://www.stormware.cz/schema/version_2/stock.xsd\" xmlns:ord=\"http://www.stormware.cz/schema/version_2/order.xsd\" xmlns:ofr=\"http://www.stormware.cz/schema/version_2/offer.xsd\" xmlns:enq=\"http://www.stormware.cz/schema/version_2/enquiry.xsd\" xmlns:vyd=\"http://www.stormware.cz/schema/version_2/vydejka.xsd\" xmlns:pri=\"http://www.stormware.cz/schema/version_2/prijemka.xsd\" xmlns:bal=\"http://www.stormware.cz/schema/version_2/balance.xsd\" xmlns:pre=\"http://www.stormware.cz/schema/version_2/prevodka.xsd\" xmlns:vyr=\"http://www.stormware.cz/schema/version_2/vyroba.xsd\" xmlns:pro=\"http://www.stormware.cz/schema/version_2/prodejka.xsd\" xmlns:con=\"http://www.stormware.cz/schema/version_2/contract.xsd\" xmlns:adb=\"http://www.stormware.cz/schema/version_2/addressbook.xsd\" xmlns:prm=\"http://www.stormware.cz/schema/version_2/parameter.xsd\" xmlns:lCon=\"http://www.stormware.cz/schema/version_2/list_contract.xsd\" xmlns:ctg=\"http://www.stormware.cz/schema/version_2/category.xsd\" xmlns:ipm=\"http://www.stormware.cz/schema/version_2/intParam.xsd\" xmlns:str=\"http://www.stormware.cz/schema/version_2/storage.xsd\" xmlns:idp=\"http://www.stormware.cz/schema/version_2/individualPrice.xsd\" xmlns:sup=\"http://www.stormware.cz/schema/version_2/supplier.xsd\" xmlns:prn=\"http://www.stormware.cz/schema/version_2/print.xsd\" xmlns:sEET=\"http://www.stormware.cz/schema/version_2/sendEET.xsd\" xmlns:act=\"http://www.stormware.cz/schema/version_2/accountancy.xsd\" xmlns:bnk=\"http://www.stormware.cz/schema/version_2/bank.xsd\" xmlns:sto=\"http://www.stormware.cz/schema/version_2/store.xsd\" xmlns:grs=\"http://www.stormware.cz/schema/version_2/groupStocks.xsd\" xmlns:acp=\"http://www.stormware.cz/schema/version_2/actionPrice.xsd\" xmlns:csh=\"http://www.stormware.cz/schema/version_2/cashRegister.xsd\" xmlns:bka=\"http://www.stormware.cz/schema/version_2/bankAccount.xsd\" xmlns:ilt=\"http://www.stormware.cz/schema/version_2/inventoryLists.xsd\" xmlns:nms=\"http://www.stormware.cz/schema/version_2/numericalSeries.xsd\" xmlns:pay=\"http://www.stormware.cz/schema/version_2/payment.xsd\" xmlns:mKasa=\"http://www.stormware.cz/schema/version_2/mKasa.xsd\" xmlns:gdp=\"http://www.stormware.cz/schema/version_2/GDPR.xsd\" xmlns:est=\"http://www.stormware.cz/schema/version_2/establishment.xsd\" xmlns:cen=\"http://www.stormware.cz/schema/version_2/centre.xsd\" xmlns:acv=\"http://www.stormware.cz/schema/version_2/activity.xsd\" xmlns:ftr=\"http://www.stormware.cz/schema/version_2/filter.xsd\">"), _xmlEncoding);
         }
 
         public IEnumerable<Dictionary<string, string>> LoadAmazonReports(IEnumerable<string> fileNames)
@@ -141,10 +259,10 @@ namespace Shmap.DataAccess
     {
         IEnumerable<Dictionary<string, string>> LoadAmazonReports(IEnumerable<string> fileNames);
 
-        void SerializeXmlInvoice(string fileName, InvoiceXml.dataPack invoice);
+        void SerializeXmlInvoice(string fileName, IEnumerable<Invoice> invoice);
 
         InvoiceXml.dataPackDataPackItem PrepareDatapackItem();
 
-        InvoiceXml.dataPack PrepareInvoice(IEnumerable<InvoiceXml.dataPackDataPackItem> dataItems);
+        InvoiceXml.dataPack PrepareInvoice(IEnumerable<Invoice> dataItems);
     }
 }

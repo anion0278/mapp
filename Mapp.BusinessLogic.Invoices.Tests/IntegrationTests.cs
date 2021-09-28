@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using Shmap.BusinessLogic.AutocompletionHelper;
@@ -99,13 +101,13 @@ namespace Shmap.BusinessLogic.Invoices.Tests
                 ExistingInvoiceNumber = (uint)startingOrderNumber,
             };
 
-            InvoiceConverter.LoadAmazonReports(new[] { inputAmazonReportFilePath }, conversionContext);
+            var invoices = InvoiceConverter.LoadAmazonReports(new[] { inputAmazonReportFilePath }, conversionContext);
 
-            string resultFile = Path.Join(Path.GetDirectoryName(expectedResultFilePath),"result.xml");
-            InvoiceConverter.ProcessInvoices(resultFile, out _);
+            string resultFileName = Path.Join(Path.GetDirectoryName(expectedResultFilePath), "result.xml");
+            InvoiceConverter.ProcessInvoices(invoices, resultFileName);
 
             string expectedResult = File.ReadAllText(expectedResultFilePath); // TODO save to memory
-            string result = File.ReadAllText(resultFile);
+            string result = File.ReadAllText(resultFileName);
 
             Assert.Equal(expectedResult, result);
         }

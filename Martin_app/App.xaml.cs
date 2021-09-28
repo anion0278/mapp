@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
+using Shmap.ViewModels;
+using Shmap.Views;
 using NLog;
 
 namespace Mapp
@@ -19,8 +22,14 @@ namespace Mapp
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-
             SetupExceptionHandling();
+
+            var bootstrapper = new Bootstrapper();
+            var mainWindow = new StartWindow
+            {
+                DataContext = bootstrapper.ResolveStartWindowViewModel()
+            };
+            mainWindow.Show();
         }
 
         private void SetupExceptionHandling()
@@ -41,13 +50,20 @@ namespace Mapp
             };
         }
 
-        private void LogUnhandledException(Exception exception, string source)
+        private void LogUnhandledException(Exception originalException, string source)
         {
-            string message = $"Unhandled exception ({source})";
+            var exception = originalException;
+            string message = $"Unhandled exception with source: {source}.";
             try
             {
-                System.Reflection.AssemblyName assemblyName = System.Reflection.Assembly.GetExecutingAssembly().GetName();
-                message = string.Format("Unhandled exception in {0} v{1}, message: {2}", assemblyName.Name, assemblyName.Version, exception.Message);
+                var assemblyName = Assembly.GetExecutingAssembly().GetName();
+                message += $"Unhandled exception in {assemblyName.Name} v{assemblyName.Version}";
+                message += $"\n * message: {exception.Message} \n * stack: {exception.StackTrace}";
+                while (exception.InnerException != null) 
+                {
+                    exception = exception.InnerException;
+                    message += $"\n * message: {exception.Message} \n * stack: {exception.StackTrace}";
+                } 
             }
             catch (Exception ex)
             {
@@ -55,7 +71,7 @@ namespace Mapp
             }
             finally
             {
-                _logger.Error(exception, message);
+                _logger.Error(originalException, message);
                 MessageBox.Show(message);
             }
         }

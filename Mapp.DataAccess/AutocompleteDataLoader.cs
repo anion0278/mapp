@@ -6,18 +6,20 @@ namespace Shmap.DataAccess
 {
     public interface IAutocompleteData
     {
-        public Dictionary<string, string> ProdWarehouseSectionBySku { get; set; } // TODO fix names
+        Dictionary<string, string> ProdWarehouseSectionBySku { get; set; } // TODO fix names
 
-        public Dictionary<string, string> PohodaProdCodeBySku { get; set; } // TODO decide - SKU or AmazonProdCode
+        Dictionary<string, string> PohodaProdCodeBySku { get; set; } // TODO decide - SKU or AmazonProdCode
 
-        public Dictionary<string, string> ShippingNameBySku { get; set; }
+        Dictionary<string, string> ShippingNameBySku { get; set; }
 
-        public Dictionary<string, string> PackQuantitySku { get; set; }
+        Dictionary<string, string> PackQuantitySku { get; set; }
 
-        public Dictionary<string, string> CustomsDeclarationBySku { get; set; }
+        Dictionary<string, string> CustomsDeclarationBySku { get; set; }
+
+        void UpdateAutocompleteData<T>(T newParamValue, IDictionary<string, T> autocompleteData, string productKey);
     }
 
-    internal class AutocompleteData: IAutocompleteData
+    internal class AutocompleteData : IAutocompleteData
     {
         public Dictionary<string, string> ProdWarehouseSectionBySku { get; set; } // TODO fix names
 
@@ -28,6 +30,19 @@ namespace Shmap.DataAccess
         public Dictionary<string, string> PackQuantitySku { get; set; }
 
         public Dictionary<string, string> CustomsDeclarationBySku { get; set; }
+
+
+        public void UpdateAutocompleteData<T>(T newParamValue, IDictionary<string, T> autocompleteData, string productKey)
+        {
+            if (autocompleteData.ContainsKey(productKey))
+            {
+                autocompleteData[productKey] = newParamValue;
+            }
+            else
+            {
+                autocompleteData.Add(productKey, newParamValue);
+            }
+        }
     }
 
     public interface IAutocompleteDataLoader
