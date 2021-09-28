@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using Mapp.CommonServices;
+using Mapp.Views;
 
 namespace Mapp
 {
