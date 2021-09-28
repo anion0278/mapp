@@ -24,11 +24,7 @@ namespace Mapp
             base.OnStartup(e);
             SetupExceptionHandling();
 
-            var bootstrapper = new Bootstrapper();
-            var mainWindow = new StartWindow
-            {
-                DataContext = bootstrapper.ResolveStartWindowViewModel()
-            };
+            var mainWindow = new MainWindow();
             mainWindow.Show();
         }
 
@@ -58,11 +54,11 @@ namespace Mapp
             {
                 var assemblyName = Assembly.GetExecutingAssembly().GetName();
                 message += $"Unhandled exception in {assemblyName.Name} v{assemblyName.Version}";
-                message += $"\n * message: {exception.Message} \n * stack: {exception.StackTrace}";
+                message += $"\n * Top-most message: {exception.Message} \n * stack: {exception.StackTrace}";
                 while (exception.InnerException != null) 
                 {
                     exception = exception.InnerException;
-                    message += $"\n * message: {exception.Message} \n * stack: {exception.StackTrace}";
+                    message += $"\n * Inner message: {exception.Message} \n * stack: {exception.StackTrace}";
                 } 
             }
             catch (Exception ex)

@@ -16,7 +16,7 @@ using Size = System.Drawing.Size;
 
 namespace Shmap.ViewModels
 {
-    public interface IStartWindowViewModel
+    public interface IMainWindowViewModel
     {
         IInvoiceConverter InvoiceConverter { get; }
         RelayCommand SelectAmazonInvoicesCommand { get; }
@@ -31,9 +31,11 @@ namespace Shmap.ViewModels
         string DefaultEmail { get; set; }
         string LatestTrackingCode { get; set; }
         bool OpenTargetFolderAfterConversion { get; set; }
+        public ObservableCollection<InvoiceItemWithDetailViewModel> InvoiceItems { get; set; }
+        public ObservableCollection<InvoiceViewModel> Invoices { get; set; }
     }
 
-    internal class StartWindowViewModel: ViewModelBase, IStartWindowViewModel
+    internal class MainWindowViewModel: ViewModelBase, IMainWindowViewModel
     {
         public IInvoiceConverter InvoiceConverter { get; }
         private readonly IConfigProvider _configProvider;
@@ -53,22 +55,20 @@ namespace Shmap.ViewModels
         private string _latestTrackingCode;
         private bool _openTargetFolderAfterConversion;
         private string _windowTitle;
+        private ObservableCollection<InvoiceItemWithDetailViewModel> _invoiceItems = new();
+        private ObservableCollection<InvoiceViewModel> _invoices = new();
 
         public RelayCommand SelectAmazonInvoicesCommand { get; }
         public RelayCommand ExportConvertedAmazonInvoicesCommand { get; }
         public RelayCommand ConvertTransactionsCommand { get; }
         public RelayCommand WindowClosingCommand { get; }
 
-        public ObservableCollection<InvoiceItemWithDetailViewModel> _invoiceItems = new();
-
-        public ObservableCollection<InvoiceViewModel> _invoices = new();
 
         public ObservableCollection<InvoiceItemWithDetailViewModel> InvoiceItems
         {
             get => _invoiceItems;
             set => Set(ref _invoiceItems, value);
         }
-
 
         public ObservableCollection<InvoiceViewModel> Invoices
         {
@@ -173,7 +173,7 @@ namespace Shmap.ViewModels
             set => Set(ref _windowTitle, value);
         }
 
-        public StartWindowViewModel() // Design-time ctor
+        public MainWindowViewModel() // Design-time ctor
         {
             _windowHeight = 600;
             _windowWidth = 900;
@@ -181,7 +181,7 @@ namespace Shmap.ViewModels
             _defaultEmail = "email@email.com";
         }
 
-        public StartWindowViewModel(IConfigProvider configProvider,
+        public MainWindowViewModel(IConfigProvider configProvider,
             IInvoiceConverter invoiceConverter,
             IAutoKeyboardInputHelper autoKeyboardInputHelper,
             IFileOperationService fileOperationService,

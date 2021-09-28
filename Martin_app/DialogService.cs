@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using Shmap.CommonServices;
+using Shmap.ViewModels;
 using Shmap.Views;
 
 namespace Mapp
@@ -11,25 +12,33 @@ namespace Mapp
             MessageBox.Show(message);
         }
 
-        public string AskToChangeLongStringIfNeeded(string message, string str, int maxLength)
+        public string AskToChangeLongStringIfNeeded(string message, string textToChange, int maxLength)
         {
-            message += $". Upravit manualne (Yes), nebo orezat dle maximalni delky {maxLength} (No)";
-            while (str.Length > maxLength)
+            message += $"\nUpravit manualne (Yes), nebo orezat dle maximalni delky {maxLength} (No)?";
+            while (textToChange.Length > maxLength) 
             {
                 var result = MessageBox.Show(message, "Upozorneni", MessageBoxButton.YesNo);
                 if (result == MessageBoxResult.Yes)
                 {
-                    var window = new ManualChange(maxLength, str);
+                    var window = new ManualChange(); // TODO set window owner - main window (to center it)
+                    var vm = window.DataContext as IManualChangeWindowViewModel; // Disadvantage of View-first approach
+                    vm.OriginalText = textToChange;
+                    vm.EditedText = textToChange;
+                    vm.MaxLength = maxLength;
+                    vm.Message = message;
                     window.ShowDialog();
-                    str = window.CorrectedText;
+                    if (vm.IsChangeAccepted)
+                    {
+                        textToChange = vm.EditedText;
+                    }
                 }
                 else
                 {
-                    str = str.Substring(0, maxLength);
+                    textToChange = textToChange.Substring(0, maxLength);
                 }
             }
 
-            return str;
+            return textToChange;
         }
     }
 }

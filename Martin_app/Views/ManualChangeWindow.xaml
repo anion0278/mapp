@@ -4,21 +4,48 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Mapp"
+        xmlns:viewModels="clr-namespace:Shmap.ViewModels"
         mc:Ignorable="d"
-        Title="Manualni uprava" Height="180" Width="436"
-        DataContext="{Binding RelativeSource={RelativeSource Self}}">
+        Title="Manualni uprava" Height="250" Width="436" ResizeMode="NoResize"
+        d:DataContext="{d:DesignInstance viewModels:ManualChangeWindowViewModel, IsDesignTimeCreatable=True}"
+        DataContext="{Binding ManualChangeWindowVm, Source={StaticResource ViewModelLocator}}"
+        WindowStartupLocation="CenterOwner">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition Height="1.2*"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="27"/>
+            <RowDefinition Height="22"/>
+            <RowDefinition Height="27"/>
+            <RowDefinition Height="22"/>
+            <RowDefinition Height="25"/>
+            <RowDefinition />
         </Grid.RowDefinitions>
-        <Label Grid.Row="0">Pubvodni text:</Label>
-        <TextBox Grid.Row="1" Name="InitialText" IsReadOnly="True" />
-        <Label Grid.Row="2">Upraveny text:</Label>
-        <TextBox Grid.Row="3"  Name="ChangedText" MaxLength="{Binding MaxLength}" />
-        <Button Grid.Row="4" Margin="5" Width="100"  Content="OK" Click="Button_Click"/>
+        <TextBlock Grid.Row="0" TextWrapping="Wrap" Text="{Binding Message}" TextAlignment="Justify" Margin="5" />
+        <Label Grid.Row="1" FontStyle="Italic" >Pudvodni text:</Label>
+        <TextBox Grid.Row="2" IsReadOnly="True" Text="{Binding OriginalText}" Margin="5 0 5 0"/>
+        <Label Grid.Row="3" FontStyle="Italic" >Upraveny text:</Label>
+        <TextBox Grid.Row="4" MaxLength="{Binding MaxLength}" Margin="5 0 5 0" Text="{Binding EditedText, UpdateSourceTrigger=PropertyChanged}" />
+        <Label Grid.Row="5" HorizontalAlignment="Right" FontStyle="Italic" FontSize="10">
+            <Label.Content>
+                <TextBlock>
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="Aktualni delka {0} z maximalne {1}">
+                            <Binding Path="CurrentTextLength" />
+                            <Binding Path="MaxLength" />
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+            </Label.Content>
+            <Label.Style>
+                <Style TargetType="Label">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsEnabled, ElementName=AcceptChangeButton}" Value="False">
+                            <Setter Property="Foreground" Value="Red"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Label.Style>
+        </Label>
+        <Button Grid.Row="6" Name="AcceptChangeButton" Width="100" Margin="10" VerticalAlignment="Center" HorizontalAlignment="Center"  Content="OK" Command="{Binding AcceptChangesCommand}" Click="Button_Click" />
     </Grid>
 </Window>

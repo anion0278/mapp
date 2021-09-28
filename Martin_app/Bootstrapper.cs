@@ -42,7 +42,8 @@ namespace Mapp
             Container.RegisterTypeAsSingleton<ITransactionsReader, TransactionsReader>();
             Container.RegisterTypeAsSingleton<IGpcGenerator, GpcGenerator>();
             Container.RegisterTypeAsSingleton<IFileOperationService, FileOperationsService>();
-            Container.RegisterTypeAsSingleton<IStartWindowViewModel, StartWindowViewModel>();
+            Container.RegisterTypeAsSingleton<IMainWindowViewModel, MainWindowViewModel>();
+            Container.RegisterTypeAsSingleton<IManualChangeWindowViewModel, ManualChangeWindowViewModel>();
             Container.RegisterTypeAsSingleton<IDialogService, DialogService>();
 
             var autocompleteDataLoader = Container.Resolve<IAutocompleteDataLoader>();
@@ -54,11 +55,6 @@ namespace Mapp
 
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
-        }
-
-        public IStartWindowViewModel ResolveStartWindowViewModel()
-        {
-            return Container.Resolve<IStartWindowViewModel>(); // somehow it is not possible to do it from App.xaml.cs
         }
     }
 }

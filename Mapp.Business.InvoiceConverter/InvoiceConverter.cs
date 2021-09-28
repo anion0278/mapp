@@ -378,7 +378,7 @@ namespace Shmap.BusinessLogic.Invoices
             string amazonOrderNumber)
         {
             string str = shipCity + ", " + shipState + " " + postalCode;
-            string message = "Nazev mesta/zeme je prilis dlouhy v objednavce C.: " + amazonOrderNumber;
+            string message = $"Nazev mesta/zeme je prilis dlouhy v objednavce C.: {amazonOrderNumber}.";
             str = _dialogService.AskToChangeLongStringIfNeeded(message, str, MaxCityLength);
 
             return str;
@@ -394,7 +394,7 @@ namespace Shmap.BusinessLogic.Invoices
 
         private string FormatClientName(string name, string amazonOrderNumber)
         {
-            string message = "Jmeno zakazniku je prilis dlouhe v objednavce C.: " + amazonOrderNumber;
+            string message = $"Jmeno zakazniku je prilis dlouhe v objednavce C.: {amazonOrderNumber}." ;
 
             name = _dialogService.AskToChangeLongStringIfNeeded(message, name, MaxClientNameLength);
 
@@ -413,8 +413,7 @@ namespace Shmap.BusinessLogic.Invoices
             if (!string.IsNullOrEmpty(address3))
                 str = str + ", " + address3;
 
-            string message = "Addressa je prilis dlouha v objednavce C.: "
-                             + amazonOrderNumber;
+            string message = $"Addressa je prilis dlouha v objednavce C.: {amazonOrderNumber}.";
             str = _dialogService.AskToChangeLongStringIfNeeded(message, str, MaxAddressNameLength);
             return str;
         }

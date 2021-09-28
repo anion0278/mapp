@@ -7,22 +7,14 @@ namespace Shmap.Views
     /// </summary>
     public partial class ManualChange : Window
     {
-        public int MaxLength { get; set; }
-
-        public ManualChange(int maxLength, string initialText)
+        public ManualChange()
         {
-            MaxLength = maxLength;
-            InitialText.Text = initialText;
-            ChangedText.Text = initialText;
-
             InitializeComponent();
         }
 
-        public string CorrectedText => ChangedText.Text;
-
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            Close();
+            Close(); // is it responsibility of view itself to close itself?
         }
     }
 }
