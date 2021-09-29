@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Runtime.CompilerServices;
 using Shmap.CommonServices;
 using Shmap.DataAccess;
+using Shmap.UI;
 
 namespace Mapp
 {

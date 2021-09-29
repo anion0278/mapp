@@ -25,6 +25,7 @@ namespace Mapp
             SetupExceptionHandling();
 
             var mainWindow = new MainWindow();
+            Current.MainWindow = mainWindow;
             mainWindow.Show();
         }
 

@@ -2,9 +2,9 @@
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Net.Mail;
 using System.Reflection;
 using System.Windows;
-using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using Shmap.BusinessLogic.AutocompletionHelper;
 using Shmap.BusinessLogic.Invoices;
@@ -27,7 +27,7 @@ namespace Shmap.ViewModels
         int WindowWidth { get; set; }
         int WindowHeight { get; set; }
         WindowState WindowState { get; set; }
-        uint ExistingInvoiceNumber { get; set; }
+        uint? ExistingInvoiceNumber { get; set; }
         string DefaultEmail { get; set; }
         string LatestTrackingCode { get; set; }
         bool OpenTargetFolderAfterConversion { get; set; }
@@ -35,7 +35,45 @@ namespace Shmap.ViewModels
         public ObservableCollection<InvoiceViewModel> Invoices { get; set; }
     }
 
-    internal class MainWindowViewModel: ViewModelBase, IMainWindowViewModel
+    internal class ValidationRule
+    {
+        public string Error { get; private set; }
+        public bool HasError { get; private set; }
+        public bool IsDirty { get; set; }
+        private readonly Func<bool> _ruleDelegate;
+        private readonly string _errorMessage;
+
+        public ValidationRule(Func<bool> ruleDelegate, string errorMessage)
+        {
+            _ruleDelegate = ruleDelegate;
+            _errorMessage = errorMessage;
+            IsDirty = true;
+        }
+
+        public void Revalidate()
+        {
+            if (!IsDirty)
+                return;
+
+            Error = null;
+            HasError = false;
+            try
+            {
+                if (!_ruleDelegate())
+                {
+                    Error = _errorMessage;
+                    HasError = true;
+                }
+            }
+            catch (Exception e)
+            {
+                Error = e.Message;
+                HasError = true;
+            }
+        }
+    }
+
+    internal class MainWindowViewModel : ViewModelWithErrorValidationBase, IMainWindowViewModel
     {
         public IInvoiceConverter InvoiceConverter { get; }
         private readonly IConfigProvider _configProvider;
@@ -50,7 +88,7 @@ namespace Shmap.ViewModels
         private WindowState _windowState;
         private int _windowTop;
         private int _windowLeft;
-        private uint _existingInvoiceNumber;
+        private uint? _existingInvoiceNumber;
         private string _defaultEmail;
         private string _latestTrackingCode;
         private bool _openTargetFolderAfterConversion;
@@ -62,7 +100,6 @@ namespace Shmap.ViewModels
         public RelayCommand ExportConvertedAmazonInvoicesCommand { get; }
         public RelayCommand ConvertTransactionsCommand { get; }
         public RelayCommand WindowClosingCommand { get; }
-
 
         public ObservableCollection<InvoiceItemWithDetailViewModel> InvoiceItems
         {
@@ -126,13 +163,13 @@ namespace Shmap.ViewModels
             }
         }
 
-        public uint ExistingInvoiceNumber
+        public uint? ExistingInvoiceNumber
         {
             get => _existingInvoiceNumber;
             set
             {
                 Set(ref _existingInvoiceNumber, value);
-                _configProvider.ExistingInvoiceNumber = value; // TODO join methods, since names are same
+                if (value.HasValue) _configProvider.ExistingInvoiceNumber = value.Value; // TODO join methods, since names are same
             }
         }
 
@@ -141,6 +178,7 @@ namespace Shmap.ViewModels
             get { return _defaultEmail; }
             set
             {
+                value = value.ToLower();
                 Set(ref _defaultEmail, value);
                 _configProvider.DefaultEmail = value;
             }
@@ -185,7 +223,7 @@ namespace Shmap.ViewModels
             IInvoiceConverter invoiceConverter,
             IAutoKeyboardInputHelper autoKeyboardInputHelper,
             IFileOperationService fileOperationService,
-            ITransactionsReader transactionsReader, 
+            ITransactionsReader transactionsReader,
             IGpcGenerator gpcGenerator,
             IAutocompleteData autocompleteData,
             IDialogService dialogService)
@@ -198,10 +236,13 @@ namespace Shmap.ViewModels
             _gpcGenerator = gpcGenerator;
             _autocompleteData = autocompleteData;
             _dialogService = dialogService;
-            SelectAmazonInvoicesCommand = new RelayCommand(SelectAmazonInvoices, ()=>true);
-            ExportConvertedAmazonInvoicesCommand = new RelayCommand(ExportConvertedAmazonInvoices, ()=>true);
-            ConvertTransactionsCommand = new RelayCommand(ConvertTransactions, ()=>true);
-            WindowClosingCommand = new RelayCommand(OnWindowClosing, ()=>true);
+            SelectAmazonInvoicesCommand = new RelayCommand(SelectAmazonInvoices, () => !HasErrors);
+            ExportConvertedAmazonInvoicesCommand = new RelayCommand(ExportConvertedAmazonInvoices, () => InvoiceItems.Any() && Invoices.Any());
+            ConvertTransactionsCommand = new RelayCommand(ConvertTransactions, () => true);
+            WindowClosingCommand = new RelayCommand(OnWindowClosing, () => true);
+
+            AddValidationRule(() => DefaultEmail, () => MailAddress.TryCreate(DefaultEmail, out _), "Zadany email neni v poradku");
+            AddValidationRule(() => ExistingInvoiceNumber, () => ExistingInvoiceNumber.HasValue, "Cislo faktury neni zadano spravne");
 
             _windowTitle += FormatTitleAssemblyFileVersion(Assembly.GetEntryAssembly());
             _windowHeight = _configProvider.MainWindowSize.Height;
@@ -224,7 +265,7 @@ namespace Shmap.ViewModels
         private string FormatTitleAssemblyFileVersion(Assembly assembly) // TODO shared assembly info file?
         {
             var fileVersion = FileVersionInfo.GetVersionInfo(assembly.Location);
-            return " v" + fileVersion.FileVersion;
+            return "Mapp v" + fileVersion.FileVersion;
         }
 
         private void ConvertTransactions()
@@ -278,7 +319,7 @@ namespace Shmap.ViewModels
             if (string.IsNullOrWhiteSpace(fileName)) return;
 
             var invoices = Invoices.Select(i => i.ExportModel());
-            var invoiceItems = InvoiceItems.Select(i => i.ExportModel()).ToList(); 
+            var invoiceItems = InvoiceItems.Select(i => i.ExportModel()).ToList();
             // TODO how to avoid need for calling ToList (due to laziness of linq)?
 
             if (invoices == null || !invoices.Any())

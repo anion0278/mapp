@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Mapp {
+namespace Shmap.UI {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]

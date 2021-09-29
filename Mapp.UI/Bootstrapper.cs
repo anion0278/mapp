@@ -8,6 +8,7 @@ using Shmap.BusinessLogic.Invoices;
 using Shmap.BusinessLogic.Transactions;
 using Shmap.CommonServices;
 using Shmap.DataAccess;
+using Shmap.UI;
 using Shmap.ViewModels;
 using Unity;
 

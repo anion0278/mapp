@@ -17,10 +17,13 @@ namespace Mapp
             message += $"\nUpravit manualne (Yes), nebo orezat dle maximalni delky {maxLength} (No)?";
             while (textToChange.Length > maxLength) 
             {
-                var result = MessageBox.Show(message, "Upozorneni", MessageBoxButton.YesNo);
+                var result = MessageBox.Show(Application.Current.MainWindow, message, "Upozorneni", MessageBoxButton.YesNo);  
+                // TODO how to set owner center for MessageBox? maybe best way is to create own MB?
+
                 if (result == MessageBoxResult.Yes)
                 {
-                    var window = new ManualChange(); // TODO set window owner - main window (to center it)
+                    var window = new ManualChange();
+                    window.Owner = Application.Current.MainWindow;  // TODO how to set window owner - main window (to center it)
                     var vm = window.DataContext as IManualChangeWindowViewModel; // Disadvantage of View-first approach
                     vm.OriginalText = textToChange;
                     vm.EditedText = textToChange;

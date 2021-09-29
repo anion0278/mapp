@@ -6,26 +6,36 @@
         xmlns:local="clr-namespace:Mapp"
         xmlns:viewModels="clr-namespace:Shmap.ViewModels"
         mc:Ignorable="d"
-        Title="Manualni uprava" Height="250" Width="436" ResizeMode="NoResize"
+        Title="Manualni uprava" Height="auto" SizeToContent="Height" MaxHeight="400" Width="450" ResizeMode="NoResize" 
         d:DataContext="{d:DesignInstance viewModels:ManualChangeWindowViewModel, IsDesignTimeCreatable=True}"
         DataContext="{Binding ManualChangeWindowVm, Source={StaticResource ViewModelLocator}}"
         WindowStartupLocation="CenterOwner">
-    <Grid>
+    <Grid Height="auto">
         <Grid.RowDefinitions>
-            <RowDefinition Height="50"/>
-            <RowDefinition Height="27"/>
-            <RowDefinition Height="22"/>
-            <RowDefinition Height="27"/>
-            <RowDefinition Height="22"/>
-            <RowDefinition Height="25"/>
-            <RowDefinition />
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0" TextWrapping="Wrap" Text="{Binding Message}" TextAlignment="Justify" Margin="5" />
-        <Label Grid.Row="1" FontStyle="Italic" >Pudvodni text:</Label>
-        <TextBox Grid.Row="2" IsReadOnly="True" Text="{Binding OriginalText}" Margin="5 0 5 0"/>
-        <Label Grid.Row="3" FontStyle="Italic" >Upraveny text:</Label>
-        <TextBox Grid.Row="4" MaxLength="{Binding MaxLength}" Margin="5 0 5 0" Text="{Binding EditedText, UpdateSourceTrigger=PropertyChanged}" />
-        <Label Grid.Row="5" HorizontalAlignment="Right" FontStyle="Italic" FontSize="10">
+        <TextBlock Grid.Row="0" TextWrapping="Wrap" Text="{Binding Message}" TextAlignment="Justify" Margin="10" />
+        <Label Grid.Row="1" FontStyle="Italic" Margin="10 0 10 0">Pudvodni text:</Label>
+        <TextBox Grid.Row="2" IsReadOnly="True" Text="{Binding OriginalText}" Margin="10 0 10 0"/>
+        <Label Grid.Row="3" FontStyle="Italic" Margin="10 0 10 0">Upraveny text:</Label>
+        <TextBox Grid.Row="4" MaxLength="{Binding MaxLength}" Margin="10 0 10 0" Text="{Binding EditedText, UpdateSourceTrigger=PropertyChanged}" >
+            <TextBox.Style>
+                <Style TargetType="TextBox">
+                    <Style.Triggers >
+                        <DataTrigger Binding="{Binding IsEnabled, ElementName=AcceptChangeButton}" Value="False">
+                            <Setter Property="Foreground" Value="DarkRed" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBox.Style>
+        </TextBox>
+        <Label Grid.Row="5" HorizontalAlignment="Right" FontStyle="Italic" FontSize="10" Margin="10 0 10 0">
             <Label.Content>
                 <TextBlock>
                     <TextBlock.Text>

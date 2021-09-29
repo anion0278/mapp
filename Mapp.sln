@@ -3,31 +3,31 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29326.143
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mapp", "Shmap.csproj", "{162BF9E6-2FF7-41D8-A7EF-BAC5D36DDBF8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shmap.UI", "Shmap.UI\Shmap.UI.csproj", "{162BF9E6-2FF7-41D8-A7EF-BAC5D36DDBF8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shmap.BusinessLogic.Transactions.Tests", "..\Shmap.Business\Shmap.BusinessLogic.Transactions.Tests.csproj", "{684CDA05-C153-4567-83DF-31F19A6CC944}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shmap.BusinessLogic.Transactions.Tests", "Shmap.BusinessLogic.Transactions.Tests\Shmap.BusinessLogic.Transactions.Tests.csproj", "{684CDA05-C153-4567-83DF-31F19A6CC944}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shmap.BusinessLogic.Invoices", "..\Shmap.Business.InvoiceConverter\Shmap.BusinessLogic.Invoices.csproj", "{72076540-2B9F-4F54-96D5-A960E232C031}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shmap.DataAccess", "Shmap.DataAccess\Shmap.DataAccess.csproj", "{088A7F3F-0EE4-49D6-8B22-408B34FD58A7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shmap.DataAccess", "..\Shmap.DataAccess\Shmap.DataAccess.csproj", "{088A7F3F-0EE4-49D6-8B22-408B34FD58A7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shmap.BusinessLogic.Transactions", "Shmap.BusinessLogic.Transactions\Shmap.BusinessLogic.Transactions.csproj", "{ABE81A5B-8946-464E-91A4-6A668A084ED2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shmap.BusinessLogic.Transactions", "..\Shmap.BusinessLogic.Transactions\Shmap.BusinessLogic.Transactions.csproj", "{ABE81A5B-8946-464E-91A4-6A668A084ED2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shmap.CommonServices", "Shmap.CommonServices.Extensions\Shmap.CommonServices.csproj", "{2407B99B-6BA5-412B-9D9C-1745F7E92373}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shmap.CommonServices", "..\Shmap.CommonServices.Extensions\Shmap.CommonServices.csproj", "{2407B99B-6BA5-412B-9D9C-1745F7E92373}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shmap.Models", "Shmap.Models\Shmap.Models.csproj", "{08791058-4D98-4A44-9CF0-2219122D61BF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shmap.Models", "..\Shmap.Models\Shmap.Models.csproj", "{08791058-4D98-4A44-9CF0-2219122D61BF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shmap.BusinessLogic.AutocompletionHelper", "Shmap.BusinessLogic.AutocompletionHelper\Shmap.BusinessLogic.AutocompletionHelper.csproj", "{2DF0B25B-A69A-455D-8B12-00D6D219C767}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shmap.BusinessLogic.AutocompletionHelper", "..\Shmap.BusinessLogic.AutocompletionHelper\Shmap.BusinessLogic.AutocompletionHelper.csproj", "{2DF0B25B-A69A-455D-8B12-00D6D219C767}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shmap.ApplicationUpdater", "Shmap.ApplicationUpdater\Shmap.ApplicationUpdater.csproj", "{18FA859D-9F1D-49B2-9601-BEDB2CA3B6DD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shmap.ApplicationUpdater", "..\Shmap.ApplicationUpdater\Shmap.ApplicationUpdater.csproj", "{18FA859D-9F1D-49B2-9601-BEDB2CA3B6DD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shmap.BusinessLogic.Currency", "Shmap.BusinessLogic.Currency\Shmap.BusinessLogic.Currency.csproj", "{DA319969-FCDC-4771-AC3E-75F96D5522F4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shmap.BusinessLogic.Currency", "..\Shmap.BusinessLogic.Currency\Shmap.BusinessLogic.Currency.csproj", "{DA319969-FCDC-4771-AC3E-75F96D5522F4}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shmap.BusinessLogic.Invoices.Tests", "..\Shmap.BusinessLogic.Invoices.Tests\Shmap.BusinessLogic.Invoices.Tests.csproj", "{02854395-D914-42C3-95B6-8CC18F31C1A7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shmap.BusinessLogic.Invoices.Tests", "Shmap.BusinessLogic.Invoices.Tests\Shmap.BusinessLogic.Invoices.Tests.csproj", "{02854395-D914-42C3-95B6-8CC18F31C1A7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{D20AE460-B73F-46A2-B618-83F253B3199F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shmap.Bootstrapper", "..\Shmap.Bootstrapper\Shmap.Bootstrapper.csproj", "{BEA75614-3D61-4B8C-8466-F8FE854A895B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shmap.Bootstrapper", "Shmap.Bootstrapper\Shmap.Bootstrapper.csproj", "{BEA75614-3D61-4B8C-8466-F8FE854A895B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shmap.BusinessLogic.Invoices", "Shmap.BusinessLogic.Invoices\Shmap.BusinessLogic.Invoices.csproj", "{F009125B-DCB2-496B-83A9-A1FF1CE48D38}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,10 +43,6 @@ Global
 		{684CDA05-C153-4567-83DF-31F19A6CC944}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{684CDA05-C153-4567-83DF-31F19A6CC944}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{684CDA05-C153-4567-83DF-31F19A6CC944}.Release|Any CPU.Build.0 = Release|Any CPU
-		{72076540-2B9F-4F54-96D5-A960E232C031}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{72076540-2B9F-4F54-96D5-A960E232C031}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{72076540-2B9F-4F54-96D5-A960E232C031}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{72076540-2B9F-4F54-96D5-A960E232C031}.Release|Any CPU.Build.0 = Release|Any CPU
 		{088A7F3F-0EE4-49D6-8B22-408B34FD58A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{088A7F3F-0EE4-49D6-8B22-408B34FD58A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{088A7F3F-0EE4-49D6-8B22-408B34FD58A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -83,6 +79,10 @@ Global
 		{BEA75614-3D61-4B8C-8466-F8FE854A895B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BEA75614-3D61-4B8C-8466-F8FE854A895B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BEA75614-3D61-4B8C-8466-F8FE854A895B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F009125B-DCB2-496B-83A9-A1FF1CE48D38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F009125B-DCB2-496B-83A9-A1FF1CE48D38}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F009125B-DCB2-496B-83A9-A1FF1CE48D38}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F009125B-DCB2-496B-83A9-A1FF1CE48D38}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

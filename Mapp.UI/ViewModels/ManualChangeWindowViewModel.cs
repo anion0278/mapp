@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Windows.Controls;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 
@@ -69,7 +70,7 @@ namespace Shmap.ViewModels
                 OriginalText = "Original text example";
                 MaxLength = 30;
                 EditedText = "Edited text example";
-                Message = "Nazev mesta/zeme je prilis dlouhy v objednavce C.: 751-548-846G";
+                Message = "Nazev mesta/zeme je prilis dlouhy v objednavce C.: 751-548-846G" + "\n multiline\n multiline\n multiline";
             }
 
             AcceptChangesCommand = new RelayCommand(AcceptChanges, AcceptedChangesCanExecute);

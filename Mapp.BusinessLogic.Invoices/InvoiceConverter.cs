@@ -277,7 +277,7 @@ namespace Shmap.BusinessLogic.Invoices
 
             if (invoiceItem.ParentInvoice.Classification == InvoiceVatClassification.RDzasEU) // EU countries except CZ
             {
-                invoiceItem.PercentVat = invoiceItem.ParentInvoice.CountryVat.Percentage * (decimal)100.0;  // TODO fix, 
+                invoiceItem.PercentVat = invoiceItem.ParentInvoice.CountryVat.Percentage * (decimal)100.0; 
             }
 
             return invoiceItem;

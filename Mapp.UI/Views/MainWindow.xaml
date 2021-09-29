@@ -35,10 +35,34 @@
                     <Button Content="Zvolit fakturu" Width="150" Height="35" Command="{Binding SelectAmazonInvoicesCommand}"/>
                     <Label Content="Posledni existujici cislo v systemu:" HorizontalAlignment="Center"/>
                     <local:NumericTextBox  x:Name="ExistingInvoiceNum"
-                                           Text="{Binding ExistingInvoiceNumber, Mode=TwoWay}"
-                                           MaxLength="9" HorizontalContentAlignment="Center" Height="23" VerticalAlignment="Center" Width="150"/>
+                                           Text="{Binding ExistingInvoiceNumber, TargetNullValue='', Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, ValidatesOnExceptions=True}"
+                                           MaxLength="9" HorizontalContentAlignment="Center" Height="23" VerticalAlignment="Center" Width="150">
+                        <TextBox.Style>
+                            <Style TargetType="TextBox">
+                                <Style.Triggers>
+                                    <Trigger Property="Validation.HasError" Value="True">
+                                        <Setter Property="Background" Value="Pink"/>
+                                        <Setter Property="ToolTip"
+                                                Value="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=(Validation.Errors)[0].ErrorContent}"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBox.Style>
+                    </local:NumericTextBox>
                     <Label Content="Default email:" HorizontalAlignment="Center"/>
-                    <TextBox Text="{Binding DefaultEmail, Mode=TwoWay}" HorizontalContentAlignment="Center" Height="23" VerticalAlignment="Center" Width="150" />
+                    <local:EmailTextBox Text="{Binding DefaultEmail, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" MaxLength="30" HorizontalContentAlignment="Center" Height="23" VerticalAlignment="Center" Width="150" >
+                        <TextBox.Style>
+                            <Style TargetType="TextBox">
+                                <Style.Triggers>
+                                    <Trigger Property="Validation.HasError" Value="True">
+                                        <Setter Property="Background" Value="Pink"/>
+                                        <Setter Property="ToolTip"
+                                                Value="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=(Validation.Errors)[0].ErrorContent}"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBox.Style>
+                    </local:EmailTextBox>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" >
                         <Label Content="Otevrit cilovou slozku po konvertaci" HorizontalAlignment="Center" />
                         <CheckBox VerticalAlignment="Center" IsChecked="{Binding OpenTargetFolderAfterConversion, Mode=TwoWay}"/>
