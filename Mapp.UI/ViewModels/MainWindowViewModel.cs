@@ -18,7 +18,6 @@ namespace Shmap.ViewModels
 {
     public interface IMainWindowViewModel
     {
-        IInvoiceConverter InvoiceConverter { get; }
         RelayCommand SelectAmazonInvoicesCommand { get; }
         RelayCommand ExportConvertedAmazonInvoicesCommand { get; }
         RelayCommand ConvertTransactionsCommand { get; }
@@ -35,47 +34,9 @@ namespace Shmap.ViewModels
         public ObservableCollection<InvoiceViewModel> Invoices { get; set; }
     }
 
-    internal class ValidationRule
-    {
-        public string Error { get; private set; }
-        public bool HasError { get; private set; }
-        public bool IsDirty { get; set; }
-        private readonly Func<bool> _ruleDelegate;
-        private readonly string _errorMessage;
-
-        public ValidationRule(Func<bool> ruleDelegate, string errorMessage)
-        {
-            _ruleDelegate = ruleDelegate;
-            _errorMessage = errorMessage;
-            IsDirty = true;
-        }
-
-        public void Revalidate()
-        {
-            if (!IsDirty)
-                return;
-
-            Error = null;
-            HasError = false;
-            try
-            {
-                if (!_ruleDelegate())
-                {
-                    Error = _errorMessage;
-                    HasError = true;
-                }
-            }
-            catch (Exception e)
-            {
-                Error = e.Message;
-                HasError = true;
-            }
-        }
-    }
-
     internal class MainWindowViewModel : ViewModelWithErrorValidationBase, IMainWindowViewModel
     {
-        public IInvoiceConverter InvoiceConverter { get; }
+        public IInvoiceConverter _invoiceConverter;
         private readonly IConfigProvider _configProvider;
         private readonly IAutoKeyboardInputHelper _autoKeyboardInputHelper;
         private readonly IFileOperationService _fileOperationService;
@@ -228,7 +189,7 @@ namespace Shmap.ViewModels
             IAutocompleteData autocompleteData,
             IDialogService dialogService)
         {
-            InvoiceConverter = invoiceConverter; // TODO FIXME
+            _invoiceConverter = invoiceConverter; 
             _configProvider = configProvider;
             _autoKeyboardInputHelper = autoKeyboardInputHelper;
             _fileOperationService = fileOperationService;
@@ -262,10 +223,17 @@ namespace Shmap.ViewModels
             _autoKeyboardInputHelper.Dispose();
         }
 
-        private string FormatTitleAssemblyFileVersion(Assembly assembly) // TODO shared assembly info file?
+        private string FormatTitleAssemblyFileVersion(Assembly assembly)
         {
-            var fileVersion = FileVersionInfo.GetVersionInfo(assembly.Location);
-            return "Mapp v" + fileVersion.FileVersion;
+            try
+            {
+                var fileVersion = FileVersionInfo.GetVersionInfo(assembly.Location);
+                return "Mapp v" + new Version(fileVersion.FileVersion).ToString(3);
+            }
+            catch (Exception)
+            {
+                return "Mapp v" + assembly.GetName().Version.ToString(3);
+            }
         }
 
         private void ConvertTransactions()
@@ -297,10 +265,10 @@ namespace Shmap.ViewModels
             var conversionContext = new InvoiceConversionContext() // TODO injected factory
             {
                 ConvertToDate = DateTime.Today,
-                DefaultEmail = _configProvider.DefaultEmail, // TODO decide whether to take it from config or from VM
-                ExistingInvoiceNumber = _configProvider.ExistingInvoiceNumber,
+                DefaultEmail = DefaultEmail, // TODO decide whether to take it from config or from VM
+                ExistingInvoiceNumber = ExistingInvoiceNumber.Value,
             };
-            var invoices = InvoiceConverter.LoadAmazonReports(fileNames, conversionContext).ToList();
+            var invoices = _invoiceConverter.LoadAmazonReports(fileNames, conversionContext).ToList();
 
             foreach (var invoiceItem in invoices.SelectMany(di => di.InvoiceItems))
             {
@@ -318,18 +286,18 @@ namespace Shmap.ViewModels
             string fileName = _fileOperationService.SaveConvertedAmazonInvoices();
             if (string.IsNullOrWhiteSpace(fileName)) return;
 
-            var invoices = Invoices.Select(i => i.ExportModel());
+            var invoices = Invoices.Select(i => i.ExportModel()).ToList();
             var invoiceItems = InvoiceItems.Select(i => i.ExportModel()).ToList();
             // TODO how to avoid need for calling ToList (due to laziness of linq)?
 
-            if (invoices == null || !invoices.Any())
+            if (!invoices.Any())
             {
                 _dialogService.ShowMessage("Zadne faktury nebyly konvertovany!"); // TODO solve using OperationResult
                 return;
             }
 
-            InvoiceConverter.ProcessInvoices(invoices, fileName);
-            ExistingInvoiceNumber += (uint)invoices.Count();
+            _invoiceConverter.ProcessInvoices(invoices, fileName);
+            ExistingInvoiceNumber += (uint)invoices.Count;
 
             if (_configProvider.OpenTargetFolderAfterConversion)
             {

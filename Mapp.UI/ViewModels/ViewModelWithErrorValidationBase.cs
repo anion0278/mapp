@@ -5,12 +5,13 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
 using GalaSoft.MvvmLight;
+using Shmap.UI.ViewModels;
 
 namespace Shmap.ViewModels
 {
     public class ViewModelWithErrorValidationBase : ViewModelBase, IDataErrorInfo
     {
-        private readonly Dictionary<string, ValidationRule> _ruleMap = new();
+        private readonly Dictionary<string, ViewModelValidationRule> _ruleMap = new();
 
         public string Error
         {
@@ -50,7 +51,7 @@ namespace Shmap.ViewModels
         {
             var name = GetPropertyName(expression);
 
-            _ruleMap.Add(name, new ValidationRule(ruleDelegate, errorMessage));
+            _ruleMap.Add(name, new ViewModelValidationRule(ruleDelegate, errorMessage));
         }
 
         public override void RaisePropertyChanged([CallerMemberName] string propertyName = null)
