@@ -1,4 +1,5 @@
 {
+  "LinesToSkipBeforeColumnNames":0,
   "MarketPlaceId":21,
   "DistinctionPhrase":"Date",
   "DateSubstring":"(.*)",

@@ -1,7 +1,8 @@
 {
+  "LinesToSkipBeforeColumnNames":7,
   "MarketPlaceId":2,
-  "DistinctionPhrase":"Todos los importes en dólares, a menos que se especifique",
-  "DateSubstring":"(.*) GMT-8",
+  "DistinctionPhrase":"Todos los importes en MXN, a menos que se especifique",
+  "DateSubstring":"(.*) GMT-7",
   "TimeSeparatorOverride":null,
   "DateCultureInfoName":"es-MX",
   "OrderIdColumnName":"Id. del pedido",
@@ -12,7 +13,8 @@
   "ValueComponentsColumnName":[
      "ventas de productos",
      "créditos de envío",
-     "descuentos promocionales"
+     "descuentos promocionales",
+     "créditos por envoltorio de regalo"
   ],
   "TransferTypeNames":[
      "Trasferir"

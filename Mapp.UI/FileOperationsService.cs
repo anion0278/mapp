@@ -76,7 +76,7 @@ namespace Mapp
 
         public void OpenFileFolder(string fileName)
         {
-            Process.Start("explorer.exe", Path.GetDirectoryName(fileName));
+            Process.Start("explorer.exe", Path.GetDirectoryName(fileName)); // TODO check if folder is already opened, then only send it to foreground !
         }
     }
 }
