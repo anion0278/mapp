@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Mapp {
+namespace Mapp.UI {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]

@@ -33,6 +33,7 @@
     <ProjectReference Include="..\Mapp.ApplicationUpdater\Mapp.ApplicationUpdater.csproj" />
     <ProjectReference Include="..\Mapp.Business.InvoiceConverter\Mapp.BusinessLogic.Invoices.csproj" />
     <ProjectReference Include="..\Mapp.BusinessLogic.AutocompletionHelper\Mapp.BusinessLogic.AutocompletionHelper.csproj" />
+    <ProjectReference Include="..\Mapp.BusinessLogic.Invoices\Mapp.BusinessLogic.Invoices.csproj" />
     <ProjectReference Include="..\Mapp.BusinessLogic.Transactions\Mapp.BusinessLogic.Transactions.csproj" />
   </ItemGroup>
 
