@@ -1,4 +1,5 @@
 {
+  "LinesToSkipBeforeColumnNames":7,
   "MarketPlaceId":6,
   "DistinctionPhrase":"Alle Beträge in Euro sofern nicht anders gekennzeichnet",
   "DateSubstring":"(.*) UTC",
@@ -12,13 +13,15 @@
   "ValueComponentsColumnName":[
      "Umsätze",
      "Gutschrift für Versandkosten",
-     "Rabatte aus Werbeaktionen"
+     "Rabatte aus Werbeaktionen",
+     "Steuer auf Versandgutschrift"
   ],
   "TransferTypeNames":[
      "Übertrag"
   ],
   "RefundTypeNames":[
-     "Erstattung"
+     "Erstattung",
+     "Erstattung durch Rückbuchung"
   ],
   "OrderTypeNames":[
      "Anpassung",

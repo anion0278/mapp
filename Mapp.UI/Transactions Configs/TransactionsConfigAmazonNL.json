@@ -1,7 +1,8 @@
 {
+  "LinesToSkipBeforeColumnNames":7,
   "MarketPlaceId":10,
   "DistinctionPhrase":"Alle bedragen in EUR, tenzij anders vermeld",
-  "DateSubstring":"(.*) GMT",
+  "DateSubstring":"(.*) UTC",
   "TimeSeparatorOverride":null,
   "DateCultureInfoName":"nl-NL",
   "OrderIdColumnName":"bestelnummer",
@@ -12,10 +13,11 @@
   "ValueComponentsColumnName":[
      "verkoop van producten",
      "Verzendtegoeden",
-     "promotiekortingen"
+     "promotiekortingen",
+     "kredietpunten cadeauverpakking"
   ],
   "TransferTypeNames":[
-     "Overdracht"
+     "Overboeking"
   ],
   "RefundTypeNames":[
      "Terugbetaling"

@@ -1,10 +1,10 @@
 {
   "LinesToSkipBeforeColumnNames":7,
-  "MarketPlaceId":0,
-  "DistinctionPhrase":"All amounts in USD, unless specified",
-  "DateSubstring":"(.*) (PST|PDT)",
+  "MarketPlaceId":13,
+  "DistinctionPhrase":"All amounts in GBP, unless specified",
+  "DateSubstring":"(.*) UTC",
   "TimeSeparatorOverride":null,
-  "DateCultureInfoName":"en-US",
+  "DateCultureInfoName":"en-GB",
   "OrderIdColumnName":"order id",
   "TransactionTypeColumnName":"type",
   "DateTimeColumnNames":[
@@ -12,7 +12,7 @@
   ],
   "ValueComponentsColumnName":[
      "product sales",
-     "shipping credits",
+     "postage credits",
      "promotional rebates",
      "gift wrap credits"
   ],
@@ -26,7 +26,7 @@
      "Order"
   ],
   "ServiceFeeTypeNames":[
-     "Service Fee", ""
+     "Service Fee"
   ],
   "TotalPriceColumnName":"total"
 }

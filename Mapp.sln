@@ -29,6 +29,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shmap.Bootstrapper", "Shmap
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shmap.BusinessLogic.Invoices", "Shmap.BusinessLogic.Invoices\Shmap.BusinessLogic.Invoices.csproj", "{F009125B-DCB2-496B-83A9-A1FF1CE48D38}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{86B12A01-1934-4F64-9EB2-AE8D2930D928}"
+	ProjectSection(SolutionItems) = preProject
+		UpdatesDefinitions.json = UpdatesDefinitions.json
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

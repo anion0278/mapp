@@ -13,7 +13,8 @@
   "ValueComponentsColumnName":[
      "product sales",
      "postage credits",
-     "promotional rebates"
+     "promotional rebates",
+     "gift wrap credits"
   ],
   "TransferTypeNames":[
      "Transfer"

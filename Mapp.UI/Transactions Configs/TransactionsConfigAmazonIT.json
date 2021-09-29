@@ -13,7 +13,8 @@
   "ValueComponentsColumnName":[
      "Vendite",
      "Accrediti per le spedizioni",
-     "Sconti promozionali"
+     "Sconti promozionali",
+     "Accrediti per confezioni regalo"
   ],
   "TransferTypeNames":[
      "Trasferimento"

@@ -205,8 +205,15 @@ namespace Shmap.BusinessLogic.Invoices
             invoice.SalesChannel = salesChannel;
 
             invoice.TotalPrice = new CommonServices.Currency(priceSum, currency, Rates);
-            if (!IsNonEuCountryByClassification(invoice.Classification))
+
+            invoice.PayVat = false;
+            if (classification == InvoiceVatClassification.RDzasEU || classification == InvoiceVatClassification.UDA5)
             {
+                invoice.PayVat = true;
+            }
+
+            if (!IsNonEuCountryByClassification(invoice.Classification))
+            { // TODO set VAT to zero if NON EU
                 invoice.CountryVat = new Vat(VatPercentage[invoice.ShipCountryCode]);
                 invoice.TotalPriceVat = new CommonServices.Currency(Math.Round(invoice.TotalPrice.AmountForeign * invoice.CountryVat.ReversePercentage, 2), currency, Rates);
             }
