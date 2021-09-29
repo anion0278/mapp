@@ -114,7 +114,7 @@ namespace Shmap.DataAccess
             data.homeCurrency.price = Math.Round(invoiceItem.TotalPrice.AmountHome, 2);
             data.homeCurrency.priceSum = Math.Round(invoiceItem.TotalPrice.AmountHome, 2);
             data.homeCurrency.priceVAT = Math.Round(invoiceItem.VatPrice.AmountHome, 2);
-            data.payVAT = false;
+            data.payVAT = invoiceItem.ParentInvoice.PayVat;
 
             if (invoiceItem.IsMoss) 
             {

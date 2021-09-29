@@ -1,0 +1,32 @@
+{
+  "LinesToSkipBeforeColumnNames":7,
+  "MarketPlaceId":12,
+  "DistinctionPhrase":"Wszystkie kwoty w PLN, chyba że określono inaczej",
+  "DateSubstring":"(.*) UTC",
+  "TimeSeparatorOverride":null,
+  "DateCultureInfoName":"pl-PL",
+  "OrderIdColumnName":"identyfikator rozliczenia",
+  "TransactionTypeColumnName":"typ",
+  "DateTimeColumnNames":[
+     "data/godzina"
+  ],
+  "ValueComponentsColumnName":[
+     "sprzedaż produktów",
+     "noty kredytowe za wysyłkę",
+     "środki na pokrycie pakowania na prezent",
+     "rabaty promocyjne"
+  ],
+  "TransferTypeNames":[
+     "Przelew"
+  ],
+  "RefundTypeNames":[
+     "Refund"
+  ],
+  "OrderTypeNames":[
+     "Zamówienie"
+  ],
+  "ServiceFeeTypeNames":[
+     "Service Fee"
+  ],
+  "TotalPriceColumnName":"suma"
+}

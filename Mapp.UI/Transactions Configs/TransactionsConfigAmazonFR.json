@@ -1,4 +1,5 @@
 {
+  "LinesToSkipBeforeColumnNames":7,
   "MarketPlaceId":8,
   "DistinctionPhrase":"Tous les montants sont en EUR, sauf mention contraire.",
   "DateSubstring":"(.*) UTC",
@@ -12,7 +13,8 @@
   "ValueComponentsColumnName":[
      "ventes de produits",
      "crédits d\u0027expédition",
-     "Rabais promotionnels"
+     "Rabais promotionnels",
+     "crédits sur l'emballage cadeau"
   ],
   "TransferTypeNames":[
      "Transfert"

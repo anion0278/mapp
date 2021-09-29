@@ -1,4 +1,5 @@
 {
+  "LinesToSkipBeforeColumnNames":7,
   "MarketPlaceId":7,
   "DistinctionPhrase":"Todos los importes en EUR, a menos que se especifique lo contrario",
   "DateSubstring":"(.*) UTC",
@@ -12,7 +13,8 @@
   "ValueComponentsColumnName":[
      "ventas de productos",
      "abonos de envío",
-     "devoluciones promocionales"
+     "devoluciones promocionales",
+     "impuestos por abonos de envío"
   ],
   "TransferTypeNames":[
      "Transferir"

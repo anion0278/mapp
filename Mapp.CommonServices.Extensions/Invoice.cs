@@ -39,6 +39,7 @@ namespace Shmap.CommonServices
         public Currency TotalPriceVat { get; set; }
         public bool IsMoss { get; set; }
         public Vat CountryVat { get; set; }
+        public bool PayVat { get; set; }
     }
 
     public class Vat
