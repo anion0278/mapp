@@ -58,5 +58,25 @@
       "MinimumVersion": "1.0.0.0",
       "UpdateMode": 1
     }
-   }
+  },
+  {
+    "CurrentVersion": "3.0.0.0",
+    "DownloadURL": "https://github.com/anion0278/mapp/releases/download/v3.0.0/mapp_v3.0.0_binaries.zip",
+    "ChangelogURL": "https://github.com/anion0278/mapp/releases/tag/v3.0.0",
+    "Mandatory": {
+      "Value": true,
+      "MinimumVersion": "1.0.0.0",
+      "UpdateMode": 1
+    }
+  },
+  {
+    "CurrentVersion": "3.0.1.0",
+    "DownloadURL": "https://github.com/anion0278/mapp/releases/download/v3.0.1/mapp_v3.0.1_binaries.zip",
+    "ChangelogURL": "https://github.com/anion0278/mapp/releases/tag/v3.0.1",
+    "Mandatory": {
+      "Value": true,
+      "MinimumVersion": "1.0.0.0",
+      "UpdateMode": 1
+    }
+  }
 ]

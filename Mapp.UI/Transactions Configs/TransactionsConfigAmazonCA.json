@@ -1,4 +1,5 @@
 {
+  "LinesToSkipBeforeColumnNames":7,
   "MarketPlaceId":1,
   "DistinctionPhrase":"All amounts in CAD, unless specified",
   "DateSubstring":"(.*) ((p.m.)|(a.m.)) (PST|PDT)",
@@ -12,13 +13,15 @@
   "ValueComponentsColumnName":[
      "product sales",
      "shipping credits",
-     "promotional rebates"
+     "promotional rebates",
+     "gift wrap credits"
   ],
   "TransferTypeNames":[
      "Transfer"
   ],
   "RefundTypeNames":[
-     "Refund"
+     "Refund",
+     "A-to-z Guarantee Claim"
   ],
   "OrderTypeNames":[
      "Order"
