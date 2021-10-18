@@ -70,7 +70,7 @@ namespace Shmap.BusinessLogic.Invoices.Tests
             string inputAmazonReportFilePath = @$"TestData\{testCaseDataDirName}\amazon.txt";
             string expectedResultFilePath = @$"TestData\{testCaseDataDirName}\converted.xml";
 
-            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); 
             string invoiceDir = "TestData\\TestSettings\\Invoice Converter";
 
             var configMock = new Mock<IConfigProvider>();
