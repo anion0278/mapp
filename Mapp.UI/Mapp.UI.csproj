@@ -31,7 +31,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Shmap.ApplicationUpdater\Shmap.ApplicationUpdater.csproj" />
-    <ProjectReference Include="..\Shmap.Business.InvoiceConverter\Shmap.BusinessLogic.Invoices.csproj" />
     <ProjectReference Include="..\Shmap.BusinessLogic.AutocompletionHelper\Shmap.BusinessLogic.AutocompletionHelper.csproj" />
     <ProjectReference Include="..\Shmap.BusinessLogic.Invoices\Shmap.BusinessLogic.Invoices.csproj" />
     <ProjectReference Include="..\Shmap.BusinessLogic.Transactions\Shmap.BusinessLogic.Transactions.csproj" />
