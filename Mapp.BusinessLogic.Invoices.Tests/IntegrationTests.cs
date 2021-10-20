@@ -96,7 +96,7 @@ namespace Shmap.BusinessLogic.Invoices.Tests
 
             var conversionContext = new InvoiceConversionContext()
             {
-                ConvertToDate = DateTime.Parse("20.10.2021"),
+                ConvertToDate = new DateTime(2021, 10, 20),
                 DefaultEmail = "info@czechdrawing.com", 
                 ExistingInvoiceNumber = (uint)startingOrderNumber,
             };
