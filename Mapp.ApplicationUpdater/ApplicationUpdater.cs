@@ -32,7 +32,7 @@ namespace Shmap.ApplicationUpdater
             AutoUpdater.ShowSkipButton = false;
             AutoUpdater.UpdateFormSize = new System.Drawing.Size(600, 400);
             AutoUpdater.ParseUpdateInfoEvent += AutoUpdater_ParseUpdateInfoEvent;
-            AutoUpdater.Start("https://raw.githubusercontent.com/anion0278/mapp/dev/UpdatesDefinitions.json");
+            AutoUpdater.Start("https://mappupdatepackagesrouter.azurewebsites.net/api/UpdatePackagesRouter");
         }
 
         private void AutoUpdater_ParseUpdateInfoEvent(ParseUpdateInfoEventArgs args)
