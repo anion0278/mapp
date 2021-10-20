@@ -34,7 +34,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		UpdatesDefinitions.json = UpdatesDefinitions.json
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdatePackagesRouterFunction", "UpdatePackagesRouterFunction\UpdatePackagesRouterFunction.csproj", "{478547B7-AD77-436E-8C32-481366BAED2D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shmap.UpdatePackagesRouterFunction", "Shmap.UpdatePackagesRouterFunction\Shmap.UpdatePackagesRouterFunction.csproj", "{478547B7-AD77-436E-8C32-481366BAED2D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
