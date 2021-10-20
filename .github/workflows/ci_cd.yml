@@ -1,0 +1,148 @@
+name: CI/CD
+
+on:
+  workflow_dispatch:    
+    inputs:
+      release_major:
+        description: 'Release - major number'     
+        required: true
+        default: '3' # major
+      release_minor:
+        description: 'Release - minor number'     
+        required: true
+        default: '0' # minor
+      release_patch:
+        description: 'Release - patch number (previous 1)'     
+        required: true
+      release_name:
+        description: 'Additional name of the release'     
+        required: true
+      release_suffix:
+        description: 'Release - version suffix (including dash!)'     
+        required: false
+        
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  build:
+    runs-on: windows-latest  
+
+    env:
+      release_version: ${{github.event.inputs.release_major}}.${{github.event.inputs.release_minor}}.${{github.event.inputs.release_patch}}.${{github.run_number}}
+      bin_dir: 'Shmap.UI/bin/release/net5.0-windows/'
+      workflow: '.github/workflows/ci_cd.yml'
+
+    steps:
+    - name: Set ENV
+      # TODO is it possible to combine output variables in single step?
+      run: |
+        echo "release_tag=v${{env.release_version}}${{github.event.inputs.release_suffix}}" >> $GITHUB_ENV
+        
+    - name: Set ENV 2
+      run: |
+        echo "artifact_name=mapp_${{env.release_tag}}_binaries.zip" >> $GITHUB_ENV
+        
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+        token: ${{ secrets.MAPP_PAT }}
+
+    - name: Find Head
+      #shell: bash
+      id: head
+      run: echo "::set-output name=head::$(git rev-parse HEAD)"
+
+    - name: Find latest tag
+      #shell: bash
+      id: latest
+      run: echo "::set-output name=latest_tag::$(git describe --tags --abbrev=0)"
+
+    - name: Create changelog text
+      id: changelog
+      uses: mikepenz/release-changelog-builder-action@v2.4.2
+      with:
+        configuration: ".github/workflows/changelog_settings.json"
+        ignorePreReleases: "false"
+        commitMode: "true"
+        toTag: ${{ steps.head.outputs.head }}
+        fromTag: ${{ steps.latest.outputs.latest_tag }}
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Check ENV
+      run: |
+        echo "changelog: ${{steps.changelog.outputs.changelog}}" 
+    - name: Change assembly versions
+      run: |
+        sed -i 's/AssemblyVersion(".*")/AssemblyVersion("${{env.release_version}}")/g' Shmap.UI/Properties/SharedAssemblyInfo.cs
+        sed -i 's/AssemblyFileVersion(".*")/AssemblyFileVersion("${{env.release_version}}")/g' Shmap.UI/Properties/SharedAssemblyInfo.cs
+    - name: Read CHANGELOG.md
+      id: package
+      uses: juliangruber/read-file-action@v1
+      with:
+        path: ./CHANGELOG.md
+
+    - name: Write to CHANGELOG.md
+      uses: DamianReeves/write-file-action@master
+      with:
+        path: ./CHANGELOG.md
+        contents: ${{ steps.changelog.outputs.changelog }}${{ steps.package.outputs.content }}
+        write-mode: overwrite
+
+    - name: Install dependencies
+      run: dotnet restore
+      
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+
+    - name: Test
+      run: dotnet test --no-restore --verbosity minimal
+
+    - name: Create Archive 
+      uses: thedoctor0/zip-release@master
+      with:
+        path: .
+        directory: ${{env.bin_dir}}
+        filename: ${{env.artifact_name}}
+        exclusions: '*.git* *.pdb /*runtimes/* ${{env.bin_dir}}runtimes/* ${{env.bin_dir}}runtimes/ ${{env.bin_dir}}runtimes ${{env.bin_dir}}ref/*'
+        
+    - name: IF statement
+      uses: haya14busa/action-cond@v1
+      id: condval
+      with:
+        cond: ${{ github.event.inputs.release_suffix == '' }}
+        if_true: false
+        if_false: true
+    
+    - name: Create Release
+      uses: ncipollo/release-action@v1
+      env:
+        ch: ${{ steps.changelog.outputs.changelog }}
+      with:
+        artifacts: "${{env.bin_dir}}${{env.artifact_name}}"
+        tag: v${{env.release_version}}
+        name: "${{env.release_tag}} - ${{github.event.inputs.release_name}}"
+        allowUpdates: true
+        commit: master
+        omitBody: false
+        omitName: false
+        prerelease: ${{steps.condval.outputs.value}}
+        artifactErrorsFailBuild: true
+        body: ${{ steps.changelog.outputs.changelog }}
+        token: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: Change default version in workflow
+      # sed to replace only the first occurence
+      run: |
+        sed -i "0,/default: '.*' # major/s//default: '${{github.event.inputs.release_major}}' # major/g" ${{env.workflow}} 
+        sed -i "0,/default: '.*' # minor/s//default: '${{github.event.inputs.release_minor}}' # minor/g" ${{env.workflow}}
+        sed -i "0,/(previous .*)/s//(previous ${{github.event.inputs.release_patch}})/g" ${{env.workflow}}
+        
+    - name: Commit report
+      run: |
+        git config --global user.name 'AutomatedRelease'
+        git config --global user.email 'automatedRelease@noemail.com'
+        git commit -am "chore: Automated report"
+        git push
