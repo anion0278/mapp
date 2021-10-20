@@ -20,49 +20,49 @@ namespace Shmap.BusinessLogic.Invoices.Tests
         [Fact]
         public void Autocomplete_Sku()
         {
-            IntegrationTestBase("autocomplete sku", 294200489);
+            IntegrationTestBase("autocomplete sku", 300000000);
         }
 
         [Fact]
         public void Discounts_Aggregation()
         {
-            IntegrationTestBase("discounts aggregation", 294200515);
+            IntegrationTestBase("discounts aggregation", 300000000);
         }
 
         [Fact]
         public void Empty_Line()
         {
-            IntegrationTestBase("empty line", 294200516);
+            IntegrationTestBase("empty line", 300000000);
         }
 
         [Fact]
         public void General()
         {
-            IntegrationTestBase("general", 294200518);
+            IntegrationTestBase("general", 300000000);
         }
 
         [Fact]
         public void Hermes_Shipping()
         {
-            IntegrationTestBase("hermes shipping", 294200521);
+            IntegrationTestBase("hermes shipping", 300000000);
         }
 
         [Fact]
         public void Multi_Item_Order()
         {
-            IntegrationTestBase("multi-item order", 294200522);
+            IntegrationTestBase("multi-item order", 300000000);
         }
 
         [Fact]
         public void Order_Number_Zeros()
         {
-            IntegrationTestBase("order number zeros", 294200529);
+            IntegrationTestBase("order number zeros", 300000000);
         }
 
         [Fact]
         public void Quantity()
         {
-            IntegrationTestBase("quantity", 294200530);
+            IntegrationTestBase("quantity", 300000000);
         }
 
         private void IntegrationTestBase(string testCaseDataDirName, int startingOrderNumber)
@@ -96,7 +96,7 @@ namespace Shmap.BusinessLogic.Invoices.Tests
 
             var conversionContext = new InvoiceConversionContext()
             {
-                ConvertToDate = DateTime.Parse("26.09.2021"),
+                ConvertToDate = DateTime.Parse("20.10.2021"),
                 DefaultEmail = "info@czechdrawing.com", 
                 ExistingInvoiceNumber = (uint)startingOrderNumber,
             };
