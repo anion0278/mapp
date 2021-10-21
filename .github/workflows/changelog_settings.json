@@ -1,0 +1,54 @@
+{ 
+  "categories": [
+        {
+            "title": "## 🚀 Features",
+            "labels": ["enhancement", "feature"]
+        },
+        {
+            "title": "## 🛠️ Minor Changes",
+            "labels": ["change"]
+        },
+        {
+            "title": "## 🔎 Breaking Changes",
+            "labels": ["breaking"]
+        },
+        {
+            "title": "## 🐛 Fixes",
+            "labels": ["bug", "fix"]
+        },
+        {
+            "title": "## 📄 Documentation",
+            "labels": ["documentation"]
+        },
+        {
+            "title": "## 🧪 Tests",
+            "labels": [
+                "test"
+            ]
+        },
+        {
+            "title": "## 🧰 Chores",
+            "labels": [
+                "chore"
+            ]
+        },
+        {
+            "title": "## 📦 Uncategorized",
+            "labels": []
+        }
+    ],
+    "sort": "ASC",
+    "template": "Total of ${{CATEGORIZED_COUNT}} new changes since ${{FROM_TAG}}\n\n${{CHANGELOG}}\n:",
+    "pr_template": "- ${{BODY}} -> Author: ${{AUTHOR}}",
+    "empty_template": "- No Changes",
+    "max_pull_requests": 1000,
+    "max_back_track_time_days": 1000,
+    "label_extractor": [
+        {
+          "pattern": "(.+): (.+)",
+          "on_property": "title",
+          "target": "$1",
+          "flags": "gu"
+        }
+      ]
+}
