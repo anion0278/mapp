@@ -66,7 +66,7 @@ jobs:
         echo "artifact_name=mapp_${{env.release_tag}}_binaries.zip" >> $GITHUB_ENV
         
     - name: Find Head
-      id: head_tag
+      id: head
       run: echo "::set-output name=head::$(git rev-parse HEAD)"
 
     - name: Find latest tag
@@ -80,7 +80,7 @@ jobs:
         configuration: ".github/workflows/changelog_settings.json"
         ignorePreReleases: "false"
         commitMode: "true"
-        toTag: ${{ steps.head_tag.outputs.head }}
+        toTag: ${{ steps.head.outputs.head }}
         fromTag: ${{ steps.latest_tag.outputs.latest_tag }}
         token: ${{ secrets.GITHUB_TOKEN }}
         
@@ -101,9 +101,9 @@ jobs:
       uses: haya14busa/action-cond@v1
       id: condval
       with:
-        cond: ${{ github.event.inputs.release_suffix == '' }}
-        if_true: false
-        if_false: true
+        cond: ${{ github.event.inputs.release_suffix != '' }}
+        if_true: true
+        if_false: false
     
     - name: Create Archive 
       uses: thedoctor0/zip-release@master
