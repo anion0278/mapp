@@ -144,5 +144,5 @@ jobs:
       run: |
         git config --global user.name 'AutomatedRelease'
         git config --global user.email 'automatedRelease@noemail.com'
-        git commit -am "chore: Automated report"
+        git commit -am "chore: Automated report [skip ci]"
         git push
