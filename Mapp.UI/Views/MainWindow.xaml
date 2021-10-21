@@ -83,7 +83,18 @@
                             </DataGridBoundColumn.ElementStyle>
                         </DataGridTextColumn>
                         <DataGridTextColumn Header="SKU (Amazon)" IsReadOnly="True" Width="*" Binding="{Binding AmazonSku}" />
-                        <DataGridTextColumn Header="Kod zbozi (!)" Width="*" Binding="{Binding WarehouseProductCode}">
+                        <DataGridTextColumn Header="Kod zbozi" Width="*" Binding="{Binding WarehouseProductCode}">
+                            <DataGridTextColumn.CellStyle>
+                                <Style TargetType="DataGridCell">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Path=IsFullyEditable}" Value="False">
+                                            <Setter Property="IsTabStop" Value="False"></Setter>
+                                            <Setter Property="Focusable" Value="False"></Setter>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </DataGridTextColumn.CellStyle>
+
                             <DataGridBoundColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="Background" Value="DarkOrange"/>
@@ -95,7 +106,28 @@
                                 </Style>
                             </DataGridBoundColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Header="Mnozstvi v packu" Width="120" Binding="{Binding PackQuantityMultiplier}" />
+                        <DataGridTextColumn Header="Mnozstvi v packu" Width="120" Binding="{Binding PackQuantityMultiplier}">
+                            <DataGridTextColumn.CellStyle>
+                                <Style TargetType="DataGridCell">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Path=IsFullyEditable}" Value="False">
+                                            <Setter Property="IsTabStop" Value="False"></Setter>
+                                            <Setter Property="Focusable" Value="False"></Setter>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </DataGridTextColumn.CellStyle>
+                            <DataGridBoundColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="Background" Value="Orange"/>
+                                    <Style.Triggers>
+                                        <Trigger  Property="Text" Value="----">
+                                            <Setter Property="Background" Value="Red"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </DataGridBoundColumn.ElementStyle>
+                        </DataGridTextColumn>
                     </DataGrid.Columns>
                 </DataGrid>
                 <DataGrid Name="BottomDataGrid" Grid.Row="2" Margin="5" AutoGenerateColumns="false" CanUserAddRows="false"
@@ -107,7 +139,7 @@
                             Binding="{Binding SalesChannel}"/>
                         <DataGridTextColumn Header="Produkty" Width="*" IsReadOnly="true" Binding="{Binding InvoiceProductNames, Converter={StaticResource ProductsConverter}}"/>
                         <DataGridTextColumn Header="SKU kody" Width="*" IsReadOnly="true" Binding="{Binding AmazonSkuCodes, Converter={StaticResource ProductsToSkuConverter}}"/>
-                        <DataGridTextColumn Header="Kod z skladu (!)" Width="*" Binding="{Binding RelatedWarehouseSection}">
+                        <DataGridTextColumn Header="Kod z skladu" Width="*" Binding="{Binding RelatedWarehouseSection}">
                             <DataGridBoundColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="Background" Value="Orange"/>
