@@ -4,7 +4,7 @@ using Shmap.DataAccess;
 
 namespace Shmap.ViewModels
 {
-    public class InvoiceItemWithDetailViewModel : ViewModelBase
+    public class InvoiceItemViewModel : ViewModelBase
     {
         private readonly InvoiceItemBase _model;
         private readonly IAutocompleteData _autocompleteData;
@@ -33,8 +33,8 @@ namespace Shmap.ViewModels
             set
             {
                 Set(ref _amazonProductName, value);
-                if (value == ApplicationConstants.EmptyItemCode || string.IsNullOrWhiteSpace(value) || _model.Type != InvoiceItemType.Shipping) return;
 
+                if (value == ApplicationConstants.EmptyItemCode || string.IsNullOrWhiteSpace(value) || string.IsNullOrEmpty(AmazonSku)) return;
                 var rememberedDictionary = _autocompleteData.ShippingNameBySku;
                 _autocompleteData.UpdateAutocompleteData(value, rememberedDictionary, AmazonSku);
             }
@@ -51,26 +51,29 @@ namespace Shmap.ViewModels
             get => _warehouseProductCode;
             set
             {
+                if (value == ApplicationConstants.EmptyItemCode || string.IsNullOrWhiteSpace(value) || string.IsNullOrEmpty(AmazonSku)) return;
                 Set(ref _warehouseProductCode, value);
-                if (value == ApplicationConstants.EmptyItemCode || string.IsNullOrWhiteSpace(value)) return;
 
                 var rememberedDictionary = _autocompleteData.PohodaProdCodeBySku;
                 _autocompleteData.UpdateAutocompleteData(value, rememberedDictionary, AmazonSku);
             }
         }
 
+        public bool IsFullyEditable => _model.Type == InvoiceItemType.Product;
+
         public uint PackQuantityMultiplier
         {
             get => _packQuantityMultiplier;
             set
             {
+                if (string.IsNullOrEmpty(AmazonSku)) return;
                 Set(ref _packQuantityMultiplier, value);
                 var rememberedDictionary = _autocompleteData.PackQuantitySku;
                 _autocompleteData.UpdateAutocompleteData(value.ToString(), rememberedDictionary, AmazonSku); // TODO make autocomplete data correctly typed
             }
         }
 
-        public InvoiceItemWithDetailViewModel(InvoiceItemBase model, IAutocompleteData autocompleteData)
+        public InvoiceItemViewModel(InvoiceItemBase model, IAutocompleteData autocompleteData)
         {
             _amazonNumber = model.ParentInvoice.VariableSymbolFull;
             _salesChannel = model.ParentInvoice.SalesChannel;

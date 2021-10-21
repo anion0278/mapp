@@ -30,7 +30,7 @@ namespace Shmap.ViewModels
         string DefaultEmail { get; set; }
         string LatestTrackingCode { get; set; }
         bool OpenTargetFolderAfterConversion { get; set; }
-        public ObservableCollection<InvoiceItemWithDetailViewModel> InvoiceItems { get; set; }
+        public ObservableCollection<InvoiceItemViewModel> InvoiceItems { get; set; }
         public ObservableCollection<InvoiceViewModel> Invoices { get; set; }
     }
 
@@ -54,7 +54,7 @@ namespace Shmap.ViewModels
         private string _latestTrackingCode;
         private bool _openTargetFolderAfterConversion;
         private string _windowTitle;
-        private ObservableCollection<InvoiceItemWithDetailViewModel> _invoiceItems = new();
+        private ObservableCollection<InvoiceItemViewModel> _invoiceItems = new();
         private ObservableCollection<InvoiceViewModel> _invoices = new();
 
         public RelayCommand SelectAmazonInvoicesCommand { get; }
@@ -62,7 +62,7 @@ namespace Shmap.ViewModels
         public RelayCommand ConvertTransactionsCommand { get; }
         public RelayCommand WindowClosingCommand { get; }
 
-        public ObservableCollection<InvoiceItemWithDetailViewModel> InvoiceItems
+        public ObservableCollection<InvoiceItemViewModel> InvoiceItems
         {
             get => _invoiceItems;
             set => Set(ref _invoiceItems, value);
@@ -272,7 +272,7 @@ namespace Shmap.ViewModels
 
             foreach (var invoiceItem in invoices.SelectMany(di => di.InvoiceItems))
             {
-                InvoiceItems.Add(new InvoiceItemWithDetailViewModel(invoiceItem, _autocompleteData));
+                InvoiceItems.Add(new InvoiceItemViewModel(invoiceItem, _autocompleteData));
             }
 
             foreach (var invoice in invoices)

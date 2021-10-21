@@ -118,7 +118,7 @@ namespace UpdatePackagesRouterFunction
     {
         [FunctionName("UpdatePackagesRouter")]
         public static async Task<HttpResponseMessage> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)]
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)]
             HttpRequest req, ILogger log)
         {
             log.LogInformation("C# HTTP trigger function is processing a request");
@@ -126,21 +126,26 @@ namespace UpdatePackagesRouterFunction
             var client = new GitHubClient(new ProductHeaderValue("AutomatedUpdatePackagesRouter"));
             var releases = await client.Repository.Release.GetAll("anion0278", "mapp");
 
-            var allReleases = releases.Select(r => new UpdateInfoEventArgs()
-            {
-                DownloadURL = r.Assets.Single(a => a.ContentType.Equals("application/x-zip-compressed"))
-                    .BrowserDownloadUrl,
-                IsUpdateAvailable = true,
-                ChangelogURL = r.HtmlUrl,
-                CurrentVersion = r.TagName.Trim('v'),
-                Mandatory = new Mandatory() { MinimumVersion = "2.0.0.0", UpdateMode = Mode.Normal, Value = true }
-            }).ToArray();
+            var allReleases = releases.Select(GetUpdateInfo).ToArray();
 
             var jsonToReturn = JsonSerializer.Serialize(allReleases,
                 new JsonSerializerOptions { IgnoreNullValues = true, WriteIndented = true });
             return new HttpResponseMessage(HttpStatusCode.OK)
             {
                 Content = new StringContent(jsonToReturn, Encoding.UTF8, "application/json")
+            };
+        }
+
+        private static UpdateInfoEventArgs GetUpdateInfo(Release release)
+        {
+            var binariesAsset = release.Assets.Single(); //.Single(a => a.ContentType.Equals("raw"));
+            return new UpdateInfoEventArgs()
+            {
+                DownloadURL = binariesAsset.BrowserDownloadUrl,
+                IsUpdateAvailable = true,
+                ChangelogURL = release.HtmlUrl,
+                CurrentVersion = release.TagName.Trim('v'),
+                Mandatory = new Mandatory() { MinimumVersion = "2.0.0.0", UpdateMode = Mode.Normal, Value = true }
             };
         }
     }
