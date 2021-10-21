@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -12,15 +13,43 @@ using NLog;
 
 namespace Mapp
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
+    public class BindingException: Exception
+    {
+        public BindingException(string message) : base(message)
+        { }
+
+        public BindingException(string message, Exception innerException) : base(message, innerException)
+        {}
+    }
+
+    public class ExplicitBindingErrorTraceListener : TraceListener
+    {
+        public EventHandler<Exception> BindingErrorEventHandler { get; set; }
+
+        public override void Write(string message)
+        { }
+
+        public override void WriteLine(string message)
+        {
+            BindingErrorEventHandler.Invoke(this, new BindingException(message));
+            Flush();
+        }
+    }
+
+
     public partial class App : Application
     {
         private static Logger _logger = LogManager.GetCurrentClassLogger();
 
         protected override void OnStartup(StartupEventArgs e)
         {
+            PresentationTraceSources.Refresh();
+            var wpfBindingErrorHandler = new ExplicitBindingErrorTraceListener();
+            wpfBindingErrorHandler.BindingErrorEventHandler += (o, e) => LogException(e, "WPF Binding");
+            PresentationTraceSources.DataBindingSource.Listeners.Add(wpfBindingErrorHandler);
+            PresentationTraceSources.DataBindingSource.Switch.Level = SourceLevels.Error;
+            PresentationTraceSources.FreezableSource.Switch.Level = SourceLevels.Off; // needed in order to hide exceptions from Freezables
+
             base.OnStartup(e);
             SetupExceptionHandling();
 
@@ -32,25 +61,25 @@ namespace Mapp
         private void SetupExceptionHandling()
         {
             AppDomain.CurrentDomain.UnhandledException += (s, e) =>
-                LogUnhandledException((Exception)e.ExceptionObject, "AppDomain.CurrentDomain.UnhandledException");
+                LogException((Exception)e.ExceptionObject, "AppDomain.CurrentDomain.UnhandledException");
 
             DispatcherUnhandledException += (s, e) =>
             {
-                LogUnhandledException(e.Exception, "Application.Current.DispatcherUnhandledException");
+                LogException(e.Exception, "Application.Current.DispatcherUnhandledException");
                 e.Handled = true;
             };
 
             TaskScheduler.UnobservedTaskException += (s, e) =>
             {
-                LogUnhandledException(e.Exception, "TaskScheduler.UnobservedTaskException");
+                LogException(e.Exception, "TaskScheduler.UnobservedTaskException");
                 e.SetObserved();
             };
         }
 
-        private void LogUnhandledException(Exception originalException, string source)
+        private void LogException(Exception originalException, string source)
         {
             var exception = originalException;
-            string message = $"Unhandled exception with source: {source}.";
+            string message = $"Unhandled exception with source: {source}. ";
             try
             {
                 var assemblyName = Assembly.GetExecutingAssembly().GetName();
