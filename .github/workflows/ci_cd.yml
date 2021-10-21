@@ -64,14 +64,6 @@ jobs:
     - name: Set ENV 2
       run: |
         echo "artifact_name=mapp_${{env.release_tag}}_binaries.zip" >> $GITHUB_ENV
-
-    - name: Create Archive 
-      uses: thedoctor0/zip-release@master
-      with:
-        path: .
-        directory: ${{env.bin_dir}}
-        filename: ${{env.artifact_name}}
-        exclusions: '*.git* *.pdb /*runtimes/* ${{env.bin_dir}}runtimes/* ${{env.bin_dir}}runtimes/ ${{env.bin_dir}}runtimes ${{env.bin_dir}}ref/*'    
         
     - name: Find Head
       id: head_tag
@@ -112,6 +104,14 @@ jobs:
         cond: ${{ github.event.inputs.release_suffix == '' }}
         if_true: false
         if_false: true
+    
+    - name: Create Archive 
+      uses: thedoctor0/zip-release@master
+      with:
+        path: .
+        directory: ${{env.bin_dir}}
+        filename: ${{env.artifact_name}}
+        exclusions: '*.git* *.pdb /*runtimes/* ${{env.bin_dir}}runtimes/* ${{env.bin_dir}}runtimes/ ${{env.bin_dir}}runtimes ${{env.bin_dir}}ref/*'   
     
     - name: Create Release
       uses: ncipollo/release-action@v1
