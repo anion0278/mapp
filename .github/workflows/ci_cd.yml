@@ -12,7 +12,7 @@ on:
         required: true
         default: '0' # minor
       release_patch:
-        description: 'Release - patch number (previous 1)'     
+        description: 'Release - patch number (previous 2)'     
         required: true
       release_name:
         description: 'Additional name of the release'     
@@ -35,6 +35,27 @@ jobs:
       workflow: '.github/workflows/ci_cd.yml'
 
     steps:
+   
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+        token: ${{ secrets.MAPP_PAT }}
+
+    - name: Install dependencies
+      run: dotnet restore
+      
+    - name: Change assembly versions
+      run: |
+        sed -i 's/AssemblyVersion(".*")/AssemblyVersion("${{env.release_version}}")/g' Shmap.UI/Properties/SharedAssemblyInfo.cs
+        sed -i 's/AssemblyFileVersion(".*")/AssemblyFileVersion("${{env.release_version}}")/g' Shmap.UI/Properties/SharedAssemblyInfo.cs
+      
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+
+    - name: Test
+      run: dotnet test --no-restore --verbosity minimal
+
     - name: Set ENV
       # TODO is it possible to combine output variables in single step?
       run: |
@@ -44,23 +65,15 @@ jobs:
       run: |
         echo "artifact_name=mapp_${{env.release_tag}}_binaries.zip" >> $GITHUB_ENV
         
-    - name: Checkout
-      uses: actions/checkout@v2
-      with:
-        fetch-depth: 0
-        token: ${{ secrets.MAPP_PAT }}
-
     - name: Find Head
-      #shell: bash
       id: head
       run: echo "::set-output name=head::$(git rev-parse HEAD)"
 
     - name: Find latest tag
-      #shell: bash
-      id: latest
+      id: latest_tag
       run: echo "::set-output name=latest_tag::$(git describe --tags --abbrev=0)"
-
-    - name: Create changelog text
+        
+    - name: Generate changelog text
       id: changelog
       uses: mikepenz/release-changelog-builder-action@v2.4.2
       with:
@@ -68,16 +81,9 @@ jobs:
         ignorePreReleases: "false"
         commitMode: "true"
         toTag: ${{ steps.head.outputs.head }}
-        fromTag: ${{ steps.latest.outputs.latest_tag }}
+        fromTag: ${{ steps.latest_tag.outputs.latest_tag }}
         token: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Check ENV
-      run: |
-        echo "changelog: ${{steps.changelog.outputs.changelog}}" 
-    - name: Change assembly versions
-      run: |
-        sed -i 's/AssemblyVersion(".*")/AssemblyVersion("${{env.release_version}}")/g' Shmap.UI/Properties/SharedAssemblyInfo.cs
-        sed -i 's/AssemblyFileVersion(".*")/AssemblyFileVersion("${{env.release_version}}")/g' Shmap.UI/Properties/SharedAssemblyInfo.cs
+        
     - name: Read CHANGELOG.md
       id: package
       uses: juliangruber/read-file-action@v1
@@ -89,32 +95,23 @@ jobs:
       with:
         path: ./CHANGELOG.md
         contents: ${{ steps.changelog.outputs.changelog }}${{ steps.package.outputs.content }}
-        write-mode: overwrite
-
-    - name: Install dependencies
-      run: dotnet restore
-      
-    - name: Build
-      run: dotnet build --configuration Release --no-restore
-
-    - name: Test
-      run: dotnet test --no-restore --verbosity minimal
-
+        write-mode: append
+        
+    - name: Check prerelease version
+      uses: haya14busa/action-cond@v1
+      id: condval
+      with:
+        cond: ${{ github.event.inputs.release_suffix != '' }}
+        if_true: true
+        if_false: false
+    
     - name: Create Archive 
       uses: thedoctor0/zip-release@master
       with:
         path: .
         directory: ${{env.bin_dir}}
         filename: ${{env.artifact_name}}
-        exclusions: '*.git* *.pdb /*runtimes/* ${{env.bin_dir}}runtimes/* ${{env.bin_dir}}runtimes/ ${{env.bin_dir}}runtimes ${{env.bin_dir}}ref/*'
-        
-    - name: IF statement
-      uses: haya14busa/action-cond@v1
-      id: condval
-      with:
-        cond: ${{ github.event.inputs.release_suffix == '' }}
-        if_true: false
-        if_false: true
+        exclusions: '*.git* *.pdb /*runtimes/* ${{env.bin_dir}}runtimes/* ${{env.bin_dir}}runtimes/ ${{env.bin_dir}}runtimes ${{env.bin_dir}}ref/*'   
     
     - name: Create Release
       uses: ncipollo/release-action@v1
@@ -144,5 +141,5 @@ jobs:
       run: |
         git config --global user.name 'AutomatedRelease'
         git config --global user.email 'automatedRelease@noemail.com'
-        git commit -am "chore: Automated report"
+        git commit -am "chore: Automated report [skip ci]"
         git push
