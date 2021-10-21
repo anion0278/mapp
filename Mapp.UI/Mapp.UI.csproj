@@ -16,6 +16,8 @@
     <PackageReference Include="AutoMapper" Version="10.1.1" />
     <PackageReference Include="FMUtils.KeyboardHook" Version="1.0.140.2145" />
     <PackageReference Include="InputSimulator" Version="1.0.4" />
+    <PackageReference Include="Microsoft.AppCenter.Analytics" Version="4.4.0" />
+    <PackageReference Include="Microsoft.AppCenter.Crashes" Version="4.4.0" />
     <PackageReference Include="MvvmLight" Version="5.4.1.1" />
     <PackageReference Include="MvvmLightLibs" Version="5.4.1.1" />
     <PackageReference Include="NLog" Version="4.7.11" />

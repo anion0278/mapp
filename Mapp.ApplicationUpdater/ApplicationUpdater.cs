@@ -39,7 +39,7 @@ namespace Shmap.ApplicationUpdater
         {
             var allUpdates = _jsonManager.DeserializeUpdates(args.RemoteData);
 
-            var applicableUpdates = allUpdates.Where(au =>
+            var applicableUpdates = allUpdates.Where(u => Version.TryParse(u.CurrentVersion, out _)).Where(au =>
                 new Version(au.CurrentVersion) > Assembly.GetEntryAssembly().GetName().Version).ToList(); // TODO we should check the same as we display in main Window (Title)
 
             // TODO handle exception in Autoupdater, that is caused by null in args.UpdateInfo
