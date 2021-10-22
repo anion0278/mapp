@@ -38,7 +38,7 @@
         }
     ],
     "sort": "ASC",
-    "template": "Total of ${{CATEGORIZED_COUNT}} new changes since ${{FROM_TAG}}\n\n${{CHANGELOG}}\n:",
+    "template": "Total of ${{CATEGORIZED_COUNT}} new changes since ${{FROM_TAG}}\n:\n${{CHANGELOG}}\n",
     "pr_template": "- ${{BODY}} -> Author: ${{AUTHOR}}",
     "empty_template": "- No Changes",
     "max_pull_requests": 1000,
