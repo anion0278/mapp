@@ -45,7 +45,7 @@ namespace Mapp
             set => SetValue(value);
         }
 
-        public string LatestTrackingCode
+        public string TrackingCode
         {
             get => GetValue<string>();
             set => SetValue(value);

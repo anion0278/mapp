@@ -4,7 +4,9 @@ using System.ComponentModel;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
+using System.Windows.Data;
 using GalaSoft.MvvmLight;
+using Mapp.BusinessLogic.Invoices.Annotations;
 using Mapp.UI.ViewModels;
 
 namespace Mapp.ViewModels
@@ -26,7 +28,7 @@ namespace Mapp.ViewModels
         {
             get
             {
-                if (_ruleMap.ContainsKey(columnName))
+                if (_ruleMap.ContainsKey(columnName)) 
                 {
                     _ruleMap[columnName].Revalidate();
                     return _ruleMap[columnName].Error;
@@ -54,10 +56,21 @@ namespace Mapp.ViewModels
             _ruleMap.Add(name, new ViewModelValidationRule(ruleDelegate, errorMessage));
         }
 
+        /// <summary>
+        /// Returns actually new CV instead of default one - allows to separate filtering for different representations
+        /// </summary>
+        /// <typeparam name="T">Type of collection element</typeparam>
+        /// <param name="collection">Target collection</param>
+        /// <returns>New instance of Collection View of the target collection</returns>
+        protected static ICollectionView GetNewCollectionViewInstance<T>(IEnumerable<T> collection)
+        {
+            return new CollectionViewSource { Source = collection }.View;
+        }
+
         public override void RaisePropertyChanged([CallerMemberName] string propertyName = null)
         {
             base.RaisePropertyChanged(propertyName);
-            if (propertyName != null && _ruleMap.ContainsKey(propertyName))
+            if (propertyName != null && _ruleMap.ContainsKey(propertyName)) 
             {
                 _ruleMap[propertyName].IsDirty = true;
             }

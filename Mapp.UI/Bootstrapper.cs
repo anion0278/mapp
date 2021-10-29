@@ -8,13 +8,15 @@ using Mapp.BusinessLogic.Invoices;
 using Mapp.BusinessLogic.Transactions;
 using Mapp.CommonServices;
 using Mapp.DataAccess;
+using Mapp.Models;
 using Mapp.UI;
+using Mapp.UI.ViewModels;
 using Mapp.ViewModels;
 using Unity;
 
 namespace Mapp
 {
-    public class Bootstrapper
+    public class Bootstrapper // TODO analyse whether it makes sense to put into separate assembly. Requires to also move Views into separate assembly 
     {
         public UnityContainer Container { get; }
         private IApplicationUpdater _appUpdater;

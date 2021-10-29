@@ -34,7 +34,7 @@ namespace Mapp
 
         public override void WriteLine(string message)
         {
-            BindingErrorEventHandler?.Invoke(this, new BindingException(message));
+            //BindingErrorEventHandler?.Invoke(this, new BindingException(message));
             Flush();
         }
     }
