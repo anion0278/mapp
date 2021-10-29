@@ -50,12 +50,12 @@ namespace Shmap.UI {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("123456")]
-        public string LatestTrackingCode {
+        public string TrackingCode {
             get {
-                return ((string)(this["LatestTrackingCode"]));
+                return ((string)(this["TrackingCode"]));
             }
             set {
-                this["LatestTrackingCode"] = value;
+                this["TrackingCode"] = value;
             }
         }
         

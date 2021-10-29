@@ -1,44 +1,29 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Mail;
 using System.Reflection;
 using System.Windows;
+using System.Windows.Data;
 using GalaSoft.MvvmLight.CommandWpf;
 using Shmap.BusinessLogic.AutocompletionHelper;
 using Shmap.BusinessLogic.Invoices;
 using Shmap.BusinessLogic.Transactions;
 using Shmap.CommonServices;
 using Shmap.DataAccess;
+using Shmap.Models;
+using Shmap.ViewModels;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
 
-namespace Shmap.ViewModels
+namespace Shmap.UI.ViewModels
 {
-    public interface IMainWindowViewModel
-    {
-        RelayCommand SelectAmazonInvoicesCommand { get; }
-        RelayCommand ExportConvertedAmazonInvoicesCommand { get; }
-        RelayCommand ConvertTransactionsCommand { get; }
-        int WindowLeft { get; set; }
-        int WindowTop { get; set; }
-        int WindowWidth { get; set; }
-        int WindowHeight { get; set; }
-        WindowState WindowState { get; set; }
-        uint? ExistingInvoiceNumber { get; set; }
-        string DefaultEmail { get; set; }
-        string LatestTrackingCode { get; set; }
-        bool OpenTargetFolderAfterConversion { get; set; }
-        public ObservableCollection<InvoiceItemViewModel> InvoiceItems { get; set; }
-        public ObservableCollection<InvoiceViewModel> Invoices { get; set; }
-    }
-
     internal class MainWindowViewModel : ViewModelWithErrorValidationBase, IMainWindowViewModel
     {
         public IInvoiceConverter _invoiceConverter;
         private readonly IConfigProvider _configProvider;
-        private readonly IAutoKeyboardInputHelper _autoKeyboardInputHelper;
         private readonly IFileOperationService _fileOperationService;
         private readonly ITransactionsReader _transactionsReader;
         private readonly IGpcGenerator _gpcGenerator;
@@ -51,32 +36,24 @@ namespace Shmap.ViewModels
         private int _windowLeft;
         private uint? _existingInvoiceNumber;
         private string _defaultEmail;
-        private string _latestTrackingCode;
+        private string _trackingCode;
         private bool _openTargetFolderAfterConversion;
         private string _windowTitle;
-        private ObservableCollection<InvoiceItemViewModel> _invoiceItems = new();
-        private ObservableCollection<InvoiceViewModel> _invoices = new();
 
         public RelayCommand SelectAmazonInvoicesCommand { get; }
         public RelayCommand ExportConvertedAmazonInvoicesCommand { get; }
         public RelayCommand ConvertTransactionsCommand { get; }
         public RelayCommand WindowClosingCommand { get; }
 
-        public ObservableCollection<InvoiceItemViewModel> InvoiceItems
-        {
-            get => _invoiceItems;
-            set => Set(ref _invoiceItems, value);
-        }
+        public ObservableCollection<InvoiceItemViewModel> InvoiceItems { get; } = new();
 
-        public ObservableCollection<InvoiceViewModel> Invoices
-        {
-            get => _invoices;
-            set => Set(ref _invoices, value);
-        }
+        public ICollectionView InvoiceItemsCollectionView { get; set; }
 
-        public int WindowLeft
+        public ObservableCollection<InvoiceViewModel> Invoices { get; } = new();
+
+        public int WindowLeft // is it responsibility of the VM?
         {
-            get { return _windowLeft; }
+            get => _windowLeft;
             set
             {
                 Set(ref _windowLeft, value);
@@ -86,7 +63,7 @@ namespace Shmap.ViewModels
 
         public int WindowTop
         {
-            get { return _windowTop; }
+            get => _windowTop;
             set
             {
                 Set(ref _windowTop, value);
@@ -114,7 +91,7 @@ namespace Shmap.ViewModels
             }
         }
 
-        public WindowState WindowState
+        public WindowState WindowState // TODO make windows agnostic
         {
             get => _windowState;
             set
@@ -136,23 +113,22 @@ namespace Shmap.ViewModels
 
         public string DefaultEmail
         {
-            get { return _defaultEmail; }
+            get => _defaultEmail;
             set
             {
                 value = value.ToLower();
                 Set(ref _defaultEmail, value);
-                _configProvider.DefaultEmail = value;
+                _configProvider.DefaultEmail = value; // TODO when value is not valid (according to the rules), it still saves data to config. Solve for all props
             }
         }
 
-        public string LatestTrackingCode
+        public string TrackingCode
         {
-            get => _configProvider.LatestTrackingCode;
+            get => _configProvider.TrackingCode;
             set
             {
-                Set(ref _latestTrackingCode, value);
-                _configProvider.LatestTrackingCode = value;
-                _autoKeyboardInputHelper.TrackingCode = value; // TODO SOLVE in a better way
+                Set(ref _trackingCode, value);
+                _configProvider.TrackingCode = value;
             }
         }
 
@@ -162,7 +138,7 @@ namespace Shmap.ViewModels
             set
             {
                 Set(ref _openTargetFolderAfterConversion, value);
-                _configProvider.OpenTargetFolderAfterConversion = value;
+                _configProvider.OpenTargetFolderAfterConversion = value; // TODO move all config stuff to export part and use Fody PropertyChanged...
             }
         }
 
@@ -182,25 +158,26 @@ namespace Shmap.ViewModels
 
         public MainWindowViewModel(IConfigProvider configProvider,
             IInvoiceConverter invoiceConverter,
-            IAutoKeyboardInputHelper autoKeyboardInputHelper,
             IFileOperationService fileOperationService,
             ITransactionsReader transactionsReader,
             IGpcGenerator gpcGenerator,
             IAutocompleteData autocompleteData,
             IDialogService dialogService)
         {
-            _invoiceConverter = invoiceConverter; 
+            _invoiceConverter = invoiceConverter;
             _configProvider = configProvider;
-            _autoKeyboardInputHelper = autoKeyboardInputHelper;
             _fileOperationService = fileOperationService;
             _transactionsReader = transactionsReader;
             _gpcGenerator = gpcGenerator;
             _autocompleteData = autocompleteData;
             _dialogService = dialogService;
             SelectAmazonInvoicesCommand = new RelayCommand(SelectAmazonInvoices, () => !HasErrors);
-            ExportConvertedAmazonInvoicesCommand = new RelayCommand(ExportConvertedAmazonInvoices, () => InvoiceItems.Any() && Invoices.Any());
+            ExportConvertedAmazonInvoicesCommand = new RelayCommand(ExportConvertedAmazonInvoices, ExportConvertedAmazonInvoicesCanExecute);
             ConvertTransactionsCommand = new RelayCommand(ConvertTransactions, () => true);
             WindowClosingCommand = new RelayCommand(OnWindowClosing, () => true);
+
+            InvoiceItemsCollectionView = GetNewCollectionViewInstance(InvoiceItems); 
+            InvoiceItemsCollectionView.GroupDescriptions.Add(new PropertyGroupDescription(nameof(InvoiceItemViewModel.AmazonNumber)));
 
             AddValidationRule(() => DefaultEmail, () => MailAddress.TryCreate(DefaultEmail, out _), "Zadany email neni v poradku");
             AddValidationRule(() => ExistingInvoiceNumber, () => ExistingInvoiceNumber.HasValue, "Cislo faktury neni zadano spravne");
@@ -213,15 +190,16 @@ namespace Shmap.ViewModels
             _windowTop = _configProvider.MainWindowTopLeftCorner.Y;
             _existingInvoiceNumber = _configProvider.ExistingInvoiceNumber;
             _defaultEmail = _configProvider.DefaultEmail;
+            _trackingCode = _configProvider.TrackingCode;
+        }
 
-            _latestTrackingCode = _configProvider.LatestTrackingCode;
-            _autoKeyboardInputHelper.TrackingCode = _configProvider.LatestTrackingCode; // TODO Really bad
+        private bool ExportConvertedAmazonInvoicesCanExecute()
+        {
+            return !HasErrors && InvoiceItems.Any() && Invoices.Any() && InvoiceItems.All(i => !i.HasErrors);
         }
 
         private void OnWindowClosing()
-        {
-            _autoKeyboardInputHelper.Dispose();
-        }
+        { }
 
         private string FormatTitleAssemblyFileVersion(Assembly assembly)
         {

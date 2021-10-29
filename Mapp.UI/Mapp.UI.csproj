@@ -31,12 +31,21 @@
     <PackageReference Include="Unity" Version="5.11.10" />
   </ItemGroup>
 
+
   <ItemGroup>
     <ProjectReference Include="..\Shmap.ApplicationUpdater\Shmap.ApplicationUpdater.csproj" />
     <ProjectReference Include="..\Shmap.BusinessLogic.AutocompletionHelper\Shmap.BusinessLogic.AutocompletionHelper.csproj" />
     <ProjectReference Include="..\Shmap.BusinessLogic.Invoices\Shmap.BusinessLogic.Invoices.csproj" />
     <ProjectReference Include="..\Shmap.BusinessLogic.Transactions\Shmap.BusinessLogic.Transactions.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>$(AssemblyName).Tests</_Parameter1>
+      <_Parameter1>Shmap.Bootstrapper</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+
 
   <ItemGroup>
     <Compile Update="AppSettings.Designer.cs">

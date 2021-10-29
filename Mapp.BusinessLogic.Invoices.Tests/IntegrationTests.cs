@@ -23,7 +23,7 @@ namespace Shmap.BusinessLogic.Invoices.Tests
             IntegrationTestBase("autocomplete sku", 300000000);
         }
 
-        [Fact]
+        [Fact] // TODO example name IsNameUnique_GivenItems_ReturnsTrueIfUnique
         public void Discounts_Aggregation()
         {
             IntegrationTestBase("discounts aggregation", 300000000);

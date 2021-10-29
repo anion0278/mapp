@@ -8,13 +8,15 @@ using Shmap.BusinessLogic.Invoices;
 using Shmap.BusinessLogic.Transactions;
 using Shmap.CommonServices;
 using Shmap.DataAccess;
+using Shmap.Models;
 using Shmap.UI;
+using Shmap.UI.ViewModels;
 using Shmap.ViewModels;
 using Unity;
 
 namespace Mapp
 {
-    public class Bootstrapper
+    public class Bootstrapper // TODO analyse whether it makes sense to put into separate assembly. Requires to also move Views into separate assembly 
     {
         public UnityContainer Container { get; }
         private IApplicationUpdater _appUpdater;

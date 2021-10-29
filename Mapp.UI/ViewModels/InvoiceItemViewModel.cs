@@ -4,7 +4,7 @@ using Shmap.DataAccess;
 
 namespace Shmap.ViewModels
 {
-    public class InvoiceItemViewModel : ViewModelBase
+    public class InvoiceItemViewModel : ViewModelWithErrorValidationBase
     {
         private readonly InvoiceItemBase _model;
         private readonly IAutocompleteData _autocompleteData;
@@ -13,7 +13,7 @@ namespace Shmap.ViewModels
         private string _amazonProductName;
         private string _amazonSku;
         private string _warehouseProductCode;
-        private uint _packQuantityMultiplier;
+        private uint? _packQuantityMultiplier;
 
         public string AmazonNumber
         {
@@ -61,7 +61,7 @@ namespace Shmap.ViewModels
 
         public bool IsFullyEditable => _model.Type == InvoiceItemType.Product;
 
-        public uint PackQuantityMultiplier
+        public uint? PackQuantityMultiplier
         {
             get => _packQuantityMultiplier;
             set
@@ -79,7 +79,9 @@ namespace Shmap.ViewModels
             _salesChannel = model.ParentInvoice.SalesChannel;
             _amazonProductName = model.Name;
 
-            _packQuantityMultiplier = 1; // Should be locked for edition for non-product items
+            AddValidationRule(() => PackQuantityMultiplier, () => PackQuantityMultiplier > 0, "Pocet musi byt vetsi nez nula");
+
+            _packQuantityMultiplier = 1; 
             if (model is InvoiceProduct product)
             {
                 _amazonSku = product.AmazonSku;
@@ -97,7 +99,7 @@ namespace Shmap.ViewModels
             _model.Name = _amazonProductName;
             if (_model is InvoiceProduct product)
             {
-                product.PackQuantityMultiplier = _packQuantityMultiplier;
+                product.PackQuantityMultiplier = _packQuantityMultiplier.Value; // valid after validation
                 product.WarehouseCode = _warehouseProductCode;
             }
             return _model;
