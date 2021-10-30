@@ -93,7 +93,7 @@
           <inv:foreignCurrency>
             <typ:unitPrice>19.99</typ:unitPrice>
             <typ:price>19.99</typ:price>
-            <typ:priceVAT>0</typ:priceVAT>
+            <typ:priceVAT>0.00</typ:priceVAT>
             <typ:priceSum>19.99</typ:priceSum>
           </inv:foreignCurrency>
           <inv:code>----</inv:code>
@@ -124,7 +124,7 @@
           <inv:foreignCurrency>
             <typ:unitPrice>5.99</typ:unitPrice>
             <typ:price>5.99</typ:price>
-            <typ:priceVAT>0</typ:priceVAT>
+            <typ:priceVAT>0.00</typ:priceVAT>
             <typ:priceSum>5.99</typ:priceSum>
           </inv:foreignCurrency>
           <inv:PDP>false</inv:PDP>

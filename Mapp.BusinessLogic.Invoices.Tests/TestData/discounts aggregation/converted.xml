@@ -69,8 +69,8 @@
           <typ:ids>----</typ:ids>
         </inv:centre>
         <inv:liquidation>
-          <typ:amountHome>228.41</typ:amountHome>
-          <typ:amountForeign>10.68</typ:amountForeign>
+          <typ:amountHome>961.56</typ:amountHome>
+          <typ:amountForeign>44.96</typ:amountForeign>
         </inv:liquidation>
         <inv:histRate>true</inv:histRate>
         <inv:markRecord>false</inv:markRecord>
@@ -93,7 +93,7 @@
           <inv:foreignCurrency>
             <typ:unitPrice>7.00</typ:unitPrice>
             <typ:price>7.00</typ:price>
-            <typ:priceVAT>0</typ:priceVAT>
+            <typ:priceVAT>0.00</typ:priceVAT>
             <typ:priceSum>7.00</typ:priceSum>
           </inv:foreignCurrency>
           <inv:code>----</inv:code>
@@ -124,7 +124,7 @@
           <inv:foreignCurrency>
             <typ:unitPrice>16.98</typ:unitPrice>
             <typ:price>16.98</typ:price>
-            <typ:priceVAT>0</typ:priceVAT>
+            <typ:priceVAT>0.00</typ:priceVAT>
             <typ:priceSum>16.98</typ:priceSum>
           </inv:foreignCurrency>
           <inv:PDP>false</inv:PDP>
@@ -146,7 +146,7 @@
           <inv:foreignCurrency>
             <typ:unitPrice>-2.99</typ:unitPrice>
             <typ:price>-2.99</typ:price>
-            <typ:priceVAT>0</typ:priceVAT>
+            <typ:priceVAT>0.00</typ:priceVAT>
             <typ:priceSum>-2.99</typ:priceSum>
           </inv:foreignCurrency>
           <inv:PDP>false</inv:PDP>
@@ -168,7 +168,7 @@
           <inv:foreignCurrency>
             <typ:unitPrice>2.99</typ:unitPrice>
             <typ:price>2.99</typ:price>
-            <typ:priceVAT>0</typ:priceVAT>
+            <typ:priceVAT>0.00</typ:priceVAT>
             <typ:priceSum>2.99</typ:priceSum>
           </inv:foreignCurrency>
           <inv:code>6422</inv:code>
@@ -199,7 +199,7 @@
           <inv:foreignCurrency>
             <typ:unitPrice>3.99</typ:unitPrice>
             <typ:price>7.98</typ:price>
-            <typ:priceVAT>0</typ:priceVAT>
+            <typ:priceVAT>0.00</typ:priceVAT>
             <typ:priceSum>7.98</typ:priceSum>
           </inv:foreignCurrency>
           <inv:code>6312/BL</inv:code>
@@ -230,7 +230,7 @@
           <inv:foreignCurrency>
             <typ:unitPrice>13.00</typ:unitPrice>
             <typ:price>13.00</typ:price>
-            <typ:priceVAT>0</typ:priceVAT>
+            <typ:priceVAT>0.00</typ:priceVAT>
             <typ:priceSum>13.00</typ:priceSum>
           </inv:foreignCurrency>
           <inv:code>5035</inv:code>
@@ -249,13 +249,13 @@
         <inv:roundingDocument>none</inv:roundingDocument>
         <inv:roundingVAT>none</inv:roundingVAT>
         <inv:homeCurrency>
-          <typ:priceNone>228.41</typ:priceNone>
+          <typ:priceNone>961.56</typ:priceNone>
           <typ:priceLow>0</typ:priceLow>
           <typ:priceLowVAT>0</typ:priceLowVAT>
           <typ:priceLowSum>0</typ:priceLowSum>
           <typ:priceHigh>0</typ:priceHigh>
           <typ:priceHighVAT>0</typ:priceHighVAT>
-          <typ:priceHighSum>228.41</typ:priceHighSum>
+          <typ:priceHighSum>961.56</typ:priceHighSum>
           <typ:price3>0</typ:price3>
           <typ:price3VAT>0</typ:price3VAT>
           <typ:price3Sum>0</typ:price3Sum>
@@ -269,7 +269,7 @@
           </typ:currency>
           <typ:rate>21.387</typ:rate>
           <typ:amount>1</typ:amount>
-          <typ:priceSum>10.68</typ:priceSum>
+          <typ:priceSum>44.96</typ:priceSum>
         </inv:foreignCurrency>
       </inv:invoiceSummary>
     </inv:invoice>

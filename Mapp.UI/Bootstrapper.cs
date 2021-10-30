@@ -56,8 +56,8 @@ namespace Mapp
             _appUpdater = Container.Resolve<IApplicationUpdater>();
             _appUpdater.CheckUpdate();
 
-            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-            Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); 
+            Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture; // TODO avoid using
         }
     }
 }
