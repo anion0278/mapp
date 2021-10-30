@@ -35,11 +35,13 @@ namespace Shmap.CommonServices
         public string CustomsDeclaration { get; set; }
         public string SalesChannel { get; set; }
         public string RelatedWarehouseName { get; set; }
-        public Currency TotalPrice { get; set; }
+        public Currency TotalPrice { get; set; } // TODO this should be => calcualted property, beacuse its business object
         public Currency TotalPriceVat { get; set; }
         public bool IsMoss { get; set; }
         public Vat CountryVat { get; set; }
         public bool PayVat { get; set; }
+
+        // it is a bussiness object, it should have methods like AddDiscount, add shipping
     }
 
     public class Vat
@@ -73,6 +75,12 @@ namespace Shmap.CommonServices
             return Rates.Single(r => r.Key.Equals(currency, StringComparison.InvariantCultureIgnoreCase)).Value;
         }
 
+        public static Currency operator +(Currency c1, Currency c2)
+        {
+            if (!c1.ForeignCurrencyName.EqualsIgnoreCase(c2.ForeignCurrencyName))
+                throw new ArgumentException("Aggregated price has different currency!");
+            return new Currency(c1.AmountForeign + c2.AmountForeign, c1.ForeignCurrencyName, c1.Rates); ;
+        }
     }
 
     public class PartnerInfo

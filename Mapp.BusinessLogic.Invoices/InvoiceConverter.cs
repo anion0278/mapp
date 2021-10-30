@@ -66,6 +66,7 @@ namespace Shmap.BusinessLogic.Invoices
 
         private void MergeInvoiceItemsToExistingDataPack(Invoice existingInvoice, Invoice aggregatedInvoice)
         {
+            // TODO this logic should go directly into Invoice Business logic object
             var existingInvoiceItems = existingInvoice.InvoiceItems.ToList();
             existingInvoiceItems.AddRange(aggregatedInvoice.InvoiceItems.Where(item => item.Type == InvoiceItemType.Product));
 
@@ -88,17 +89,9 @@ namespace Shmap.BusinessLogic.Invoices
             if (existingItem.Type != aggregatedItem.Type) 
                 throw new ArgumentException("Cannot aggregate items of different type!");
 
-            existingItem.TotalPrice = AggregatePrice(existingItem.TotalPrice, aggregatedItem.TotalPrice); 
-            existingItem.VatPrice = AggregatePrice(existingItem.VatPrice, aggregatedItem.VatPrice);
-            existingItem.UnitPrice = AggregatePrice(existingItem.UnitPrice, aggregatedItem.UnitPrice);
-        }
-
-        private CommonServices.Currency AggregatePrice(CommonServices.Currency c1, CommonServices.Currency c2) // TODO maybe Currency +operator?
-        {
-            if (!c1.ForeignCurrencyName.EqualsIgnoreCase(c2.ForeignCurrencyName))
-                throw new ArgumentException("Aggregated price has different currency!");
-
-            return new CommonServices.Currency(c1.AmountForeign + c2.AmountForeign, c1.ForeignCurrencyName, Rates);
+            existingItem.TotalPrice += aggregatedItem.TotalPrice; 
+            existingItem.VatPrice += aggregatedItem.VatPrice;
+            existingItem.UnitPrice += aggregatedItem.UnitPrice;
         }
 
         public IEnumerable<Invoice> LoadAmazonReports(IEnumerable<string> reportsFileNames, InvoiceConversionContext conversionContext)
@@ -106,10 +99,10 @@ namespace Shmap.BusinessLogic.Invoices
             var dataFromAmazonReports = _invoicesXmlManager.LoadAmazonReports(reportsFileNames);
             if (dataFromAmazonReports == null) return Array.Empty<Invoice>();
 
-            return MerginInvoicesOfSameOrders(dataFromAmazonReports, conversionContext);
+            return MergeInvoicesOfSameOrders(dataFromAmazonReports, conversionContext);
         }
 
-        private IEnumerable<Invoice> MerginInvoicesOfSameOrders(IEnumerable<Dictionary<string, string>> dataFromAmazonReports,  InvoiceConversionContext conversionContext)
+        private IEnumerable<Invoice> MergeInvoicesOfSameOrders(IEnumerable<Dictionary<string, string>> dataFromAmazonReports,  InvoiceConversionContext conversionContext)
         {
             var source = new List<Invoice>();
             foreach (var report in dataFromAmazonReports)
