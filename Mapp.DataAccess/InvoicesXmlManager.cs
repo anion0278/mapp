@@ -8,7 +8,6 @@ using System.Xml;
 using System.Xml.Serialization;
 using Shmap.CommonServices;
 using Microsoft.VisualBasic.FileIO;
-using Formatting = System.Xml.Formatting;
 
 namespace Shmap.DataAccess
 {
@@ -55,7 +54,7 @@ namespace Shmap.DataAccess
             packDataPackItem.invoice.invoiceHeader.dateDue = invoice.DateDue;
             packDataPackItem.invoice.invoiceHeader.classificationVAT.ids = invoice.Classification.GetDescriptionFromEnum();
             packDataPackItem.invoice.invoiceHeader.classificationVAT.classificationVATType = invoice.VatType;
-            packDataPackItem.invoice.invoiceHeader.text = "This is your invoice:"; // TODO Remove?
+            packDataPackItem.invoice.invoiceHeader.text = "This is your invoice:"; // TODO Remove? use feature flag
             packDataPackItem.invoice.invoiceHeader.paymentType.ids = invoice.SalesChannel;
             packDataPackItem.invoice.invoiceHeader.centre.ids = invoice.RelatedWarehouseName;
             packDataPackItem.invoice.invoiceHeader.histRate = true; // always true
@@ -63,21 +62,21 @@ namespace Shmap.DataAccess
             packDataPackItem.invoice.invoiceHeader.partnerIdentity.address = FillPartnerInfo(invoice.ClientInfo);
             SetCustomsDeclarationIntoMobilePhone(invoice, packDataPackItem); 
 
-            packDataPackItem.invoice.invoiceHeader.liquidation.amountHome = Math.Round(invoice.TotalPrice.AmountHome, 2);
+            packDataPackItem.invoice.invoiceHeader.liquidation.amountHome = invoice.TotalPrice.AmountHome.DefRound(); ;
             packDataPackItem.invoice.invoiceHeader.liquidation.amountForeign = invoice.TotalPrice.AmountForeign;
 
-            packDataPackItem.invoice.invoiceSummary.foreignCurrency.amount = 1;
+            packDataPackItem.invoice.invoiceSummary.foreignCurrency.amount = 1; // always rate of 1 currency unit
             packDataPackItem.invoice.invoiceSummary.foreignCurrency.currency.ids = invoice.TotalPrice.ForeignCurrencyName;
             packDataPackItem.invoice.invoiceSummary.foreignCurrency.rate = invoice.TotalPrice.Rate;
             packDataPackItem.invoice.invoiceSummary.foreignCurrency.priceSum = invoice.TotalPrice.AmountForeign;
 
-            packDataPackItem.invoice.invoiceSummary.homeCurrency.priceNone = Math.Round(invoice.TotalPrice.AmountHome, 2);
-            packDataPackItem.invoice.invoiceSummary.homeCurrency.priceHighSum = Math.Round(invoice.TotalPrice.AmountHome, 2);
+            packDataPackItem.invoice.invoiceSummary.homeCurrency.priceNone = invoice.TotalPrice.AmountHome.DefRound();
+            packDataPackItem.invoice.invoiceSummary.homeCurrency.priceHighSum = invoice.TotalPrice.AmountHome.DefRound();
 
-            if (invoice.CountryVat != null)
+            if (invoice.CountryVat.Percentage != 0 ) // bad but not like michael jackson
             {
-                packDataPackItem.invoice.invoiceSummary.homeCurrency.priceHigh = Math.Round(invoice.TotalPrice.AmountHome - invoice.TotalPriceVat.AmountHome, 2);
-                packDataPackItem.invoice.invoiceSummary.homeCurrency.priceHighVAT = Math.Round(invoice.TotalPriceVat.AmountHome, 2);
+                packDataPackItem.invoice.invoiceSummary.homeCurrency.priceHigh = (invoice.TotalPrice.AmountHome - invoice.TotalPriceVat.AmountHome).DefRound();
+                packDataPackItem.invoice.invoiceSummary.homeCurrency.priceHighVAT = invoice.TotalPriceVat.AmountHome.DefRound();
             }
 
             if (invoice.IsMoss) 
@@ -105,15 +104,15 @@ namespace Shmap.DataAccess
             data.PDP = false;
 
             data.rateVAT = "historyHigh";
-            data.foreignCurrency.unitPrice = Math.Round(invoiceItem.UnitPrice.AmountForeign, 2); // TODO make RoundToDefaultAccuracy - extension method
-            data.foreignCurrency.price = Math.Round(invoiceItem.TotalPrice.AmountForeign, 2);
-            data.foreignCurrency.priceSum = Math.Round(invoiceItem.TotalPrice.AmountForeign, 2);
-            data.foreignCurrency.priceVAT = Math.Round(invoiceItem.VatPrice.AmountForeign, 2);
+            data.foreignCurrency.unitPrice = invoiceItem.UnitPrice.AmountForeign.DefRound();
+            data.foreignCurrency.price = invoiceItem.TotalPrice.AmountForeign.DefRound();
+            data.foreignCurrency.priceSum = invoiceItem.TotalPrice.AmountForeign.DefRound();
+            data.foreignCurrency.priceVAT = invoiceItem.VatPrice.AmountForeign.DefRound();
 
-            data.homeCurrency.unitPrice = Math.Round(invoiceItem.UnitPrice.AmountHome, 2);
-            data.homeCurrency.price = Math.Round(invoiceItem.TotalPrice.AmountHome, 2);
-            data.homeCurrency.priceSum = Math.Round(invoiceItem.TotalPrice.AmountHome, 2);
-            data.homeCurrency.priceVAT = Math.Round(invoiceItem.VatPrice.AmountHome, 2);
+            data.homeCurrency.unitPrice = invoiceItem.UnitPrice.AmountHome.DefRound();
+            data.homeCurrency.price = invoiceItem.TotalPrice.AmountHome.DefRound();
+            data.homeCurrency.priceSum = invoiceItem.TotalPrice.AmountHome.DefRound();
+            data.homeCurrency.priceVAT = invoiceItem.VatPrice.AmountHome.DefRound();
             data.payVAT = invoiceItem.ParentInvoice.PayVat;
 
             if (invoiceItem.IsMoss) 

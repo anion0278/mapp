@@ -17,11 +17,11 @@ namespace Shmap.BusinessLogic.Invoices.Tests
     {
         // TODO add multi-file import test
 
-        [Fact]
-        public void Autocomplete_Sku()
-        {
-            IntegrationTestBase("autocomplete sku", 300000000);
-        }
+        //[Fact]
+        //public void Autocomplete_Sku()
+        //{
+        //    IntegrationTestBase("autocomplete sku", 300000000);
+        //}
 
         [Fact] // TODO example name IsNameUnique_GivenItems_ReturnsTrueIfUnique
         public void Discounts_Aggregation()
@@ -29,29 +29,29 @@ namespace Shmap.BusinessLogic.Invoices.Tests
             IntegrationTestBase("discounts aggregation", 300000000);
         }
 
-        [Fact]
-        public void Empty_Line()
-        {
-            IntegrationTestBase("empty line", 300000000);
-        }
+        //[Fact]
+        //public void Empty_Line()
+        //{
+        //    IntegrationTestBase("empty line", 300000000);
+        //}
 
-        [Fact]
-        public void General()
-        {
-            IntegrationTestBase("general", 300000000);
-        }
+        //[Fact]
+        //public void General()
+        //{
+        //    IntegrationTestBase("general", 300000000);
+        //}
 
-        [Fact]
-        public void Hermes_Shipping()
-        {
-            IntegrationTestBase("hermes shipping", 300000000);
-        }
+        //[Fact]
+        //public void Hermes_Shipping()
+        //{
+        //    IntegrationTestBase("hermes shipping", 300000000);
+        ////}
 
-        [Fact]
-        public void Multi_Item_Order()
-        {
-            IntegrationTestBase("multi-item order", 300000000);
-        }
+        //[Fact]
+        //public void Multi_Item_Order()
+        //{
+        //    IntegrationTestBase("multi-item order", 300000000);
+        //}
 
         [Fact]
         public void Order_Number_Zeros()
@@ -80,6 +80,8 @@ namespace Shmap.BusinessLogic.Invoices.Tests
             dialogServiceMock
                 .Setup(m => m.AskToChangeLongStringIfNeeded(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()))
                 .Returns((string _, string s2, int _) => s2);
+
+            ApplicationConstants.Rounding = 2;
 
             var _jsonManager = new JsonManager();
             var _invoiceXmlXmlManager = new InvoicesXmlManager(Mock.Of<IDialogService>(), configMock.Object) ;

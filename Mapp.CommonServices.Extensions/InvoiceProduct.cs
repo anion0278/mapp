@@ -15,18 +15,13 @@ namespace Shmap.CommonServices
     {
         public InvoiceItemType Type { get; protected set; }
         public decimal Quantity { get; set; }
-       
-
         public string Name { get; set; }
-
         public decimal PercentVat { get; set; }
         public bool IsMoss => ParentInvoice.IsMoss;
-
-        public Invoice ParentInvoice { get; protected set; }
-
-        public Currency UnitPrice { get; set; }
+        public Invoice ParentInvoice { get; }
         public Currency TotalPrice { get; set; }
-        public Currency VatPrice { get; set; }
+        public Currency UnitPrice => new (TotalPrice.AmountForeign / Quantity, ParentInvoice.TotalPrice.ForeignCurrencyName, TotalPrice.Rates);
+        public Currency VatPrice => new(TotalPrice.AmountForeign * ParentInvoice.CountryVat.ReversePercentage, ParentInvoice.TotalPrice.ForeignCurrencyName, TotalPrice.Rates);
 
         protected InvoiceItemBase(Invoice parentInvoice)
         {
@@ -46,10 +41,7 @@ namespace Shmap.CommonServices
             get => _packQuantityMultiplier;
             set
             {
-                UnitPrice = new Currency(
-                    UnitPrice.AmountForeign * _packQuantityMultiplier / value, 
-                    UnitPrice.ForeignCurrencyName, 
-                    UnitPrice.Rates); // TODO handle currency more elegantly
+                // revert previous multiplier and apply the new one
                 Quantity = (int)(Quantity / _packQuantityMultiplier * value);
                 _packQuantityMultiplier = value;
             }
