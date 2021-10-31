@@ -43,7 +43,7 @@ namespace Shmap.BusinessLogic.Transactions
 
         private string GetTransactionLine(Transaction transaction)
         {
-            var shortVariableCode = TransactionsReader.GetShortVariableCode(transaction.OrderId, out var zerosRemoved);
+            var shortVariableCode = Invoice.GetShortVariableCode(transaction.OrderId, out var zerosRemoved);
             if (transaction.Type == TransactionTypes.Refund) // Refunds have short variable codes from first 10 symbols
             {
                 shortVariableCode = GetShortVariableCodeForRefund(transaction.OrderId);

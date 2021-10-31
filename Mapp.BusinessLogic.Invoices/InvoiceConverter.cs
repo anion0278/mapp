@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -12,14 +13,6 @@ using Shmap.BusinessLogic.Transactions;
 
 namespace Shmap.BusinessLogic.Invoices
 {
-
-    public class InvoiceConversionContext
-    {
-        public uint ExistingInvoiceNumber { get; init; }
-        public string DefaultEmail { get; init; }
-        public DateTime ConvertToDate { get; init; }
-    }
-
     public interface IInvoiceConverter
     {
         IEnumerable<Invoice> LoadAmazonReports(IEnumerable<string> reportsFileNames, InvoiceConversionContext conversionContext);
@@ -39,13 +32,9 @@ namespace Shmap.BusinessLogic.Invoices
         private readonly int MaxCityLength = 45;
         private readonly int MaxClientNameLength = 30;
         private Dictionary<string, decimal> Rates;
-        private Dictionary<string, decimal> VatPercentage;
 
-        public string[] _euContries = // TODO from settings
-        {
-            "BE", "BG", "DK", "EE", "FI", "FR", "IE", "IT", "CY", "LT", "LV", "LU", "HU", "HR", "MT", "DE",
-            "NL", "PL", "PT", "AT", "RO", "GR", "SK", "SI", "ES", "SE", "EU", "CZ"
-        };
+
+        private readonly Dictionary<string, decimal> _vatPercentage;
 
         public InvoiceConverter(IAutocompleteData autocompleteData,
             ICurrencyConverter currencyConverter,
@@ -61,7 +50,7 @@ namespace Shmap.BusinessLogic.Invoices
             _dialogService = dialogService;
             autocompleteDataLoader.LoadSettings();
             Rates = csvLoader.LoadFixedCurrencyRates(); // TODO make it possible to choose from settings
-            VatPercentage = csvLoader.LoadCountryVatRates(); // TODO make it possible to choose from settings
+            _vatPercentage = csvLoader.LoadCountryVatRates(); // TODO make it possible to choose from settings
         }
 
         public IEnumerable<Invoice> LoadAmazonReports(IEnumerable<string> reportsFileNames, InvoiceConversionContext conversionContext)
@@ -77,7 +66,7 @@ namespace Shmap.BusinessLogic.Invoices
             var mergedInvoices = new List<Invoice>();
             foreach (var report in dataFromAmazonReports)
             {
-                var singleAmazonInvoice = ProcessInvoiceLine(report, mergedInvoices.Count + 1, conversionContext);
+                var singleAmazonInvoice = ProcessInvoiceLine(report, (uint)(mergedInvoices.Count + 1), conversionContext);
                 var existingDataPack = mergedInvoices.FirstOrDefault(i => i.VariableSymbolFull == singleAmazonInvoice.VariableSymbolFull);
                 if (existingDataPack != null)
                 {
@@ -92,57 +81,48 @@ namespace Shmap.BusinessLogic.Invoices
             return mergedInvoices;
         }
 
+        //private T GetOptionalField<T>(IReadOnlyDictionary<string, string> valuesFromAmazon, string fieldName)
+        //{
+        //    var value = default(T);
+        //    if (valuesFromAmazon.TryGetValue("item-promotion-discount", out T field))
+        //    {
+        //        value = decimal.Parse(itemDiscount);
+        //    }
+        //}
 
-        private Invoice ProcessInvoiceLine(
-            IReadOnlyDictionary<string, string> valuesFromAmazon,
-            int invoiceIndex,
-            InvoiceConversionContext conversionContext)
+        private Invoice ProcessInvoiceLine(IReadOnlyDictionary<string, string> valuesFromAmazon, uint index, InvoiceConversionContext context)
         {
-            string shipCountry = valuesFromAmazon["ship-country"];
-            var classification = SetClassification(shipCountry);
+            var invoice = new Invoice(_vatPercentage);
 
-            decimal giftWrapPrice = 0;
-            string giftWrapPriceName = "gift-wrap-price";
-            string giftWrapTax = "gift-wrap-tax";
-            if (valuesFromAmazon.ContainsKey(giftWrapPriceName) && valuesFromAmazon.ContainsKey(giftWrapTax))
+            string shipCountry = valuesFromAmazon["ship-country"];
+
+            // TODO handle optional fields
+            decimal promotionDiscount = 0;
+            if (valuesFromAmazon.TryGetValue("item-promotion-discount", out string itemDiscount))
             {
-                giftWrapPrice = GetPrice(valuesFromAmazon[giftWrapPriceName], valuesFromAmazon[giftWrapTax], shipCountry);
+                promotionDiscount = decimal.Parse(itemDiscount);
             }
 
-            var invoice = new Invoice();
+            if (valuesFromAmazon.TryGetValue("ship-promotion-discount", out string shippingDiscount))
+            {
+                decimal shipPromotionDiscount = decimal.Parse(shippingDiscount);
+                promotionDiscount += shipPromotionDiscount; // shipping discount se scita do total discount
+            }
 
-            string headerSymPar = valuesFromAmazon["order-id"];
-            uint invoiceNumber = (uint)(conversionContext.ExistingInvoiceNumber + invoiceIndex);
-            string userId = "Usr01 (" + invoiceIndex.ToString().PadLeft(3, '0') + ")";
-            decimal itemFullPrice = GetPrice(valuesFromAmazon["item-price"], valuesFromAmazon["item-tax"], shipCountry); // price for all items
-            decimal shippingPrice = GetPrice(valuesFromAmazon["shipping-price"], valuesFromAmazon["shipping-tax"], shipCountry);
-
-            decimal shipPromotionDiscount = decimal.Parse(valuesFromAmazon["ship-promotion-discount"]);
-            decimal promotionDiscount = decimal.Parse(valuesFromAmazon["item-promotion-discount"]);
-            promotionDiscount += shipPromotionDiscount; // shipping discount se scita do total discount
-
-            string salesChannel = valuesFromAmazon["sales-channel"];
-            string clientName = FormatClientName(valuesFromAmazon["recipient-name"], headerSymPar);
-            string city = FormatCity(valuesFromAmazon["ship-city"], valuesFromAmazon["ship-state"], string.Empty, headerSymPar);
-            string fullAddress = FormatFullAddress(valuesFromAmazon["ship-address-1"], valuesFromAmazon["ship-address-2"], valuesFromAmazon["ship-address-3"], headerSymPar);
-            string phoneNumber = FormatPhoneNumber(valuesFromAmazon["ship-phone-number"], valuesFromAmazon["buyer-phone-number"], headerSymPar);
-            string productName = valuesFromAmazon["product-name"];
             string sku = valuesFromAmazon["sku"];
-            string shipping = GetShippingType(shipCountry, sku);
+
+            DateTime today = context.ConvertToDate;
 
             invoice.CurrencyName = _currencyConverter.Convert(valuesFromAmazon["currency"]);
-
-            DateTime today = conversionContext.ConvertToDate;
-
-            invoice.UserId = userId;
-            invoice.Number = invoiceNumber;
-            invoice.VariableSymbolFull = headerSymPar;
-            invoice.VariableSymbolShort = TransactionsReader.GetShortVariableCode(headerSymPar, out _);
+            invoice.Number = context.ExistingInvoiceNumber + index;
+            invoice.VariableSymbolFull = valuesFromAmazon["order-id"];
             invoice.ShipCountryCode = shipCountry;
             invoice.ConversionDate = today;
 
-            invoice.Classification = classification;
-            invoice.VatType = GetClassificationVatType(classification);
+            string clientName = FormatClientName(valuesFromAmazon["recipient-name"], invoice.VariableSymbolFull);
+            string city = FormatCity(valuesFromAmazon["ship-city"], valuesFromAmazon["ship-state"], string.Empty, invoice.VariableSymbolFull);
+            string fullAddress = FormatFullAddress(valuesFromAmazon["ship-address-1"], valuesFromAmazon["ship-address-2"], valuesFromAmazon["ship-address-3"], invoice.VariableSymbolFull);
+            string phoneNumber = FormatPhoneNumber(valuesFromAmazon["ship-phone-number"], valuesFromAmazon["buyer-phone-number"], invoice.VariableSymbolFull);
 
             invoice.ClientInfo = new PartnerInfo
             {
@@ -156,39 +136,35 @@ namespace Shmap.BusinessLogic.Invoices
                 },
                 Contact = new ContactData
                 {
-                    Email = conversionContext.DefaultEmail,
+                    Email = context.DefaultEmail,
                     Phone = phoneNumber
                 }
             };
-            invoice.CustomsDeclaration = GetCustomsDeclarationBySku(sku, classification);
+
+            invoice.CustomsDeclaration = GetCustomsDeclarationBySkuOnlyForNonEu(sku, invoice.Classification);
             invoice.RelatedWarehouseName = GetSavedWarehouseBySku(sku);
-            invoice.SalesChannel = salesChannel;
 
-            invoice.PayVat = false;
-            if (classification == InvoiceVatClassification.RDzasEU || classification == InvoiceVatClassification.UDA5)
+            if (valuesFromAmazon.TryGetValue("sales-channel", out string salesChannelValue))
             {
-                invoice.PayVat = true;
-            }
-
-            if (!IsNonEuCountryByClassification(invoice.Classification))
-            {
-                invoice.CountryVat = new Vat(VatPercentage[invoice.ShipCountryCode]);
-            }
-
-            if (classification == InvoiceVatClassification.RDzasEU) // EU countries except CZ
-            {
-                invoice.IsMoss = true;
+                invoice.SalesChannel = valuesFromAmazon["sales-channel"];
             }
 
             var invoiceItems = new List<InvoiceItemBase>();
             var invoiceProduct = new InvoiceProduct(invoice)
             {
-                WarehouseCode = GetItemCodeBySku(sku),
+                WarehouseCode = GetSavedItemCodeBySku(sku),
                 WarehouseName = "Zboží",
                 AmazonSku = sku
             };
 
-            var invoiceItemProduct = FillInvoiceItem(invoiceProduct, productName, itemFullPrice, decimal.Parse(valuesFromAmazon["quantity-purchased"]));
+
+            var invoiceItemProduct = FillInvoiceItem(
+                invoiceProduct,
+                valuesFromAmazon["product-name"],
+                decimal.Parse(valuesFromAmazon["item-price"]),
+                    decimal.Parse(valuesFromAmazon["item-tax"]),
+                decimal.Parse(valuesFromAmazon["quantity-purchased"]));
+
             invoiceProduct.PackQuantityMultiplier = 1;
             if (!string.IsNullOrEmpty(invoiceProduct.AmazonSku) &&
                 _autocompleteData.PackQuantitySku.ContainsKey(invoiceProduct.AmazonSku))
@@ -197,19 +173,40 @@ namespace Shmap.BusinessLogic.Invoices
             }
             invoiceItems.Add(invoiceItemProduct);
 
-            var invoiceItemShipping = FillInvoiceItem(new InvoiceItemGeneral(invoice, InvoiceItemType.Shipping), shipping, shippingPrice, 1);
+
+            var invoiceItemShipping = FillInvoiceItem(
+                new InvoiceItemGeneral(invoice, InvoiceItemType.Shipping),
+                GetSavedShippingType(sku, invoice.Classification),
+                decimal.Parse(valuesFromAmazon["shipping-price"]),
+                decimal.Parse(valuesFromAmazon["shipping-tax"]),
+                1);
             invoiceItems.Add(invoiceItemShipping);
+
 
             if (promotionDiscount != 0)
             {
-                var invoiceItemDiscount = FillInvoiceItem(new InvoiceItemGeneral(invoice, InvoiceItemType.Discount), "Discount", promotionDiscount, 1);
+                var invoiceItemDiscount = FillInvoiceItem(
+                    new InvoiceItemGeneral(invoice, InvoiceItemType.Discount),
+                    "Discount",
+                    promotionDiscount,
+                    0,
+                    1);
                 invoiceItems.Add(invoiceItemDiscount);
             }
 
-            if (giftWrapPrice != 0)
+            // TODO fix
+            if (valuesFromAmazon.TryGetValue("gift-wrap-price", out var giftWrapPrice) // columns are not always available in the amazon invoice
+                && valuesFromAmazon.TryGetValue("gift-wrap-tax", out var giftWrapTax)
+                && decimal.TryParse(giftWrapPrice, out var giftWrapPriceV)
+                && giftWrapPriceV != 0)
             {
                 string giftWrapType = "Gift wrap " + valuesFromAmazon["gift-wrap-type"];
-                var invoiceItemGiftWrap = FillInvoiceItem(new InvoiceItemGeneral(invoice, InvoiceItemType.GiftWrap), giftWrapType, promotionDiscount, 1);
+                var invoiceItemGiftWrap = FillInvoiceItem(
+                    new InvoiceItemGeneral(invoice, InvoiceItemType.GiftWrap),
+                    giftWrapType,
+                    decimal.Parse(giftWrapPrice),
+                        decimal.Parse(giftWrapTax),
+                    1);
                 invoiceItems.Add(invoiceItemGiftWrap);
             }
 
@@ -222,102 +219,89 @@ namespace Shmap.BusinessLogic.Invoices
         }
 
 
-        private InvoiceItemBase FillInvoiceItem(InvoiceItemBase invoiceItem, string name, decimal price, decimal quantity)
+        private InvoiceItemBase FillInvoiceItem(InvoiceItemBase invoiceItem, string name, decimal price, decimal tax, decimal quantity)
         {
-            if (name.Length > MaxItemNameLength)
+            if (name.Length > MaxItemNameLength) // TODO allow user to change manually
             {
                 name = name.Substring(0, MaxItemNameLength);
             }
 
             invoiceItem.Name = name;
             invoiceItem.Quantity = quantity;
-            invoiceItem.TotalPrice = new CommonServices.Currency(
-                price * (1 - invoiceItem.ParentInvoice.CountryVat.ReversePercentage), 
-                invoiceItem.ParentInvoice.TotalPrice.ForeignCurrencyName, 
+            invoiceItem.TotalPriceWithTax = new CommonServices.Currency(
+                price * (1 - invoiceItem.ParentInvoice.CountryVat.ReversePercentage),
+                invoiceItem.ParentInvoice.TotalPrice.ForeignCurrencyName,
                 Rates);
 
-            if (invoiceItem.ParentInvoice.Classification == InvoiceVatClassification.RDzasEU) // EU countries except CZ
-            {
-                invoiceItem.PercentVat = invoiceItem.ParentInvoice.CountryVat.Percentage * (decimal)100.0;
-            }
+            invoiceItem.Tax = new CommonServices.Currency(
+                tax,
+                invoiceItem.ParentInvoice.TotalPrice.ForeignCurrencyName,
+                Rates);
+
+            invoiceItem.PercentVat = invoiceItem.ParentInvoice.CountryVat.Percentage * (decimal)100.0;
 
             return invoiceItem;
         }
 
-
-        private decimal GetPrice(string price, string tax, string country)
-        {
-            if (string.IsNullOrWhiteSpace(price)) return 0;
-
-            if (country.EqualsIgnoreCase("GB") || country.EqualsIgnoreCase("AU"))
-                return decimal.Parse(price) - decimal.Parse(tax);
-
-            return decimal.Parse(price);
-        }
-
-        private string GetClassificationVatType(InvoiceVatClassification classification)
-        {
-            return IsNonEuCountryByClassification(classification) ? "nonSubsume" : null;
-        }
-
-        private string GetCustomsDeclarationBySku(string sku, InvoiceVatClassification classification)
-        {
-            if (IsNonEuCountryByClassification(classification) &&
-                _autocompleteData.CustomsDeclarationBySku.ContainsKey(sku))
-            {
-                return _autocompleteData.CustomsDeclarationBySku[sku];
-            }
-            return string.Empty;
-        }
-
-        private string GetShippingType(string shipCountry, string sku)
-        {
-            string defaultShippingName = "Shipping";
-            if (!_euContries.Contains(shipCountry))
-            {
-                return defaultShippingName;
-            }
-
-            if (!_autocompleteData.ShippingNameBySku.ContainsKey(sku))
-            {
-                return defaultShippingName;
-            }
-
-            return _autocompleteData.ShippingNameBySku[sku];
-        }
-
         public void ProcessInvoices(IEnumerable<Invoice> invoices, string fileName)
         {
-            _invoicesXmlManager.SerializeXmlInvoice(fileName, invoices);
-
             _autocompleteDataLoader.SaveSettings(_autocompleteData);
-        }
-
-        private string GetItemCodeBySku(string sku)
-        {
-            if (!_autocompleteData.PohodaProdCodeBySku.ContainsKey(sku)) return ApplicationConstants.EmptyItemCode;
-
-            return _autocompleteData.PohodaProdCodeBySku[sku];
-        }
-
-        private string GetSavedWarehouseBySku(string sku)
-        {
-            string defaultCentreIds = ApplicationConstants.EmptyItemCode;
-            if (!_autocompleteData.ProdWarehouseSectionBySku.ContainsKey(sku)) return defaultCentreIds;
-
-            return _autocompleteData.ProdWarehouseSectionBySku[sku];
+            _invoicesXmlManager.SerializeXmlInvoice(fileName, invoices);
         }
 
         private bool IsNonEuCountryByClassification(InvoiceVatClassification classification)
         {
-            return classification == InvoiceVatClassification.UVzbozi; // AFWULL
+            return classification == InvoiceVatClassification.UVzbozi;
         }
 
-        private InvoiceVatClassification SetClassification(string shipCountry)
+        private string GetCustomsDeclarationBySkuOnlyForNonEu(string sku, InvoiceVatClassification classification)
         {
-            if (shipCountry.Equals("CZ")) return InvoiceVatClassification.UDA5; // UDA5 only CZ
-            return _euContries.Contains(shipCountry) ? InvoiceVatClassification.RDzasEU : InvoiceVatClassification.UVzbozi;
-            // UDzasEU - European Union countries, UVzboží - the rest
+            if (IsNonEuCountryByClassification(classification))
+            {
+                return GetAutocompleteOrDefault(
+                    _autocompleteData.CustomsDeclarationBySku,
+                    sku,
+                    string.Empty);
+            }
+            return string.Empty;
+        }
+
+        private string GetSavedShippingType(string sku, InvoiceVatClassification classification)
+        {
+            string defaultShippingName = "Shipping";
+            if (classification != InvoiceVatClassification.UDA5 && classification != InvoiceVatClassification.RDzasEU)
+            {
+                return defaultShippingName;
+            }
+
+            return GetAutocompleteOrDefault(
+                _autocompleteData.ShippingNameBySku,
+                sku,
+                defaultShippingName);
+        }
+
+        private string GetSavedItemCodeBySku(string sku)
+        {
+            return GetAutocompleteOrDefault(
+                _autocompleteData.PohodaProdCodeBySku,
+                sku,
+                ApplicationConstants.EmptyItemCode);
+        }
+
+        private string GetSavedWarehouseBySku(string sku)
+        {
+            return GetAutocompleteOrDefault(
+                _autocompleteData.ProdWarehouseSectionBySku,
+                sku,
+                ApplicationConstants.EmptyItemCode);
+        }
+
+        private string GetAutocompleteOrDefault(
+            IReadOnlyDictionary<string, string> autocompleteData,
+            string searchKey,
+            string defaultValue)
+        {
+            return autocompleteData.TryGetValue(searchKey, out string value) ? value : defaultValue;
         }
 
         private string FormatCity(

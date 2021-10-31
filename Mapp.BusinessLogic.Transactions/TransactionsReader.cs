@@ -63,21 +63,7 @@ namespace Shmap.BusinessLogic.Transactions
             return configs;
         }
 
-        public static string GetShortVariableCode(string fullVariableCode, out int zerosRemoved)
-        {
-            // TODO put somewhere else, used in two places
-            zerosRemoved = 0;
-
-            string filteredCode = fullVariableCode.RemoveAll("-");
-            filteredCode = filteredCode.Substring(filteredCode.Length - 10, 10);
-
-            // if short var code has zeros in the begining - they cannot be stored in Invoice, that is why we delete them
-            // and give information about how many zeros were deleted to GPC generator
-            var finalCode = filteredCode.TrimStart('0');  // zeros don't get correctly imported into Pohoda
-            zerosRemoved = filteredCode.Length - finalCode.Length;
-
-            return finalCode;
-        }
+        
 
         private IReadOnlyList<string[]> GetFileLines(string fileName, string encodingCode = "utf-8")
         {

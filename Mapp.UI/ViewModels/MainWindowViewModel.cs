@@ -8,7 +8,6 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Data;
 using GalaSoft.MvvmLight.CommandWpf;
-using Shmap.BusinessLogic.AutocompletionHelper;
 using Shmap.BusinessLogic.Invoices;
 using Shmap.BusinessLogic.Transactions;
 using Shmap.CommonServices;

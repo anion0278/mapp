@@ -8,7 +8,6 @@ namespace Shmap.ViewModels
 {
     public interface IManualChangeWindowViewModel
     {
-        public RelayCommand AcceptChangesCommand { get; }
         public bool IsChangeAccepted { get; }
         int MaxLength { get; set; }
         string Message { get; set; }
@@ -17,7 +16,7 @@ namespace Shmap.ViewModels
         int CurrentTextLength { get; set; }
     }
 
-    public class ManualChangeWindowViewModel: ViewModelBase, IManualChangeWindowViewModel
+    public class ManualChangeWindowViewModel: ViewModelWithErrorValidationBase, IManualChangeWindowViewModel
     {
         private int _maxLength;
         private string _originalText;
@@ -82,7 +81,7 @@ namespace Shmap.ViewModels
             return CurrentTextLength <= MaxLength;
         }
 
-        private void AcceptChanges()
+        private void AcceptChanges() //TODO possbile to apply validataion rules
         {
             IsChangeAccepted = true;
         }

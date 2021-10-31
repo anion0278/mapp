@@ -36,11 +36,11 @@ namespace Shmap.DataAccess
             return dataPack.dataPackItem[0];
         }
 
-        private InvoiceXml.dataPackDataPackItem FillDataPackItem(Invoice invoice)
+        private InvoiceXml.dataPackDataPackItem FillDataPackItem(Invoice invoice, int index)
         {
             var packDataPackItem = PrepareDatapackItem();
 
-            packDataPackItem.id = invoice.UserId;
+            packDataPackItem.id = $"Usr01 ({index.ToString().PadLeft(3, '0')})";
 
             packDataPackItem.invoice.invoiceHeader.accounting.ids = "3Fv";
             packDataPackItem.invoice.invoiceHeader.invoiceType = "issuedInvoice";
