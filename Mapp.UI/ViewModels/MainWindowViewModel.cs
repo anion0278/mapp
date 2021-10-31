@@ -8,7 +8,6 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Data;
 using GalaSoft.MvvmLight.CommandWpf;
-using Mapp.BusinessLogic.AutocompletionHelper;
 using Mapp.BusinessLogic.Invoices;
 using Mapp.BusinessLogic.Transactions;
 using Mapp.CommonServices;
