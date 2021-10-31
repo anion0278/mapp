@@ -17,16 +17,28 @@
         d:DataContext="{d:DesignInstance viewModels1:MainWindowViewModel, IsDesignTimeCreatable=True}"
         DataContext="{Binding MainWindowVm, Source={StaticResource ViewModelLocator}}">
 
-    <i:Interaction.Triggers>
-        <i:EventTrigger EventName="Closing">
-            <command:EventToCommand Command="{Binding Mode=OneWay, Path=WindowClosingCommand}" />
-        </i:EventTrigger>
-    </i:Interaction.Triggers>
-
     <Window.Resources>
         <martinApp:ProductsListConverter x:Key="ProductsConverter"/>
         <martinApp:ProductsListToSkuConverter x:Key="ProductsToSkuConverter"/>
 
+        <!--Applied to every column header-->
+        <Style TargetType="{x:Type DataGridColumnHeader}">
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        </Style>
+
+        <ControlTemplate x:Key="ErrorTemplate">
+            <TextBlock Text="!"  Width="auto"
+                           FontWeight="Bold" Foreground="Red" 
+                           TextAlignment="Center"
+                           HorizontalAlignment="Stretch" FontSize="20">
+                <TextBlock.ToolTip>
+                    <Binding RelativeSource="{RelativeSource FindAncestor, 
+                                    AncestorType={x:Type DataGridRow}}"
+                                 Path="(Validation.Errors)/ErrorContent" />
+                </TextBlock.ToolTip>
+            </TextBlock>
+        </ControlTemplate>
 
         <Style  x:Key="EditingCellStyle"  TargetType="{x:Type TextBox}">
             <!--this ensures that text looks the same way in both TextBox and TextBlock-->
@@ -51,46 +63,28 @@
             <Setter Property="Width" Value="150"/>
             <Setter Property="Height" Value="20"/>
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
-            <!--<Setter Property="VerticalContentAlignment" Value="Center"/>-->
         </Style>
-
 
         <Style x:Key="ActionButtonStyle" TargetType="Button">
             <Setter Property="Width" Value="150" />
             <Setter Property="Height" Value="35" />
+            <Setter Property="ToolTipService.ShowOnDisabled" Value="True"/>
             <Style.Triggers>
-                <Trigger Property="Validation.HasError" Value="True">
-                    <Setter Property="Background" Value="Pink"/>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="ToolTip" Value="Data chybi nebo obsahuji chyby"/>
                 </Trigger>
             </Style.Triggers>
         </Style>
 
-        <Style x:Key="ColumnHeaderStyle" TargetType="{x:Type DataGridColumnHeader}">
-            <Setter Property="HorizontalAlignment" Value="Stretch"/>
-            <Setter Property="HorizontalContentAlignment" Value="Center"/>
-        </Style>
-
-        <Style x:Key="DefaultTextCellStyle" TargetType="{x:Type DataGridCell}">
-            <Setter Property="TextBlock.TextAlignment" Value="Center"/>
-        </Style>
-
-        <Style x:Key="UserInputCellStyle" TargetType="{x:Type DataGridCell}" 
-               BasedOn="{StaticResource DefaultTextCellStyle}" >
-            <Setter Property="Background" Value="LightBlue"/>
-            <Setter Property="TextBlock.TextWrapping" Value="Wrap"/>
-            <Setter Property="HorizontalContentAlignment" Value="Center" />
-            <Style.Triggers>
-                <Trigger Property="IsSelected" Value="True">
-                    <Setter Property="Foreground" Value="Black"/>
-                    <Setter Property="FontWeight" Value="Bold"/>
-                </Trigger>
-            </Style.Triggers>
+        <Style x:Key="WrapBlockStyle" TargetType="{x:Type TextBlock}" >
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="TextAlignment" Value="Center" />
         </Style>
 
         <!--REMOVE-->
         <Style x:Key="UserInputBlockStyle" TargetType="{x:Type TextBlock}" >
             <Setter Property="Background" Value="LightBlue"/>
-            <Setter Property="TextBlock.TextWrapping" Value="Wrap"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
             <Setter Property="TextAlignment" Value="Center" />
         </Style>
 
@@ -103,7 +97,8 @@
             </Style.Triggers>
         </Style>
 
-        <Style x:Key="TextBlockWithValidationTipStyle" TargetType="TextBlock" BasedOn="{StaticResource UserInputBlockStyle}">
+        <Style x:Key="TextBlockWithValidationTipStyle" TargetType="TextBlock" 
+               BasedOn="{StaticResource UserInputBlockStyle}">
             <Style.Triggers>
                 <Trigger Property="Validation.HasError" Value="True">
                     <Setter Property="Background" Value="Pink"/>
@@ -113,9 +108,27 @@
             </Style.Triggers>
         </Style>
 
+        <Style x:Key="ParamLabelStyle" TargetType="Label">
+            <Setter Property="HorizontalAlignment" Value="Center" />
+        </Style>
 
-        <Style x:Key="ToggleableReadonlyCellStyle" TargetType="DataGridCell">
+
+        <Style x:Key="UserInputCellStyle" TargetType="{x:Type DataGridCell}">
+            <Setter Property="Background" Value="LightBlue"/>
+            <Setter Property="TextBlock.TextWrapping" Value="Wrap"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="TextBlock.TextAlignment" Value="Center"/>
             <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Foreground" Value="Black"/>
+                    <Setter Property="FontWeight" Value="Bold"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="ToggleableReadonlyCellStyle" TargetType="{x:Type DataGridCell}">
+            <Style.Triggers>
+                <!--Due to virtualization sometimes causes harmless binding errors-->
                 <DataTrigger Binding="{Binding Path=IsFullyEditable}" Value="False">
                     <Setter Property="IsTabStop" Value="False"></Setter>
                     <Setter Property="Focusable" Value="False"></Setter>
@@ -123,10 +136,23 @@
             </Style.Triggers>
         </Style>
 
-        <Style x:Key="ParamLabelStyle" TargetType="Label">
-            <Setter Property="HorizontalAlignment" Value="Center" />
+        <Style TargetType="{x:Type DataGridCell}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type DataGridCell}">
+                        <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True" >
+                            <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
     </Window.Resources>
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Closing">
+            <command:EventToCommand Command="{Binding Mode=OneWay, Path=WindowClosingCommand}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
 
     <TabControl>
         <TabItem Header="Amazon - konverter">
@@ -157,19 +183,11 @@
                             Command="{Binding ExportConvertedAmazonInvoicesCommand}"/>
                 </StackPanel>
 
-                <DataGrid Grid.Row="1" Margin="5" AutoGenerateColumns="false" CanUserAddRows="false" VirtualizingPanel.ScrollUnit="Pixel"
+                <DataGrid Grid.Row="1" Margin="5" AutoGenerateColumns="false" CanUserAddRows="false" 
+                          EnableColumnVirtualization="False" EnableRowVirtualization="False" VirtualizingPanel.ScrollUnit="Pixel"
+                          RowValidationErrorTemplate="{StaticResource ErrorTemplate}" 
                           ItemsSource="{Binding InvoiceItemsCollectionView}"  >
-                    <!--<DataGrid.RowValidationErrorTemplate>
-                        <ControlTemplate>
-                                <TextBlock Text="!"  Width="auto"
-                                           FontWeight="Bold" Foreground="Red" 
-                                           TextAlignment="Center"
-                                           HorizontalAlignment="Stretch" FontSize="16" 
-                                           ToolTip="{Binding RelativeSource={RelativeSource
-                      FindAncestor, AncestorType={x:Type DataGridRow}},
-                      Path=(Validation.Errors)/ErrorContent}" />
-                        </ControlTemplate>
-                    </DataGrid.RowValidationErrorTemplate>-->
+
                     <DataGrid.GroupStyle>
                         <GroupStyle>
                             <GroupStyle.Panel>
@@ -224,36 +242,27 @@
 
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Cislo (Amazon)" MinWidth="150" Width="100" IsReadOnly="true" 
-                                            HeaderStyle="{StaticResource ColumnHeaderStyle}"
-                                            CellStyle="{StaticResource DefaultTextCellStyle}"
                                             Binding="{Binding AmazonNumber}" />
 
                         <DataGridTextColumn Header="Puvod" MinWidth="100" Width="100" IsReadOnly="true" 
-                                            HeaderStyle="{StaticResource ColumnHeaderStyle}"
-                                            CellStyle="{StaticResource DefaultTextCellStyle}"
                                             Binding="{Binding SalesChannel}"/>
 
                         <DataGridTextColumn Header="Nazev produktu (Amazon)" Width="*" 
-                                            HeaderStyle="{StaticResource ColumnHeaderStyle}"
                                             CellStyle ="{StaticResource UserInputCellStyle}"
                                             EditingElementStyle="{StaticResource EditingCellStyle}"
                                             ElementStyle="{StaticResource UserInputBlockStyle}"
                                             Binding="{Binding AmazonProductName}" />
 
                         <DataGridTextColumn Header="SKU (Amazon)" IsReadOnly="True" MinWidth="100" Width="150" 
-                                            HeaderStyle="{StaticResource ColumnHeaderStyle}"
-                                            CellStyle="{StaticResource DefaultTextCellStyle}"
                                             Binding="{Binding AmazonSku}" />
 
                         <DataGridTextColumn Header="Kod zbozi" Width="150" 
-                                            HeaderStyle="{StaticResource ColumnHeaderStyle}"
                                             CellStyle="{StaticResource ToggleableReadonlyCellStyle}"
                                             EditingElementStyle="{StaticResource EditingCellStyle}"
                                             ElementStyle="{StaticResource RememberedUserInputCellStyle}"
                                             Binding="{Binding WarehouseProductCode}" />
 
                         <DataGridTemplateColumn Header="Mnozstvi v packu" Width="120" 
-                                                HeaderStyle="{StaticResource ColumnHeaderStyle}"
                                                 CellStyle="{StaticResource ToggleableReadonlyCellStyle}">
                             <DataGridTemplateColumn.CellEditingTemplate>
                                 <DataTemplate>
@@ -269,49 +278,44 @@
                                                Text="{Binding PackQuantityMultiplier}" />
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
-                       
+
                         </DataGridTemplateColumn>
 
                     </DataGrid.Columns>
                 </DataGrid>
 
 
-
-                <DataGrid Name="BottomDataGrid" Grid.Row="2" Margin="5" AutoGenerateColumns="false" CanUserAddRows="false"
-              ItemsSource="{Binding Invoices}" >
+                <DataGrid Grid.Row="2" Margin="5" AutoGenerateColumns="false" CanUserAddRows="false"
+                          EnableRowVirtualization="False" EnableColumnVirtualization="False" VirtualizingPanel.ScrollUnit="Pixel"
+                          RowValidationErrorTemplate="{StaticResource ErrorTemplate}" 
+                          ItemsSource="{Binding Invoices}" >
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Cislo (Amazon)" Width="0.6*" IsReadOnly="true"
-                            Binding="{Binding AmazonNumber}"/>
-                        <DataGridTextColumn Header="Puvod" Width="0.4*" IsReadOnly="true"
-                            Binding="{Binding SalesChannel}"/>
-                        <DataGridTextColumn Header="Produkty" Width="*" IsReadOnly="true" Binding="{Binding InvoiceProductNames, Converter={StaticResource ProductsConverter}}"/>
-                        <DataGridTextColumn Header="SKU kody" Width="*" IsReadOnly="true" Binding="{Binding AmazonSkuCodes, Converter={StaticResource ProductsToSkuConverter}}"/>
-                        <DataGridTextColumn Header="Kod z skladu" Width="*" Binding="{Binding RelatedWarehouseSection}">
-                            <DataGridBoundColumn.ElementStyle>
-                                <Style TargetType="{x:Type TextBlock}">
-                                    <Setter Property="Background" Value="Orange"/>
-                                    <Style.Triggers>
-                                        <Trigger  Property="Text" Value="----">
-                                            <Setter Property="Background" Value="Red"/>
-                                        </Trigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </DataGridBoundColumn.ElementStyle>
-                        </DataGridTextColumn>
+                        <DataGridTextColumn Header="Cislo (Amazon)" Width="150" IsReadOnly="true"
+                                            Binding="{Binding AmazonNumber}"/>
+
+                        <DataGridTextColumn Header="Puvod" Width="100" IsReadOnly="true"
+                                            Binding="{Binding SalesChannel}"/>
+
+                        <DataGridTextColumn Header="Produkty" Width="2*" IsReadOnly="true" 
+                                            ElementStyle="{StaticResource WrapBlockStyle}"
+                                            Binding="{Binding InvoiceProductNames, Converter={StaticResource ProductsConverter}}"/>
+
+                        <DataGridTextColumn Header="SKU kody" Width="120" IsReadOnly="true" 
+                                            Binding="{Binding AmazonSkuCodes, Converter={StaticResource ProductsToSkuConverter}}"/>
+
+                        <DataGridTextColumn Header="Kod z skladu" Width="120" 
+                                            CellStyle="{StaticResource ToggleableReadonlyCellStyle}"
+                                            EditingElementStyle="{StaticResource EditingCellStyle}"
+                                            ElementStyle="{StaticResource RememberedUserInputCellStyle}"
+                                            Binding="{Binding RelatedWarehouseSection}" />
+
                         <DataGridTextColumn Header="Celni prohlaseni" Width="*" 
-                                            Binding="{Binding CustomsDeclaration}">
-                            <DataGridBoundColumn.ElementStyle>
-                                <Style TargetType="{x:Type TextBlock}">
-                                    <Setter Property="Background" Value="DarkOrange"/>
-                                    <Style.Triggers>
-                                        <Trigger  Property="Text" Value="----">
-                                            <Setter Property="Background" Value="Red"/>
-                                        </Trigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </DataGridBoundColumn.ElementStyle>
-                        </DataGridTextColumn>
-                        <DataGridTextColumn Header="Typ VAT" Width="*"  IsReadOnly="True"
+                                            CellStyle ="{StaticResource UserInputCellStyle}"
+                                            EditingElementStyle="{StaticResource EditingCellStyle}"
+                                            ElementStyle="{StaticResource UserInputBlockStyle}"
+                                            Binding="{Binding CustomsDeclaration}" />
+
+                        <DataGridTextColumn Header="Typ VAT" Width="80"  IsReadOnly="True"
                                             Binding="{Binding VatType}"/>
                     </DataGrid.Columns>
                 </DataGrid>

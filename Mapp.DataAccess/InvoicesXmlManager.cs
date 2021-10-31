@@ -63,12 +63,12 @@ namespace Shmap.DataAccess
             SetCustomsDeclarationIntoMobilePhone(invoice, packDataPackItem); 
 
             packDataPackItem.invoice.invoiceHeader.liquidation.amountHome = invoice.TotalPrice.AmountHome.DefRound(); ;
-            packDataPackItem.invoice.invoiceHeader.liquidation.amountForeign = invoice.TotalPrice.AmountForeign;
+            packDataPackItem.invoice.invoiceHeader.liquidation.amountForeign = invoice.TotalPrice.AmountForeign.DefRound();
 
             packDataPackItem.invoice.invoiceSummary.foreignCurrency.amount = 1; // always rate of 1 currency unit
             packDataPackItem.invoice.invoiceSummary.foreignCurrency.currency.ids = invoice.TotalPrice.ForeignCurrencyName;
-            packDataPackItem.invoice.invoiceSummary.foreignCurrency.rate = invoice.TotalPrice.Rate;
-            packDataPackItem.invoice.invoiceSummary.foreignCurrency.priceSum = invoice.TotalPrice.AmountForeign;
+            packDataPackItem.invoice.invoiceSummary.foreignCurrency.rate = invoice.TotalPrice.Rate.DefRound();
+            packDataPackItem.invoice.invoiceSummary.foreignCurrency.priceSum = invoice.TotalPrice.AmountForeign.DefRound();
 
             packDataPackItem.invoice.invoiceSummary.homeCurrency.priceNone = invoice.TotalPrice.AmountHome.DefRound();
             packDataPackItem.invoice.invoiceSummary.homeCurrency.priceHighSum = invoice.TotalPrice.AmountHome.DefRound();
@@ -81,7 +81,7 @@ namespace Shmap.DataAccess
 
             if (invoice.IsMoss) 
             {
-                packDataPackItem.invoice.invoiceHeader.MOSS = new InvoiceXml.invoiceInvoiceHeaderMOSS() { ids = invoice.ShipCountryCode };
+                packDataPackItem.invoice.invoiceHeader.MOSS = new InvoiceXml.invoiceInvoiceHeaderMOSS() { ids = invoice.ShipCountryCode }; // Pro recko "EL"
                 packDataPackItem.invoice.invoiceHeader.evidentiaryResourcesMOSS = new InvoiceXml.invoiceInvoiceHeaderEvidentiaryResourcesMOSS() { ids = "A" };
             }
 
