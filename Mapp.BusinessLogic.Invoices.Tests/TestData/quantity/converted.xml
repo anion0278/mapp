@@ -66,7 +66,7 @@
         </inv:account>
         <inv:symConst>308</inv:symConst>
         <inv:centre>
-          <typ:ids>----</typ:ids>
+          <typ:ids />
         </inv:centre>
         <inv:liquidation>
           <typ:amountHome>555.63</typ:amountHome>
@@ -96,13 +96,13 @@
             <typ:priceVAT>0.00</typ:priceVAT>
             <typ:priceSum>19.99</typ:priceSum>
           </inv:foreignCurrency>
-          <inv:code>----</inv:code>
+          <inv:code />
           <inv:stockItem>
             <typ:store>
               <typ:ids>Zboží</typ:ids>
             </typ:store>
             <typ:stockItem>
-              <typ:ids>----</typ:ids>
+              <typ:ids />
             </typ:stockItem>
           </inv:stockItem>
           <inv:PDP>false</inv:PDP>
@@ -152,7 +152,7 @@
           <typ:currency>
             <typ:ids>USD</typ:ids>
           </typ:currency>
-          <typ:rate>21.387</typ:rate>
+          <typ:rate>21.39</typ:rate>
           <typ:amount>1</typ:amount>
           <typ:priceSum>25.98</typ:priceSum>
         </inv:foreignCurrency>
@@ -225,7 +225,7 @@
         </inv:account>
         <inv:symConst>308</inv:symConst>
         <inv:centre>
-          <typ:ids>----</typ:ids>
+          <typ:ids />
         </inv:centre>
         <inv:liquidation>
           <typ:amountHome>352.23</typ:amountHome>
@@ -255,13 +255,13 @@
             <typ:priceVAT>0.00</typ:priceVAT>
             <typ:priceSum>16.99</typ:priceSum>
           </inv:foreignCurrency>
-          <inv:code>----</inv:code>
+          <inv:code />
           <inv:stockItem>
             <typ:store>
               <typ:ids>Zboží</typ:ids>
             </typ:store>
             <typ:stockItem>
-              <typ:ids>----</typ:ids>
+              <typ:ids />
             </typ:stockItem>
           </inv:stockItem>
           <inv:PDP>false</inv:PDP>
@@ -311,7 +311,7 @@
           <typ:currency>
             <typ:ids>CAD</typ:ids>
           </typ:currency>
-          <typ:rate>16.789</typ:rate>
+          <typ:rate>16.79</typ:rate>
           <typ:amount>1</typ:amount>
           <typ:priceSum>20.98</typ:priceSum>
         </inv:foreignCurrency>
@@ -384,7 +384,7 @@
         </inv:account>
         <inv:symConst>308</inv:symConst>
         <inv:centre>
-          <typ:ids>----</typ:ids>
+          <typ:ids />
         </inv:centre>
         <inv:liquidation>
           <typ:amountHome>335.44</typ:amountHome>
@@ -414,13 +414,13 @@
             <typ:priceVAT>0.00</typ:priceVAT>
             <typ:priceSum>15.99</typ:priceSum>
           </inv:foreignCurrency>
-          <inv:code>----</inv:code>
+          <inv:code />
           <inv:stockItem>
             <typ:store>
               <typ:ids>Zboží</typ:ids>
             </typ:store>
             <typ:stockItem>
-              <typ:ids>----</typ:ids>
+              <typ:ids />
             </typ:stockItem>
           </inv:stockItem>
           <inv:PDP>false</inv:PDP>
@@ -470,7 +470,7 @@
           <typ:currency>
             <typ:ids>CAD</typ:ids>
           </typ:currency>
-          <typ:rate>16.789</typ:rate>
+          <typ:rate>16.79</typ:rate>
           <typ:amount>1</typ:amount>
           <typ:priceSum>19.98</typ:priceSum>
         </inv:foreignCurrency>
@@ -543,7 +543,7 @@
         </inv:account>
         <inv:symConst>308</inv:symConst>
         <inv:centre>
-          <typ:ids>----</typ:ids>
+          <typ:ids />
         </inv:centre>
         <inv:liquidation>
           <typ:amountHome>384.54</typ:amountHome>
@@ -573,13 +573,13 @@
             <typ:priceVAT>0.00</typ:priceVAT>
             <typ:priceSum>13.99</typ:priceSum>
           </inv:foreignCurrency>
-          <inv:code>----</inv:code>
+          <inv:code />
           <inv:stockItem>
             <typ:store>
               <typ:ids>Zboží</typ:ids>
             </typ:store>
             <typ:stockItem>
-              <typ:ids>----</typ:ids>
+              <typ:ids />
             </typ:stockItem>
           </inv:stockItem>
           <inv:PDP>false</inv:PDP>
@@ -629,7 +629,7 @@
           <typ:currency>
             <typ:ids>USD</typ:ids>
           </typ:currency>
-          <typ:rate>21.387</typ:rate>
+          <typ:rate>21.39</typ:rate>
           <typ:amount>1</typ:amount>
           <typ:priceSum>17.98</typ:priceSum>
         </inv:foreignCurrency>
