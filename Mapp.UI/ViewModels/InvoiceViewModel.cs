@@ -76,7 +76,6 @@ namespace Mapp.ViewModels
             }
         }
 
-
         public InvoiceViewModel(Invoice model, IAutocompleteData autocompleteData)
         {
             _amazonNumber = model.VariableSymbolFull;
@@ -88,6 +87,10 @@ namespace Mapp.ViewModels
             _vatType = model.Classification;
             _autocompleteData = autocompleteData;
             
+            AddValidationRule(() => RelatedWarehouseSection, 
+                ()=>!string.IsNullOrWhiteSpace(RelatedWarehouseSection), 
+                "Neni zadan kod skladu");
+
             // for now saving model
             _model = model;
         }
