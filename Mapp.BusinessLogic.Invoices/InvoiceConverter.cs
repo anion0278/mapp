@@ -27,13 +27,10 @@ namespace Shmap.BusinessLogic.Invoices
         private readonly IInvoicesXmlManager _invoicesXmlManager;
         private readonly IAutocompleteDataLoader _autocompleteDataLoader;
         private readonly IDialogService _dialogService;
-        private static readonly int MaxItemNameLength = 85;
         private readonly int MaxAddressNameLength = 60;
         private readonly int MaxCityLength = 45;
         private readonly int MaxClientNameLength = 30;
-        private Dictionary<string, decimal> Rates;
-
-
+        private Dictionary<string, decimal> _rates;
         private readonly Dictionary<string, decimal> _vatPercentage;
 
         public InvoiceConverter(IAutocompleteData autocompleteData,
@@ -49,7 +46,7 @@ namespace Shmap.BusinessLogic.Invoices
             _autocompleteDataLoader = autocompleteDataLoader;
             _dialogService = dialogService;
             autocompleteDataLoader.LoadSettings();
-            Rates = csvLoader.LoadFixedCurrencyRates(); // TODO make it possible to choose from settings
+            _rates = csvLoader.LoadFixedCurrencyRates(); // TODO make it possible to choose from settings
             _vatPercentage = csvLoader.LoadCountryVatRates(); // TODO make it possible to choose from settings
         }
 
@@ -80,15 +77,6 @@ namespace Shmap.BusinessLogic.Invoices
 
             return mergedInvoices;
         }
-
-        //private T GetOptionalField<T>(IReadOnlyDictionary<string, string> valuesFromAmazon, string fieldName)
-        //{
-        //    var value = default(T);
-        //    if (valuesFromAmazon.TryGetValue("item-promotion-discount", out T field))
-        //    {
-        //        value = decimal.Parse(itemDiscount);
-        //    }
-        //}
 
         private Invoice ProcessInvoiceLine(IReadOnlyDictionary<string, string> valuesFromAmazon, uint index, InvoiceConversionContext context)
         {
@@ -146,7 +134,7 @@ namespace Shmap.BusinessLogic.Invoices
 
             if (valuesFromAmazon.TryGetValue("sales-channel", out string salesChannelValue))
             {
-                invoice.SalesChannel = valuesFromAmazon["sales-channel"];
+                invoice.SalesChannel = salesChannelValue;
             }
 
             var invoiceItems = new List<InvoiceItemBase>();
@@ -221,22 +209,17 @@ namespace Shmap.BusinessLogic.Invoices
 
         private InvoiceItemBase FillInvoiceItem(InvoiceItemBase invoiceItem, string name, decimal price, decimal tax, decimal quantity)
         {
-            if (name.Length > MaxItemNameLength) // TODO allow user to change manually
-            {
-                name = name.Substring(0, MaxItemNameLength);
-            }
-
             invoiceItem.Name = name;
             invoiceItem.Quantity = quantity;
             invoiceItem.TotalPriceWithTax = new CommonServices.Currency(
                 price * (1 - invoiceItem.ParentInvoice.CountryVat.ReversePercentage),
                 invoiceItem.ParentInvoice.TotalPrice.ForeignCurrencyName,
-                Rates);
+                _rates);
 
             invoiceItem.Tax = new CommonServices.Currency(
                 tax,
                 invoiceItem.ParentInvoice.TotalPrice.ForeignCurrencyName,
-                Rates);
+                _rates);
 
             invoiceItem.PercentVat = invoiceItem.ParentInvoice.CountryVat.Percentage * (decimal)100.0;
 

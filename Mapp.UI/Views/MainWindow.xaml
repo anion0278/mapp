@@ -279,7 +279,7 @@
                         <DataGridTextColumn Header="Kod zbozi" Width="150" 
                                             CellStyle="{StaticResource ToggleableReadonlyCellStyle}"
                                             EditingElementStyle="{StaticResource EditingCellStyle}"
-                                            Binding="{Binding WarehouseProductCode,Mode=TwoWay, ValidatesOnDataErrors=True}">
+                                            Binding="{resources:ValidatableBinding WarehouseProductCode,Mode=TwoWay}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Style.Triggers>

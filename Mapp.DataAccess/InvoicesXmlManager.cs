@@ -95,6 +95,14 @@ namespace Shmap.DataAccess
         private InvoiceXml.invoiceInvoiceItem CreateInvoiceItem(InvoiceItemBase invoiceItem)
         {
             var data = new InvoiceXml.invoiceInvoiceItem();
+
+            int MaxItemNameLength = 85;
+            //this name is not actually used in pohoda, so it can be automatically truncated
+            if (invoiceItem.Name.Length > MaxItemNameLength) // TODO do this operation during BLO->DTO convertion
+            {
+                invoiceItem.Name = invoiceItem.Name.Substring(0, MaxItemNameLength);
+            }
+
             data.text = invoiceItem.Name;
             data.quantity = invoiceItem.Quantity;
 

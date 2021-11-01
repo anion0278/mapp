@@ -25,6 +25,7 @@ namespace Shmap.UI.Views.Resources
             ValidatesOnDataErrors = true;
             ValidatesOnExceptions = true;
             UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
+            Mode = BindingMode.TwoWay;
         }
 
         public ValidatableBinding(string path) : base(path)
@@ -32,6 +33,7 @@ namespace Shmap.UI.Views.Resources
             ValidatesOnDataErrors = true;
             ValidatesOnExceptions = true;
             UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
+            Mode = BindingMode.TwoWay;
         }
     }
 }

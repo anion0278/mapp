@@ -87,8 +87,13 @@ namespace Shmap.ViewModels
 
             GoToInvoicePageCommand = new RelayCommand(GoToInvoicePage);
 
-            AddValidationRule(() => PackQuantityMultiplier, () => PackQuantityMultiplier > 0, "Pocet musi byt vetsi nez nula");
-            AddValidationRule(() => WarehouseProductCode, ValidateProductCode, "Neni zadan kod produktu");
+            AddValidationRule(() => PackQuantityMultiplier, 
+                () => PackQuantityMultiplier > 0, 
+                "Pocet musi byt vetsi nez nula");
+
+            AddValidationRule(() => WarehouseProductCode, 
+                ValidateProductCode, 
+                "Neni zadan kod produktu");
 
             _packQuantityMultiplier = 1; 
             if (model is InvoiceProduct product)
@@ -108,7 +113,7 @@ namespace Shmap.ViewModels
             //var salesCentrals = new Dictionary<string, string>()
             //    {{"amazon.com", ""}};
             string url = "https://sellercentral.amazon.co.uk/orders-v3/order/";
-            if (_model.ParentInvoice.SalesChannel.EqualsIgnoreCase("amazon.com"))
+            if (_model.ParentInvoice.SalesChannel.EqualsIgnoreCase("amazon.com")) //SalesChannel can be null
             {
                 url = "https://sellercentral.amazon.com/orders-v3/order/";
             }
