@@ -81,7 +81,7 @@ namespace Shmap.DataAccess
 
             if (invoice.IsMoss) 
             {
-                packDataPackItem.invoice.invoiceHeader.MOSS = new InvoiceXml.invoiceInvoiceHeaderMOSS() { ids = invoice.ShipCountryCode }; // Pro recko "EL"
+                packDataPackItem.invoice.invoiceHeader.MOSS = new InvoiceXml.invoiceInvoiceHeaderMOSS() { ids = invoice.MossCountryCode };
                 packDataPackItem.invoice.invoiceHeader.evidentiaryResourcesMOSS = new InvoiceXml.invoiceInvoiceHeaderEvidentiaryResourcesMOSS() { ids = "A" };
             }
 

@@ -29,19 +29,21 @@ namespace Shmap.CommonServices
             "NL", "PL", "PT", "AT", "RO", "GR", "SK", "SI", "ES", "SE", "EU", "CZ"
         };
 
-        private string[] _homeCountries = {"CZ"};
+        private Dictionary<string, string> _mossExceptionCountryCodes = new() { { "GR", "EL" } };
+
+        private string[] _homeCountries = { "CZ" };
 
         public Invoice(Dictionary<string, decimal> vatPercentage)
         {
             _vatPercentage = vatPercentage;
         }
 
-        public IEnumerable<InvoiceItemBase> InvoiceItems => _invoiceItems;
+        public IEnumerable<InvoiceItemBase> InvoiceItems => _invoiceItems.OrderBy(i => i.Type); // This is business rule - order Product-gift-discount-shipping
         public string ShipCountryCode { get; set; }
         public InvoiceVatClassification Classification => GetClassification();
         public uint Number { get; set; }
         public string VariableSymbolFull { get; set; }
-        public string VariableSymbolShort => GetShortVariableCode(VariableSymbolFull, out _); 
+        public string VariableSymbolShort => GetShortVariableCode(VariableSymbolFull, out _);
         public DateTime ConversionDate { get; set; }
         public DateTime DateTax => CalculateTaxDate();
         public DateTime DateAccounting => ConversionDate;
@@ -53,7 +55,7 @@ namespace Shmap.CommonServices
         public string RelatedWarehouseName { get; set; }
         public Currency TotalPrice => AggregatePrice();
 
-        public Currency TotalPriceVat => new (Math.Round(TotalPrice.AmountForeign * CountryVat.ReversePercentage, 2), TotalPrice.ForeignCurrencyName, TotalPrice.Rates);
+        public Currency TotalPriceVat => new(Math.Round(TotalPrice.AmountForeign * CountryVat.ReversePercentage, 2), TotalPrice.ForeignCurrencyName, TotalPrice.Rates);
 
         public bool IsMoss => Classification == InvoiceVatClassification.RDzasEU;
 
@@ -71,13 +73,19 @@ namespace Shmap.CommonServices
         public bool PayVat => Classification is InvoiceVatClassification.RDzasEU or InvoiceVatClassification.UDA5;
 
         public string CurrencyName { get; set; } // TODO get rid of that!
+        public string MossCountryCode => GetMossCountryCode();
+
+        private string GetMossCountryCode()
+        {
+            return _mossExceptionCountryCodes.TryGetValue(ShipCountryCode, out string mossCode) ? mossCode : ShipCountryCode;
+        }
 
         private Currency AggregatePrice()
         {
             if (!InvoiceItems.Any()) return new Currency(0, CurrencyName, new Dictionary<string, decimal>());
 
             return InvoiceItems
-                .Select(i=>i.TotalPrice)
+                .Select(i => i.TotalPrice)
                 .Aggregate((s, i) => s + i);
         }
 
@@ -114,7 +122,6 @@ namespace Shmap.CommonServices
             // and give information about how many zeros were deleted to GPC generator
             var finalCode = filteredCode.TrimStart('0');  // zeros don't get correctly imported into Pohoda
             zerosRemoved = filteredCode.Length - finalCode.Length;
-
             return finalCode;
         }
 
@@ -153,7 +160,7 @@ namespace Shmap.CommonServices
 
         private bool IsNonEuCountryByClassification(InvoiceVatClassification classification)
         {
-            return classification == InvoiceVatClassification.UVzbozi; 
+            return classification == InvoiceVatClassification.UVzbozi;
         }
     }
 
@@ -179,8 +186,8 @@ namespace Shmap.CommonServices
     {
         public string City { get; set; }
         public string Street { get; set; }
-        public string Country { get; set; } 
-        public string Zip { get; set; } 
+        public string Country { get; set; }
+        public string Zip { get; set; }
     }
 
     public class ContactData

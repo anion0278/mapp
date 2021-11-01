@@ -1,7 +1,4 @@
-﻿using System.Reflection;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Input;
+﻿using System.Windows.Data;
 
 namespace Shmap.UI.Views.Resources
 {
@@ -19,38 +16,6 @@ namespace Shmap.UI.Views.Resources
         {
             TargetNullValue = "";
         }
-    }
-
-    public class DataGris : DataGrid
-    {
-
-        protected override void OnExecutedCommitEdit(ExecutedRoutedEventArgs e)
-        {
-            base.OnExecutedCommitEdit(e);
-            if (e.Parameter is DataGridEditingUnit unit && unit == DataGridEditingUnit.Cell)
-            {
-                CancelEdit(unit);
-            }
-        }
-        //protected override void OnCanExecuteBeginEdit(System.Windows.Input.CanExecuteRoutedEventArgs e)
-        //{
-        //    var hasCellValidationError = false;
-        //    var hasRowValidationError = false;
-        //    const BindingFlags bindingFlags =
-        //        BindingFlags.FlattenHierarchy | BindingFlags.NonPublic | BindingFlags.Instance;
-        //    //Current cell
-        //    var cellErrorInfo = this.GetType().BaseType.GetProperty("HasCellValidationError", bindingFlags);
-        //    //Grid row
-        //    var rowErrorInfo = this.GetType().BaseType.GetProperty("HasRowValidationError", bindingFlags);
-        //    if (cellErrorInfo != null) hasCellValidationError = (bool)cellErrorInfo.GetValue(this, null);
-        //    if (rowErrorInfo != null) hasRowValidationError = (bool)rowErrorInfo.GetValue(this, null);
-        //    base.OnCanExecuteBeginEdit(e);
-        //    if ((!e.CanExecute && hasCellValidationError) || (!e.CanExecute && hasRowValidationError))
-        //    {
-        //        e.CanExecute = true;
-        //        e.Handled = true;
-        //    }
-        //}
     }
 
     public class ValidatableBinding : Binding

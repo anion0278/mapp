@@ -34,7 +34,7 @@ namespace Shmap.ViewModels
             {
                 Set(ref _amazonProductName, value);
 
-                if (value == ApplicationConstants.EmptyItemCode || string.IsNullOrWhiteSpace(value) || string.IsNullOrEmpty(AmazonSku)) return;
+                if (string.IsNullOrWhiteSpace(value) || string.IsNullOrEmpty(AmazonSku)) return;
                 var rememberedDictionary = _autocompleteData.ShippingNameBySku;
                 _autocompleteData.UpdateAutocompleteData(value, rememberedDictionary, AmazonSku);
             }
@@ -51,7 +51,7 @@ namespace Shmap.ViewModels
             get => _warehouseProductCode;
             set
             {
-                if (value == ApplicationConstants.EmptyItemCode || string.IsNullOrWhiteSpace(value) || string.IsNullOrEmpty(AmazonSku)) return;
+                if (string.IsNullOrWhiteSpace(value) || string.IsNullOrEmpty(AmazonSku)) return;
                 Set(ref _warehouseProductCode, value);
 
                 var rememberedDictionary = _autocompleteData.PohodaProdCodeBySku;
@@ -80,6 +80,7 @@ namespace Shmap.ViewModels
             _amazonProductName = model.Name;
 
             AddValidationRule(() => PackQuantityMultiplier, () => PackQuantityMultiplier > 0, "Pocet musi byt vetsi nez nula");
+            AddValidationRule(() => WarehouseProductCode, ValidateProductCode, "Neni zadan kod produktu");
 
             _packQuantityMultiplier = 1; 
             if (model is InvoiceProduct product)
@@ -92,6 +93,11 @@ namespace Shmap.ViewModels
 
             // temp
             _model = model;
+        }
+
+        private bool ValidateProductCode()
+        {
+            return _model.Type != InvoiceItemType.Product || !string.IsNullOrWhiteSpace(WarehouseProductCode);
         }
 
         public InvoiceItemBase ExportModel()

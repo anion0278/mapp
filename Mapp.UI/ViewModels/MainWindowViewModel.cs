@@ -194,7 +194,9 @@ namespace Shmap.UI.ViewModels
 
         private bool ExportConvertedAmazonInvoicesCanExecute()
         {
-            return !HasErrors && InvoiceItems.Any() && Invoices.Any() && InvoiceItems.All(i => !i.HasErrors);
+            return !HasErrors && InvoiceItems.Any() && Invoices.Any() 
+                   && InvoiceItems.All(i => !i.HasErrors)
+                   && Invoices.All(i => !i.HasErrors);
         }
 
         private void OnWindowClosing()

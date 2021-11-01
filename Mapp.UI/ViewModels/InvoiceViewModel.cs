@@ -6,7 +6,7 @@ using Shmap.DataAccess;
 
 namespace Shmap.ViewModels
 {
-    public class InvoiceViewModel : ViewModelBase
+    public class InvoiceViewModel : ViewModelWithErrorValidationBase
     {
         private readonly Invoice _model;
         private readonly IAutocompleteData _autocompleteData;
@@ -42,14 +42,13 @@ namespace Shmap.ViewModels
             set => Set(ref _amazonSkuCodes, value);
         }
 
-
         public string CustomsDeclaration
         {
             get => _customsDeclaration;
             set
             {
                 Set(ref _customsDeclaration, value);
-                if (value == ApplicationConstants.EmptyItemCode || string.IsNullOrWhiteSpace(value)) return;
+                if (string.IsNullOrWhiteSpace(value)) return;
 
                 var rememberedDictionary = _autocompleteData.CustomsDeclarationBySku;
                 string productSku = AmazonSkuCodes.FirstOrDefault();
@@ -69,7 +68,7 @@ namespace Shmap.ViewModels
             set
             {
                 Set(ref _relatedWarehouseSection, value);
-                if (value == ApplicationConstants.EmptyItemCode || string.IsNullOrWhiteSpace(value)) return;
+                if (string.IsNullOrWhiteSpace(value)) return;
 
                 var rememberedDictionary = _autocompleteData.ProdWarehouseSectionBySku;
                 string productSku = AmazonSkuCodes.FirstOrDefault();

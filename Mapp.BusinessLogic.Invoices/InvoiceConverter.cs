@@ -258,7 +258,7 @@ namespace Shmap.BusinessLogic.Invoices
         {
             if (IsNonEuCountryByClassification(classification))
             {
-                return GetAutocompleteOrDefault(
+                return GetAutocompleteOrEmpty(
                     _autocompleteData.CustomsDeclarationBySku,
                     sku,
                     string.Empty);
@@ -274,7 +274,7 @@ namespace Shmap.BusinessLogic.Invoices
                 return defaultShippingName;
             }
 
-            return GetAutocompleteOrDefault(
+            return GetAutocompleteOrEmpty(
                 _autocompleteData.ShippingNameBySku,
                 sku,
                 defaultShippingName);
@@ -282,24 +282,19 @@ namespace Shmap.BusinessLogic.Invoices
 
         private string GetSavedItemCodeBySku(string sku)
         {
-            return GetAutocompleteOrDefault(
+            return GetAutocompleteOrEmpty(
                 _autocompleteData.PohodaProdCodeBySku,
-                sku,
-                ApplicationConstants.EmptyItemCode);
+                sku);
         }
 
         private string GetSavedWarehouseBySku(string sku)
         {
-            return GetAutocompleteOrDefault(
+            return GetAutocompleteOrEmpty(
                 _autocompleteData.ProdWarehouseSectionBySku,
-                sku,
-                ApplicationConstants.EmptyItemCode);
+                sku);
         }
 
-        private string GetAutocompleteOrDefault(
-            IReadOnlyDictionary<string, string> autocompleteData,
-            string searchKey,
-            string defaultValue)
+        private string GetAutocompleteOrEmpty(IReadOnlyDictionary<string, string> autocompleteData, string searchKey, string defaultValue = "")
         {
             return autocompleteData.TryGetValue(searchKey, out string value) ? value : defaultValue;
         }
