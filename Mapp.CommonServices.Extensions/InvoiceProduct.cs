@@ -2,13 +2,13 @@
 
 namespace Mapp.CommonServices
 {
-    public enum InvoiceItemType
+    public enum InvoiceItemType // TODO how to let know that this sequence is a business rule (order in final output)
     {
         Undefined,
         Product,
-        Shipping,
+        GiftWrap,
         Discount,
-        GiftWrap
+        Shipping,
     }
 
     // TODO composition over inheritance?
