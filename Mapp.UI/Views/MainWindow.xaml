@@ -101,7 +101,6 @@
             <Setter Property="HorizontalAlignment" Value="Center" />
         </Style>
 
-
         <Style x:Key="UserInputCellStyle" TargetType="{x:Type DataGridCell}">
             <Setter Property="Background" Value="LightBlue"/>
             <Setter Property="TextBlock.TextWrapping" Value="Wrap"/>
@@ -137,10 +136,12 @@
             </Setter>
             <Style.Triggers>
                 <Trigger Property="IsKeyboardFocusWithin" Value="True">
-                    <!--<Setter Property="Background" Value="White"/>
-                    <Setter Property="Foreground" Value="DarkSeaGreen"/>-->
-                    <Setter Property="BorderThickness" Value="2"/>
+                    <Setter Property="BorderThickness" Value="3"/>
                     <Setter Property="BorderBrush" Value="SandyBrown"/>
+                </Trigger>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="Gainsboro"/>
+                    <Setter Property="Foreground" Value="Black"/>
                 </Trigger>
             </Style.Triggers>
         </Style>
@@ -259,9 +260,9 @@
                     </DataGrid.GroupStyle>
 
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Cislo (Amazon)" MinWidth="150" Width="100" IsReadOnly="true" 
-                                            CellStyle="{StaticResource CellStyle}"
-                                            Binding="{Binding AmazonNumber}" />
+                        <resources:DataGridHyperlinkCommandColumn Header="Cislo (Amazon)" MinWidth="150" Width="100" IsReadOnly="true" 
+                                                        Command="{Binding GoToInvoicePageCommand}"
+                                                        Binding="{Binding AmazonNumber}"  />
 
                         <DataGridTextColumn Header="Puvod" MinWidth="100" Width="100" IsReadOnly="true" 
                                             Binding="{Binding SalesChannel}"/>
