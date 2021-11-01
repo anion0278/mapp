@@ -1,5 +1,8 @@
 ﻿using System.Reflection;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
 using System.Windows.Input;
 
 namespace Shmap.UI.Views.Resources
@@ -37,4 +40,23 @@ namespace Shmap.UI.Views.Resources
         //    }
         //}
     }
+
+    public class DataGridHyperlinkCommandColumn : System.Windows.Controls.DataGridHyperlinkColumn
+    {
+        /// <summary>
+        /// Support binding the hyperlink to an ICommand rather than a Uri
+        /// </summary>
+        public BindingBase Command { get; set; }
+
+        protected override FrameworkElement GenerateElement(DataGridCell cell, object dataItem)
+        {
+            var result = base.GenerateElement(cell, dataItem);
+
+            if (((TextBlock)result).Inlines.FirstInline is Hyperlink link)
+                BindingOperations.SetBinding(link, Hyperlink.CommandProperty, Command);
+
+            return result;
+        }
+    }
+
 }

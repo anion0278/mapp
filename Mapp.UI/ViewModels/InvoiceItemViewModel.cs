@@ -1,6 +1,11 @@
-﻿using GalaSoft.MvvmLight;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
+using System.Security.Policy;
+using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.CommandWpf;
 using Shmap.CommonServices;
 using Shmap.DataAccess;
+using NLog.LayoutRenderers;
 
 namespace Shmap.ViewModels
 {
@@ -27,6 +32,8 @@ namespace Shmap.ViewModels
             //set => Set(ref _salesChannel, value);
         }
 
+        public RelayCommand GoToInvoicePageCommand { get; }
+
         public string AmazonProductName
         {
             get => _amazonProductName;
@@ -43,7 +50,6 @@ namespace Shmap.ViewModels
         public string AmazonSku
         {
             get => _amazonSku;
-            //set => Set(ref _amazonSku, value);
         }
 
         public string WarehouseProductCode
@@ -79,6 +85,8 @@ namespace Shmap.ViewModels
             _salesChannel = model.ParentInvoice.SalesChannel;
             _amazonProductName = model.Name;
 
+            GoToInvoicePageCommand = new RelayCommand(GoToInvoicePage);
+
             AddValidationRule(() => PackQuantityMultiplier, () => PackQuantityMultiplier > 0, "Pocet musi byt vetsi nez nula");
             AddValidationRule(() => WarehouseProductCode, ValidateProductCode, "Neni zadan kod produktu");
 
@@ -93,6 +101,19 @@ namespace Shmap.ViewModels
 
             // temp
             _model = model;
+        }
+
+        private void GoToInvoicePage()
+        {
+            //var salesCentrals = new Dictionary<string, string>()
+            //    {{"amazon.com", ""}};
+            string url = "https://sellercentral.amazon.co.uk/orders-v3/order/";
+            if (_model.ParentInvoice.SalesChannel.EqualsIgnoreCase("amazon.com"))
+            {
+                url = "https://sellercentral.amazon.com/orders-v3/order/";
+            }
+            url += AmazonNumber;
+            Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
         }
 
         private bool ValidateProductCode()
