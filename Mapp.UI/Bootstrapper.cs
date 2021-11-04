@@ -30,7 +30,7 @@ namespace Mapp
 
         private void ConfigureContainer()
         {
-            //ServiceLocator.SetLocatorProvider(() => new UnityServiceLocator(_container)); // antipattern?
+            // lets consider ServiceLocator is an anti-pattern
 
             // TODO use naming convention registering
             Container.RegisterInstance<IConfigProvider>(new ConfigProvider(AppSettings.Default, true));
@@ -46,8 +46,9 @@ namespace Mapp
             Container.RegisterTypeAsSingleton<IGpcGenerator, GpcGenerator>();
             Container.RegisterTypeAsSingleton<IFileOperationService, FileOperationsService>();
             Container.RegisterTypeAsSingleton<IMainWindowViewModel, MainWindowViewModel>();
-            Container.RegisterTypeAsSingleton<IManualChangeWindowViewModel, ManualChangeWindowViewModel>();
             Container.RegisterTypeAsSingleton<IDialogService, DialogService>();
+
+            Container.RegisterType<IManualChangeWindowViewModel, ManualChangeWindowViewModel>();
 
             var autocompleteDataLoader = Container.Resolve<IAutocompleteDataLoader>();
             _autocompleteData = autocompleteDataLoader.LoadSettings();

@@ -141,7 +141,6 @@ namespace Mapp.BusinessLogic.Invoices
             var invoiceProduct = new InvoiceProduct(invoice)
             {
                 WarehouseCode = GetSavedItemCodeBySku(sku),
-                WarehouseName = "Zboží",
                 AmazonSku = sku
             };
 

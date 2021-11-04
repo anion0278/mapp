@@ -42,12 +42,14 @@ namespace Mapp
 
     public partial class App : Application
     {
-        private static Logger _logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
+#if !DEBUG
             AppCenter.Start("9549dd3a-1371-4a23-b973-f5e80154119d", typeof(Analytics), typeof(Crashes)); // TODO should solve secrt storing somehow :(
+#endif
             SetupExceptionHandling();
 
             PresentationTraceSources.Refresh();
@@ -86,7 +88,9 @@ namespace Mapp
             string message = $"Unhandled exception with source: {source}. ";
             try
             {
+#if !DEBUG
                 Crashes.TrackError(exception);
+#endif
                 var assemblyName = Assembly.GetExecutingAssembly().GetName();
                 message += $"Unhandled exception in {assemblyName.Name} v{assemblyName.Version}";
                 message += $"\n * Top-most message: {exception.Message} \n * stack: {exception.StackTrace}";
