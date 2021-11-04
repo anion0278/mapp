@@ -13,54 +13,25 @@ namespace Shmap.ViewModels
         string Message { get; set; }
         string OriginalText { get; set; }
         string EditedText { get; set; }
-        int CurrentTextLength { get; set; }
+        int CurrentTextLength { get; }
     }
 
-    public class ManualChangeWindowViewModel: ViewModelWithErrorValidationBase, IManualChangeWindowViewModel
+    public class ManualChangeWindowViewModel : ViewModelWithErrorValidationBase, IManualChangeWindowViewModel
     {
-        private int _maxLength;
-        private string _originalText;
-        private string _editedText;
-        private int _currentTextLength;
-        private string _message;
-
+        // Fody takes care of PropChange notification
         public RelayCommand AcceptChangesCommand { get; }
 
         public bool IsChangeAccepted { get; private set; }
 
-        public string Message // TODO in ViewModel-first approach it can be get-only (set from ctor), same as MaxLength
-        {
-            get => _message;
-            set => Set(ref _message, value);
-        }
+        public string Message { get; set; } // TODO in ViewModel-first approach it can be get-only (set from ctor), same as MaxLength
 
-        public int MaxLength
-        {
-            get => _maxLength;
-            set => Set(ref _maxLength, value);
-        }
+        public int MaxLength { get; set; }
 
-        public string OriginalText
-        {
-            get => _originalText;
-            set => Set(ref _originalText, value);
-        }
+        public string OriginalText { get; set; }
 
-        public string EditedText
-        {
-            get => _editedText;
-            set
-            {
-                Set(ref _editedText, value);
-                CurrentTextLength = EditedText.Length;
-            }
-        }
+        public string EditedText { get; set; }
 
-        public int CurrentTextLength
-        {
-            get => _currentTextLength;
-            set => Set(ref _currentTextLength, value);
-        }
+        public int CurrentTextLength => EditedText?.Length ?? 0;
 
         public ManualChangeWindowViewModel() // design time ctor
         {
@@ -81,7 +52,7 @@ namespace Shmap.ViewModels
             return CurrentTextLength <= MaxLength;
         }
 
-        private void AcceptChanges() //TODO possbile to apply validataion rules
+        private void AcceptChanges()
         {
             IsChangeAccepted = true;
         }

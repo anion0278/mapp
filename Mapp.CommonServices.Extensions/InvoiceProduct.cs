@@ -16,7 +16,6 @@ namespace Shmap.CommonServices
     {
         private uint _packQuantityMultiplier;
         public string WarehouseCode { get; set; }
-        public string WarehouseName { get; set; }
         public string AmazonSku { get; set; }
         public uint PackQuantityMultiplier
         {

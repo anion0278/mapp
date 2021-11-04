@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Security.Policy;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
@@ -108,15 +109,19 @@ namespace Shmap.ViewModels
             _model = model;
         }
 
-        private void GoToInvoicePage()
+        private void GoToInvoicePage() // TODO into separate provider + tests
         {
-            //var salesCentrals = new Dictionary<string, string>()
-            //    {{"amazon.com", ""}};
-            string url = "https://sellercentral.amazon.co.uk/orders-v3/order/";
-            if (_model.ParentInvoice.SalesChannel.EqualsIgnoreCase("amazon.com")) //SalesChannel can be null
+            string salesChannel = _model.ParentInvoice.SalesChannel;
+
+            var amazonCentralExceptions = new Dictionary<IEnumerable<string>, string>()
             {
-                url = "https://sellercentral.amazon.com/orders-v3/order/";
-            }
+                {new []{"amazon.com", "amazon.com.mx", "amazon.ca"}, "https://sellercentral.amazon.com/orders-v3/order/"}
+            };
+            string defaultAmazonCentralUrl = "https://sellercentral.amazon.co.uk/orders-v3/order/";
+
+            string url = amazonCentralExceptions.SingleOrDefault(pair => pair.Key.Contains(salesChannel)).Value
+                         ?? defaultAmazonCentralUrl;
+           
             url += AmazonNumber;
             Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
         }

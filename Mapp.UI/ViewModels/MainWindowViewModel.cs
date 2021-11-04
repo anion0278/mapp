@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -14,6 +15,7 @@ using Shmap.CommonServices;
 using Shmap.DataAccess;
 using Shmap.Models;
 using Shmap.ViewModels;
+using Moq;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
 
@@ -44,12 +46,13 @@ namespace Shmap.UI.ViewModels
         public RelayCommand ConvertTransactionsCommand { get; }
         public RelayCommand WindowClosingCommand { get; }
 
-        public ObservableCollection<InvoiceItemViewModel> InvoiceItems { get; } = new();
+        public ObservableCollection<InvoiceItemViewModel> InvoiceItems { get; } = new(); // TODO make private field?
 
-        public ICollectionView InvoiceItemsCollectionView { get; set; }
+        public ICollectionView InvoiceItemsCollectionView { get; }
 
         public ObservableCollection<InvoiceViewModel> Invoices { get; } = new();
 
+        // TODO apply Fody
         public int WindowLeft // is it responsibility of the VM?
         {
             get => _windowLeft;
@@ -149,10 +152,47 @@ namespace Shmap.UI.ViewModels
 
         public MainWindowViewModel() // Design-time ctor
         {
-            _windowHeight = 600;
+            _windowHeight = 650;
             _windowWidth = 900;
             _existingInvoiceNumber = 123456789;
             _defaultEmail = "email@email.com";
+
+            InvoiceItemsCollectionView = InitializeCollectionView();
+
+            var invoice = new Invoice(new Dictionary<string, decimal>())
+            {
+                VariableSymbolFull = "203-5798943-2666737",
+                ShipCountryCode = "GB",
+                RelatedWarehouseName = "CGE",
+                CustomsDeclaration = "1x deskova hra",
+                SalesChannel = "amazon.com"
+            };
+            var items = new InvoiceItemBase[]
+            {
+                new InvoiceProduct(invoice)
+                {
+                    AmazonSku = "55-KOH-FR6885",
+                    Name = "Dermacol Make-Up Cover, Waterproof Hypoallergenic for All Skin Types, Nr 218",
+                    PackQuantityMultiplier = 1,
+                    WarehouseCode = "CGE08",
+                },
+                new InvoiceItemGeneral(invoice, InvoiceItemType.Shipping)
+                {
+                    Name = "Shipping",
+                },
+                new InvoiceItemGeneral(invoice, InvoiceItemType.Discount)
+                {
+                    Name = "Discount"
+                }
+            };
+            invoice.AddInvoiceItems(items);
+
+            var dataMock = Mock.Of<IAutocompleteData>();
+            foreach (var item in items)
+            {
+                InvoiceItems.Add(new InvoiceItemViewModel(item, dataMock)); // TODO create bindable collection with AddRange method
+            }
+            Invoices.Add(new InvoiceViewModel(invoice, dataMock));
         }
 
         public MainWindowViewModel(IConfigProvider configProvider,
@@ -170,13 +210,13 @@ namespace Shmap.UI.ViewModels
             _gpcGenerator = gpcGenerator;
             _autocompleteData = autocompleteData;
             _dialogService = dialogService;
+
             SelectAmazonInvoicesCommand = new RelayCommand(SelectAmazonInvoices, () => !HasErrors);
             ExportConvertedAmazonInvoicesCommand = new RelayCommand(ExportConvertedAmazonInvoices, ExportConvertedAmazonInvoicesCanExecute);
             ConvertTransactionsCommand = new RelayCommand(ConvertTransactions, () => true);
             WindowClosingCommand = new RelayCommand(OnWindowClosing, () => true);
 
-            InvoiceItemsCollectionView = GetNewCollectionViewInstance(InvoiceItems); 
-            InvoiceItemsCollectionView.GroupDescriptions.Add(new PropertyGroupDescription(nameof(InvoiceItemViewModel.AmazonNumber)));
+            InvoiceItemsCollectionView = InitializeCollectionView();
 
             AddValidationRule(() => DefaultEmail, () => MailAddress.TryCreate(DefaultEmail, out _), "Zadany email neni v poradku");
             AddValidationRule(() => ExistingInvoiceNumber, () => ExistingInvoiceNumber.HasValue, "Cislo faktury neni zadano spravne");
@@ -190,6 +230,48 @@ namespace Shmap.UI.ViewModels
             _existingInvoiceNumber = _configProvider.ExistingInvoiceNumber;
             _defaultEmail = _configProvider.DefaultEmail;
             _trackingCode = _configProvider.TrackingCode;
+
+            var invoice = new Invoice(new Dictionary<string, decimal>())
+            {
+                VariableSymbolFull = "203-5798943-2666737",
+                ShipCountryCode = "GB",
+                RelatedWarehouseName = "CGE",
+                CustomsDeclaration = "1x deskova hra",
+                SalesChannel = "amazon.com"
+            };
+            var items = new InvoiceItemBase[]
+            {
+                new InvoiceProduct(invoice)
+                {
+                    AmazonSku = "55-KOH-FR6885",
+                    Name = "Dermacol Make-Up Cover, Waterproof Hypoallergenic for All Skin Types, Nr 218",
+                    PackQuantityMultiplier = 1,
+                    WarehouseCode = "CGE08",
+                },
+                new InvoiceItemGeneral(invoice, InvoiceItemType.Shipping)
+                {
+                    Name = "Shipping",
+                },
+                new InvoiceItemGeneral(invoice, InvoiceItemType.Discount)
+                {
+                    Name = "Discount"
+                }
+            };
+            invoice.AddInvoiceItems(items);
+
+            var dataMock = Mock.Of<IAutocompleteData>();
+            foreach (var item in items)
+            {
+                InvoiceItems.Add(new InvoiceItemViewModel(item, dataMock)); // TODO create bindable collection with AddRange method
+            }
+            Invoices.Add(new InvoiceViewModel(invoice, dataMock));
+        }
+
+        private ICollectionView InitializeCollectionView()
+        {
+            var collectionView = GetNewCollectionViewInstance(InvoiceItems);
+            collectionView.GroupDescriptions.Add(new PropertyGroupDescription(nameof(InvoiceItemViewModel.AmazonNumber)));
+            return collectionView;
         }
 
         private bool ExportConvertedAmazonInvoicesCanExecute()

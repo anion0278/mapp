@@ -22,7 +22,7 @@
         </Grid.RowDefinitions>
         <TextBlock Grid.Row="0" TextWrapping="Wrap" Text="{Binding Message}" TextAlignment="Justify" Margin="10" />
         <Label Grid.Row="1" FontStyle="Italic" Margin="10 0 10 0">Pudvodni text:</Label>
-        <TextBox Grid.Row="2" IsReadOnly="True" Text="{Binding OriginalText}" Margin="10 0 10 0"/>
+        <TextBox Grid.Row="2" IsReadOnly="True" Text="{Binding OriginalText}" Foreground="Gray" Margin="10 0 10 0"/>
         <Label Grid.Row="3" FontStyle="Italic" Margin="10 0 10 0">Upraveny text:</Label>
         <TextBox Grid.Row="4" MaxLength="{Binding MaxLength}" Margin="10 0 10 0" Text="{Binding EditedText, UpdateSourceTrigger=PropertyChanged}" >
             <TextBox.Style>

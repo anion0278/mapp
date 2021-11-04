@@ -42,6 +42,8 @@ namespace Shmap.CommonServices
         public string ShipCountryCode { get; set; }
         public InvoiceVatClassification Classification => GetClassification();
         public uint Number { get; set; }
+
+        // TODO join variable symbols into single Class with ShortVersion autoprop
         public string VariableSymbolFull { get; set; }
         public string VariableSymbolShort => GetShortVariableCode(VariableSymbolFull, out _);
         public DateTime ConversionDate { get; set; }
@@ -139,6 +141,15 @@ namespace Shmap.CommonServices
         {
             _invoiceItems.Add(item);
         }
+
+        public void AddInvoiceItems(IEnumerable<InvoiceItemBase> items)
+        {
+            foreach (var item in items)
+            {
+                _invoiceItems.Add(item);
+            }
+        }
+
 
         private InvoiceVatClassification GetClassification()
         {

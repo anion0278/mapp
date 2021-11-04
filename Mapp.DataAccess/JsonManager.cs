@@ -42,9 +42,12 @@ namespace Shmap.DataAccess
             return JsonSerializer.Deserialize<Dictionary<string, string>>(json) ?? new Dictionary<string, string>();
         }
 
-        public void SerializeDictionaryToJson(Dictionary<string, string> map, string fileName)
+        public void SerializeDictionaryToJson(Dictionary<string, string> map, string fileName) // TODO store data only if change occured
         {
-            string json = JsonSerializer.Serialize(map);
+            string json = JsonSerializer.Serialize(map, new JsonSerializerOptions
+            {
+                IgnoreNullValues = true, WriteIndented = true
+            });
             File.WriteAllText(fileName, json);
         }
 
