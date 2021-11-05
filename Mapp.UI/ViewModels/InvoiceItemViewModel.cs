@@ -111,7 +111,6 @@ namespace Shmap.ViewModels
 
         private bool ValidateProductCode()
         {
-            return false;
             return _model.Type != InvoiceItemType.Product || !string.IsNullOrWhiteSpace(WarehouseProductCode);
         }
 
