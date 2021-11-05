@@ -14,26 +14,16 @@ namespace Shmap.ViewModels
     {
         private readonly InvoiceItemBase _model;
         private readonly IAutocompleteData _autocompleteData;
-        private string _amazonNumber;
-        private string _salesChannel;
         private string _amazonProductName;
-        private string _amazonSku;
         private string _warehouseProductCode;
         private uint? _packQuantityMultiplier;
 
-        public string AmazonNumber
-        {
-            get => _amazonNumber;
-            //set => Set(ref _amazonNumber, value);
-        }
-
-        public string SalesChannel
-        {
-            get => _salesChannel;
-            //set => Set(ref _salesChannel, value);
-        }
-
         public RelayCommand GoToInvoicePageCommand { get; }
+
+        public string AmazonNumber { get; }
+        public string SalesChannel { get; }
+        public string AmazonSku { get; }
+        public bool IsFullyEditable => _model.Type == InvoiceItemType.Product;
 
         public string AmazonProductName
         {
@@ -46,11 +36,6 @@ namespace Shmap.ViewModels
                 var rememberedDictionary = _autocompleteData.ShippingNameBySku;
                 _autocompleteData.UpdateAutocompleteData(value, rememberedDictionary, AmazonSku);
             }
-        }
-
-        public string AmazonSku
-        {
-            get => _amazonSku;
         }
 
         public string WarehouseProductCode
@@ -66,8 +51,6 @@ namespace Shmap.ViewModels
             }
         }
 
-        public bool IsFullyEditable => _model.Type == InvoiceItemType.Product;
-
         public uint? PackQuantityMultiplier
         {
             get => _packQuantityMultiplier;
@@ -82,24 +65,24 @@ namespace Shmap.ViewModels
 
         public InvoiceItemViewModel(InvoiceItemBase model, IAutocompleteData autocompleteData)
         {
-            _amazonNumber = model.ParentInvoice.VariableSymbolFull;
-            _salesChannel = model.ParentInvoice.SalesChannel;
+            AmazonNumber = model.ParentInvoice.VariableSymbolFull;
+            SalesChannel = model.ParentInvoice.SalesChannel;
             _amazonProductName = model.Name;
 
             GoToInvoicePageCommand = new RelayCommand(GoToInvoicePage);
 
-            AddValidationRule(() => PackQuantityMultiplier, 
-                () => PackQuantityMultiplier > 0, 
+            AddValidationRule(() => PackQuantityMultiplier,
+                () => PackQuantityMultiplier > 0,
                 "Pocet musi byt vetsi nez nula");
 
-            AddValidationRule(() => WarehouseProductCode, 
-                ValidateProductCode, 
+            AddValidationRule(() => WarehouseProductCode,
+                ValidateProductCode,
                 "Neni zadan kod produktu");
 
-            _packQuantityMultiplier = 1; 
+            _packQuantityMultiplier = 1;
             if (model is InvoiceProduct product)
             {
-                _amazonSku = product.AmazonSku;
+                AmazonSku = product.AmazonSku;
                 _warehouseProductCode = product.WarehouseCode;
                 _packQuantityMultiplier = product.PackQuantityMultiplier;
             }
@@ -121,13 +104,14 @@ namespace Shmap.ViewModels
 
             string url = amazonCentralExceptions.SingleOrDefault(pair => pair.Key.Contains(salesChannel)).Value
                          ?? defaultAmazonCentralUrl;
-           
+
             url += AmazonNumber;
             Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
         }
 
         private bool ValidateProductCode()
         {
+            return false;
             return _model.Type != InvoiceItemType.Product || !string.IsNullOrWhiteSpace(WarehouseProductCode);
         }
 

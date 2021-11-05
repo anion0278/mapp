@@ -10,37 +10,14 @@ namespace Shmap.ViewModels
     {
         private readonly Invoice _model;
         private readonly IAutocompleteData _autocompleteData;
-        private string _amazonNumber;
-        private string _salesChannel;
-        private IEnumerable<string> _invoiceProductNames;
-        private IEnumerable<string> _amazonSkuCodes;
         private string _customsDeclaration;
         private string _relatedWarehouseSection;
-        private InvoiceVatClassification _vatType;
 
-        public string AmazonNumber
-        {
-            get => _amazonNumber;
-            set => Set(ref _amazonNumber, value);
-        }
-
-        public string SalesChannel
-        {
-            get => _salesChannel;
-            set => Set(ref _salesChannel, value);
-        }
-
-        public IEnumerable<string> InvoiceProductNames // TODO AmazonSkuCodes and InvoiceProductNames should be joined and shown in table together
-        {
-            get => _invoiceProductNames;
-            set => Set(ref _invoiceProductNames, value);
-        }
-
-        public IEnumerable<string> AmazonSkuCodes
-        {
-            get => _amazonSkuCodes;
-            set => Set(ref _amazonSkuCodes, value);
-        }
+        public string AmazonNumber { get; }
+        public string SalesChannel { get; }
+        public InvoiceVatClassification VatType { get; }
+        public IEnumerable<string> InvoiceProductNames { get; } 
+        public IEnumerable<string> AmazonSkuCodes { get; }
 
         public string CustomsDeclaration
         {
@@ -54,12 +31,6 @@ namespace Shmap.ViewModels
                 string productSku = AmazonSkuCodes.FirstOrDefault();
                 _autocompleteData.UpdateAutocompleteData(value, rememberedDictionary, productSku);
             }
-        }
-
-        public InvoiceVatClassification VatType
-        {
-            get => _vatType;
-            set => Set(ref _vatType, value);
         }
 
         public string RelatedWarehouseSection
@@ -78,13 +49,14 @@ namespace Shmap.ViewModels
 
         public InvoiceViewModel(Invoice model, IAutocompleteData autocompleteData)
         {
-            _amazonNumber = model.VariableSymbolFull;
-            _salesChannel = model.SalesChannel;
+            AmazonNumber = model.VariableSymbolFull;
+            SalesChannel = model.SalesChannel;
+            AmazonSkuCodes = model.InvoiceItems.OfType<InvoiceProduct>().Select(p => p.AmazonSku);
+            InvoiceProductNames = model.InvoiceItems.OfType<InvoiceProduct>().Select(p => p.Name);
+            VatType= model.Classification;
+
             _relatedWarehouseSection = model.RelatedWarehouseName;
-            _amazonSkuCodes = model.InvoiceItems.OfType<InvoiceProduct>().Select(p => p.AmazonSku);
-            _invoiceProductNames = model.InvoiceItems.OfType<InvoiceProduct>().Select(p => p.Name);
             _customsDeclaration = model.CustomsDeclaration;
-            _vatType = model.Classification;
             _autocompleteData = autocompleteData;
             
             AddValidationRule(() => RelatedWarehouseSection, 

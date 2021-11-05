@@ -13,7 +13,7 @@ namespace Shmap.ViewModels
 {
     public class ViewModelWithErrorValidationBase : ViewModelBase, IDataErrorInfo
     {
-        private readonly Dictionary<string, ViewModelValidationRule> _ruleMap = new();
+        private readonly Dictionary<string, ViewModelValidationRule> _ruleMap = new(); // TODO decide how to handle multiple rules for the same proprerty, right now causes errors
 
         public string Error
         {
