@@ -33,7 +33,7 @@ namespace Shmap.BusinessLogic.Transactions
             }
         }
 
-        private string GetShortVariableCodeForRefund(string fullVariableCode)
+        private string GetShortVariableCodeForRefund(string fullVariableCode) // TODO remove repetition 
         {
             // refunds are filled manually in pohoda, so there is no need to care about invoice symVar
             string filteredCode = fullVariableCode.RemoveAll("-");

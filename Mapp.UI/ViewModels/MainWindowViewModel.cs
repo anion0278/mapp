@@ -23,7 +23,7 @@ namespace Shmap.UI.ViewModels
 {
     internal class MainWindowViewModel : ViewModelWithErrorValidationBase, IMainWindowViewModel
     {
-        public IInvoiceConverter _invoiceConverter;
+        private readonly IInvoiceConverter _invoiceConverter;
         private readonly IConfigProvider _configProvider;
         private readonly IFileOperationService _fileOperationService;
         private readonly ITransactionsReader _transactionsReader;
@@ -39,12 +39,10 @@ namespace Shmap.UI.ViewModels
         private string _defaultEmail;
         private string _trackingCode;
         private bool _openTargetFolderAfterConversion;
-        private string _windowTitle;
 
         public RelayCommand SelectAmazonInvoicesCommand { get; }
         public RelayCommand ExportConvertedAmazonInvoicesCommand { get; }
         public RelayCommand ConvertTransactionsCommand { get; }
-        public RelayCommand WindowClosingCommand { get; }
 
         public ObservableCollection<InvoiceItemViewModel> InvoiceItems { get; } = new(); // TODO make private field?
 
@@ -144,11 +142,7 @@ namespace Shmap.UI.ViewModels
             }
         }
 
-        public string WindowTitle
-        {
-            get => _windowTitle;
-            set => Set(ref _windowTitle, value);
-        }
+        public string WindowTitle { get; set; }
 
         public MainWindowViewModel() // Design-time ctor
         {
@@ -186,7 +180,6 @@ namespace Shmap.UI.ViewModels
                 }
             };
             invoice.AddInvoiceItems(items);
-
             var dataMock = Mock.Of<IAutocompleteData>();
             foreach (var item in items)
             {
@@ -214,14 +207,13 @@ namespace Shmap.UI.ViewModels
             SelectAmazonInvoicesCommand = new RelayCommand(SelectAmazonInvoices, () => !HasErrors);
             ExportConvertedAmazonInvoicesCommand = new RelayCommand(ExportConvertedAmazonInvoices, ExportConvertedAmazonInvoicesCanExecute);
             ConvertTransactionsCommand = new RelayCommand(ConvertTransactions, () => true);
-            WindowClosingCommand = new RelayCommand(OnWindowClosing, () => true);
 
             InvoiceItemsCollectionView = InitializeCollectionView();
 
             AddValidationRule(() => DefaultEmail, () => MailAddress.TryCreate(DefaultEmail, out _), "Zadany email neni v poradku");
             AddValidationRule(() => ExistingInvoiceNumber, () => ExistingInvoiceNumber.HasValue, "Cislo faktury neni zadano spravne");
 
-            _windowTitle += FormatTitleAssemblyFileVersion(Assembly.GetEntryAssembly());
+            WindowTitle += FormatTitleAssemblyFileVersion(Assembly.GetEntryAssembly());
             _windowHeight = _configProvider.MainWindowSize.Height;
             _windowWidth = _configProvider.MainWindowSize.Width;
             _windowState = _configProvider.IsMainWindowMaximized ? WindowState.Maximized : WindowState.Normal;
@@ -230,41 +222,6 @@ namespace Shmap.UI.ViewModels
             _existingInvoiceNumber = _configProvider.ExistingInvoiceNumber;
             _defaultEmail = _configProvider.DefaultEmail;
             _trackingCode = _configProvider.TrackingCode;
-
-            var invoice = new Invoice(new Dictionary<string, decimal>())
-            {
-                VariableSymbolFull = "203-5798943-2666737",
-                ShipCountryCode = "GB",
-                RelatedWarehouseName = "CGE",
-                CustomsDeclaration = "1x deskova hra",
-                SalesChannel = "amazon.com"
-            };
-            var items = new InvoiceItemBase[]
-            {
-                new InvoiceProduct(invoice)
-                {
-                    AmazonSku = "55-KOH-FR6885",
-                    Name = "Dermacol Make-Up Cover, Waterproof Hypoallergenic for All Skin Types, Nr 218",
-                    PackQuantityMultiplier = 1,
-                    WarehouseCode = "CGE08",
-                },
-                new InvoiceItemGeneral(invoice, InvoiceItemType.Shipping)
-                {
-                    Name = "Shipping",
-                },
-                new InvoiceItemGeneral(invoice, InvoiceItemType.Discount)
-                {
-                    Name = "Discount"
-                }
-            };
-            invoice.AddInvoiceItems(items);
-
-            var dataMock = Mock.Of<IAutocompleteData>();
-            foreach (var item in items)
-            {
-                InvoiceItems.Add(new InvoiceItemViewModel(item, dataMock)); // TODO create bindable collection with AddRange method
-            }
-            Invoices.Add(new InvoiceViewModel(invoice, dataMock));
         }
 
         private ICollectionView InitializeCollectionView()
@@ -280,9 +237,6 @@ namespace Shmap.UI.ViewModels
                    && InvoiceItems.All(i => !i.HasErrors)
                    && Invoices.All(i => !i.HasErrors);
         }
-
-        private void OnWindowClosing()
-        { }
 
         private string FormatTitleAssemblyFileVersion(Assembly assembly)
         {

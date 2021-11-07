@@ -7,7 +7,7 @@
         xmlns:mapp="clr-namespace:Mapp"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:command="http://www.galasoft.ch/mvvmlight"
-        xmlns:resources="clr-namespace:Shmap.UI.Views.Resources"
+        xmlns:rs="clr-namespace:Shmap.UI.Views.Resources"
         xmlns:viewModels="clr-namespace:Shmap.UI.ViewModels"
         mc:Ignorable="d"
         Title="{Binding WindowTitle}" 
@@ -21,32 +21,12 @@
         <mapp:ProductsListConverter x:Key="ProductsConverter"/>
         <mapp:ProductsListToSkuConverter x:Key="ProductsToSkuConverter"/>
 
-        <!--Applied to every column header-->
-        <Style TargetType="{x:Type DataGridColumnHeader}">
-            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        <Style TargetType="{x:Type Label}">
+            <Setter Property="HorizontalAlignment" Value="Center" />
+        </Style>
+
+        <Style x:Key="BoxWithErrorTipStyle" TargetType="{x:Type TextBox}" >
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
-        </Style>
-
-        <ControlTemplate x:Key="ErrorTemplate">
-            <TextBlock Text="!"  Width="auto" FontWeight="Bold" Foreground="Red" Margin="5 0 5 0"
-                       TextAlignment="Center" HorizontalAlignment="Stretch" FontSize="20">
-                <TextBlock.ToolTip>
-                    <Binding RelativeSource="{RelativeSource FindAncestor, 
-                                    AncestorType={x:Type DataGridRow}}"
-                                 Path="(Validation.Errors)/ErrorContent" />
-                </TextBlock.ToolTip>
-            </TextBlock>
-        </ControlTemplate>
-
-        <Style  x:Key="EditingCellStyle"  TargetType="{x:Type TextBox}">
-            <!--this ensures that text looks the same way in both TextBox and TextBlock-->
-            <Setter Property="TextAlignment" Value="Center" />
-            <Setter Property="Padding" Value="-3 -1 -3 -1" />
-            <Setter Property="TextWrapping" Value="Wrap"/>
-        </Style>
-
-        <Style x:Key="TextBoxWithValidationTipStyle" TargetType="TextBox" BasedOn="{StaticResource EditingCellStyle}">
-            <!--<Setter Property="TextAlignment" Value="Center" />-->
             <Style.Triggers>
                 <Trigger Property="Validation.HasError" Value="True">
                     <Setter Property="Background" Value="Pink"/>
@@ -56,14 +36,20 @@
             </Style.Triggers>
         </Style>
 
-        <Style x:Key="ParamInputWithTipStyle" TargetType="TextBox" 
-               BasedOn="{StaticResource TextBoxWithValidationTipStyle}">
+        <Style x:Key="InputBoxStyle" TargetType="{x:Type TextBox}" 
+               BasedOn="{StaticResource BoxWithErrorTipStyle}">
             <Setter Property="Width" Value="150"/>
             <Setter Property="Height" Value="20"/>
-            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="True">
+                    <Setter Property="Background" Value="Pink"/>
+                    <Setter Property="ToolTip" Value="{Binding RelativeSource={x:Static RelativeSource.Self}, 
+                                            Path=(Validation.Errors)/ErrorContent}"/>
+                </Trigger>
+            </Style.Triggers>
         </Style>
 
-        <Style x:Key="ActionButtonStyle" TargetType="Button">
+        <Style TargetType="{x:Type Button}">
             <Setter Property="Width" Value="150" />
             <Setter Property="Height" Value="35" />
             <Setter Property="ToolTipService.ShowOnDisabled" Value="True"/>
@@ -74,21 +60,30 @@
             </Style.Triggers>
         </Style>
 
-        <Style x:Key="WrapBlockStyle" TargetType="{x:Type TextBlock}" >
-            <Setter Property="TextWrapping" Value="Wrap"/>
-            <Setter Property="TextAlignment" Value="Center" />
+        <Style TargetType="{x:Type DataGridColumnHeader}">
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
         </Style>
 
-        <!--REMOVE-->
-        <Style x:Key="UserInputBlockStyle" TargetType="{x:Type TextBlock}" >
-            <Setter Property="Background" Value="LightBlue"/>
+        <ControlTemplate x:Key="ErrorTemplate">
+            <Label Content="!"  FontWeight="ExtraBold" Foreground="Red" 
+                       Margin="5 0 5 0"
+                       VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+                       VerticalAlignment="Stretch"  HorizontalAlignment="Stretch" FontSize="20">
+                <Label.ToolTip>
+                    <Binding RelativeSource="{RelativeSource FindAncestor,  AncestorType={x:Type DataGridRow}}"
+                             Path="(Validation.Errors)/ErrorContent" />
+                </Label.ToolTip>
+            </Label>
+        </ControlTemplate>
+
+        <Style x:Key="CellBlockStyle" TargetType="{x:Type TextBlock}" >
             <Setter Property="TextWrapping" Value="Wrap"/>
             <Setter Property="TextAlignment" Value="Center" />
-        </Style>
-
-        <Style x:Key="TextBlockWithValidationTipStyle" TargetType="TextBlock" 
-               BasedOn="{StaticResource UserInputBlockStyle}">
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Padding" Value="3" />
             <Style.Triggers>
+                <!--TODO reuse tooltip-->
                 <Trigger Property="Validation.HasError" Value="True">
                     <Setter Property="Background" Value="Pink"/>
                     <Setter Property="ToolTip" Value="{Binding RelativeSource={x:Static RelativeSource.Self}, 
@@ -97,43 +92,17 @@
             </Style.Triggers>
         </Style>
 
-        <Style x:Key="ParamLabelStyle" TargetType="Label">
-            <Setter Property="HorizontalAlignment" Value="Center" />
-        </Style>
-
-        <Style x:Key="UserInputCellStyle" TargetType="{x:Type DataGridCell}">
-            <Setter Property="Background" Value="LightBlue"/>
-            <Setter Property="TextBlock.TextWrapping" Value="Wrap"/>
-            <Setter Property="HorizontalContentAlignment" Value="Center" />
-            <Setter Property="TextBlock.TextAlignment" Value="Center"/>
-            <Style.Triggers>
-                <Trigger Property="IsSelected" Value="True">
-                    <Setter Property="Foreground" Value="Black"/>
-                    <Setter Property="FontWeight" Value="Bold"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-
-        <Style x:Key="ToggleableReadonlyCellStyle" TargetType="{x:Type DataGridCell}">
-            <Style.Triggers>
-                <!--Due to virtualization sometimes causes harmless binding errors-->
-                <DataTrigger Binding="{Binding Path=IsFullyEditable}" Value="False">
-                    <Setter Property="IsTabStop" Value="False"></Setter>
-                    <Setter Property="Focusable" Value="False"></Setter>
-                </DataTrigger>
-            </Style.Triggers>
+        <Style x:Key="CellBoxEditingStyle" TargetType="{x:Type TextBox}"
+               BasedOn="{StaticResource BoxWithErrorTipStyle}">
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="TextAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Stretch" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="Padding" Value="3" />
         </Style>
 
         <Style TargetType="{x:Type DataGridCell}">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type DataGridCell}">
-                        <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True" >
-                            <ContentPresenter Margin="3" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
             <Style.Triggers>
                 <Trigger Property="IsKeyboardFocusWithin" Value="True">
                     <Setter Property="BorderThickness" Value="3"/>
@@ -146,32 +115,22 @@
             </Style.Triggers>
         </Style>
 
-        <Style x:Key="CellStyle" TargetType="{x:Type DataGridCell}">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type DataGridCell}">
-                        <Border Cursor="Hand" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True" >
-                            <ContentPresenter Margin="3" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
+        <Style x:Key="InputCellStyle" TargetType="{x:Type DataGridCell}"
+               BasedOn="{StaticResource {x:Type DataGridCell}}">
+            <Setter Property="Background" Value="LightCyan"/>
+        </Style>
+
+        <Style x:Key="ToggleableReadonlyCellStyle" TargetType="{x:Type DataGridCell}"
+               BasedOn="{StaticResource InputCellStyle}">
             <Style.Triggers>
-                <Trigger Property="IsKeyboardFocusWithin" Value="True">
-                    <!--<Setter Property="Background" Value="White"/>
-                    <Setter Property="Foreground" Value="DarkSeaGreen"/>-->
-                    <Setter Property="BorderThickness" Value="2"/>
-                    <Setter Property="BorderBrush" Value="SandyBrown"/>
-                </Trigger>
+                <DataTrigger Binding="{Binding Path=IsFullyEditable}" Value="False">
+                    <Setter Property="IsTabStop" Value="False"></Setter>
+                    <Setter Property="Focusable" Value="False"></Setter>
+                </DataTrigger>
             </Style.Triggers>
         </Style>
 
     </Window.Resources>
-    <i:Interaction.Triggers>
-        <i:EventTrigger EventName="Closing">
-            <command:EventToCommand Command="{Binding Mode=OneWay, Path=WindowClosingCommand}" />
-        </i:EventTrigger>
-    </i:Interaction.Triggers>
 
     <TabControl>
         <TabItem Header="Amazon - konverter">
@@ -183,29 +142,28 @@
                 </Grid.RowDefinitions>
 
                 <StackPanel Grid.Row="0" Margin="20">
-                    <Button Content="Zvolit fakturu" Style="{StaticResource ActionButtonStyle}" 
+                    <Button Content="Zvolit fakturu"  
                             Command="{Binding SelectAmazonInvoicesCommand}"/>
 
-                    <Label Content="Posledni existujici cislo v systemu:" Style="{StaticResource ParamLabelStyle}" />
-                    <local:NumericTextBox MaxLength="9" Style="{StaticResource ParamInputWithTipStyle}"
-                                          Text="{resources:NullableBinding ExistingInvoiceNumber}" />
+                    <Label Content="Posledni existujici cislo v systemu:" />
+                    <local:NumericTextBox MaxLength="9" Style="{StaticResource InputBoxStyle}"
+                                          Text="{rs:NullableBinding ExistingInvoiceNumber}" />
 
-                    <Label Content="Default email:"  Style="{StaticResource ParamLabelStyle}" />
-                    <local:EmailTextBox MaxLength="30" Style="{StaticResource ParamInputWithTipStyle}" 
-                                        Text="{resources:ValidatableBinding DefaultEmail}" />
+                    <Label Content="Default email:" />
+                    <local:EmailTextBox MaxLength="30" Style="{StaticResource InputBoxStyle}"
+                                        Text="{rs:ValidatableBinding DefaultEmail}" />
 
                     <CheckBox Content="Otevrit slozku po konvertaci" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10"
                               IsChecked="{Binding OpenTargetFolderAfterConversion}"/>
 
-                    <Button Content="Konvertovat..." Style="{StaticResource ActionButtonStyle}" 
-                            Command="{Binding ExportConvertedAmazonInvoicesCommand}"/>
+                    <Button Content="Konvertovat..." Command="{Binding ExportConvertedAmazonInvoicesCommand}"/>
                 </StackPanel>
 
-                <resources:ValidatableDataGrid Grid.Row="1" Margin="5" AutoGenerateColumns="false" CanUserAddRows="false" CanUserDeleteRows="False"
-                          EnableColumnVirtualization="False" EnableRowVirtualization="False" VirtualizingPanel.ScrollUnit="Pixel"
-                          PreviewTextInput="DataGrid_PreviewTextInput"
-                          RowValidationErrorTemplate="{StaticResource ErrorTemplate}" 
-                          ItemsSource="{Binding InvoiceItemsCollectionView}"  >
+                <rs:UnblockingDataGrid Grid.Row="1" Margin="5" AutoGenerateColumns="false" CanUserAddRows="false" CanUserDeleteRows="False"
+                                     EnableColumnVirtualization="False" EnableRowVirtualization="False" VirtualizingPanel.ScrollUnit="Pixel"
+                                     RowValidationErrorTemplate="{StaticResource ErrorTemplate}" 
+                                     ItemsSource="{Binding InvoiceItemsCollectionView}">
+                    <!--TODO SET Desing time VM context-->
 
                     <DataGrid.GroupStyle>
                         <GroupStyle>
@@ -219,7 +177,7 @@
                                     <Setter Property="Template">
                                         <Setter.Value>
                                             <ControlTemplate TargetType="{x:Type GroupItem}">
-                                                <Expander IsExpanded="True" Background="MediumPurple">
+                                                <Expander IsExpanded="True" Background="MediumPurple" IsTabStop="False">
                                                     <Expander.Style>
                                                         <Style TargetType="{x:Type Expander}">
                                                             <Style.Triggers>
@@ -260,95 +218,88 @@
                     </DataGrid.GroupStyle>
 
                     <DataGrid.Columns>
-                        <resources:DataGridHyperlinkCommandColumn Header="Cislo (Amazon)" MinWidth="150" Width="100" IsReadOnly="true" 
-                                                        Command="{Binding GoToInvoicePageCommand}"
-                                                        Binding="{Binding AmazonNumber}"  />
+                        <rs:HyperlinkCommandColumn Header="Cislo (Amazon)" MinWidth="150" Width="100" IsReadOnly="true" 
+                                                   ElementStyle="{StaticResource CellBlockStyle}"
+                                                   EditingElementStyle="{StaticResource CellBoxEditingStyle}"
+                                                   Command="{Binding GoToInvoicePageCommand}"
+                                                   Binding="{Binding AmazonNumber}"  />
 
                         <DataGridTextColumn Header="Puvod" MinWidth="100" Width="100" IsReadOnly="true" 
+                                            ElementStyle="{StaticResource CellBlockStyle}"
+                                            EditingElementStyle="{StaticResource CellBoxEditingStyle}"
                                             Binding="{Binding SalesChannel}"/>
 
                         <DataGridTextColumn Header="Nazev produktu (Amazon)" Width="*" 
-                                            CellStyle ="{StaticResource UserInputCellStyle}"
-                                            EditingElementStyle="{StaticResource EditingCellStyle}"
-                                            ElementStyle="{StaticResource UserInputBlockStyle}"
+                                            CellStyle="{StaticResource InputCellStyle}"
+                                            ElementStyle="{StaticResource CellBlockStyle}"
+                                            EditingElementStyle="{StaticResource CellBoxEditingStyle}"
                                             Binding="{Binding AmazonProductName}" />
 
                         <DataGridTextColumn Header="SKU (Amazon)" IsReadOnly="True" MinWidth="100" Width="150" 
+                                            ElementStyle="{StaticResource CellBlockStyle}"
+                                            EditingElementStyle="{StaticResource CellBoxEditingStyle}"
                                             Binding="{Binding AmazonSku}" />
 
                         <DataGridTextColumn Header="Kod zbozi" Width="150" 
                                             CellStyle="{StaticResource ToggleableReadonlyCellStyle}"
-                                            EditingElementStyle="{StaticResource EditingCellStyle}"
-                                            Binding="{resources:ValidatableBinding WarehouseProductCode,Mode=TwoWay}">
-                            <DataGridTextColumn.ElementStyle>
-                                <Style TargetType="{x:Type TextBlock}">
-                                    <Style.Triggers>
-                                        <Trigger Property="Validation.HasError" Value="True">
-                                            <Setter Property="ToolTip"
-                                            Value="{Binding RelativeSource={RelativeSource Self},
-                                                Path=(Validation.Errors)/ErrorContent}"/>
-                                            </Trigger>
-                                            </Style.Triggers>
-                                </Style>
-                            </DataGridTextColumn.ElementStyle>
-                        </DataGridTextColumn>
+                                            ElementStyle="{StaticResource CellBlockStyle}"
+                                            EditingElementStyle="{StaticResource CellBoxEditingStyle}"
+                                            Binding="{rs:ValidatableBinding Path=WarehouseProductCode, Mode=TwoWay}" />
 
-                        <DataGridTemplateColumn Header="Mnozstvi v packu" Width="120" 
-                                                CellStyle="{StaticResource ToggleableReadonlyCellStyle}">
-                            <DataGridTemplateColumn.CellEditingTemplate>
-                                <DataTemplate>
-                                    <local:NumericTextBox MaxLength="3"
-                                                          Style="{StaticResource TextBoxWithValidationTipStyle}"
-                                                          Text="{resources:NullableBinding PackQuantityMultiplier}" />
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellEditingTemplate>
-
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock Style="{StaticResource TextBlockWithValidationTipStyle}"
-                                               Text="{Binding PackQuantityMultiplier}" />
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-
-                        </DataGridTemplateColumn>
+                        <local:DataGridNumberColumn MaxInputLength="3" IsInteger="True" Header="Kod zbozi" Width="150" 
+                                                    CellStyle="{StaticResource ToggleableReadonlyCellStyle}"
+                                                    ElementStyle="{StaticResource CellBlockStyle}"
+                                                    EditingElementStyle="{StaticResource CellBoxEditingStyle}"
+                                                    Binding="{rs:NullableBinding PackQuantityMultiplier}" />
 
                     </DataGrid.Columns>
-                </resources:ValidatableDataGrid>
+                </rs:UnblockingDataGrid>
 
-
-                <resources:ValidatableDataGrid Grid.Row="2" Margin="5" AutoGenerateColumns="false" CanUserAddRows="false" CanUserDeleteRows="False"
-                          EnableRowVirtualization="False" EnableColumnVirtualization="False" VirtualizingPanel.ScrollUnit="Pixel"
-                          RowValidationErrorTemplate="{StaticResource ErrorTemplate}" 
-                          ItemsSource="{Binding Invoices}" >
+                <rs:UnblockingDataGrid Grid.Row="2" Margin="5" AutoGenerateColumns="false" CanUserAddRows="false" CanUserDeleteRows="False"
+                                     EnableRowVirtualization="False" EnableColumnVirtualization="False" VirtualizingPanel.ScrollUnit="Pixel"
+                                     RowValidationErrorTemplate="{StaticResource ErrorTemplate}" 
+                                     ItemsSource="{Binding Invoices}" >
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Cislo (Amazon)" Width="150" IsReadOnly="true"
+                                            ElementStyle="{StaticResource CellBlockStyle}"
+                                            EditingElementStyle="{StaticResource CellBoxEditingStyle}"
                                             Binding="{Binding AmazonNumber}"/>
 
                         <DataGridTextColumn Header="Puvod" Width="100" IsReadOnly="true"
+                                            ElementStyle="{StaticResource CellBlockStyle}"
+                                            EditingElementStyle="{StaticResource CellBoxEditingStyle}"
                                             Binding="{Binding SalesChannel}"/>
 
                         <DataGridTextColumn Header="Produkty" Width="2*" IsReadOnly="true" 
-                                            ElementStyle="{StaticResource WrapBlockStyle}"
+                                            ElementStyle="{StaticResource CellBlockStyle}"
+                                            EditingElementStyle="{StaticResource CellBoxEditingStyle}"
                                             Binding="{Binding InvoiceProductNames, Converter={StaticResource ProductsConverter}}"/>
 
                         <DataGridTextColumn Header="SKU kody" Width="120" IsReadOnly="true" 
+                                            ElementStyle="{StaticResource CellBlockStyle}"
+                                            EditingElementStyle="{StaticResource CellBoxEditingStyle}"
                                             Binding="{Binding AmazonSkuCodes, Converter={StaticResource ProductsToSkuConverter}}"/>
 
+
                         <DataGridTextColumn Header="Kod ze skladu" Width="120" 
-                                            CellStyle="{StaticResource ToggleableReadonlyCellStyle}"
-                                            EditingElementStyle="{StaticResource EditingCellStyle}"
-                                            Binding="{resources:ValidatableBinding RelatedWarehouseSection, Mode=TwoWay}" />
+                                            CellStyle="{StaticResource InputCellStyle}"
+                                            ElementStyle="{StaticResource CellBlockStyle}"
+                                            EditingElementStyle="{StaticResource CellBoxEditingStyle}"
+                                            Binding="{rs:ValidatableBinding Path=RelatedWarehouseSection, Mode=TwoWay}" />
 
                         <DataGridTextColumn Header="Celni prohlaseni" Width="*" 
-                                            CellStyle ="{StaticResource UserInputCellStyle}"
-                                            EditingElementStyle="{StaticResource EditingCellStyle}"
-                                            ElementStyle="{StaticResource UserInputBlockStyle}"
+                                            CellStyle="{StaticResource InputCellStyle}"
+                                            ElementStyle="{StaticResource CellBlockStyle}"
+                                            EditingElementStyle="{StaticResource CellBoxEditingStyle}"
                                             Binding="{Binding CustomsDeclaration}" />
 
                         <DataGridTextColumn Header="Typ VAT" Width="80"  IsReadOnly="True"
+                                            ElementStyle="{StaticResource CellBlockStyle}"
+                                            EditingElementStyle="{StaticResource CellBoxEditingStyle}"
                                             Binding="{Binding VatType}"/>
+
                     </DataGrid.Columns>
-                </resources:ValidatableDataGrid>
+                </rs:UnblockingDataGrid>
             </Grid>
         </TabItem>
         <TabItem Header="Konverze transakci">
