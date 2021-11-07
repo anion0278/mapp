@@ -33,7 +33,7 @@ namespace Shmap.BusinessLogic.Transactions
             }
         }
 
-        private string GetShortVariableCodeForRefund(string fullVariableCode)
+        private string GetShortVariableCodeForRefund(string fullVariableCode) // TODO remove repetition 
         {
             // refunds are filled manually in pohoda, so there is no need to care about invoice symVar
             string filteredCode = fullVariableCode.RemoveAll("-");
@@ -43,7 +43,7 @@ namespace Shmap.BusinessLogic.Transactions
 
         private string GetTransactionLine(Transaction transaction)
         {
-            var shortVariableCode = TransactionsReader.GetShortVariableCode(transaction.OrderId, out var zerosRemoved);
+            var shortVariableCode = Invoice.GetShortVariableCode(transaction.OrderId, out var zerosRemoved);
             if (transaction.Type == TransactionTypes.Refund) // Refunds have short variable codes from first 10 symbols
             {
                 shortVariableCode = GetShortVariableCodeForRefund(transaction.OrderId);

@@ -10,7 +10,7 @@ namespace Shmap.BusinessLogic.Currency
         string GetAmazonName(string amazonName, List<ConvertableParameterPair> CurrencyPairs);
     }
 
-    public class CurrencyConverter : ICurrencyConverter
+    public class CurrencyConverter : ICurrencyConverter // TODO currency factory
     {
         public string Convert(string amazonCurrency)
         {
@@ -20,7 +20,8 @@ namespace Shmap.BusinessLogic.Currency
                 new ("CDN", "CAD"),
                 new ("GBP", "GBP"),
                 new ("EUR", "EUR"),
-                new ("MXN", "MXN")
+                new ("MXN", "MXN"),
+                new ("AUD", "AUD")
             };
             try
             {

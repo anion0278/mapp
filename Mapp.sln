@@ -25,8 +25,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shmap.BusinessLogic.Invoice
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{D20AE460-B73F-46A2-B618-83F253B3199F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shmap.Bootstrapper", "Shmap.Bootstrapper\Shmap.Bootstrapper.csproj", "{BEA75614-3D61-4B8C-8466-F8FE854A895B}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shmap.BusinessLogic.Invoices", "Shmap.BusinessLogic.Invoices\Shmap.BusinessLogic.Invoices.csproj", "{F009125B-DCB2-496B-83A9-A1FF1CE48D38}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{86B12A01-1934-4F64-9EB2-AE8D2930D928}"
@@ -82,10 +80,6 @@ Global
 		{02854395-D914-42C3-95B6-8CC18F31C1A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{02854395-D914-42C3-95B6-8CC18F31C1A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{02854395-D914-42C3-95B6-8CC18F31C1A7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BEA75614-3D61-4B8C-8466-F8FE854A895B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BEA75614-3D61-4B8C-8466-F8FE854A895B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BEA75614-3D61-4B8C-8466-F8FE854A895B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BEA75614-3D61-4B8C-8466-F8FE854A895B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F009125B-DCB2-496B-83A9-A1FF1CE48D38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F009125B-DCB2-496B-83A9-A1FF1CE48D38}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F009125B-DCB2-496B-83A9-A1FF1CE48D38}.Release|Any CPU.ActiveCfg = Release|Any CPU

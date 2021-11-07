@@ -1,4 +1,5 @@
 ﻿using System;
+using Shmap.Models;
 using WindowsInput;
 using WindowsInput.Native;
 
@@ -6,20 +7,18 @@ namespace Shmap.BusinessLogic.AutocompletionHelper
 {
     public interface IAutoKeyboardInputHelper: IDisposable
     {
-        string TrackingCode { get; set; }
     }
 
     public class AutoKeyboardInputHelper: IAutoKeyboardInputHelper
     {
-        private InputSimulator _keyboardSim = new InputSimulator();
+        private readonly IMainWindowViewModel _mainWindowViewModel;
+        private InputSimulator _keyboardSim = new();
         private KeyboardHook _keyboardHook;
         private bool _isCommandPressed = false;
-        //public DateTime _lastAutoinputTime;
 
-        public string TrackingCode { get; set; }// TODO should be somehow connected with VM
-
-        public AutoKeyboardInputHelper() 
+        public AutoKeyboardInputHelper(IMainWindowViewModel mainWindowViewModel) 
         {
+            _mainWindowViewModel = mainWindowViewModel;
             _keyboardHook = new KeyboardHook(); // TODO replace by https://www.nuget.org/packages/MouseKeyHook/
             _keyboardHook.KeyDown += keyboardHook_KeyDown;
             _keyboardHook.KeyUp += keyboardHook_KeyUp;
@@ -46,7 +45,7 @@ namespace Shmap.BusinessLogic.AutocompletionHelper
             if (key == KeyboardHook.VKeys.F4 && _isCommandPressed ) /*&& elapsedTime.Seconds > 2*/
             {
                 //_lastAutoinputTime = DateTime.Now;
-                _keyboardSim.Keyboard.TextEntry($"RR{TrackingCode}CZ");
+                _keyboardSim.Keyboard.TextEntry($"RR{_mainWindowViewModel.TrackingCode}CZ");
                 _keyboardSim.Keyboard.KeyPress(VirtualKeyCode.TAB);
                 _keyboardSim.Keyboard.Sleep(50);
                 _keyboardSim.Keyboard.TextEntry(DateTime.Now.ToString("dd.MM.yyyy"));

@@ -8,13 +8,15 @@ using Shmap.BusinessLogic.Invoices;
 using Shmap.BusinessLogic.Transactions;
 using Shmap.CommonServices;
 using Shmap.DataAccess;
+using Shmap.Models;
 using Shmap.UI;
+using Shmap.UI.ViewModels;
 using Shmap.ViewModels;
 using Unity;
 
 namespace Mapp
 {
-    public class Bootstrapper
+    public class Bootstrapper // TODO analyse whether it makes sense to put into separate assembly. Requires to also move Views into separate assembly 
     {
         public UnityContainer Container { get; }
         private IApplicationUpdater _appUpdater;
@@ -28,7 +30,7 @@ namespace Mapp
 
         private void ConfigureContainer()
         {
-            //ServiceLocator.SetLocatorProvider(() => new UnityServiceLocator(_container)); // antipattern?
+            // lets consider ServiceLocator is an anti-pattern
 
             // TODO use naming convention registering
             Container.RegisterInstance<IConfigProvider>(new ConfigProvider(AppSettings.Default, true));
@@ -44,8 +46,9 @@ namespace Mapp
             Container.RegisterTypeAsSingleton<IGpcGenerator, GpcGenerator>();
             Container.RegisterTypeAsSingleton<IFileOperationService, FileOperationsService>();
             Container.RegisterTypeAsSingleton<IMainWindowViewModel, MainWindowViewModel>();
-            Container.RegisterTypeAsSingleton<IManualChangeWindowViewModel, ManualChangeWindowViewModel>();
             Container.RegisterTypeAsSingleton<IDialogService, DialogService>();
+
+            Container.RegisterType<IManualChangeWindowViewModel, ManualChangeWindowViewModel>();
 
             var autocompleteDataLoader = Container.Resolve<IAutocompleteDataLoader>();
             _autocompleteData = autocompleteDataLoader.LoadSettings();
@@ -54,8 +57,8 @@ namespace Mapp
             _appUpdater = Container.Resolve<IApplicationUpdater>();
             _appUpdater.CheckUpdate();
 
-            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-            Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); 
+            Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture; // TODO avoid using
         }
     }
 }

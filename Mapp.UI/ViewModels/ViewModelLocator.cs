@@ -1,4 +1,5 @@
-﻿using Unity;
+﻿using Shmap.Models;
+using Unity;
 
 namespace Shmap.ViewModels
 {

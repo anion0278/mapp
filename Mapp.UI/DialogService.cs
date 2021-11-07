@@ -23,7 +23,6 @@ namespace Mapp
                 if (result == MessageBoxResult.Yes)
                 {
                     var window = new ManualChange();
-                    window.Owner = Application.Current.MainWindow;  // TODO how to set window owner - main window (to center it)
                     var vm = window.DataContext as IManualChangeWindowViewModel; // Disadvantage of View-first approach
                     vm.OriginalText = textToChange;
                     vm.EditedText = textToChange;

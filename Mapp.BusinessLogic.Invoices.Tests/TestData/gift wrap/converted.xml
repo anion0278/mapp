@@ -174,7 +174,7 @@
           <typ:currency>
             <typ:ids>USD</typ:ids>
           </typ:currency>
-          <typ:rate>21.387</typ:rate>
+          <typ:rate>21.39</typ:rate>
           <typ:amount>1</typ:amount>
           <typ:priceSum>58.98</typ:priceSum>
         </inv:foreignCurrency>

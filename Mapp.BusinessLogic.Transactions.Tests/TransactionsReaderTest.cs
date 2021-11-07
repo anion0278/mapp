@@ -16,6 +16,9 @@ namespace Shmap.Business
         [Fact]
         public void Read_Given_Returns()
         {
+            // ReadTransactions - musi spadnout a zahlasit vlastni typ chyby pokud nenajde jakykoliv sloupec z tech co jsou nadefinovane v Config,
+            // pripadne projet cele, posbirat vsechny vyjimky a vygenerovat vysledne exception
+
             //var reader = new TransactionsReader(new JsonManager()); // TODO moq
 
             //var transactions = reader.ReadTransactions(Path.Combine(Environment.CurrentDirectory, "Data", "2019DecMonthlyTransaction au.csv"));

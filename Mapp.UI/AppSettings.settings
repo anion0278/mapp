@@ -1,5 +1,5 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Mapp" GeneratedClassName="AppSettings">
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Shmap.UI" GeneratedClassName="AppSettings">
   <Profiles />
   <Settings>
     <Setting Name="ExistingInvoiceNumber" Type="System.UInt32" Scope="User">
@@ -8,7 +8,7 @@
     <Setting Name="DefaultEmail" Type="System.String" Scope="User">
       <Value Profile="(Default)">info@czechdrawing.com</Value>
     </Setting>
-    <Setting Name="LatestTrackingCode" Type="System.String" Scope="User">
+    <Setting Name="TrackingCode" Type="System.String" Scope="User">
       <Value Profile="(Default)">123456</Value>
     </Setting>
     <Setting Name="MainWindowSize" Type="System.Drawing.Size" Scope="User">

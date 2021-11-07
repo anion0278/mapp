@@ -260,7 +260,7 @@
         </inv:account>
         <inv:symConst>308</inv:symConst>
         <inv:centre>
-          <typ:ids>----</typ:ids>
+          <typ:ids />
         </inv:centre>
         <inv:MOSS>
           <typ:ids>FR</typ:ids>
@@ -296,7 +296,7 @@
             <typ:priceVAT>3.33</typ:priceVAT>
             <typ:priceSum>16.66</typ:priceSum>
           </inv:foreignCurrency>
-          <inv:code>----</inv:code>
+          <inv:code />
           <inv:typeServiceMOSS>
             <typ:ids>GD</typ:ids>
           </inv:typeServiceMOSS>
@@ -305,7 +305,7 @@
               <typ:ids>Zboží</typ:ids>
             </typ:store>
             <typ:stockItem>
-              <typ:ids>----</typ:ids>
+              <typ:ids />
             </typ:stockItem>
           </inv:stockItem>
           <inv:PDP>false</inv:PDP>

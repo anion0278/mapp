@@ -34,7 +34,7 @@ namespace Shmap.DataAccess
 
         public void UpdateAutocompleteData<T>(T newParamValue, IDictionary<string, T> autocompleteData, string productKey)
         {
-            if (autocompleteData.ContainsKey(productKey))
+            if (autocompleteData.ContainsKey(productKey))  // dictionary.TODO use TryGetValue
             {
                 autocompleteData[productKey] = newParamValue;
             }
