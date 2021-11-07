@@ -65,7 +65,7 @@
         </inv:account>
         <inv:symConst>308</inv:symConst>
         <inv:centre>
-          <typ:ids>----</typ:ids>
+          <typ:ids />
         </inv:centre>
         <inv:MOSS>
           <typ:ids>DE</typ:ids>
@@ -101,7 +101,7 @@
             <typ:priceVAT>4.76</typ:priceVAT>
             <typ:priceSum>25.04</typ:priceSum>
           </inv:foreignCurrency>
-          <inv:code>----</inv:code>
+          <inv:code />
           <inv:typeServiceMOSS>
             <typ:ids>GD</typ:ids>
           </inv:typeServiceMOSS>
@@ -110,7 +110,7 @@
               <typ:ids>Zboží</typ:ids>
             </typ:store>
             <typ:stockItem>
-              <typ:ids>----</typ:ids>
+              <typ:ids />
             </typ:stockItem>
           </inv:stockItem>
           <inv:PDP>false</inv:PDP>
@@ -269,7 +269,7 @@
         </inv:account>
         <inv:symConst>308</inv:symConst>
         <inv:centre>
-          <typ:ids>----</typ:ids>
+          <typ:ids />
         </inv:centre>
         <inv:MOSS>
           <typ:ids>SE</typ:ids>
@@ -305,7 +305,7 @@
             <typ:priceVAT>4.39</typ:priceVAT>
             <typ:priceSum>17.56</typ:priceSum>
           </inv:foreignCurrency>
-          <inv:code>----</inv:code>
+          <inv:code />
           <inv:typeServiceMOSS>
             <typ:ids>GD</typ:ids>
           </inv:typeServiceMOSS>
@@ -314,7 +314,7 @@
               <typ:ids>Zboží</typ:ids>
             </typ:store>
             <typ:stockItem>
-              <typ:ids>----</typ:ids>
+              <typ:ids />
             </typ:stockItem>
           </inv:stockItem>
           <inv:PDP>false</inv:PDP>
@@ -389,7 +389,7 @@
             <typ:priceVAT>5.80</typ:priceVAT>
             <typ:priceSum>23.19</typ:priceSum>
           </inv:foreignCurrency>
-          <inv:code>----</inv:code>
+          <inv:code />
           <inv:typeServiceMOSS>
             <typ:ids>GD</typ:ids>
           </inv:typeServiceMOSS>
@@ -398,7 +398,7 @@
               <typ:ids>Zboží</typ:ids>
             </typ:store>
             <typ:stockItem>
-              <typ:ids>----</typ:ids>
+              <typ:ids />
             </typ:stockItem>
           </inv:stockItem>
           <inv:PDP>false</inv:PDP>

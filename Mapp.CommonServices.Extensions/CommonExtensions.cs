@@ -5,6 +5,10 @@ namespace Mapp.CommonServices
 {
     public static class CommonExtensions
     {
+        public static decimal DefRound(this decimal value)
+        {
+            return Math.Round(value, ApplicationConstants.Rounding);
+        }
 
         public static string GetDescriptionFromEnum(this Enum enumeration, bool useEnumValueNameAsDefault = false)
         {

@@ -12,7 +12,7 @@ namespace Mapp
 
         public static bool EqualsIgnoreCase(this string firstStr, string secondStr)
         {
-            return firstStr.Equals(secondStr, StringComparison.InvariantCultureIgnoreCase);
+            return firstStr.Equals(secondStr, StringComparison.OrdinalIgnoreCase);
         }
     }
 }

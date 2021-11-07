@@ -14,4 +14,8 @@
     <PackageReference Include="InputSimulator" Version="1.0.4" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Mapp.Models\Mapp.Models.csproj" />
+  </ItemGroup>
+
 </Project>

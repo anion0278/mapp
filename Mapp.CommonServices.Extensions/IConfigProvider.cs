@@ -6,7 +6,7 @@ namespace Mapp.CommonServices
     {
         uint ExistingInvoiceNumber { get; set; }
         string DefaultEmail { get; set; }
-        string LatestTrackingCode { get; set; }
+        string TrackingCode { get; set; }
         bool IsMainWindowMaximized { get; set; }
         Size MainWindowSize { get; set; }
         Point MainWindowTopLeftCorner { get; set; }

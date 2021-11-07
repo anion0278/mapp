@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="windows-1250"?>
 <dat:dataPack version="2.0" id="Usr01" ico="05448034" key="efd0db6a-9c08-4bb5-befb-36809eadcba1" programVersion="12101.4 (7.1.2019)" application="Transformace" note="Uživatelský export" xmlns:dat="http://www.stormware.cz/schema/version_2/data.xsd">
-  <dat:dataPackItem version="2.0" id="Usr01 (001)">
+  <dat:dataPackItem version="2.0" id="Usr01 (000)">
     <inv:invoice version="2.0" xmlns:inv="http://www.stormware.cz/schema/version_2/invoice.xsd">
       <inv:invoiceHeader xmlns:typ="http://www.stormware.cz/schema/version_2/type.xsd" xmlns:rsp="http://www.stormware.cz/schema/version_2/response.xsd" xmlns:rdc="http://www.stormware.cz/schema/version_2/documentresponse.xsd" xmlns:lst="http://www.stormware.cz/schema/version_2/list.xsd" xmlns:lStk="http://www.stormware.cz/schema/version_2/list_stock.xsd" xmlns:lAdb="http://www.stormware.cz/schema/version_2/list_addBook.xsd" xmlns:lCen="http://www.stormware.cz/schema/version_2/list_centre.xsd" xmlns:lAcv="http://www.stormware.cz/schema/version_2/list_activity.xsd" xmlns:acu="http://www.stormware.cz/schema/version_2/accountingunit.xsd" xmlns:vch="http://www.stormware.cz/schema/version_2/voucher.xsd" xmlns:int="http://www.stormware.cz/schema/version_2/intDoc.xsd" xmlns:stk="http://www.stormware.cz/schema/version_2/stock.xsd" xmlns:ord="http://www.stormware.cz/schema/version_2/order.xsd" xmlns:ofr="http://www.stormware.cz/schema/version_2/offer.xsd" xmlns:enq="http://www.stormware.cz/schema/version_2/enquiry.xsd" xmlns:vyd="http://www.stormware.cz/schema/version_2/vydejka.xsd" xmlns:pri="http://www.stormware.cz/schema/version_2/prijemka.xsd" xmlns:bal="http://www.stormware.cz/schema/version_2/balance.xsd" xmlns:pre="http://www.stormware.cz/schema/version_2/prevodka.xsd" xmlns:vyr="http://www.stormware.cz/schema/version_2/vyroba.xsd" xmlns:pro="http://www.stormware.cz/schema/version_2/prodejka.xsd" xmlns:con="http://www.stormware.cz/schema/version_2/contract.xsd" xmlns:adb="http://www.stormware.cz/schema/version_2/addressbook.xsd" xmlns:prm="http://www.stormware.cz/schema/version_2/parameter.xsd" xmlns:lCon="http://www.stormware.cz/schema/version_2/list_contract.xsd" xmlns:ctg="http://www.stormware.cz/schema/version_2/category.xsd" xmlns:ipm="http://www.stormware.cz/schema/version_2/intParam.xsd" xmlns:str="http://www.stormware.cz/schema/version_2/storage.xsd" xmlns:idp="http://www.stormware.cz/schema/version_2/individualPrice.xsd" xmlns:sup="http://www.stormware.cz/schema/version_2/supplier.xsd" xmlns:prn="http://www.stormware.cz/schema/version_2/print.xsd" xmlns:sEET="http://www.stormware.cz/schema/version_2/sendEET.xsd" xmlns:act="http://www.stormware.cz/schema/version_2/accountancy.xsd" xmlns:bnk="http://www.stormware.cz/schema/version_2/bank.xsd" xmlns:sto="http://www.stormware.cz/schema/version_2/store.xsd" xmlns:grs="http://www.stormware.cz/schema/version_2/groupStocks.xsd" xmlns:acp="http://www.stormware.cz/schema/version_2/actionPrice.xsd" xmlns:csh="http://www.stormware.cz/schema/version_2/cashRegister.xsd" xmlns:bka="http://www.stormware.cz/schema/version_2/bankAccount.xsd" xmlns:ilt="http://www.stormware.cz/schema/version_2/inventoryLists.xsd" xmlns:nms="http://www.stormware.cz/schema/version_2/numericalSeries.xsd" xmlns:pay="http://www.stormware.cz/schema/version_2/payment.xsd" xmlns:mKasa="http://www.stormware.cz/schema/version_2/mKasa.xsd" xmlns:gdp="http://www.stormware.cz/schema/version_2/GDPR.xsd" xmlns:est="http://www.stormware.cz/schema/version_2/establishment.xsd" xmlns:cen="http://www.stormware.cz/schema/version_2/centre.xsd" xmlns:acv="http://www.stormware.cz/schema/version_2/activity.xsd" xmlns:ftr="http://www.stormware.cz/schema/version_2/filter.xsd">
         <inv:invoiceType>issuedInvoice</inv:invoiceType>
@@ -66,7 +66,7 @@
         </inv:account>
         <inv:symConst>308</inv:symConst>
         <inv:centre>
-          <typ:ids>----</typ:ids>
+          <typ:ids />
         </inv:centre>
         <inv:liquidation>
           <typ:amountHome>520.12</typ:amountHome>
@@ -96,13 +96,13 @@
             <typ:priceVAT>0</typ:priceVAT>
             <typ:priceSum>26.99</typ:priceSum>
           </inv:foreignCurrency>
-          <inv:code>----</inv:code>
+          <inv:code />
           <inv:stockItem>
             <typ:store>
               <typ:ids>Zboží</typ:ids>
             </typ:store>
             <typ:stockItem>
-              <typ:ids>----</typ:ids>
+              <typ:ids />
             </typ:stockItem>
           </inv:stockItem>
           <inv:PDP>false</inv:PDP>
@@ -149,13 +149,13 @@
             <typ:priceVAT>0</typ:priceVAT>
             <typ:priceSum>26.99</typ:priceSum>
           </inv:foreignCurrency>
-          <inv:code>----</inv:code>
+          <inv:code />
           <inv:stockItem>
             <typ:store>
               <typ:ids>Zboží</typ:ids>
             </typ:store>
             <typ:stockItem>
-              <typ:ids>----</typ:ids>
+              <typ:ids />
             </typ:stockItem>
           </inv:stockItem>
           <inv:PDP>false</inv:PDP>
@@ -180,13 +180,13 @@
             <typ:priceVAT>0</typ:priceVAT>
             <typ:priceSum>79.65</typ:priceSum>
           </inv:foreignCurrency>
-          <inv:code>----</inv:code>
+          <inv:code />
           <inv:stockItem>
             <typ:store>
               <typ:ids>Zboží</typ:ids>
             </typ:store>
             <typ:stockItem>
-              <typ:ids>----</typ:ids>
+              <typ:ids />
             </typ:stockItem>
           </inv:stockItem>
           <inv:PDP>false</inv:PDP>
@@ -214,14 +214,14 @@
           <typ:currency>
             <typ:ids>CAD</typ:ids>
           </typ:currency>
-          <typ:rate>16.789</typ:rate>
+          <typ:rate>16.79</typ:rate>
           <typ:amount>1</typ:amount>
           <typ:priceSum>30.98</typ:priceSum>
         </inv:foreignCurrency>
       </inv:invoiceSummary>
     </inv:invoice>
   </dat:dataPackItem>
-  <dat:dataPackItem version="2.0" id="Usr01 (002)">
+  <dat:dataPackItem version="2.0" id="Usr01 (001)">
     <inv:invoice version="2.0" xmlns:inv="http://www.stormware.cz/schema/version_2/invoice.xsd">
       <inv:invoiceHeader xmlns:typ="http://www.stormware.cz/schema/version_2/type.xsd" xmlns:rsp="http://www.stormware.cz/schema/version_2/response.xsd" xmlns:rdc="http://www.stormware.cz/schema/version_2/documentresponse.xsd" xmlns:lst="http://www.stormware.cz/schema/version_2/list.xsd" xmlns:lStk="http://www.stormware.cz/schema/version_2/list_stock.xsd" xmlns:lAdb="http://www.stormware.cz/schema/version_2/list_addBook.xsd" xmlns:lCen="http://www.stormware.cz/schema/version_2/list_centre.xsd" xmlns:lAcv="http://www.stormware.cz/schema/version_2/list_activity.xsd" xmlns:acu="http://www.stormware.cz/schema/version_2/accountingunit.xsd" xmlns:vch="http://www.stormware.cz/schema/version_2/voucher.xsd" xmlns:int="http://www.stormware.cz/schema/version_2/intDoc.xsd" xmlns:stk="http://www.stormware.cz/schema/version_2/stock.xsd" xmlns:ord="http://www.stormware.cz/schema/version_2/order.xsd" xmlns:ofr="http://www.stormware.cz/schema/version_2/offer.xsd" xmlns:enq="http://www.stormware.cz/schema/version_2/enquiry.xsd" xmlns:vyd="http://www.stormware.cz/schema/version_2/vydejka.xsd" xmlns:pri="http://www.stormware.cz/schema/version_2/prijemka.xsd" xmlns:bal="http://www.stormware.cz/schema/version_2/balance.xsd" xmlns:pre="http://www.stormware.cz/schema/version_2/prevodka.xsd" xmlns:vyr="http://www.stormware.cz/schema/version_2/vyroba.xsd" xmlns:pro="http://www.stormware.cz/schema/version_2/prodejka.xsd" xmlns:con="http://www.stormware.cz/schema/version_2/contract.xsd" xmlns:adb="http://www.stormware.cz/schema/version_2/addressbook.xsd" xmlns:prm="http://www.stormware.cz/schema/version_2/parameter.xsd" xmlns:lCon="http://www.stormware.cz/schema/version_2/list_contract.xsd" xmlns:ctg="http://www.stormware.cz/schema/version_2/category.xsd" xmlns:ipm="http://www.stormware.cz/schema/version_2/intParam.xsd" xmlns:str="http://www.stormware.cz/schema/version_2/storage.xsd" xmlns:idp="http://www.stormware.cz/schema/version_2/individualPrice.xsd" xmlns:sup="http://www.stormware.cz/schema/version_2/supplier.xsd" xmlns:prn="http://www.stormware.cz/schema/version_2/print.xsd" xmlns:sEET="http://www.stormware.cz/schema/version_2/sendEET.xsd" xmlns:act="http://www.stormware.cz/schema/version_2/accountancy.xsd" xmlns:bnk="http://www.stormware.cz/schema/version_2/bank.xsd" xmlns:sto="http://www.stormware.cz/schema/version_2/store.xsd" xmlns:grs="http://www.stormware.cz/schema/version_2/groupStocks.xsd" xmlns:acp="http://www.stormware.cz/schema/version_2/actionPrice.xsd" xmlns:csh="http://www.stormware.cz/schema/version_2/cashRegister.xsd" xmlns:bka="http://www.stormware.cz/schema/version_2/bankAccount.xsd" xmlns:ilt="http://www.stormware.cz/schema/version_2/inventoryLists.xsd" xmlns:nms="http://www.stormware.cz/schema/version_2/numericalSeries.xsd" xmlns:pay="http://www.stormware.cz/schema/version_2/payment.xsd" xmlns:mKasa="http://www.stormware.cz/schema/version_2/mKasa.xsd" xmlns:gdp="http://www.stormware.cz/schema/version_2/GDPR.xsd" xmlns:est="http://www.stormware.cz/schema/version_2/establishment.xsd" xmlns:cen="http://www.stormware.cz/schema/version_2/centre.xsd" xmlns:acv="http://www.stormware.cz/schema/version_2/activity.xsd" xmlns:ftr="http://www.stormware.cz/schema/version_2/filter.xsd">
         <inv:invoiceType>issuedInvoice</inv:invoiceType>
@@ -287,7 +287,7 @@
         </inv:account>
         <inv:symConst>308</inv:symConst>
         <inv:centre>
-          <typ:ids>----</typ:ids>
+          <typ:ids />
         </inv:centre>
         <inv:liquidation>
           <typ:amountHome>363.15</typ:amountHome>
@@ -317,13 +317,13 @@
             <typ:priceVAT>0</typ:priceVAT>
             <typ:priceSum>12.99</typ:priceSum>
           </inv:foreignCurrency>
-          <inv:code>----</inv:code>
+          <inv:code />
           <inv:stockItem>
             <typ:store>
               <typ:ids>Zboží</typ:ids>
             </typ:store>
             <typ:stockItem>
-              <typ:ids>----</typ:ids>
+              <typ:ids />
             </typ:stockItem>
           </inv:stockItem>
           <inv:PDP>false</inv:PDP>
@@ -373,14 +373,14 @@
           <typ:currency>
             <typ:ids>USD</typ:ids>
           </typ:currency>
-          <typ:rate>21.387</typ:rate>
+          <typ:rate>21.39</typ:rate>
           <typ:amount>1</typ:amount>
           <typ:priceSum>16.98</typ:priceSum>
         </inv:foreignCurrency>
       </inv:invoiceSummary>
     </inv:invoice>
   </dat:dataPackItem>
-  <dat:dataPackItem version="2.0" id="Usr01 (003)">
+  <dat:dataPackItem version="2.0" id="Usr01 (002)">
     <inv:invoice version="2.0" xmlns:inv="http://www.stormware.cz/schema/version_2/invoice.xsd">
       <inv:invoiceHeader xmlns:typ="http://www.stormware.cz/schema/version_2/type.xsd" xmlns:rsp="http://www.stormware.cz/schema/version_2/response.xsd" xmlns:rdc="http://www.stormware.cz/schema/version_2/documentresponse.xsd" xmlns:lst="http://www.stormware.cz/schema/version_2/list.xsd" xmlns:lStk="http://www.stormware.cz/schema/version_2/list_stock.xsd" xmlns:lAdb="http://www.stormware.cz/schema/version_2/list_addBook.xsd" xmlns:lCen="http://www.stormware.cz/schema/version_2/list_centre.xsd" xmlns:lAcv="http://www.stormware.cz/schema/version_2/list_activity.xsd" xmlns:acu="http://www.stormware.cz/schema/version_2/accountingunit.xsd" xmlns:vch="http://www.stormware.cz/schema/version_2/voucher.xsd" xmlns:int="http://www.stormware.cz/schema/version_2/intDoc.xsd" xmlns:stk="http://www.stormware.cz/schema/version_2/stock.xsd" xmlns:ord="http://www.stormware.cz/schema/version_2/order.xsd" xmlns:ofr="http://www.stormware.cz/schema/version_2/offer.xsd" xmlns:enq="http://www.stormware.cz/schema/version_2/enquiry.xsd" xmlns:vyd="http://www.stormware.cz/schema/version_2/vydejka.xsd" xmlns:pri="http://www.stormware.cz/schema/version_2/prijemka.xsd" xmlns:bal="http://www.stormware.cz/schema/version_2/balance.xsd" xmlns:pre="http://www.stormware.cz/schema/version_2/prevodka.xsd" xmlns:vyr="http://www.stormware.cz/schema/version_2/vyroba.xsd" xmlns:pro="http://www.stormware.cz/schema/version_2/prodejka.xsd" xmlns:con="http://www.stormware.cz/schema/version_2/contract.xsd" xmlns:adb="http://www.stormware.cz/schema/version_2/addressbook.xsd" xmlns:prm="http://www.stormware.cz/schema/version_2/parameter.xsd" xmlns:lCon="http://www.stormware.cz/schema/version_2/list_contract.xsd" xmlns:ctg="http://www.stormware.cz/schema/version_2/category.xsd" xmlns:ipm="http://www.stormware.cz/schema/version_2/intParam.xsd" xmlns:str="http://www.stormware.cz/schema/version_2/storage.xsd" xmlns:idp="http://www.stormware.cz/schema/version_2/individualPrice.xsd" xmlns:sup="http://www.stormware.cz/schema/version_2/supplier.xsd" xmlns:prn="http://www.stormware.cz/schema/version_2/print.xsd" xmlns:sEET="http://www.stormware.cz/schema/version_2/sendEET.xsd" xmlns:act="http://www.stormware.cz/schema/version_2/accountancy.xsd" xmlns:bnk="http://www.stormware.cz/schema/version_2/bank.xsd" xmlns:sto="http://www.stormware.cz/schema/version_2/store.xsd" xmlns:grs="http://www.stormware.cz/schema/version_2/groupStocks.xsd" xmlns:acp="http://www.stormware.cz/schema/version_2/actionPrice.xsd" xmlns:csh="http://www.stormware.cz/schema/version_2/cashRegister.xsd" xmlns:bka="http://www.stormware.cz/schema/version_2/bankAccount.xsd" xmlns:ilt="http://www.stormware.cz/schema/version_2/inventoryLists.xsd" xmlns:nms="http://www.stormware.cz/schema/version_2/numericalSeries.xsd" xmlns:pay="http://www.stormware.cz/schema/version_2/payment.xsd" xmlns:mKasa="http://www.stormware.cz/schema/version_2/mKasa.xsd" xmlns:gdp="http://www.stormware.cz/schema/version_2/GDPR.xsd" xmlns:est="http://www.stormware.cz/schema/version_2/establishment.xsd" xmlns:cen="http://www.stormware.cz/schema/version_2/centre.xsd" xmlns:acv="http://www.stormware.cz/schema/version_2/activity.xsd" xmlns:ftr="http://www.stormware.cz/schema/version_2/filter.xsd">
         <inv:invoiceType>issuedInvoice</inv:invoiceType>
@@ -445,7 +445,7 @@
         </inv:account>
         <inv:symConst>308</inv:symConst>
         <inv:centre>
-          <typ:ids>----</typ:ids>
+          <typ:ids />
         </inv:centre>
         <inv:MOSS>
           <typ:ids>ES</typ:ids>
@@ -481,7 +481,7 @@
             <typ:priceVAT>1.39</typ:priceVAT>
             <typ:priceSum>6.60</typ:priceSum>
           </inv:foreignCurrency>
-          <inv:code>----</inv:code>
+          <inv:code />
           <inv:typeServiceMOSS>
             <typ:ids>GD</typ:ids>
           </inv:typeServiceMOSS>
@@ -490,7 +490,7 @@
               <typ:ids>Zboží</typ:ids>
             </typ:store>
             <typ:stockItem>
-              <typ:ids>----</typ:ids>
+              <typ:ids />
             </typ:stockItem>
           </inv:stockItem>
           <inv:PDP>false</inv:PDP>
@@ -543,14 +543,14 @@
           <typ:currency>
             <typ:ids>USD</typ:ids>
           </typ:currency>
-          <typ:rate>21.387</typ:rate>
+          <typ:rate>21.39</typ:rate>
           <typ:amount>1</typ:amount>
           <typ:priceSum>13.98</typ:priceSum>
         </inv:foreignCurrency>
       </inv:invoiceSummary>
     </inv:invoice>
   </dat:dataPackItem>
-  <dat:dataPackItem version="2.0" id="Usr01 (004)">
+  <dat:dataPackItem version="2.0" id="Usr01 (003)">
     <inv:invoice version="2.0" xmlns:inv="http://www.stormware.cz/schema/version_2/invoice.xsd">
       <inv:invoiceHeader xmlns:typ="http://www.stormware.cz/schema/version_2/type.xsd" xmlns:rsp="http://www.stormware.cz/schema/version_2/response.xsd" xmlns:rdc="http://www.stormware.cz/schema/version_2/documentresponse.xsd" xmlns:lst="http://www.stormware.cz/schema/version_2/list.xsd" xmlns:lStk="http://www.stormware.cz/schema/version_2/list_stock.xsd" xmlns:lAdb="http://www.stormware.cz/schema/version_2/list_addBook.xsd" xmlns:lCen="http://www.stormware.cz/schema/version_2/list_centre.xsd" xmlns:lAcv="http://www.stormware.cz/schema/version_2/list_activity.xsd" xmlns:acu="http://www.stormware.cz/schema/version_2/accountingunit.xsd" xmlns:vch="http://www.stormware.cz/schema/version_2/voucher.xsd" xmlns:int="http://www.stormware.cz/schema/version_2/intDoc.xsd" xmlns:stk="http://www.stormware.cz/schema/version_2/stock.xsd" xmlns:ord="http://www.stormware.cz/schema/version_2/order.xsd" xmlns:ofr="http://www.stormware.cz/schema/version_2/offer.xsd" xmlns:enq="http://www.stormware.cz/schema/version_2/enquiry.xsd" xmlns:vyd="http://www.stormware.cz/schema/version_2/vydejka.xsd" xmlns:pri="http://www.stormware.cz/schema/version_2/prijemka.xsd" xmlns:bal="http://www.stormware.cz/schema/version_2/balance.xsd" xmlns:pre="http://www.stormware.cz/schema/version_2/prevodka.xsd" xmlns:vyr="http://www.stormware.cz/schema/version_2/vyroba.xsd" xmlns:pro="http://www.stormware.cz/schema/version_2/prodejka.xsd" xmlns:con="http://www.stormware.cz/schema/version_2/contract.xsd" xmlns:adb="http://www.stormware.cz/schema/version_2/addressbook.xsd" xmlns:prm="http://www.stormware.cz/schema/version_2/parameter.xsd" xmlns:lCon="http://www.stormware.cz/schema/version_2/list_contract.xsd" xmlns:ctg="http://www.stormware.cz/schema/version_2/category.xsd" xmlns:ipm="http://www.stormware.cz/schema/version_2/intParam.xsd" xmlns:str="http://www.stormware.cz/schema/version_2/storage.xsd" xmlns:idp="http://www.stormware.cz/schema/version_2/individualPrice.xsd" xmlns:sup="http://www.stormware.cz/schema/version_2/supplier.xsd" xmlns:prn="http://www.stormware.cz/schema/version_2/print.xsd" xmlns:sEET="http://www.stormware.cz/schema/version_2/sendEET.xsd" xmlns:act="http://www.stormware.cz/schema/version_2/accountancy.xsd" xmlns:bnk="http://www.stormware.cz/schema/version_2/bank.xsd" xmlns:sto="http://www.stormware.cz/schema/version_2/store.xsd" xmlns:grs="http://www.stormware.cz/schema/version_2/groupStocks.xsd" xmlns:acp="http://www.stormware.cz/schema/version_2/actionPrice.xsd" xmlns:csh="http://www.stormware.cz/schema/version_2/cashRegister.xsd" xmlns:bka="http://www.stormware.cz/schema/version_2/bankAccount.xsd" xmlns:ilt="http://www.stormware.cz/schema/version_2/inventoryLists.xsd" xmlns:nms="http://www.stormware.cz/schema/version_2/numericalSeries.xsd" xmlns:pay="http://www.stormware.cz/schema/version_2/payment.xsd" xmlns:mKasa="http://www.stormware.cz/schema/version_2/mKasa.xsd" xmlns:gdp="http://www.stormware.cz/schema/version_2/GDPR.xsd" xmlns:est="http://www.stormware.cz/schema/version_2/establishment.xsd" xmlns:cen="http://www.stormware.cz/schema/version_2/centre.xsd" xmlns:acv="http://www.stormware.cz/schema/version_2/activity.xsd" xmlns:ftr="http://www.stormware.cz/schema/version_2/filter.xsd">
         <inv:invoiceType>issuedInvoice</inv:invoiceType>
@@ -616,7 +616,7 @@
         </inv:account>
         <inv:symConst>308</inv:symConst>
         <inv:centre>
-          <typ:ids>----</typ:ids>
+          <typ:ids />
         </inv:centre>
         <inv:liquidation>
           <typ:amountHome>725.87</typ:amountHome>
@@ -646,13 +646,13 @@
             <typ:priceVAT>0</typ:priceVAT>
             <typ:priceSum>29.95</typ:priceSum>
           </inv:foreignCurrency>
-          <inv:code>----</inv:code>
+          <inv:code />
           <inv:stockItem>
             <typ:store>
               <typ:ids>Zboží</typ:ids>
             </typ:store>
             <typ:stockItem>
-              <typ:ids>----</typ:ids>
+              <typ:ids />
             </typ:stockItem>
           </inv:stockItem>
           <inv:PDP>false</inv:PDP>
@@ -702,14 +702,14 @@
           <typ:currency>
             <typ:ids>USD</typ:ids>
           </typ:currency>
-          <typ:rate>21.387</typ:rate>
+          <typ:rate>21.39</typ:rate>
           <typ:amount>1</typ:amount>
           <typ:priceSum>33.94</typ:priceSum>
         </inv:foreignCurrency>
       </inv:invoiceSummary>
     </inv:invoice>
   </dat:dataPackItem>
-  <dat:dataPackItem version="2.0" id="Usr01 (005)">
+  <dat:dataPackItem version="2.0" id="Usr01 (004)">
     <inv:invoice version="2.0" xmlns:inv="http://www.stormware.cz/schema/version_2/invoice.xsd">
       <inv:invoiceHeader xmlns:typ="http://www.stormware.cz/schema/version_2/type.xsd" xmlns:rsp="http://www.stormware.cz/schema/version_2/response.xsd" xmlns:rdc="http://www.stormware.cz/schema/version_2/documentresponse.xsd" xmlns:lst="http://www.stormware.cz/schema/version_2/list.xsd" xmlns:lStk="http://www.stormware.cz/schema/version_2/list_stock.xsd" xmlns:lAdb="http://www.stormware.cz/schema/version_2/list_addBook.xsd" xmlns:lCen="http://www.stormware.cz/schema/version_2/list_centre.xsd" xmlns:lAcv="http://www.stormware.cz/schema/version_2/list_activity.xsd" xmlns:acu="http://www.stormware.cz/schema/version_2/accountingunit.xsd" xmlns:vch="http://www.stormware.cz/schema/version_2/voucher.xsd" xmlns:int="http://www.stormware.cz/schema/version_2/intDoc.xsd" xmlns:stk="http://www.stormware.cz/schema/version_2/stock.xsd" xmlns:ord="http://www.stormware.cz/schema/version_2/order.xsd" xmlns:ofr="http://www.stormware.cz/schema/version_2/offer.xsd" xmlns:enq="http://www.stormware.cz/schema/version_2/enquiry.xsd" xmlns:vyd="http://www.stormware.cz/schema/version_2/vydejka.xsd" xmlns:pri="http://www.stormware.cz/schema/version_2/prijemka.xsd" xmlns:bal="http://www.stormware.cz/schema/version_2/balance.xsd" xmlns:pre="http://www.stormware.cz/schema/version_2/prevodka.xsd" xmlns:vyr="http://www.stormware.cz/schema/version_2/vyroba.xsd" xmlns:pro="http://www.stormware.cz/schema/version_2/prodejka.xsd" xmlns:con="http://www.stormware.cz/schema/version_2/contract.xsd" xmlns:adb="http://www.stormware.cz/schema/version_2/addressbook.xsd" xmlns:prm="http://www.stormware.cz/schema/version_2/parameter.xsd" xmlns:lCon="http://www.stormware.cz/schema/version_2/list_contract.xsd" xmlns:ctg="http://www.stormware.cz/schema/version_2/category.xsd" xmlns:ipm="http://www.stormware.cz/schema/version_2/intParam.xsd" xmlns:str="http://www.stormware.cz/schema/version_2/storage.xsd" xmlns:idp="http://www.stormware.cz/schema/version_2/individualPrice.xsd" xmlns:sup="http://www.stormware.cz/schema/version_2/supplier.xsd" xmlns:prn="http://www.stormware.cz/schema/version_2/print.xsd" xmlns:sEET="http://www.stormware.cz/schema/version_2/sendEET.xsd" xmlns:act="http://www.stormware.cz/schema/version_2/accountancy.xsd" xmlns:bnk="http://www.stormware.cz/schema/version_2/bank.xsd" xmlns:sto="http://www.stormware.cz/schema/version_2/store.xsd" xmlns:grs="http://www.stormware.cz/schema/version_2/groupStocks.xsd" xmlns:acp="http://www.stormware.cz/schema/version_2/actionPrice.xsd" xmlns:csh="http://www.stormware.cz/schema/version_2/cashRegister.xsd" xmlns:bka="http://www.stormware.cz/schema/version_2/bankAccount.xsd" xmlns:ilt="http://www.stormware.cz/schema/version_2/inventoryLists.xsd" xmlns:nms="http://www.stormware.cz/schema/version_2/numericalSeries.xsd" xmlns:pay="http://www.stormware.cz/schema/version_2/payment.xsd" xmlns:mKasa="http://www.stormware.cz/schema/version_2/mKasa.xsd" xmlns:gdp="http://www.stormware.cz/schema/version_2/GDPR.xsd" xmlns:est="http://www.stormware.cz/schema/version_2/establishment.xsd" xmlns:cen="http://www.stormware.cz/schema/version_2/centre.xsd" xmlns:acv="http://www.stormware.cz/schema/version_2/activity.xsd" xmlns:ftr="http://www.stormware.cz/schema/version_2/filter.xsd">
         <inv:invoiceType>issuedInvoice</inv:invoiceType>
@@ -775,7 +775,7 @@
         </inv:account>
         <inv:symConst>308</inv:symConst>
         <inv:centre>
-          <typ:ids>----</typ:ids>
+          <typ:ids />
         </inv:centre>
         <inv:liquidation>
           <typ:amountHome>352.23</typ:amountHome>
@@ -805,13 +805,13 @@
             <typ:priceVAT>0</typ:priceVAT>
             <typ:priceSum>16.99</typ:priceSum>
           </inv:foreignCurrency>
-          <inv:code>----</inv:code>
+          <inv:code />
           <inv:stockItem>
             <typ:store>
               <typ:ids>Zboží</typ:ids>
             </typ:store>
             <typ:stockItem>
-              <typ:ids>----</typ:ids>
+              <typ:ids />
             </typ:stockItem>
           </inv:stockItem>
           <inv:PDP>false</inv:PDP>
@@ -861,14 +861,14 @@
           <typ:currency>
             <typ:ids>CAD</typ:ids>
           </typ:currency>
-          <typ:rate>16.789</typ:rate>
+          <typ:rate>16.79</typ:rate>
           <typ:amount>1</typ:amount>
           <typ:priceSum>20.98</typ:priceSum>
         </inv:foreignCurrency>
       </inv:invoiceSummary>
     </inv:invoice>
   </dat:dataPackItem>
-  <dat:dataPackItem version="2.0" id="Usr01 (006)">
+  <dat:dataPackItem version="2.0" id="Usr01 (005)">
     <inv:invoice version="2.0" xmlns:inv="http://www.stormware.cz/schema/version_2/invoice.xsd">
       <inv:invoiceHeader xmlns:typ="http://www.stormware.cz/schema/version_2/type.xsd" xmlns:rsp="http://www.stormware.cz/schema/version_2/response.xsd" xmlns:rdc="http://www.stormware.cz/schema/version_2/documentresponse.xsd" xmlns:lst="http://www.stormware.cz/schema/version_2/list.xsd" xmlns:lStk="http://www.stormware.cz/schema/version_2/list_stock.xsd" xmlns:lAdb="http://www.stormware.cz/schema/version_2/list_addBook.xsd" xmlns:lCen="http://www.stormware.cz/schema/version_2/list_centre.xsd" xmlns:lAcv="http://www.stormware.cz/schema/version_2/list_activity.xsd" xmlns:acu="http://www.stormware.cz/schema/version_2/accountingunit.xsd" xmlns:vch="http://www.stormware.cz/schema/version_2/voucher.xsd" xmlns:int="http://www.stormware.cz/schema/version_2/intDoc.xsd" xmlns:stk="http://www.stormware.cz/schema/version_2/stock.xsd" xmlns:ord="http://www.stormware.cz/schema/version_2/order.xsd" xmlns:ofr="http://www.stormware.cz/schema/version_2/offer.xsd" xmlns:enq="http://www.stormware.cz/schema/version_2/enquiry.xsd" xmlns:vyd="http://www.stormware.cz/schema/version_2/vydejka.xsd" xmlns:pri="http://www.stormware.cz/schema/version_2/prijemka.xsd" xmlns:bal="http://www.stormware.cz/schema/version_2/balance.xsd" xmlns:pre="http://www.stormware.cz/schema/version_2/prevodka.xsd" xmlns:vyr="http://www.stormware.cz/schema/version_2/vyroba.xsd" xmlns:pro="http://www.stormware.cz/schema/version_2/prodejka.xsd" xmlns:con="http://www.stormware.cz/schema/version_2/contract.xsd" xmlns:adb="http://www.stormware.cz/schema/version_2/addressbook.xsd" xmlns:prm="http://www.stormware.cz/schema/version_2/parameter.xsd" xmlns:lCon="http://www.stormware.cz/schema/version_2/list_contract.xsd" xmlns:ctg="http://www.stormware.cz/schema/version_2/category.xsd" xmlns:ipm="http://www.stormware.cz/schema/version_2/intParam.xsd" xmlns:str="http://www.stormware.cz/schema/version_2/storage.xsd" xmlns:idp="http://www.stormware.cz/schema/version_2/individualPrice.xsd" xmlns:sup="http://www.stormware.cz/schema/version_2/supplier.xsd" xmlns:prn="http://www.stormware.cz/schema/version_2/print.xsd" xmlns:sEET="http://www.stormware.cz/schema/version_2/sendEET.xsd" xmlns:act="http://www.stormware.cz/schema/version_2/accountancy.xsd" xmlns:bnk="http://www.stormware.cz/schema/version_2/bank.xsd" xmlns:sto="http://www.stormware.cz/schema/version_2/store.xsd" xmlns:grs="http://www.stormware.cz/schema/version_2/groupStocks.xsd" xmlns:acp="http://www.stormware.cz/schema/version_2/actionPrice.xsd" xmlns:csh="http://www.stormware.cz/schema/version_2/cashRegister.xsd" xmlns:bka="http://www.stormware.cz/schema/version_2/bankAccount.xsd" xmlns:ilt="http://www.stormware.cz/schema/version_2/inventoryLists.xsd" xmlns:nms="http://www.stormware.cz/schema/version_2/numericalSeries.xsd" xmlns:pay="http://www.stormware.cz/schema/version_2/payment.xsd" xmlns:mKasa="http://www.stormware.cz/schema/version_2/mKasa.xsd" xmlns:gdp="http://www.stormware.cz/schema/version_2/GDPR.xsd" xmlns:est="http://www.stormware.cz/schema/version_2/establishment.xsd" xmlns:cen="http://www.stormware.cz/schema/version_2/centre.xsd" xmlns:acv="http://www.stormware.cz/schema/version_2/activity.xsd" xmlns:ftr="http://www.stormware.cz/schema/version_2/filter.xsd">
         <inv:invoiceType>issuedInvoice</inv:invoiceType>
@@ -934,7 +934,7 @@
         </inv:account>
         <inv:symConst>308</inv:symConst>
         <inv:centre>
-          <typ:ids>----</typ:ids>
+          <typ:ids />
         </inv:centre>
         <inv:liquidation>
           <typ:amountHome>512.86</typ:amountHome>
@@ -964,13 +964,13 @@
             <typ:priceVAT>0</typ:priceVAT>
             <typ:priceSum>19.99</typ:priceSum>
           </inv:foreignCurrency>
-          <inv:code>----</inv:code>
+          <inv:code />
           <inv:stockItem>
             <typ:store>
               <typ:ids>Zboží</typ:ids>
             </typ:store>
             <typ:stockItem>
-              <typ:ids>----</typ:ids>
+              <typ:ids />
             </typ:stockItem>
           </inv:stockItem>
           <inv:PDP>false</inv:PDP>
@@ -1020,14 +1020,14 @@
           <typ:currency>
             <typ:ids>USD</typ:ids>
           </typ:currency>
-          <typ:rate>21.387</typ:rate>
+          <typ:rate>21.39</typ:rate>
           <typ:amount>1</typ:amount>
           <typ:priceSum>23.98</typ:priceSum>
         </inv:foreignCurrency>
       </inv:invoiceSummary>
     </inv:invoice>
   </dat:dataPackItem>
-  <dat:dataPackItem version="2.0" id="Usr01 (007)">
+  <dat:dataPackItem version="2.0" id="Usr01 (006)">
     <inv:invoice version="2.0" xmlns:inv="http://www.stormware.cz/schema/version_2/invoice.xsd">
       <inv:invoiceHeader xmlns:typ="http://www.stormware.cz/schema/version_2/type.xsd" xmlns:rsp="http://www.stormware.cz/schema/version_2/response.xsd" xmlns:rdc="http://www.stormware.cz/schema/version_2/documentresponse.xsd" xmlns:lst="http://www.stormware.cz/schema/version_2/list.xsd" xmlns:lStk="http://www.stormware.cz/schema/version_2/list_stock.xsd" xmlns:lAdb="http://www.stormware.cz/schema/version_2/list_addBook.xsd" xmlns:lCen="http://www.stormware.cz/schema/version_2/list_centre.xsd" xmlns:lAcv="http://www.stormware.cz/schema/version_2/list_activity.xsd" xmlns:acu="http://www.stormware.cz/schema/version_2/accountingunit.xsd" xmlns:vch="http://www.stormware.cz/schema/version_2/voucher.xsd" xmlns:int="http://www.stormware.cz/schema/version_2/intDoc.xsd" xmlns:stk="http://www.stormware.cz/schema/version_2/stock.xsd" xmlns:ord="http://www.stormware.cz/schema/version_2/order.xsd" xmlns:ofr="http://www.stormware.cz/schema/version_2/offer.xsd" xmlns:enq="http://www.stormware.cz/schema/version_2/enquiry.xsd" xmlns:vyd="http://www.stormware.cz/schema/version_2/vydejka.xsd" xmlns:pri="http://www.stormware.cz/schema/version_2/prijemka.xsd" xmlns:bal="http://www.stormware.cz/schema/version_2/balance.xsd" xmlns:pre="http://www.stormware.cz/schema/version_2/prevodka.xsd" xmlns:vyr="http://www.stormware.cz/schema/version_2/vyroba.xsd" xmlns:pro="http://www.stormware.cz/schema/version_2/prodejka.xsd" xmlns:con="http://www.stormware.cz/schema/version_2/contract.xsd" xmlns:adb="http://www.stormware.cz/schema/version_2/addressbook.xsd" xmlns:prm="http://www.stormware.cz/schema/version_2/parameter.xsd" xmlns:lCon="http://www.stormware.cz/schema/version_2/list_contract.xsd" xmlns:ctg="http://www.stormware.cz/schema/version_2/category.xsd" xmlns:ipm="http://www.stormware.cz/schema/version_2/intParam.xsd" xmlns:str="http://www.stormware.cz/schema/version_2/storage.xsd" xmlns:idp="http://www.stormware.cz/schema/version_2/individualPrice.xsd" xmlns:sup="http://www.stormware.cz/schema/version_2/supplier.xsd" xmlns:prn="http://www.stormware.cz/schema/version_2/print.xsd" xmlns:sEET="http://www.stormware.cz/schema/version_2/sendEET.xsd" xmlns:act="http://www.stormware.cz/schema/version_2/accountancy.xsd" xmlns:bnk="http://www.stormware.cz/schema/version_2/bank.xsd" xmlns:sto="http://www.stormware.cz/schema/version_2/store.xsd" xmlns:grs="http://www.stormware.cz/schema/version_2/groupStocks.xsd" xmlns:acp="http://www.stormware.cz/schema/version_2/actionPrice.xsd" xmlns:csh="http://www.stormware.cz/schema/version_2/cashRegister.xsd" xmlns:bka="http://www.stormware.cz/schema/version_2/bankAccount.xsd" xmlns:ilt="http://www.stormware.cz/schema/version_2/inventoryLists.xsd" xmlns:nms="http://www.stormware.cz/schema/version_2/numericalSeries.xsd" xmlns:pay="http://www.stormware.cz/schema/version_2/payment.xsd" xmlns:mKasa="http://www.stormware.cz/schema/version_2/mKasa.xsd" xmlns:gdp="http://www.stormware.cz/schema/version_2/GDPR.xsd" xmlns:est="http://www.stormware.cz/schema/version_2/establishment.xsd" xmlns:cen="http://www.stormware.cz/schema/version_2/centre.xsd" xmlns:acv="http://www.stormware.cz/schema/version_2/activity.xsd" xmlns:ftr="http://www.stormware.cz/schema/version_2/filter.xsd">
         <inv:invoiceType>issuedInvoice</inv:invoiceType>
@@ -1093,7 +1093,7 @@
         </inv:account>
         <inv:symConst>308</inv:symConst>
         <inv:centre>
-          <typ:ids>----</typ:ids>
+          <typ:ids />
         </inv:centre>
         <inv:liquidation>
           <typ:amountHome>333.93</typ:amountHome>
@@ -1123,13 +1123,13 @@
             <typ:priceVAT>0</typ:priceVAT>
             <typ:priceSum>15.90</typ:priceSum>
           </inv:foreignCurrency>
-          <inv:code>----</inv:code>
+          <inv:code />
           <inv:stockItem>
             <typ:store>
               <typ:ids>Zboží</typ:ids>
             </typ:store>
             <typ:stockItem>
-              <typ:ids>----</typ:ids>
+              <typ:ids />
             </typ:stockItem>
           </inv:stockItem>
           <inv:PDP>false</inv:PDP>
@@ -1176,13 +1176,13 @@
             <typ:priceVAT>0</typ:priceVAT>
             <typ:priceSum>16.99</typ:priceSum>
           </inv:foreignCurrency>
-          <inv:code>----</inv:code>
+          <inv:code />
           <inv:stockItem>
             <typ:store>
               <typ:ids>Zboží</typ:ids>
             </typ:store>
             <typ:stockItem>
-              <typ:ids>----</typ:ids>
+              <typ:ids />
             </typ:stockItem>
           </inv:stockItem>
           <inv:PDP>false</inv:PDP>
@@ -1210,7 +1210,7 @@
           <typ:currency>
             <typ:ids>CAD</typ:ids>
           </typ:currency>
-          <typ:rate>16.789</typ:rate>
+          <typ:rate>16.79</typ:rate>
           <typ:amount>1</typ:amount>
           <typ:priceSum>19.89</typ:priceSum>
         </inv:foreignCurrency>

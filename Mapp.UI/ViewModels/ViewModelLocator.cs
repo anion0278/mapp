@@ -1,4 +1,5 @@
-﻿using Unity;
+﻿using Mapp.Models;
+using Unity;
 
 namespace Mapp.ViewModels
 {
