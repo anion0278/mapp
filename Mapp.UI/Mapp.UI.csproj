@@ -10,6 +10,9 @@
     <AssemblyName>Mapp</AssemblyName>
     <NeutralLanguage>en</NeutralLanguage>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+
+    <!--This inludes native e_sqlite3.dll into single file app-->
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
   </PropertyGroup>
 
   <ItemGroup>
