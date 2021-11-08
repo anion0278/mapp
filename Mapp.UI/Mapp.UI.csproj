@@ -10,19 +10,25 @@
     <AssemblyName>Mapp</AssemblyName>
     <NeutralLanguage>en</NeutralLanguage>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+
+    <!--This inludes native e_sqlite3.dll into single file app-->
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="10.1.1" />
-    <PackageReference Include="FMUtils.KeyboardHook" Version="1.0.140.2145" />
-    <PackageReference Include="InputSimulator" Version="1.0.4" />
     <PackageReference Include="Microsoft.AppCenter.Analytics" Version="4.4.0" />
     <PackageReference Include="Microsoft.AppCenter.Crashes" Version="4.4.0" />
     <PackageReference Include="Moq" Version="4.16.1" />
     <PackageReference Include="MvvmLight" Version="5.4.1.1" />
     <PackageReference Include="MvvmLightLibs" Version="5.4.1.1" />
     <PackageReference Include="NLog" Version="4.7.11" />
-    <PackageReference Include="PropertyChanged.Fody" Version="3.4.0" />
     <PackageReference Include="System.Text.Encoding" Version="4.3.0">
       <IncludeAssets>compile</IncludeAssets>
     </PackageReference>
