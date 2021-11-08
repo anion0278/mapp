@@ -9,7 +9,6 @@ using Mapp.BusinessLogic.Currency;
 using Mapp.CommonServices;
 using Mapp.DataAccess;
 using Mapp;
-using Mapp.BusinessLogic.Transactions;
 
 namespace Mapp.BusinessLogic.Invoices
 {
