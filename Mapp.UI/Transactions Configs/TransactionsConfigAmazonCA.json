@@ -1,33 +1,34 @@
 {
-  "LinesToSkipBeforeColumnNames":7,
-  "MarketPlaceId":1,
-  "DistinctionPhrase":"All amounts in CAD, unless specified",
-  "DateSubstring":"(.*) ((p.m.)|(a.m.)) (PST|PDT)",
-  "TimeSeparatorOverride":null,
-  "DateCultureInfoName":"en-CA",
-  "OrderIdColumnName":"order id",
-  "TransactionTypeColumnName":"type",
-  "DateTimeColumnNames":[
-     "date/time"
+  "LinesToSkipBeforeColumnNames": 7,
+  "MarketPlaceId": 1,
+  "DistinctionPhrase": "All amounts in CAD, unless specified",
+  "DateSubstring": "(.*) ((p.m.)|(a.m.)) (PST|PDT)",
+  "TimeSeparatorOverride": null,
+  "DateCultureInfoName": "en-CA",
+  "OrderIdColumnName": "order id",
+  "TransactionTypeColumnName": "type",
+  "DateTimeColumnNames": [
+    "date/time"
   ],
-  "ValueComponentsColumnName":[
-     "product sales",
-     "shipping credits",
-     "promotional rebates",
-     "gift wrap credits"
+  "ValueComponentsColumnName": [
+    "product sales",
+    "shipping credits",
+    "promotional rebates",
+    "gift wrap credits"
   ],
-  "TransferTypeNames":[
-     "Transfer"
+  "TransferTypeNames": [
+    "Transfer"
   ],
-  "RefundTypeNames":[
-     "Refund",
-     "A-to-z Guarantee Claim"
+  "RefundTypeNames": [
+    "Refund",
+    "A-to-z Guarantee Claim"
   ],
-  "OrderTypeNames":[
-     "Order"
+  "OrderTypeNames": [
+    "Order"
   ],
-  "ServiceFeeTypeNames":[
-     "Service Fee", ""
+  "ServiceFeeTypeNames": [
+    "Service Fee",
+    ""
   ],
-  "TotalPriceColumnName":"total"
+  "TotalPriceColumnName": "total"
 }
