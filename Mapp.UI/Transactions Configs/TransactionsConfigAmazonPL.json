@@ -1,32 +1,32 @@
 {
-  "LinesToSkipBeforeColumnNames":7,
-  "MarketPlaceId":12,
-  "DistinctionPhrase":"Wszystkie kwoty w PLN, chyba że określono inaczej",
-  "DateSubstring":"(.*) UTC",
-  "TimeSeparatorOverride":null,
-  "DateCultureInfoName":"pl-PL",
-  "OrderIdColumnName":"identyfikator rozliczenia",
-  "TransactionTypeColumnName":"typ",
-  "DateTimeColumnNames":[
-     "data/godzina"
+  "LinesToSkipBeforeColumnNames": 7,
+  "MarketPlaceId": 12,
+  "DistinctionPhrase": "Wszystkie kwoty w PLN, chyba że określono inaczej",
+  "DateSubstring": "(.*) UTC",
+  "TimeSeparatorOverride": null,
+  "DateCultureInfoName": "pl-PL",
+  "OrderIdColumnName": "identyfikator zamówienia",
+  "TransactionTypeColumnName": "typ",
+  "DateTimeColumnNames": [
+    "data/godzina"
   ],
-  "ValueComponentsColumnName":[
-     "sprzedaż produktów",
-     "noty kredytowe za wysyłkę",
-     "środki na pokrycie pakowania na prezent",
-     "rabaty promocyjne"
+  "ValueComponentsColumnName": [
+    "sprzedaż produktów",
+    "noty kredytowe za wysyłkę",
+    "środki na pokrycie pakowania na prezent",
+    "rabaty promocyjne"
   ],
-  "TransferTypeNames":[
-     "Przelew"
+  "TransferTypeNames": [
+    "Przelew"
   ],
-  "RefundTypeNames":[
-     "Refund"
+  "RefundTypeNames": [
+    "Refund"
   ],
-  "OrderTypeNames":[
-     "Zamówienie"
+  "OrderTypeNames": [
+    "Zamówienie"
   ],
-  "ServiceFeeTypeNames":[
-     "Service Fee"
+  "ServiceFeeTypeNames": [
+    "Service Fee"
   ],
-  "TotalPriceColumnName":"suma"
+  "TotalPriceColumnName": "suma"
 }

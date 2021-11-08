@@ -1,34 +1,34 @@
 {
-  "LinesToSkipBeforeColumnNames":7,
-  "MarketPlaceId":6,
-  "DistinctionPhrase":"Alle Beträge in Euro sofern nicht anders gekennzeichnet",
-  "DateSubstring":"(.*) UTC",
-  "TimeSeparatorOverride":null,
-  "DateCultureInfoName":"de-DE",
-  "OrderIdColumnName":"Bestellnummer",
-  "TransactionTypeColumnName":"Typ",
-  "DateTimeColumnNames":[
-     "Datum/Uhrzeit"
+  "LinesToSkipBeforeColumnNames": 7,
+  "MarketPlaceId": 6,
+  "DistinctionPhrase": "Alle Beträge in Euro sofern nicht anders gekennzeichnet",
+  "DateSubstring": "(.*) UTC",
+  "TimeSeparatorOverride": null,
+  "DateCultureInfoName": "de-DE",
+  "OrderIdColumnName": "Bestellnummer",
+  "TransactionTypeColumnName": "Typ",
+  "DateTimeColumnNames": [
+    "Datum/Uhrzeit"
   ],
-  "ValueComponentsColumnName":[
-     "Umsätze",
-     "Gutschrift für Versandkosten",
-     "Rabatte aus Werbeaktionen",
-     "Steuer auf Versandgutschrift"
+  "ValueComponentsColumnName": [
+    "Umsätze",
+    "Gutschrift für Versandkosten",
+    "Rabatte aus Werbeaktionen",
+    "Gutschrift für Geschenkverpackung"
   ],
-  "TransferTypeNames":[
-     "Übertrag"
+  "TransferTypeNames": [
+    "Übertrag"
   ],
-  "RefundTypeNames":[
-     "Erstattung",
-     "Erstattung durch Rückbuchung"
+  "RefundTypeNames": [
+    "Erstattung",
+    "Erstattung durch Rückbuchung"
   ],
-  "OrderTypeNames":[
-     "Anpassung",
-     "Bestellung"
+  "OrderTypeNames": [
+    "Anpassung",
+    "Bestellung"
   ],
-  "ServiceFeeTypeNames":[
-     "Servicegebühr"
+  "ServiceFeeTypeNames": [
+    "Servicegebühr"
   ],
-  "TotalPriceColumnName":"Gesamt"
+  "TotalPriceColumnName": "Gesamt"
 }
