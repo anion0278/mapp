@@ -31,7 +31,7 @@ jobs:
 
     env:
       release_version: ${{github.event.inputs.release_major}}.${{github.event.inputs.release_minor}}.${{github.event.inputs.release_patch}}.${{github.run_number}}
-      bin_dir: 'Shmap.UI/bin/release/net5.0-windows/'
+      bin_dir: 'Shmap.UI/bin/publish/'
       workflow: '.github/workflows/ci_cd.yml'
 
     steps:
@@ -51,7 +51,9 @@ jobs:
         sed -i 's/AssemblyFileVersion(".*")/AssemblyFileVersion("${{env.release_version}}")/g' Shmap.UI/Properties/SharedAssemblyInfo.cs
       
     - name: Build
-      run: dotnet build --configuration Release --no-restore
+      run: |
+        dotnet build --configuration Release --no-restore
+        dotnet publish Shmap.UI -c Release -r win-x64 -o  ${{env.bin_dir}} -p:PublishSingleFile=true --self-contained false
 
     - name: Test
       run: dotnet test --no-restore --verbosity minimal
