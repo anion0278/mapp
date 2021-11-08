@@ -48,7 +48,7 @@ namespace Mapp
         {
             base.OnStartup(e);
 #if !DEBUG
-            AppCenter.Start("9549dd3a-1371-4a23-b973-f5e80154119d", typeof(Analytics), typeof(Crashes)); // TODO should solve secrt storing somehow :(
+            //AppCenter.Start("9549dd3a-1371-4a23-b973-f5e80154119d", typeof(Analytics), typeof(Crashes)); // TODO should solve secrt storing somehow :(
 #endif
             SetupExceptionHandling();
 
@@ -89,7 +89,7 @@ namespace Mapp
             try
             {
 #if !DEBUG
-                Crashes.TrackError(exception);
+                //Crashes.TrackError(exception);
 #endif
                 var assemblyName = Assembly.GetExecutingAssembly().GetName();
                 message += $"Unhandled exception in {assemblyName.Name} v{assemblyName.Version}";
