@@ -5,8 +5,6 @@ using System.Runtime.Serialization;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using Mapp;
-using Shmap.BusinessLogic.Transactions;
-using Shmap.DataAccess;
 using Xunit;
 
 namespace Shmap.Business

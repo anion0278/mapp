@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:Mapp"
              xmlns:viewModels="clr-namespace:Shmap.ViewModels"
-             xmlns:visualBasic="clr-namespace:Microsoft.VisualBasic;assembly=Microsoft.VisualBasic.Core"
              xmlns:system="clr-namespace:System;assembly=System.Runtime">
     <Application.Resources>
         <viewModels:ViewModelLocator x:Key="ViewModelLocator" />
