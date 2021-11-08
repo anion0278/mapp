@@ -4,6 +4,13 @@
     <TargetFramework>net5.0-windows</TargetFramework>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <Deterministic>false</Deterministic>
+    <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>
 
   <ItemGroup>
@@ -12,7 +19,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Shmap.BusinessLogic.Currency\Shmap.BusinessLogic.Currency.csproj" />
-    <ProjectReference Include="..\Shmap.BusinessLogic.Transactions\Shmap.BusinessLogic.Transactions.csproj" />
     <ProjectReference Include="..\Shmap.CommonServices.Extensions\Shmap.CommonServices.csproj" />
     <ProjectReference Include="..\Shmap.DataAccess\Shmap.DataAccess.csproj" />
   </ItemGroup>
