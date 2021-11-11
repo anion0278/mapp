@@ -48,6 +48,7 @@ namespace Mapp
         {
             base.OnStartup(e);
 #if !DEBUG
+            //https://github.com/dotnet/winforms/blob/72c140e531729b58737bb7b84212ff96767a151d/src/System.Windows.Forms/src/System/Windows/Forms/Application.cs#L952
             //AppCenter.Start("9549dd3a-1371-4a23-b973-f5e80154119d", typeof(Analytics), typeof(Crashes)); // TODO should solve secrt storing somehow :(
 #endif
             SetupExceptionHandling();
