@@ -27,9 +27,14 @@ namespace Shmap.ViewModels
                 Set(ref _customsDeclaration, value);
                 if (string.IsNullOrWhiteSpace(value)) return;
 
-                var rememberedDictionary = _autocompleteData.CustomsDeclarationBySku;
-                string productSku = AmazonSkuCodes.FirstOrDefault();
-                _autocompleteData.UpdateAutocompleteData(value, rememberedDictionary, productSku);
+                if (_model.InvoiceItems.OfType<InvoiceProduct>().Count() == 1) // v tomto pripade pamatujeme celni prohlaseni pro jeden produkt, protoze se nemeni
+                {
+                    var rememberedDictionary = _autocompleteData.CustomsDeclarationBySku;
+                    string productSku = AmazonSkuCodes.FirstOrDefault();
+                    _autocompleteData.UpdateAutocompleteData(value, rememberedDictionary, productSku);
+                }
+
+                // TODO pridat pamatovani celniho prhlaseni pro kominace produktu
             }
         }
 
@@ -62,6 +67,10 @@ namespace Shmap.ViewModels
             AddValidationRule(() => RelatedWarehouseSection, 
                 ()=>!string.IsNullOrWhiteSpace(RelatedWarehouseSection), 
                 "Neni zadan kod skladu");
+
+            AddValidationRule(() => CustomsDeclaration,
+                () => CustomsDeclaration.Length <= 24,
+                "Celni prohlaseni max. 24 symbolu");
 
             // for now saving model
             _model = model;

@@ -32,6 +32,7 @@ namespace Shmap.CommonServices
         protected InvoiceItemBase(Invoice parentInvoice)
         {
             ParentInvoice = parentInvoice;
+            //ParentInvoice.AddInvoiceItem(this); // TODO !!!! ПРЯМО ЗДЕСЬ сам новый объект может добавлять себя к своему инвойс парэнту
         }
     }
 }

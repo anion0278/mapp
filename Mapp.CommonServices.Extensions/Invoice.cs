@@ -18,7 +18,7 @@ namespace Shmap.CommonServices
     }
 
 
-    public class Invoice
+    public class Invoice  
     {
         private readonly List<InvoiceItemBase> _invoiceItems = new();
         private Dictionary<string, decimal> _vatPercentage;
@@ -57,7 +57,8 @@ namespace Shmap.CommonServices
         public string RelatedWarehouseName { get; set; }
         public Currency TotalPrice => AggregatePrice();
 
-        public Currency TotalPriceVat => new(Math.Round(TotalPrice.AmountForeign * CountryVat.ReversePercentage, 2), TotalPrice.ForeignCurrencyName, TotalPrice.Rates);
+        // TODO Misto toho aby se pouzivali calulated props se muzou pouzivat nastaveni 
+        public Currency TotalPriceVat => new((TotalPrice.AmountForeign * CountryVat.ReversePercentage).DefRound(), TotalPrice.ForeignCurrencyName, TotalPrice.Rates);
 
         public bool IsMoss => Classification == InvoiceVatClassification.RDzasEU;
 
