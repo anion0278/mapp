@@ -111,8 +111,6 @@ jobs:
     
     - name: Create Release
       uses: ncipollo/release-action@v1
-      env:
-        ch: ${{ steps.changelog.outputs.changelog }}
       with:
         artifacts: "${{env.bin_dir}}${{env.artifact_name}}"
         tag: v${{env.release_version}}
