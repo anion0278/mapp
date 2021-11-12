@@ -2,7 +2,7 @@
   "categories": [
         {
             "title": "## 🚀 Features",
-            "labels": ["enhancement", "feature"]
+            "labels": ["enhancement", "feature", "feat"]
         },
         {
             "title": "## 🛠️ Minor Changes",
@@ -14,11 +14,11 @@
         },
         {
             "title": "## 🐛 Fixes",
-            "labels": ["bug", "fix"]
+            "labels": ["bug", "fix", "fixed", "fixes"]
         },
         {
             "title": "## 📄 Documentation",
-            "labels": ["documentation"]
+            "labels": ["documentation", "doc", "docs"]
         },
         {
             "title": "## 🧪 Tests",
@@ -38,8 +38,8 @@
         }
     ],
     "sort": "ASC",
-    "template": "Total of ${{CATEGORIZED_COUNT}} new changes since ${{FROM_TAG}}:\n${{CHANGELOG}}\n",
-    "pr_template": "- ${{BODY}} -> Author: ${{AUTHOR}}",
+    "template": "New release on ${{MERGED_AT}}\nTotal of ${{CATEGORIZED_COUNT}} new changes since ${{FROM_TAG}}:\n${{CHANGELOG}}\n",
+    "pr_template": "- ${{BODY}}",
     "empty_template": "- No Changes",
     "max_pull_requests": 1000,
     "max_back_track_time_days": 1000,
