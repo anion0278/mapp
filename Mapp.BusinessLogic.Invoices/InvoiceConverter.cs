@@ -162,7 +162,7 @@ namespace Shmap.BusinessLogic.Invoices
 
             var invoiceItemShipping = FillInvoiceItem(
                 new InvoiceItemGeneral(invoice, InvoiceItemType.Shipping),
-                GetSavedShippingType(sku, invoice.Classification),
+                GetSavedShippingType(sku, invoice.ClientInfo, invoice.Classification),
                 decimal.Parse(valuesFromAmazon["shipping-price"]),
                 decimal.Parse(valuesFromAmazon["shipping-tax"]),
                 1);
@@ -183,15 +183,22 @@ namespace Shmap.BusinessLogic.Invoices
             // TODO fix
             if (valuesFromAmazon.TryGetValue("gift-wrap-price", out var giftWrapPrice) // columns are not always available in the amazon invoice
                 && valuesFromAmazon.TryGetValue("gift-wrap-tax", out var giftWrapTax)
-                && decimal.TryParse(giftWrapPrice, out var giftWrapPriceV)
-                && giftWrapPriceV != 0)
+                && decimal.TryParse(giftWrapPrice, out var giftWrapPriceValue)
+                && giftWrapPriceValue != 0)
             {
+                decimal giftWrapTaxVal = 0;
+
+                if (decimal.TryParse(giftWrapTax, out var valueTax))
+                {
+                    giftWrapTaxVal = valueTax;
+                }
+
                 string giftWrapType = "Gift wrap " + valuesFromAmazon["gift-wrap-type"];
                 var invoiceItemGiftWrap = FillInvoiceItem(
                     new InvoiceItemGeneral(invoice, InvoiceItemType.GiftWrap),
                     giftWrapType,
-                    decimal.Parse(giftWrapPrice),
-                        decimal.Parse(giftWrapTax),
+                    giftWrapPriceValue,
+                    giftWrapTaxVal,
                     1);
                 invoiceItems.Add(invoiceItemGiftWrap);
             }
@@ -205,12 +212,13 @@ namespace Shmap.BusinessLogic.Invoices
         }
 
 
-        private InvoiceItemBase FillInvoiceItem(InvoiceItemBase invoiceItem, string name, decimal price, decimal tax, decimal quantity)
+        private InvoiceItemBase FillInvoiceItem(InvoiceItemBase invoiceItem, string name, decimal priceIncludingTax, decimal tax, decimal quantity)
         {
             invoiceItem.Name = name;
             invoiceItem.Quantity = quantity;
             invoiceItem.TotalPriceWithTax = new CommonServices.Currency(
-                price * (1 - invoiceItem.ParentInvoice.CountryVat.ReversePercentage),
+                priceIncludingTax, // There is no need to manually calculate tax (ReverseTaxValue) and subtract it since its value is available in amazon report
+                                   // and recalculation logic is included into InvoiceBase Item
                 invoiceItem.ParentInvoice.TotalPrice.ForeignCurrencyName,
                 _rates);
 
@@ -247,15 +255,22 @@ namespace Shmap.BusinessLogic.Invoices
             return string.Empty;
         }
 
-        private string GetSavedShippingType(string sku, InvoiceVatClassification classification)
+        private string GetSavedShippingType(string sku, ClientInfo clientInfo, InvoiceVatClassification classification)
         {
             string defaultShippingName = "Shipping";
+
+            if (_autocompleteData.DefaultShippingByPartnerCountry.TryGetValue(clientInfo.Address.Country, out string countryDefaultShipping))
+            {
+                defaultShippingName = countryDefaultShipping;
+            }
+
             if (classification != InvoiceVatClassification.UDA5 && classification != InvoiceVatClassification.RDzasEU)
             {
                 return defaultShippingName;
             }
 
-            return GetAutocompleteOrEmpty(
+            // only for non-EU
+            return GetAutocompleteOrEmpty( // TODO ПРОБЛЕМА в том что при агригации шипиногов их названия будут стираться
                 _autocompleteData.ShippingNameBySku,
                 sku,
                 defaultShippingName);
