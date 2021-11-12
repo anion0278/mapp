@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Security.Policy;
@@ -102,7 +103,7 @@ namespace Shmap.ViewModels
             };
             string defaultAmazonCentralUrl = "https://sellercentral.amazon.co.uk/orders-v3/order/";
 
-            string url = amazonCentralExceptions.SingleOrDefault(pair => pair.Key.Contains(salesChannel)).Value
+            string url = amazonCentralExceptions.SingleOrDefault(pair => pair.Key.Contains(salesChannel, StringComparer.OrdinalIgnoreCase)).Value
                          ?? defaultAmazonCentralUrl;
 
             url += AmazonNumber;
