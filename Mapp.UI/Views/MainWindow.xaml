@@ -40,6 +40,7 @@
                BasedOn="{StaticResource BoxWithErrorTipStyle}">
             <Setter Property="Width" Value="150"/>
             <Setter Property="Height" Value="20"/>
+            <Setter Property="Margin" Value="5 0 5 0"/>
             <Style.Triggers>
                 <Trigger Property="Validation.HasError" Value="True">
                     <Setter Property="Background" Value="Pink"/>
@@ -51,7 +52,7 @@
 
         <Style TargetType="{x:Type Button}">
             <Setter Property="Width" Value="150" />
-            <Setter Property="Height" Value="35" />
+            <Setter Property="Height" Value="25" />
             <Setter Property="ToolTipService.ShowOnDisabled" Value="True"/>
             <Style.Triggers>
                 <Trigger Property="IsEnabled" Value="False">
@@ -141,17 +142,24 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
-                <StackPanel Grid.Row="0" Margin="20">
+                <StackPanel Grid.Row="0" Margin="10">
                     <Button Content="Zvolit fakturu"  
                             Command="{Binding SelectAmazonInvoicesCommand}"/>
 
-                    <Label Content="Posledni existujici cislo v systemu:" />
-                    <local:NumericTextBox MaxLength="9" Style="{StaticResource InputBoxStyle}"
-                                          Text="{rs:NullableBinding ExistingInvoiceNumber}" />
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <StackPanel>
+                            <Label Content="Prechozi № v Pohode:" />
+                            <local:NumericTextBox MaxLength="9" Style="{StaticResource InputBoxStyle}"
+                                              Text="{rs:NullableBinding ExistingInvoiceNumber}" />
+                        </StackPanel>
 
-                    <Label Content="Default email:" />
-                    <local:EmailTextBox MaxLength="30" Style="{StaticResource InputBoxStyle}"
-                                        Text="{rs:ValidatableBinding DefaultEmail}" />
+                        <StackPanel>
+                            <Label Content="Vychozi email:" />
+                            <local:EmailTextBox MaxLength="30" Style="{StaticResource InputBoxStyle}"
+                                            Text="{rs:ValidatableBinding DefaultEmail}" />
+                        </StackPanel>
+                    </StackPanel>
+
 
                     <CheckBox Content="Otevrit slozku po konvertaci" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10"
                               IsChecked="{Binding OpenTargetFolderAfterConversion}"/>

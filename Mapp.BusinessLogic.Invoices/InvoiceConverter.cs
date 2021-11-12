@@ -183,15 +183,22 @@ namespace Shmap.BusinessLogic.Invoices
             // TODO fix
             if (valuesFromAmazon.TryGetValue("gift-wrap-price", out var giftWrapPrice) // columns are not always available in the amazon invoice
                 && valuesFromAmazon.TryGetValue("gift-wrap-tax", out var giftWrapTax)
-                && decimal.TryParse(giftWrapPrice, out var giftWrapPriceV)
-                && giftWrapPriceV != 0)
+                && decimal.TryParse(giftWrapPrice, out var giftWrapPriceValue)
+                && giftWrapPriceValue != 0)
             {
+                decimal giftWrapTaxVal = 0;
+
+                if (decimal.TryParse(giftWrapTax, out var valueTax))
+                {
+                    giftWrapTaxVal = valueTax;
+                }
+
                 string giftWrapType = "Gift wrap " + valuesFromAmazon["gift-wrap-type"];
                 var invoiceItemGiftWrap = FillInvoiceItem(
                     new InvoiceItemGeneral(invoice, InvoiceItemType.GiftWrap),
                     giftWrapType,
-                    decimal.Parse(giftWrapPrice),
-                        decimal.Parse(giftWrapTax),
+                    giftWrapPriceValue,
+                    giftWrapTaxVal,
                     1);
                 invoiceItems.Add(invoiceItemGiftWrap);
             }
