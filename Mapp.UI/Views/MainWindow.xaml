@@ -9,6 +9,7 @@
         xmlns:command="http://www.galasoft.ch/mvvmlight"
         xmlns:rs="clr-namespace:Shmap.UI.Views.Resources"
         xmlns:viewModels="clr-namespace:Shmap.UI.ViewModels"
+        xmlns:common="clr-namespace:Shmap.CommonServices;assembly=Shmap.CommonServices"
         mc:Ignorable="d"
         Title="{Binding WindowTitle}" 
         WindowStartupLocation="Manual" WindowState="{Binding WindowState, Mode=TwoWay}" 
@@ -118,15 +119,35 @@
 
         <Style x:Key="InputCellStyle" TargetType="{x:Type DataGridCell}"
                BasedOn="{StaticResource {x:Type DataGridCell}}">
-            <Setter Property="Background" Value="LightCyan"/>
+            <Style.Triggers>
+                <Trigger Property="IsTabStop" Value="True">
+                    <Setter Property="Background" Value="LightCyan"/>
+                </Trigger>
+            </Style.Triggers>
         </Style>
 
-        <Style x:Key="ToggleableReadonlyCellStyle" TargetType="{x:Type DataGridCell}"
+        <Style x:Key="ProductNameToggleableReadonlyCellStyle" TargetType="{x:Type DataGridCell}"
                BasedOn="{StaticResource InputCellStyle}">
+            <Setter Property="IsTabStop" Value="False"></Setter>
+            <Setter Property="Focusable" Value="False"></Setter>
             <Style.Triggers>
-                <DataTrigger Binding="{Binding Path=IsFullyEditable}" Value="False">
-                    <Setter Property="IsTabStop" Value="False"></Setter>
-                    <Setter Property="Focusable" Value="False"></Setter>
+                <DataTrigger Binding="{Binding Path=ItemType}" Value="{x:Static common:InvoiceItemType.Shipping}">
+                    <Setter Property="IsTabStop" Value="True"></Setter>
+                    <Setter Property="Focusable" Value="True"></Setter>
+                </DataTrigger>
+            </Style.Triggers>
+
+            
+        </Style>
+
+        <Style x:Key="ProductCodeToggleableReadonlyCellStyle" TargetType="{x:Type DataGridCell}"
+               BasedOn="{StaticResource InputCellStyle}">
+            <Setter Property="IsTabStop" Value="False"></Setter>
+            <Setter Property="Focusable" Value="False"></Setter>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Path=ItemType}" Value="{x:Static common:InvoiceItemType.Product}">
+                    <Setter Property="IsTabStop" Value="True"></Setter>
+                    <Setter Property="Focusable" Value="True"></Setter>
                 </DataTrigger>
             </Style.Triggers>
         </Style>
@@ -238,7 +259,7 @@
                                             Binding="{Binding SalesChannel}"/>
 
                         <DataGridTextColumn Header="Nazev produktu (Amazon)" Width="*" 
-                                            CellStyle="{StaticResource InputCellStyle}"
+                                            CellStyle="{StaticResource ProductNameToggleableReadonlyCellStyle}"
                                             ElementStyle="{StaticResource CellBlockStyle}"
                                             EditingElementStyle="{StaticResource CellBoxEditingStyle}"
                                             Binding="{Binding AmazonProductName}" />
@@ -249,13 +270,13 @@
                                             Binding="{Binding AmazonSku}" />
 
                         <DataGridTextColumn Header="Kod zbozi" Width="150" 
-                                            CellStyle="{StaticResource ToggleableReadonlyCellStyle}"
+                                            CellStyle="{StaticResource ProductCodeToggleableReadonlyCellStyle}"
                                             ElementStyle="{StaticResource CellBlockStyle}"
                                             EditingElementStyle="{StaticResource CellBoxEditingStyle}"
                                             Binding="{rs:ValidatableBinding Path=WarehouseProductCode, Mode=TwoWay}" />
 
-                        <local:DataGridNumberColumn MaxInputLength="3" IsInteger="True" Header="Kod zbozi" Width="150" 
-                                                    CellStyle="{StaticResource ToggleableReadonlyCellStyle}"
+                        <local:DataGridNumberColumn MaxInputLength="3" IsInteger="True" Header="Mnozstvi v packu" Width="150" 
+                                                    CellStyle="{StaticResource ProductCodeToggleableReadonlyCellStyle}"
                                                     ElementStyle="{StaticResource CellBlockStyle}"
                                                     EditingElementStyle="{StaticResource CellBoxEditingStyle}"
                                                     Binding="{rs:NullableBinding PackQuantityMultiplier}" />
@@ -299,7 +320,7 @@
                                             CellStyle="{StaticResource InputCellStyle}"
                                             ElementStyle="{StaticResource CellBlockStyle}"
                                             EditingElementStyle="{StaticResource CellBoxEditingStyle}"
-                                            Binding="{Binding CustomsDeclaration}" />
+                                            Binding="{rs:ValidatableBinding CustomsDeclaration}" />
 
                         <DataGridTextColumn Header="Typ VAT" Width="80"  IsReadOnly="True"
                                             ElementStyle="{StaticResource CellBlockStyle}"

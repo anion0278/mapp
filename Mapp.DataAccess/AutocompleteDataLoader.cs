@@ -16,6 +16,8 @@ namespace Shmap.DataAccess
 
         Dictionary<string, string> CustomsDeclarationBySku { get; set; }
 
+        Dictionary<string, string> DefaultShippingByPartnerCountry { get; set; }
+
         void UpdateAutocompleteData<T>(T newParamValue, IDictionary<string, T> autocompleteData, string productKey);
     }
 
@@ -30,6 +32,8 @@ namespace Shmap.DataAccess
         public Dictionary<string, string> PackQuantitySku { get; set; }
 
         public Dictionary<string, string> CustomsDeclarationBySku { get; set; }
+
+        public Dictionary<string, string> DefaultShippingByPartnerCountry { get; set; }
 
 
         public void UpdateAutocompleteData<T>(T newParamValue, IDictionary<string, T> autocompleteData, string productKey)
@@ -61,6 +65,7 @@ namespace Shmap.DataAccess
         private string PohodaProdCodeBySkuJson;
         private string ProductQuantityBySkuJson;
         private string CustomsDeclarationBySkuJson;
+        private string DefaultShippingByPartnerCountryJson;
 
         public AutocompleteDataLoader(IJsonManager jsonManager, IConfigProvider configProvider)
         {
@@ -70,6 +75,7 @@ namespace Shmap.DataAccess
 
         public IAutocompleteData LoadSettings()
         {
+            // TODO completely rewrite
             PohodaProdCodeBySkuJson = Path.Combine(_configProvider.InvoiceConverterConfigsDir, "AutocompletePohodaProdCodeBySku.json");
             ProdWarehouseSectionBySkuJson =
                 Path.Combine(_configProvider.InvoiceConverterConfigsDir, "AutocompleteProdWarehouseSectionBySku.json");
@@ -80,6 +86,9 @@ namespace Shmap.DataAccess
             CustomsDeclarationBySkuJson =
                 Path.Combine(_configProvider.InvoiceConverterConfigsDir, "AutocompleteCustomsDeclarationBySku.json");
 
+            DefaultShippingByPartnerCountryJson =
+                Path.Combine(_configProvider.InvoiceConverterConfigsDir, "AutocompleteDefaultShippingByPartnerCountry.json");
+
             var autocompleteData = new AutocompleteData // TODO factory
             {
                 // TODO intelligible exception if some files are missing
@@ -87,7 +96,8 @@ namespace Shmap.DataAccess
                 ProdWarehouseSectionBySku = _jsonManager.DeserializeJsonDictionary(ProdWarehouseSectionBySkuJson),
                 ShippingNameBySku = _jsonManager.DeserializeJsonDictionary(ShippingNameBySkuJson),
                 PackQuantitySku = _jsonManager.DeserializeJsonDictionary(ProductQuantityBySkuJson),
-                CustomsDeclarationBySku = _jsonManager.DeserializeJsonDictionary(CustomsDeclarationBySkuJson)
+                CustomsDeclarationBySku = _jsonManager.DeserializeJsonDictionary(CustomsDeclarationBySkuJson),
+                DefaultShippingByPartnerCountry = _jsonManager.DeserializeJsonDictionary(DefaultShippingByPartnerCountryJson),
             };
             // TODO fix names
             return autocompleteData;
@@ -100,6 +110,7 @@ namespace Shmap.DataAccess
             _jsonManager.SerializeDictionaryToJson(data.ShippingNameBySku, ShippingNameBySkuJson);
             _jsonManager.SerializeDictionaryToJson(data.PackQuantitySku, ProductQuantityBySkuJson);
             _jsonManager.SerializeDictionaryToJson(data.CustomsDeclarationBySku, CustomsDeclarationBySkuJson);
+            _jsonManager.SerializeDictionaryToJson(data.DefaultShippingByPartnerCountry, DefaultShippingByPartnerCountryJson);
         }
 
     }

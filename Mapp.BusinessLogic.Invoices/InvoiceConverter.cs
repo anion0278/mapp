@@ -111,7 +111,7 @@ namespace Shmap.BusinessLogic.Invoices
             string fullAddress = FormatFullAddress(valuesFromAmazon["ship-address-1"], valuesFromAmazon["ship-address-2"], valuesFromAmazon["ship-address-3"], invoice.VariableSymbolFull);
             string phoneNumber = FormatPhoneNumber(valuesFromAmazon["ship-phone-number"], valuesFromAmazon["buyer-phone-number"], invoice.VariableSymbolFull);
 
-            invoice.ClientInfo = new PartnerInfo
+            invoice.ClientInfo = new ClientInfo
             {
                 Name = clientName,
                 Address = new Address
@@ -162,7 +162,7 @@ namespace Shmap.BusinessLogic.Invoices
 
             var invoiceItemShipping = FillInvoiceItem(
                 new InvoiceItemGeneral(invoice, InvoiceItemType.Shipping),
-                GetSavedShippingType(sku, invoice.Classification),
+                GetSavedShippingType(sku, invoice.ClientInfo, invoice.Classification),
                 decimal.Parse(valuesFromAmazon["shipping-price"]),
                 decimal.Parse(valuesFromAmazon["shipping-tax"]),
                 1);
@@ -255,15 +255,22 @@ namespace Shmap.BusinessLogic.Invoices
             return string.Empty;
         }
 
-        private string GetSavedShippingType(string sku, InvoiceVatClassification classification)
+        private string GetSavedShippingType(string sku, ClientInfo clientInfo, InvoiceVatClassification classification)
         {
             string defaultShippingName = "Shipping";
-            if (classification != InvoiceVatClassification.UDA5 && classification != InvoiceVatClassification.RDzasEU)
+            
+            if (_autocompleteData.DefaultShippingByPartnerCountry.TryGetValue(clientInfo.Address.Country, out string countryDefaultShipping))
+            {
+                defaultShippingName = countryDefaultShipping;
+            }
+
+            if (classification != InvoiceVatClassification.UDA5 && classification != InvoiceVatClassification.RDzasEU) 
             {
                 return defaultShippingName;
             }
 
-            return GetAutocompleteOrEmpty(
+            // only for non-EU
+            return GetAutocompleteOrEmpty( // TODO ПРОБЛЕМА в том что при агригации шипиногов их названия будут стираться
                 _autocompleteData.ShippingNameBySku,
                 sku,
                 defaultShippingName);

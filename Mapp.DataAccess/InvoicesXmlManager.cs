@@ -147,17 +147,17 @@ namespace Shmap.DataAccess
             packDataPackItem.invoice.invoiceHeader.partnerIdentity.address.mobilPhone = invoice.CustomsDeclaration;
         }
 
-        private static InvoiceXml.address FillPartnerInfo(PartnerInfo partnerInfo)
+        private static InvoiceXml.address FillPartnerInfo(ClientInfo clientInfo)
         {
             var data = new InvoiceXml.address
             {
-                name = partnerInfo.Name,
-                city = partnerInfo.Address.City, 
-                street = partnerInfo.Address.Street,
-                country = new InvoiceXml.addressCountry{ ids = partnerInfo.Address.Country },
-                zip = partnerInfo.Address.Zip,
-                phone = partnerInfo.Contact.Phone,
-                email = partnerInfo.Contact.Email
+                name = clientInfo.Name,
+                city = clientInfo.Address.City, 
+                street = clientInfo.Address.Street,
+                country = new InvoiceXml.addressCountry{ ids = clientInfo.Address.Country },
+                zip = clientInfo.Address.Zip,
+                phone = clientInfo.Contact.Phone,
+                email = clientInfo.Contact.Email
             };
             return data;
         }

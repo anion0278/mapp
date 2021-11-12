@@ -51,7 +51,7 @@ namespace Shmap.CommonServices
         public DateTime DateAccounting => ConversionDate;
         public DateTime DateDue => CalculateDueDate();
         public string VatType => IsNonEuCountryByClassification(Classification) ? "nonSubsume" : null; // TODO into DAL ?
-        public PartnerInfo ClientInfo { get; set; }
+        public ClientInfo ClientInfo { get; set; }
         public string CustomsDeclaration { get; set; }
         public string SalesChannel { get; set; } = string.Empty;
         public string RelatedWarehouseName { get; set; }
@@ -187,7 +187,7 @@ namespace Shmap.CommonServices
         }
     }
 
-    public class PartnerInfo
+    public class ClientInfo
     {
         public string Name { get; set; }
         public Address Address { get; set; }

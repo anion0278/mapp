@@ -24,7 +24,8 @@ namespace Shmap.ViewModels
         public string AmazonNumber { get; }
         public string SalesChannel { get; }
         public string AmazonSku { get; }
-        public bool IsFullyEditable => _model.Type == InvoiceItemType.Product;
+
+        public InvoiceItemType ItemType => _model.Type;
 
         public string AmazonProductName
         {
@@ -34,8 +35,12 @@ namespace Shmap.ViewModels
                 Set(ref _amazonProductName, value);
 
                 if (string.IsNullOrWhiteSpace(value) || string.IsNullOrEmpty(AmazonSku)) return;
-                var rememberedDictionary = _autocompleteData.ShippingNameBySku;
-                _autocompleteData.UpdateAutocompleteData(value, rememberedDictionary, AmazonSku);
+
+                if (_model.Type == InvoiceItemType.Shipping)
+                {
+                    var rememberedDictionary = _autocompleteData.ShippingNameBySku;
+                    _autocompleteData.UpdateAutocompleteData(value, rememberedDictionary, AmazonSku);
+                }
             }
         }
 
