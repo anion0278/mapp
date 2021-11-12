@@ -21,6 +21,7 @@ namespace Mapp
         public UnityContainer Container { get; }
         private IApplicationUpdater _appUpdater;
         private IAutocompleteData _autocompleteData;
+        private IAutoKeyboardInputHelper _keyboardInputHelper;
 
         public Bootstrapper()
         {
@@ -54,6 +55,7 @@ namespace Mapp
             _autocompleteData = autocompleteDataLoader.LoadSettings();
             Container.RegisterInstance(_autocompleteData);
 
+            _keyboardInputHelper = Container.Resolve<IAutoKeyboardInputHelper>(); // SHOULD BE HERE, otherwise will not get instantiated
             _appUpdater = Container.Resolve<IApplicationUpdater>();
             _appUpdater.CheckUpdate();
 
