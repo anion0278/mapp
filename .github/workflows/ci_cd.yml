@@ -12,7 +12,7 @@ on:
         required: true
         default: '2' # minor
       release_patch:
-        description: 'Release - patch number (previous 1)'     
+        description: 'Release - patch number (previous 2)'     
         required: true
       release_name:
         description: 'Additional name of the release'     
@@ -76,7 +76,7 @@ jobs:
       run: echo "::set-output name=latest_tag::$(git describe --tags --abbrev=0)"
         
     - name: Generate changelog text
-      id: changelog
+      id: changelog_build
       uses: mikepenz/release-changelog-builder-action@v2.4.2
       with:
         configuration: ".github/workflows/changelog_settings.json"
@@ -85,24 +85,18 @@ jobs:
         toTag: ${{ steps.head.outputs.head }}
         fromTag: ${{ steps.latest_tag.outputs.latest_tag }}
         token: ${{ secrets.GITHUB_TOKEN }}
-        
-    - name: Read CHANGELOG.md
-      id: package
-      uses: juliangruber/read-file-action@v1
-      with:
-        path: ./CHANGELOG.md
 
-    - name: Write to CHANGELOG.md
+    - name: Append to CHANGELOG.md
       uses: DamianReeves/write-file-action@master
       with:
         path: ./CHANGELOG.md
-        contents: ${{ steps.changelog.outputs.changelog }}${{ steps.package.outputs.content }}
+        contents: \n${{ steps.changelog_build.outputs.changelog }}
         write-mode: append
         
     - name: Check prerelease version
       uses: haya14busa/action-cond@v1
-      id: condval
-      with:
+      id: condval 
+      with: # allows to get actual bool from string
         cond: ${{ github.event.inputs.release_suffix != '' }}
         if_true: true
         if_false: false
@@ -117,8 +111,6 @@ jobs:
     
     - name: Create Release
       uses: ncipollo/release-action@v1
-      env:
-        ch: ${{ steps.changelog.outputs.changelog }}
       with:
         artifacts: "${{env.bin_dir}}${{env.artifact_name}}"
         tag: v${{env.release_version}}
@@ -129,7 +121,7 @@ jobs:
         omitName: false
         prerelease: ${{steps.condval.outputs.value}}
         artifactErrorsFailBuild: true
-        body: ${{ steps.changelog.outputs.changelog }}
+        body: ${{ steps.changelog_build.outputs.changelog }}
         token: ${{ secrets.GITHUB_TOKEN }}
         
     - name: Change default version in workflow
