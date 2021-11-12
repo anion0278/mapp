@@ -95,8 +95,8 @@ jobs:
         
     - name: Check prerelease version
       uses: haya14busa/action-cond@v1
-      id: condval
-      with:
+      id: condval 
+      with: # allows to get actual bool from string
         cond: ${{ github.event.inputs.release_suffix != '' }}
         if_true: true
         if_false: false
@@ -123,7 +123,7 @@ jobs:
         omitName: false
         prerelease: ${{steps.condval.outputs.value}}
         artifactErrorsFailBuild: true
-        body: ${{ steps.changelog.outputs.changelog }}
+        body: ${{ steps.changelog_build.outputs.changelog }}
         token: ${{ secrets.GITHUB_TOKEN }}
         
     - name: Change default version in workflow
