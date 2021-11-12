@@ -53,4 +53,47 @@ Total of 15 new changes since v3.2.1.8:
 ## 🧰 Chores
 
 - chore: Automated report [skip ci] -> Author: AutomatedRelease
-- chore: Automated report [skip ci] -> Author: AutomatedRelease
+- chore: Automated report [skip ci] -> Author: AutomatedRelease\nNew release on ${{MERGED_AT}}
+Total of 19 new changes since v3.2.1.8:
+## 🚀 Features
+
+- feature: predefined shipping types for countries, disabled product name change in UI, fixed tests
+
+## 🛠️ Minor Changes
+
+- change: customs declaration is remembered only if Invoice has a single item, added validation rule for its length
+
+## 🐛 Fixes
+
+- fix: invalid amazon URL central due to case sensitivity
+- fix: always instantiating keyborad helper
+- fix: exception on empty Gift Wrap Tax value, changed UI
+- fix: item price calculation for EU countries
+- fix: missing class - naming
+- fix: changelog prepending [skip ci]
+- fix: max changelog length fix [skip ci]
+- fix: change log appending
+- fix: tax calculation
+- fix: missing changelog step
+
+[skip ci]
+
+## 📄 Documentation
+
+- doc: improved changelog formatting [skip ci]
+- doc: cleaned changelog [skip ci]
+- doc: improved changelog template [skip ci]
+- doc: removed author name from commit description [skip ci]
+
+## 🧰 Chores
+
+- chore: Automated report [skip ci]
+- chore: Automated report [skip ci]
+- chore: Automated report [skip ci]
+
+## 📦 Uncategorized
+
+- chores: removed unused env var definition
+
+[skip ci]
+- Merge branch 'master' of https://github.com/anion0278/mapp
