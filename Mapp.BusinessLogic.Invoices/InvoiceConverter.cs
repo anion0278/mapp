@@ -212,12 +212,13 @@ namespace Shmap.BusinessLogic.Invoices
         }
 
 
-        private InvoiceItemBase FillInvoiceItem(InvoiceItemBase invoiceItem, string name, decimal price, decimal tax, decimal quantity)
+        private InvoiceItemBase FillInvoiceItem(InvoiceItemBase invoiceItem, string name, decimal priceIncludingTax, decimal tax, decimal quantity)
         {
             invoiceItem.Name = name;
             invoiceItem.Quantity = quantity;
             invoiceItem.TotalPriceWithTax = new CommonServices.Currency(
-                price * (1 - invoiceItem.ParentInvoice.CountryVat.ReversePercentage),
+                priceIncludingTax, // There is no need to manually calculate tax (ReverseTaxValue) and subtract it since its value is available in amazon report
+                // and recalculation logic is included into InvoiceBase Item
                 invoiceItem.ParentInvoice.TotalPrice.ForeignCurrencyName,
                 _rates);
 

@@ -18,7 +18,8 @@ namespace Shmap.CommonServices
         {
             if (_taxIncludingCountries.Contains(ParentInvoice.ShipCountryCode))
             {
-                return TotalPriceWithTax - Tax;
+                return TotalPriceWithTax - Tax; // TODO zvazit zda tady nedat vypocet zalozeny na ReversePercentage Vat, pak to bude univerzalni a bude zachovavat invarianty pro pripad zmeny zeme
+                //price * (1 - invoiceItem.ParentInvoice.CountryVat.ReversePercentage)
             }
 
             return TotalPriceWithTax;
