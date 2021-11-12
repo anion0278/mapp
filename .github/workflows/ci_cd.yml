@@ -76,7 +76,7 @@ jobs:
       run: echo "::set-output name=latest_tag::$(git describe --tags --abbrev=0)"
         
     - name: Generate changelog text
-      id: changelog
+      id: changelog_build
       uses: mikepenz/release-changelog-builder-action@v2.4.2
       with:
         configuration: ".github/workflows/changelog_settings.json"
@@ -85,18 +85,12 @@ jobs:
         toTag: ${{ steps.head.outputs.head }}
         fromTag: ${{ steps.latest_tag.outputs.latest_tag }}
         token: ${{ secrets.GITHUB_TOKEN }}
-        
-    - name: Read CHANGELOG.md
-      id: package
-      uses: juliangruber/read-file-action@v1
-      with:
-        path: ./CHANGELOG.md
 
-    - name: Write to CHANGELOG.md
+    - name: Append to CHANGELOG.md
       uses: DamianReeves/write-file-action@master
       with:
         path: ./CHANGELOG.md
-        contents: ${{ steps.package.outputs.content }}
+        contents: \n${{ steps.changelog_build.outputs.changelog }}
         write-mode: append
         
     - name: Check prerelease version
