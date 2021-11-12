@@ -23,7 +23,9 @@ Total of 5 new changes since v3.0.2.3
 - Update ci_cd.yml -> Author: anion0278
 - Merge branch 'dev' -> Author: anion0278
 - Merge branch 'master' of https://github.com/anion0278/mapp -> Author: anion0278
-\nNew release on ${{MERGED_AT}}
+
+============================================================================================
+
 Total of 15 new changes since v3.2.1.8:
 ## 🚀 Features
 
