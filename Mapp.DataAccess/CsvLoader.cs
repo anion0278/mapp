@@ -12,7 +12,6 @@ namespace Shmap.DataAccess
     {
         Dictionary<string, decimal> LoadFixedCurrencyRates();
         Dictionary<string, decimal> LoadCountryVatRates();
-        string ToInvariantFormat(string input);
     }
 
     public class CsvLoader : ICsvLoader
@@ -70,8 +69,8 @@ namespace Shmap.DataAccess
             var ratesDict = new Dictionary<string, decimal>();
             for (int index = skipLines; index < strArrayList.Count; ++index)
             {
-                decimal num = decimal.Parse(ToInvariantFormat(strArrayList[index][skipColumns + 2])) /
-                              decimal.Parse(ToInvariantFormat(strArrayList[index][skipColumns]));
+                decimal num = decimal.Parse(strArrayList[index][skipColumns + 2], CultureInfo.InvariantCulture) /
+                              decimal.Parse(strArrayList[index][skipColumns], CultureInfo.InvariantCulture);
                 ratesDict.Add(strArrayList[index][skipColumns + 1], num);
             }
 
@@ -95,16 +94,11 @@ namespace Shmap.DataAccess
             var ratesDict = new Dictionary<string, decimal>();
             for (int index = 0; index < strArrayList.Count; ++index)
             {
-                decimal vat = decimal.Parse(ToInvariantFormat(strArrayList[index][1])) / (decimal) 100.0;
+                decimal vat = decimal.Parse(strArrayList[index][1], CultureInfo.InvariantCulture) / (decimal) 100.0;
                 ratesDict.Add(strArrayList[index][0], vat);
             }
 
             return ratesDict;
-        }
-
-        public string ToInvariantFormat(string input)
-        {
-            return input.Replace(",", CultureInfo.InvariantCulture.NumberFormat.NumberDecimalSeparator);
         }
 
 
