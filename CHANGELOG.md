@@ -108,4 +108,19 @@ Total of 1 new changes since v3.2.2.15:
 ## 📦 Uncategorized
 
 - Update CHANGELOG.md
+- Update ci_cd.yml\nNew release on ${{MERGED_AT}}
+Total of 3 new changes since v3.2.2.15:
+## 🐛 Fixes
+
+- fix: exception during csv currency parsing
+
+## 🧰 Chores
+
+- chore: Automated report [skip ci]
+- chore: Automated report [skip ci]
+
+## 📦 Uncategorized
+
+- Update CHANGELOG.md
 - Update ci_cd.yml
+- Merge branch 'master' of https://github.com/anion0278/mapp
