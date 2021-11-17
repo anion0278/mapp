@@ -99,3 +99,13 @@ Total of 19 new changes since v3.2.1.8:
 
 [skip ci]
 - Merge branch 'master' of https://github.com/anion0278/mapp
+\nNew release on ${{MERGED_AT}}
+Total of 1 new changes since v3.2.2.15:
+## 🧰 Chores
+
+- chore: Automated report [skip ci]
+
+## 📦 Uncategorized
+
+- Update CHANGELOG.md
+- Update ci_cd.yml
