@@ -11,6 +11,9 @@ namespace Mapp.Business
 {
     public class TransactionsReaderTest
     {
+
+        // TODO create TestExtension assembly, put extension method for fast creation of autofixture with Automock
+
         [Fact]
         public void Read_Given_Returns()
         {

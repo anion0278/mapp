@@ -33,7 +33,7 @@ namespace Mapp
         {
             // lets consider ServiceLocator is an anti-pattern
 
-            // TODO use naming convention registering
+            // TODO use naming convention auto-registering
             Container.RegisterInstance<IConfigProvider>(new ConfigProvider(AppSettings.Default, true));
             Container.RegisterTypeAsSingleton<IJsonManager, JsonManager>();
             Container.RegisterTypeAsSingleton<IAutoKeyboardInputHelper, AutoKeyboardInputHelper>();
