@@ -20,6 +20,6 @@ namespace Shmap.BusinessLogic.Transactions
 
         public string OrderId { get; set; }
 
-        public double TransactionValue { get; set; }
+        public decimal TransactionValue { get; set; }
     }
 }

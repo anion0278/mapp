@@ -128,17 +128,17 @@ namespace Shmap.BusinessLogic.Transactions
 
                 // PRICE
 
-                double transactionTotalValue = 0;
+                decimal transactionTotalValue = 0;
                 foreach (var compColumnName in marketPlaceSetting.ValueComponentsColumnName)
                 {
-                    transactionTotalValue += double.Parse(transactionsDict[compColumnName][index], marketPlaceSetting.DateCultureInfo);
+                    transactionTotalValue += decimal.Parse(transactionsDict[compColumnName][index], marketPlaceSetting.DateCultureInfo);
                 }
 
                 var transactionType = ParseTransactionType(transactionsDict[marketPlaceSetting.TransactionTypeColumnName][index], marketPlaceSetting);
                 if (transactionType == TransactionTypes.Transfer || transactionType == TransactionTypes.ServiceFee)
                 {
                     // V priprade Service Fee a Transferu product price je total price
-                    transactionTotalValue = double.Parse(transactionsDict[marketPlaceSetting.TotalPriceColumnName][index], marketPlaceSetting.DateCultureInfo);
+                    transactionTotalValue = decimal.Parse(transactionsDict[marketPlaceSetting.TotalPriceColumnName][index], marketPlaceSetting.DateCultureInfo);
                 }
 
                 // DATE 

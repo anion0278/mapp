@@ -1,8 +1,11 @@
-﻿using System.Windows;
+﻿using System.Collections.Generic;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
+using Microsoft.AppCenter;
+using Microsoft.AppCenter.Analytics;
 
 namespace Shmap.Views
 {
@@ -11,6 +14,12 @@ namespace Shmap.Views
         public MainWindow()
         {
             InitializeComponent();
+            //AppCenter.Start("9549dd3a-1371-4a23-b973-f5e80154119d", typeof(Analytics));
+            //Analytics.SetEnabledAsync(true);
+            //Analytics.TrackEvent("Mapp clicked", new Dictionary<string, string> {
+            //    { "Category", "Music" },
+            //    { "FileName", "favorite.avi"}
+            //});
         }
     }
 }

@@ -76,7 +76,7 @@ namespace Shmap.BusinessLogic.Transactions
             return formatted;
         }
 
-        private string FormatPrice(double price)
+        private string FormatPrice(decimal price)
         {
             string priceFormatted = Math.Abs(price).ToString("N2").RemoveAll(".").RemoveAll(",").PadLeft(8,'0');
             return priceFormatted;

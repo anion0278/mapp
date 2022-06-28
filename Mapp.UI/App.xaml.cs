@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Configuration;
 using System.Data;
 using System.Diagnostics;
@@ -11,7 +12,6 @@ using Shmap.ViewModels;
 using Shmap.Views;
 using Microsoft.AppCenter;
 using Microsoft.AppCenter.Analytics;
-using Microsoft.AppCenter.Crashes;
 using NLog;
 
 namespace Mapp
@@ -44,25 +44,44 @@ namespace Mapp
     {
         private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
+        // TODO project-wide System.OverflowException check !!!
+
         protected override void OnStartup(StartupEventArgs e)
         {
+            //var x = new[] { 1, 2, 3, };
+            //x.ToImmutableArray().
+            //ImmutableArrayExtensions.
+            //x[1] = 8;
+
+            //using var loggerFactory = LoggerFactory.Create(builder =>
+            //{
+            //    builder
+            //        .AddFilter("Microsoft", LogLevel.Warning)
+            //        .AddFilter("System", LogLevel.Warning)
+            //        .AddFilter("LoggingConsoleApp.Program", LogLevel.Debug)
+            //        .AddNLog(NLog.LogFactory());
+            //});
+
+            //Microsoft.Extensions.Logging.ILogger logger = loggerFactory.CreateLogger<App>();
+            //logger.LogInformation("Example log message");
+
             base.OnStartup(e);
 #if !DEBUG
             //https://github.com/dotnet/winforms/blob/72c140e531729b58737bb7b84212ff96767a151d/src/System.Windows.Forms/src/System/Windows/Forms/Application.cs#L952
             //AppCenter.Start("9549dd3a-1371-4a23-b973-f5e80154119d", typeof(Analytics), typeof(Crashes)); // TODO should solve secrt storing somehow :(
 #endif
-            SetupExceptionHandling();
+            //SetupExceptionHandling();
 
-            PresentationTraceSources.Refresh();
-            var wpfBindingErrorHandler = new ExplicitBindingErrorTraceListener();
-            wpfBindingErrorHandler.BindingErrorEventHandler += (o, e) => LogException(e, "WPF Binding");
-            PresentationTraceSources.DataBindingSource.Listeners.Add(wpfBindingErrorHandler);
-            PresentationTraceSources.DataBindingSource.Switch.Level = SourceLevels.Error;
-            PresentationTraceSources.FreezableSource.Switch.Level = SourceLevels.Off; // needed in order to hide exceptions from Freezables
+            //PresentationTraceSources.Refresh();
+            //var wpfBindingErrorHandler = new ExplicitBindingErrorTraceListener();
+            //wpfBindingErrorHandler.BindingErrorEventHandler += (o, e) => LogException(e, "WPF Binding");
+            //PresentationTraceSources.DataBindingSource.Listeners.Add(wpfBindingErrorHandler);
+            //PresentationTraceSources.DataBindingSource.Switch.Level = SourceLevels.Error;
+            //PresentationTraceSources.FreezableSource.Switch.Level = SourceLevels.Off; // needed in order to hide exceptions from Freezables
 
-            var mainWindow = new MainWindow();
-            Current.MainWindow = mainWindow;
-            mainWindow.Show();
+            //var mainWindow = new MainWindow();
+            //Current.MainWindow = mainWindow;
+            //mainWindow.Show();
         }
 
         private void SetupExceptionHandling()

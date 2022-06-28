@@ -4,16 +4,20 @@ using System.IO;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using System.Text;
+using System.Threading.Tasks;
 using Shmap.BusinessLogic.AutocompletionHelper;
 using Shmap.BusinessLogic.Currency;
 using Shmap.CommonServices;
 using Shmap.DataAccess;
 using Moq;
+using VerifyXunit;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace Shmap.BusinessLogic.Invoices.Tests
 {
-    public class IntegrationTests // Charact. tests?
+    [UsesVerify]
+    public class IntegrationTests: VerifyBase
     {
         // TODO add multi-file import test
 
@@ -41,31 +45,31 @@ namespace Shmap.BusinessLogic.Invoices.Tests
         //    IntegrationTestBase("general", 300000000);
         //}
 
-        //[Fact]
-        //public void Hermes_Shipping()
-        //{
-        //    IntegrationTestBase("hermes shipping", 300000000);
-        ////}
-
-        //[Fact]
-        //public void Multi_Item_Order()
-        //{
-        //    IntegrationTestBase("multi-item order", 300000000);
-        //}
-
         [Fact]
-        public void Order_Number_Zeros()
+        public async Task Hermes_Shipping()
         {
-            IntegrationTestBase("order number zeros", 300000000);
+            await IntegrationTestBase("hermes shipping", 300000000);
         }
 
         [Fact]
-        public void Quantity()
+        public async Task Multi_Item_Order()
         {
-            IntegrationTestBase("quantity", 300000000);
+            await IntegrationTestBase("multi-item order", 300000000);
         }
 
-        private void IntegrationTestBase(string testCaseDataDirName, int startingOrderNumber)
+        [Fact]
+        public async Task Order_Number_Zeros()
+        {
+            await IntegrationTestBase("order number zeros", 300000000);
+        }
+
+        [Fact]
+        public async Task Quantity()
+        {
+            await IntegrationTestBase("quantity", 300000000);
+        }
+
+        private async Task IntegrationTestBase(string testCaseDataDirName, int startingOrderNumber) // TODO testCaseDataDirName - use CallerMethodName attribute, Or use Theories?
         {
             string inputAmazonReportFilePath = @$"TestData\{testCaseDataDirName}\amazon.txt";
             string expectedResultFilePath = @$"TestData\{testCaseDataDirName}\converted.xml";
@@ -81,18 +85,18 @@ namespace Shmap.BusinessLogic.Invoices.Tests
                 .Setup(m => m.AskToChangeLongStringIfNeeded(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()))
                 .Returns((string _, string s2, int _) => s2);
 
-            ApplicationConstants.Rounding = 2;
+            ApplicationConstants.Rounding = 2; // TODO solve by intoducing settings context
 
-            var _jsonManager = new JsonManager();
-            var _invoiceXmlXmlManager = new InvoicesXmlManager(Mock.Of<IDialogService>(), configMock.Object) ;
-            var _currencyLoader = new CsvLoader(configMock.Object);
-            var _autocompleteDataLoader = new AutocompleteDataLoader(_jsonManager, configMock.Object);
-            var _autocompleteData = _autocompleteDataLoader.LoadSettings();
-            var InvoiceConverter = new InvoiceConverter(
-                _autocompleteData,
+            var jsonManager = new JsonManager();
+            var invoiceXmlXmlManager = new InvoicesXmlManager(Mock.Of<IDialogService>(), configMock.Object) ;
+            var currencyLoader = new CsvLoader(configMock.Object);
+            var autocompleteDataLoader = new AutocompleteDataLoader(jsonManager, configMock.Object);
+            var autocompleteData = autocompleteDataLoader.LoadSettings();
+            var invoiceConverter = new InvoiceConverter(
+                autocompleteData,
                 new CurrencyConverter(),
-                _currencyLoader,
-                _invoiceXmlXmlManager,
+                currencyLoader,
+                invoiceXmlXmlManager,
                 Mock.Of<IAutocompleteDataLoader>(),
                 dialogServiceMock.Object);
 
@@ -102,16 +106,19 @@ namespace Shmap.BusinessLogic.Invoices.Tests
                 DefaultEmail = "info@czechdrawing.com", 
                 ExistingInvoiceNumber = (uint)startingOrderNumber,
             };
-
-            var invoices = InvoiceConverter.LoadAmazonReports(new[] { inputAmazonReportFilePath }, conversionContext);
+            
+            var invoices = invoiceConverter.LoadAmazonReports(new[] { inputAmazonReportFilePath }, conversionContext);
 
             string resultFileName = Path.Join(Path.GetDirectoryName(expectedResultFilePath), "result.xml");
-            InvoiceConverter.ProcessInvoices(invoices, resultFileName);
+            invoiceConverter.ProcessInvoices(invoices, resultFileName); // TODO pass JSON-to-memory-saver
 
-            string expectedResult = File.ReadAllText(expectedResultFilePath); // TODO save to memory
-            string result = File.ReadAllText(resultFileName);
+            //string expectedResult = File.ReadAllText(expectedResultFilePath); // TODO save to memory
+            string result = await File.ReadAllTextAsync(resultFileName);
 
-            Assert.Equal(expectedResult, result);
+            await Verify(result);
+            //Assert.Equal(expectedResult, result);
         }
+
+        public IntegrationTests(): base(){ }
     }
 }

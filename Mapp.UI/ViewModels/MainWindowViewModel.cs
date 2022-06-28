@@ -48,7 +48,7 @@ namespace Shmap.UI.ViewModels
 
         public ICollectionView InvoiceItemsCollectionView { get; }
 
-        public ObservableCollection<InvoiceViewModel> Invoices { get; } = new();
+        public BindingList<InvoiceViewModel> Invoices { get; } = new(); // use BindingList if it is required to update UI for inner items changes
 
         // TODO apply Fody
         public int WindowLeft // is it responsibility of the VM?

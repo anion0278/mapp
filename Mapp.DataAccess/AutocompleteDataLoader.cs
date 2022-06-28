@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using Shmap.CommonServices;
 
 namespace Shmap.DataAccess
@@ -75,19 +76,21 @@ namespace Shmap.DataAccess
 
         public IAutocompleteData LoadSettings()
         {
+            // TODO PathsProvider!!
             // TODO completely rewrite
-            PohodaProdCodeBySkuJson = Path.Combine(_configProvider.InvoiceConverterConfigsDir, "AutocompletePohodaProdCodeBySku.json");
+            var assemblyLocation = Directory.GetParent(Assembly.GetExecutingAssembly().Location).FullName;
+            PohodaProdCodeBySkuJson = Path.Join(assemblyLocation, _configProvider.InvoiceConverterConfigsDir, "AutocompletePohodaProdCodeBySku.json");
             ProdWarehouseSectionBySkuJson =
-                Path.Combine(_configProvider.InvoiceConverterConfigsDir, "AutocompleteProdWarehouseSectionBySku.json");
+                Path.Join(assemblyLocation, _configProvider.InvoiceConverterConfigsDir, "AutocompleteProdWarehouseSectionBySku.json");
             ShippingNameBySkuJson =
-                Path.Combine(_configProvider.InvoiceConverterConfigsDir, "AutocompleteShippingTypeBySku.json");
+                Path.Join(assemblyLocation, _configProvider.InvoiceConverterConfigsDir, "AutocompleteShippingTypeBySku.json");
             ProductQuantityBySkuJson =
-                Path.Combine(_configProvider.InvoiceConverterConfigsDir, "AutocompleteProdQuantityBySku.json");
+                Path.Join(assemblyLocation, _configProvider.InvoiceConverterConfigsDir, "AutocompleteProdQuantityBySku.json");
             CustomsDeclarationBySkuJson =
-                Path.Combine(_configProvider.InvoiceConverterConfigsDir, "AutocompleteCustomsDeclarationBySku.json");
+                Path.Join(assemblyLocation, _configProvider.InvoiceConverterConfigsDir, "AutocompleteCustomsDeclarationBySku.json");
 
             DefaultShippingByPartnerCountryJson =
-                Path.Combine(_configProvider.InvoiceConverterConfigsDir, "AutocompleteDefaultShippingByPartnerCountry.json");
+                Path.Join(assemblyLocation, _configProvider.InvoiceConverterConfigsDir, "AutocompleteDefaultShippingByPartnerCountry.json");
 
             var autocompleteData = new AutocompleteData // TODO factory
             {

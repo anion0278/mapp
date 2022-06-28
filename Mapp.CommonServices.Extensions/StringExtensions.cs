@@ -34,9 +34,9 @@ namespace Shmap.CommonServices
             return string.Format(str, args);
         }
 
-        public static bool IsNumber(this string str)
-        {
-            return double.TryParse(str.Replace(",", "."), NumberStyles.Float, CultureInfo.InvariantCulture, out _);
-        }
+        //public static bool IsNumber(this string str)
+        //{
+        //    return double.TryParse(str.Replace(",", "."), NumberStyles.Float, CultureInfo.InvariantCulture, out _);
+        //}
     }
 }

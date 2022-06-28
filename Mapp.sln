@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29326.143
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32422.2
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shmap.UI", "Shmap.UI\Shmap.UI.csproj", "{162BF9E6-2FF7-41D8-A7EF-BAC5D36DDBF8}"
 EndProject
@@ -33,6 +33,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shmap.UpdatePackagesRouterFunction", "Shmap.UpdatePackagesRouterFunction\Shmap.UpdatePackagesRouterFunction.csproj", "{478547B7-AD77-436E-8C32-481366BAED2D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shmap.UI.UiTests", "Shmap.UI.UiTests\Shmap.UI.UiTests.csproj", "{8069FD7E-9809-4692-984C-621639005146}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -88,6 +90,10 @@ Global
 		{478547B7-AD77-436E-8C32-481366BAED2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{478547B7-AD77-436E-8C32-481366BAED2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{478547B7-AD77-436E-8C32-481366BAED2D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8069FD7E-9809-4692-984C-621639005146}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8069FD7E-9809-4692-984C-621639005146}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8069FD7E-9809-4692-984C-621639005146}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8069FD7E-9809-4692-984C-621639005146}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -95,6 +101,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{684CDA05-C153-4567-83DF-31F19A6CC944} = {D20AE460-B73F-46A2-B618-83F253B3199F}
 		{02854395-D914-42C3-95B6-8CC18F31C1A7} = {D20AE460-B73F-46A2-B618-83F253B3199F}
+		{8069FD7E-9809-4692-984C-621639005146} = {D20AE460-B73F-46A2-B618-83F253B3199F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {211ABC19-7048-4CCA-BE7E-F5C1DAD28548}

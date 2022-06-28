@@ -1,0 +1,286 @@
+﻿<?xml version="1.0" encoding="windows-1250"?>
+<dat:dataPack version="2.0" id="Usr01" ico="05448034" key="efd0db6a-9c08-4bb5-befb-36809eadcba1" programVersion="12101.4 (7.1.2019)" application="Transformace" note="U�ivatelsk� export" xmlns:dat="http://www.stormware.cz/schema/version_2/data.xsd">
+  <dat:dataPackItem version="2.0" id="Usr01 (000)">
+    <inv:invoice version="2.0" xmlns:inv="http://www.stormware.cz/schema/version_2/invoice.xsd">
+      <inv:invoiceHeader xmlns:typ="http://www.stormware.cz/schema/version_2/type.xsd" xmlns:rsp="http://www.stormware.cz/schema/version_2/response.xsd" xmlns:rdc="http://www.stormware.cz/schema/version_2/documentresponse.xsd" xmlns:lst="http://www.stormware.cz/schema/version_2/list.xsd" xmlns:lStk="http://www.stormware.cz/schema/version_2/list_stock.xsd" xmlns:lAdb="http://www.stormware.cz/schema/version_2/list_addBook.xsd" xmlns:lCen="http://www.stormware.cz/schema/version_2/list_centre.xsd" xmlns:lAcv="http://www.stormware.cz/schema/version_2/list_activity.xsd" xmlns:acu="http://www.stormware.cz/schema/version_2/accountingunit.xsd" xmlns:vch="http://www.stormware.cz/schema/version_2/voucher.xsd" xmlns:int="http://www.stormware.cz/schema/version_2/intDoc.xsd" xmlns:stk="http://www.stormware.cz/schema/version_2/stock.xsd" xmlns:ord="http://www.stormware.cz/schema/version_2/order.xsd" xmlns:ofr="http://www.stormware.cz/schema/version_2/offer.xsd" xmlns:enq="http://www.stormware.cz/schema/version_2/enquiry.xsd" xmlns:vyd="http://www.stormware.cz/schema/version_2/vydejka.xsd" xmlns:pri="http://www.stormware.cz/schema/version_2/prijemka.xsd" xmlns:bal="http://www.stormware.cz/schema/version_2/balance.xsd" xmlns:pre="http://www.stormware.cz/schema/version_2/prevodka.xsd" xmlns:vyr="http://www.stormware.cz/schema/version_2/vyroba.xsd" xmlns:pro="http://www.stormware.cz/schema/version_2/prodejka.xsd" xmlns:con="http://www.stormware.cz/schema/version_2/contract.xsd" xmlns:adb="http://www.stormware.cz/schema/version_2/addressbook.xsd" xmlns:prm="http://www.stormware.cz/schema/version_2/parameter.xsd" xmlns:lCon="http://www.stormware.cz/schema/version_2/list_contract.xsd" xmlns:ctg="http://www.stormware.cz/schema/version_2/category.xsd" xmlns:ipm="http://www.stormware.cz/schema/version_2/intParam.xsd" xmlns:str="http://www.stormware.cz/schema/version_2/storage.xsd" xmlns:idp="http://www.stormware.cz/schema/version_2/individualPrice.xsd" xmlns:sup="http://www.stormware.cz/schema/version_2/supplier.xsd" xmlns:prn="http://www.stormware.cz/schema/version_2/print.xsd" xmlns:sEET="http://www.stormware.cz/schema/version_2/sendEET.xsd" xmlns:act="http://www.stormware.cz/schema/version_2/accountancy.xsd" xmlns:bnk="http://www.stormware.cz/schema/version_2/bank.xsd" xmlns:sto="http://www.stormware.cz/schema/version_2/store.xsd" xmlns:grs="http://www.stormware.cz/schema/version_2/groupStocks.xsd" xmlns:acp="http://www.stormware.cz/schema/version_2/actionPrice.xsd" xmlns:csh="http://www.stormware.cz/schema/version_2/cashRegister.xsd" xmlns:bka="http://www.stormware.cz/schema/version_2/bankAccount.xsd" xmlns:ilt="http://www.stormware.cz/schema/version_2/inventoryLists.xsd" xmlns:nms="http://www.stormware.cz/schema/version_2/numericalSeries.xsd" xmlns:pay="http://www.stormware.cz/schema/version_2/payment.xsd" xmlns:mKasa="http://www.stormware.cz/schema/version_2/mKasa.xsd" xmlns:gdp="http://www.stormware.cz/schema/version_2/GDPR.xsd" xmlns:est="http://www.stormware.cz/schema/version_2/establishment.xsd" xmlns:cen="http://www.stormware.cz/schema/version_2/centre.xsd" xmlns:acv="http://www.stormware.cz/schema/version_2/activity.xsd" xmlns:ftr="http://www.stormware.cz/schema/version_2/filter.xsd">
+        <inv:invoiceType>issuedInvoice</inv:invoiceType>
+        <inv:number>
+          <typ:numberRequested>300000001</typ:numberRequested>
+        </inv:number>
+        <inv:symVar>6305714773</inv:symVar>
+        <inv:symPar>202-0322630-5714773</inv:symPar>
+        <inv:date>2021-10-20</inv:date>
+        <inv:dateTax>2021-10-25</inv:dateTax>
+        <inv:dateAccounting>2021-10-20</inv:dateAccounting>
+        <inv:dateDue>2021-10-23</inv:dateDue>
+        <inv:accounting>
+          <typ:ids>3Fv</typ:ids>
+        </inv:accounting>
+        <inv:classificationVAT>
+          <typ:ids>UVzbo��</typ:ids>
+          <typ:classificationVATType>nonSubsume</typ:classificationVATType>
+        </inv:classificationVAT>
+        <inv:text>This is your invoice:</inv:text>
+        <inv:partnerIdentity>
+          <typ:address>
+            <typ:name>mrs jan harrison</typ:name>
+            <typ:city>STRANRAER, wigtownshire </typ:city>
+            <typ:street>22 HARBOUR TERRACE, DRUMMORE</typ:street>
+            <typ:zip>DG9 9PZ</typ:zip>
+            <typ:country>
+              <typ:ids>GB</typ:ids>
+            </typ:country>
+            <typ:phone />
+            <typ:mobilPhone />
+            <typ:email>info@czechdrawing.com</typ:email>
+          </typ:address>
+          <typ:shipToAddress>
+            <typ:name />
+            <typ:city />
+            <typ:street />
+            <typ:phone />
+          </typ:shipToAddress>
+        </inv:partnerIdentity>
+        <inv:myIdentity>
+          <typ:address>
+            <typ:company>Czech Goods </typ:company>
+            <typ:title>s.r.o.</typ:title>
+            <typ:surname>Martin</typ:surname>
+            <typ:name>V�lek</typ:name>
+            <typ:city>PORUBA</typ:city>
+            <typ:street>Ma�arsk�</typ:street>
+            <typ:number>1454/6</typ:number>
+            <typ:zip>708 00</typ:zip>
+            <typ:ico>05448034</typ:ico>
+            <typ:dic>CZ005448034</typ:dic>
+            <typ:phone>776596476</typ:phone>
+            <typ:email>valinho@seznam.cz</typ:email>
+          </typ:address>
+        </inv:myIdentity>
+        <inv:paymentType>
+          <typ:ids>Amazon.co.uk</typ:ids>
+        </inv:paymentType>
+        <inv:account>
+          <typ:ids>Fio</typ:ids>
+          <typ:accountNo>2001353907</typ:accountNo>
+        </inv:account>
+        <inv:symConst>308</inv:symConst>
+        <inv:centre>
+          <typ:ids />
+        </inv:centre>
+        <inv:liquidation>
+          <typ:amountHome>496.23</typ:amountHome>
+          <typ:amountForeign>17.00</typ:amountForeign>
+        </inv:liquidation>
+        <inv:histRate>true</inv:histRate>
+        <inv:markRecord>false</inv:markRecord>
+      </inv:invoiceHeader>
+      <inv:invoiceDetail xmlns:rsp="http://www.stormware.cz/schema/version_2/response.xsd" xmlns:rdc="http://www.stormware.cz/schema/version_2/documentresponse.xsd" xmlns:typ="http://www.stormware.cz/schema/version_2/type.xsd" xmlns:lst="http://www.stormware.cz/schema/version_2/list.xsd" xmlns:lStk="http://www.stormware.cz/schema/version_2/list_stock.xsd" xmlns:lAdb="http://www.stormware.cz/schema/version_2/list_addBook.xsd" xmlns:lCen="http://www.stormware.cz/schema/version_2/list_centre.xsd" xmlns:lAcv="http://www.stormware.cz/schema/version_2/list_activity.xsd" xmlns:acu="http://www.stormware.cz/schema/version_2/accountingunit.xsd" xmlns:vch="http://www.stormware.cz/schema/version_2/voucher.xsd" xmlns:int="http://www.stormware.cz/schema/version_2/intDoc.xsd" xmlns:stk="http://www.stormware.cz/schema/version_2/stock.xsd" xmlns:ord="http://www.stormware.cz/schema/version_2/order.xsd" xmlns:ofr="http://www.stormware.cz/schema/version_2/offer.xsd" xmlns:enq="http://www.stormware.cz/schema/version_2/enquiry.xsd" xmlns:vyd="http://www.stormware.cz/schema/version_2/vydejka.xsd" xmlns:pri="http://www.stormware.cz/schema/version_2/prijemka.xsd" xmlns:bal="http://www.stormware.cz/schema/version_2/balance.xsd" xmlns:pre="http://www.stormware.cz/schema/version_2/prevodka.xsd" xmlns:vyr="http://www.stormware.cz/schema/version_2/vyroba.xsd" xmlns:pro="http://www.stormware.cz/schema/version_2/prodejka.xsd" xmlns:con="http://www.stormware.cz/schema/version_2/contract.xsd" xmlns:adb="http://www.stormware.cz/schema/version_2/addressbook.xsd" xmlns:prm="http://www.stormware.cz/schema/version_2/parameter.xsd" xmlns:lCon="http://www.stormware.cz/schema/version_2/list_contract.xsd" xmlns:ctg="http://www.stormware.cz/schema/version_2/category.xsd" xmlns:ipm="http://www.stormware.cz/schema/version_2/intParam.xsd" xmlns:str="http://www.stormware.cz/schema/version_2/storage.xsd" xmlns:idp="http://www.stormware.cz/schema/version_2/individualPrice.xsd" xmlns:sup="http://www.stormware.cz/schema/version_2/supplier.xsd" xmlns:prn="http://www.stormware.cz/schema/version_2/print.xsd" xmlns:sEET="http://www.stormware.cz/schema/version_2/sendEET.xsd" xmlns:act="http://www.stormware.cz/schema/version_2/accountancy.xsd" xmlns:bnk="http://www.stormware.cz/schema/version_2/bank.xsd" xmlns:sto="http://www.stormware.cz/schema/version_2/store.xsd" xmlns:grs="http://www.stormware.cz/schema/version_2/groupStocks.xsd" xmlns:acp="http://www.stormware.cz/schema/version_2/actionPrice.xsd" xmlns:csh="http://www.stormware.cz/schema/version_2/cashRegister.xsd" xmlns:bka="http://www.stormware.cz/schema/version_2/bankAccount.xsd" xmlns:ilt="http://www.stormware.cz/schema/version_2/inventoryLists.xsd" xmlns:nms="http://www.stormware.cz/schema/version_2/numericalSeries.xsd" xmlns:pay="http://www.stormware.cz/schema/version_2/payment.xsd" xmlns:mKasa="http://www.stormware.cz/schema/version_2/mKasa.xsd" xmlns:gdp="http://www.stormware.cz/schema/version_2/GDPR.xsd" xmlns:est="http://www.stormware.cz/schema/version_2/establishment.xsd" xmlns:cen="http://www.stormware.cz/schema/version_2/centre.xsd" xmlns:acv="http://www.stormware.cz/schema/version_2/activity.xsd" xmlns:ftr="http://www.stormware.cz/schema/version_2/filter.xsd">
+        <inv:invoiceItem>
+          <inv:text>Koh I noor Artist's 3800/27 Coloured Pencil - Olive Green Dark</inv:text>
+          <inv:quantity>1</inv:quantity>
+          <inv:coefficient>0</inv:coefficient>
+          <inv:payVAT>false</inv:payVAT>
+          <inv:rateVAT>historyHigh</inv:rateVAT>
+          <inv:percentVAT>0</inv:percentVAT>
+          <inv:discountPercentage>0</inv:discountPercentage>
+          <inv:homeCurrency>
+            <typ:unitPrice>58.38</typ:unitPrice>
+            <typ:price>58.38</typ:price>
+            <typ:priceVAT>0.00</typ:priceVAT>
+            <typ:priceSum>58.38</typ:priceSum>
+          </inv:homeCurrency>
+          <inv:foreignCurrency>
+            <typ:unitPrice>2.00</typ:unitPrice>
+            <typ:price>2.00</typ:price>
+            <typ:priceVAT>0.00</typ:priceVAT>
+            <typ:priceSum>2.00</typ:priceSum>
+          </inv:foreignCurrency>
+          <inv:code />
+          <inv:stockItem>
+            <typ:store>
+              <typ:ids>Zbo��</typ:ids>
+            </typ:store>
+            <typ:stockItem>
+              <typ:ids />
+            </typ:stockItem>
+          </inv:stockItem>
+          <inv:PDP>false</inv:PDP>
+        </inv:invoiceItem>
+        <inv:invoiceItem>
+          <inv:text>Koh I noor Artist's 3800/26 Coloured Pencil - Dark Green</inv:text>
+          <inv:quantity>1</inv:quantity>
+          <inv:coefficient>0</inv:coefficient>
+          <inv:payVAT>false</inv:payVAT>
+          <inv:rateVAT>historyHigh</inv:rateVAT>
+          <inv:percentVAT>0</inv:percentVAT>
+          <inv:discountPercentage>0</inv:discountPercentage>
+          <inv:homeCurrency>
+            <typ:unitPrice>29.19</typ:unitPrice>
+            <typ:price>29.19</typ:price>
+            <typ:priceVAT>0.00</typ:priceVAT>
+            <typ:priceSum>29.19</typ:priceSum>
+          </inv:homeCurrency>
+          <inv:foreignCurrency>
+            <typ:unitPrice>1.00</typ:unitPrice>
+            <typ:price>1.00</typ:price>
+            <typ:priceVAT>0.00</typ:priceVAT>
+            <typ:priceSum>1.00</typ:priceSum>
+          </inv:foreignCurrency>
+          <inv:code />
+          <inv:stockItem>
+            <typ:store>
+              <typ:ids>Zbo��</typ:ids>
+            </typ:store>
+            <typ:stockItem>
+              <typ:ids />
+            </typ:stockItem>
+          </inv:stockItem>
+          <inv:PDP>false</inv:PDP>
+        </inv:invoiceItem>
+        <inv:invoiceItem>
+          <inv:text>Koh I noor Artist's 3800/25 Coloured Pencil - Meadow Green</inv:text>
+          <inv:quantity>1</inv:quantity>
+          <inv:coefficient>0</inv:coefficient>
+          <inv:payVAT>false</inv:payVAT>
+          <inv:rateVAT>historyHigh</inv:rateVAT>
+          <inv:percentVAT>0</inv:percentVAT>
+          <inv:discountPercentage>0</inv:discountPercentage>
+          <inv:homeCurrency>
+            <typ:unitPrice>29.19</typ:unitPrice>
+            <typ:price>29.19</typ:price>
+            <typ:priceVAT>0.00</typ:priceVAT>
+            <typ:priceSum>29.19</typ:priceSum>
+          </inv:homeCurrency>
+          <inv:foreignCurrency>
+            <typ:unitPrice>1.00</typ:unitPrice>
+            <typ:price>1.00</typ:price>
+            <typ:priceVAT>0.00</typ:priceVAT>
+            <typ:priceSum>1.00</typ:priceSum>
+          </inv:foreignCurrency>
+          <inv:code />
+          <inv:stockItem>
+            <typ:store>
+              <typ:ids>Zbo��</typ:ids>
+            </typ:store>
+            <typ:stockItem>
+              <typ:ids />
+            </typ:stockItem>
+          </inv:stockItem>
+          <inv:PDP>false</inv:PDP>
+        </inv:invoiceItem>
+        <inv:invoiceItem>
+          <inv:text>Koh I noor Artist's 3800/63 Coloured Pencil - Olive Green Light</inv:text>
+          <inv:quantity>1</inv:quantity>
+          <inv:coefficient>0</inv:coefficient>
+          <inv:payVAT>false</inv:payVAT>
+          <inv:rateVAT>historyHigh</inv:rateVAT>
+          <inv:percentVAT>0</inv:percentVAT>
+          <inv:discountPercentage>0</inv:discountPercentage>
+          <inv:homeCurrency>
+            <typ:unitPrice>29.19</typ:unitPrice>
+            <typ:price>29.19</typ:price>
+            <typ:priceVAT>0.00</typ:priceVAT>
+            <typ:priceSum>29.19</typ:priceSum>
+          </inv:homeCurrency>
+          <inv:foreignCurrency>
+            <typ:unitPrice>1.00</typ:unitPrice>
+            <typ:price>1.00</typ:price>
+            <typ:priceVAT>0.00</typ:priceVAT>
+            <typ:priceSum>1.00</typ:priceSum>
+          </inv:foreignCurrency>
+          <inv:code />
+          <inv:stockItem>
+            <typ:store>
+              <typ:ids>Zbo��</typ:ids>
+            </typ:store>
+            <typ:stockItem>
+              <typ:ids />
+            </typ:stockItem>
+          </inv:stockItem>
+          <inv:PDP>false</inv:PDP>
+        </inv:invoiceItem>
+        <inv:invoiceItem>
+          <inv:text>Koh I noor Artist's 3800/62 Coloured Pencil - Apple Green</inv:text>
+          <inv:quantity>1</inv:quantity>
+          <inv:coefficient>0</inv:coefficient>
+          <inv:payVAT>false</inv:payVAT>
+          <inv:rateVAT>historyHigh</inv:rateVAT>
+          <inv:percentVAT>0</inv:percentVAT>
+          <inv:discountPercentage>0</inv:discountPercentage>
+          <inv:homeCurrency>
+            <typ:unitPrice>87.57</typ:unitPrice>
+            <typ:price>87.57</typ:price>
+            <typ:priceVAT>0.00</typ:priceVAT>
+            <typ:priceSum>87.57</typ:priceSum>
+          </inv:homeCurrency>
+          <inv:foreignCurrency>
+            <typ:unitPrice>3.00</typ:unitPrice>
+            <typ:price>3.00</typ:price>
+            <typ:priceVAT>0.00</typ:priceVAT>
+            <typ:priceSum>3.00</typ:priceSum>
+          </inv:foreignCurrency>
+          <inv:code />
+          <inv:stockItem>
+            <typ:store>
+              <typ:ids>Zbo��</typ:ids>
+            </typ:store>
+            <typ:stockItem>
+              <typ:ids />
+            </typ:stockItem>
+          </inv:stockItem>
+          <inv:PDP>false</inv:PDP>
+        </inv:invoiceItem>
+        <inv:invoiceItem>
+          <inv:text>Shipping</inv:text>
+          <inv:quantity>1</inv:quantity>
+          <inv:coefficient>0</inv:coefficient>
+          <inv:payVAT>false</inv:payVAT>
+          <inv:rateVAT>historyHigh</inv:rateVAT>
+          <inv:percentVAT>0</inv:percentVAT>
+          <inv:discountPercentage>0</inv:discountPercentage>
+          <inv:homeCurrency>
+            <typ:unitPrice>262.71</typ:unitPrice>
+            <typ:price>262.71</typ:price>
+            <typ:priceVAT>0.00</typ:priceVAT>
+            <typ:priceSum>262.71</typ:priceSum>
+          </inv:homeCurrency>
+          <inv:foreignCurrency>
+            <typ:unitPrice>9.00</typ:unitPrice>
+            <typ:price>9.00</typ:price>
+            <typ:priceVAT>0.00</typ:priceVAT>
+            <typ:priceSum>9.00</typ:priceSum>
+          </inv:foreignCurrency>
+          <inv:PDP>false</inv:PDP>
+        </inv:invoiceItem>
+      </inv:invoiceDetail>
+      <inv:invoiceSummary xmlns:typ="http://www.stormware.cz/schema/version_2/type.xsd" xmlns:rsp="http://www.stormware.cz/schema/version_2/response.xsd" xmlns:rdc="http://www.stormware.cz/schema/version_2/documentresponse.xsd" xmlns:lst="http://www.stormware.cz/schema/version_2/list.xsd" xmlns:lStk="http://www.stormware.cz/schema/version_2/list_stock.xsd" xmlns:lAdb="http://www.stormware.cz/schema/version_2/list_addBook.xsd" xmlns:lCen="http://www.stormware.cz/schema/version_2/list_centre.xsd" xmlns:lAcv="http://www.stormware.cz/schema/version_2/list_activity.xsd" xmlns:acu="http://www.stormware.cz/schema/version_2/accountingunit.xsd" xmlns:vch="http://www.stormware.cz/schema/version_2/voucher.xsd" xmlns:int="http://www.stormware.cz/schema/version_2/intDoc.xsd" xmlns:stk="http://www.stormware.cz/schema/version_2/stock.xsd" xmlns:ord="http://www.stormware.cz/schema/version_2/order.xsd" xmlns:ofr="http://www.stormware.cz/schema/version_2/offer.xsd" xmlns:enq="http://www.stormware.cz/schema/version_2/enquiry.xsd" xmlns:vyd="http://www.stormware.cz/schema/version_2/vydejka.xsd" xmlns:pri="http://www.stormware.cz/schema/version_2/prijemka.xsd" xmlns:bal="http://www.stormware.cz/schema/version_2/balance.xsd" xmlns:pre="http://www.stormware.cz/schema/version_2/prevodka.xsd" xmlns:vyr="http://www.stormware.cz/schema/version_2/vyroba.xsd" xmlns:pro="http://www.stormware.cz/schema/version_2/prodejka.xsd" xmlns:con="http://www.stormware.cz/schema/version_2/contract.xsd" xmlns:adb="http://www.stormware.cz/schema/version_2/addressbook.xsd" xmlns:prm="http://www.stormware.cz/schema/version_2/parameter.xsd" xmlns:lCon="http://www.stormware.cz/schema/version_2/list_contract.xsd" xmlns:ctg="http://www.stormware.cz/schema/version_2/category.xsd" xmlns:ipm="http://www.stormware.cz/schema/version_2/intParam.xsd" xmlns:str="http://www.stormware.cz/schema/version_2/storage.xsd" xmlns:idp="http://www.stormware.cz/schema/version_2/individualPrice.xsd" xmlns:sup="http://www.stormware.cz/schema/version_2/supplier.xsd" xmlns:prn="http://www.stormware.cz/schema/version_2/print.xsd" xmlns:sEET="http://www.stormware.cz/schema/version_2/sendEET.xsd" xmlns:act="http://www.stormware.cz/schema/version_2/accountancy.xsd" xmlns:bnk="http://www.stormware.cz/schema/version_2/bank.xsd" xmlns:sto="http://www.stormware.cz/schema/version_2/store.xsd" xmlns:grs="http://www.stormware.cz/schema/version_2/groupStocks.xsd" xmlns:acp="http://www.stormware.cz/schema/version_2/actionPrice.xsd" xmlns:csh="http://www.stormware.cz/schema/version_2/cashRegister.xsd" xmlns:bka="http://www.stormware.cz/schema/version_2/bankAccount.xsd" xmlns:ilt="http://www.stormware.cz/schema/version_2/inventoryLists.xsd" xmlns:nms="http://www.stormware.cz/schema/version_2/numericalSeries.xsd" xmlns:pay="http://www.stormware.cz/schema/version_2/payment.xsd" xmlns:mKasa="http://www.stormware.cz/schema/version_2/mKasa.xsd" xmlns:gdp="http://www.stormware.cz/schema/version_2/GDPR.xsd" xmlns:est="http://www.stormware.cz/schema/version_2/establishment.xsd" xmlns:cen="http://www.stormware.cz/schema/version_2/centre.xsd" xmlns:acv="http://www.stormware.cz/schema/version_2/activity.xsd" xmlns:ftr="http://www.stormware.cz/schema/version_2/filter.xsd">
+        <inv:roundingDocument>none</inv:roundingDocument>
+        <inv:roundingVAT>none</inv:roundingVAT>
+        <inv:homeCurrency>
+          <typ:priceNone>496.23</typ:priceNone>
+          <typ:priceLow>0</typ:priceLow>
+          <typ:priceLowVAT>0</typ:priceLowVAT>
+          <typ:priceLowSum>0</typ:priceLowSum>
+          <typ:priceHigh>0</typ:priceHigh>
+          <typ:priceHighVAT>0</typ:priceHighVAT>
+          <typ:priceHighSum>496.23</typ:priceHighSum>
+          <typ:price3>0</typ:price3>
+          <typ:price3VAT>0</typ:price3VAT>
+          <typ:price3Sum>0</typ:price3Sum>
+          <typ:round>
+            <typ:priceRound>0</typ:priceRound>
+          </typ:round>
+        </inv:homeCurrency>
+        <inv:foreignCurrency>
+          <typ:currency>
+            <typ:ids>GBP</typ:ids>
+          </typ:currency>
+          <typ:rate>29.19</typ:rate>
+          <typ:amount>1</typ:amount>
+          <typ:priceSum>17.00</typ:priceSum>
+        </inv:foreignCurrency>
+      </inv:invoiceSummary>
+    </inv:invoice>
+  </dat:dataPackItem>
+</dat:dataPack>

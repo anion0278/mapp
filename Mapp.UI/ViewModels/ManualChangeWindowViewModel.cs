@@ -13,21 +13,20 @@ namespace Shmap.ViewModels
         string Message { get; set; }
         string OriginalText { get; set; }
         string EditedText { get; set; }
-        int CurrentTextLength { get; }
     }
 
     public class ManualChangeWindowViewModel : ViewModelWithErrorValidationBase, IManualChangeWindowViewModel
     {
         // Fody takes care of PropChange notification
-        public RelayCommand AcceptChangesCommand { get; }
+        public RelayCommand AcceptChangesCommand { get; } // TODO expose ICommand or IAsyncRelayCommand everywhere
 
         public bool IsChangeAccepted { get; private set; }
 
         public string Message { get; set; } // TODO in ViewModel-first approach it can be get-only (set from ctor), same as MaxLength
 
-        public int MaxLength { get; set; }
+        public int MaxLength { get; set; } // TODO does not need to be a prop
 
-        public string OriginalText { get; set; }
+        public string OriginalText { get; set; } // FIXME does not work!
 
         public string EditedText { get; set; }
 

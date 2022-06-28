@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.Design.Serialization;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text.Json;
 using AutoUpdaterDotNET;
 using Shmap.Models;
@@ -53,7 +54,9 @@ namespace Shmap.DataAccess
 
         public IEnumerable<MarketPlaceTransactionsConfigDTO> LoadTransactionsConfigs()
         {
-            var fileNames = Directory.GetFiles("Transactions Configs");
+            // WE need it because when app is started from other dir (for example during UI tests), it would not otherwise find the configs!!
+            var assemblyLocation = Directory.GetParent(Assembly.GetExecutingAssembly().Location).FullName; 
+            var fileNames = Directory.GetFiles(Path.Join(assemblyLocation, "Transactions Configs"));
             var configDtos = new List<MarketPlaceTransactionsConfigDTO>();
             foreach (var fileName in fileNames.Where(fn => fn.Contains("TransactionsConfig")))
             {
