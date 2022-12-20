@@ -3,18 +3,29 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
+using System.IO.Enumeration;
 using System.Linq;
+using System.Net.Http;
 using System.Net.Mail;
 using System.Reflection;
+using System.Security.Policy;
+using System.Text.RegularExpressions;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Documents;
+using System.Xml;
+using Castle.Core.Internal;
 using GalaSoft.MvvmLight.CommandWpf;
 using Shmap.BusinessLogic.Invoices;
+using Shmap.BusinessLogic.Invoices.Annotations;
 using Shmap.BusinessLogic.Transactions;
 using Shmap.CommonServices;
 using Shmap.DataAccess;
 using Shmap.Models;
 using Shmap.ViewModels;
+using Microsoft.Win32;
 using Moq;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
@@ -43,6 +54,7 @@ namespace Shmap.UI.ViewModels
         public RelayCommand SelectAmazonInvoicesCommand { get; }
         public RelayCommand ExportConvertedAmazonInvoicesCommand { get; }
         public RelayCommand ConvertTransactionsCommand { get; }
+        public RelayCommand ConvertWarehouseDataCommand { get; set; }
 
         public ObservableCollection<InvoiceItemViewModel> InvoiceItems { get; } = new(); // TODO make private field?
 
@@ -50,7 +62,9 @@ namespace Shmap.UI.ViewModels
 
         public BindingList<InvoiceViewModel> Invoices { get; } = new(); // use BindingList if it is required to update UI for inner items changes
 
+
         // TODO apply Fody
+
         public int WindowLeft // is it responsibility of the VM?
         {
             get => _windowLeft;
@@ -144,6 +158,7 @@ namespace Shmap.UI.ViewModels
 
         public string WindowTitle { get; set; }
 
+
         public MainWindowViewModel() // Design-time ctor
         {
             _windowHeight = 650;
@@ -207,6 +222,7 @@ namespace Shmap.UI.ViewModels
             SelectAmazonInvoicesCommand = new RelayCommand(SelectAmazonInvoices, () => !HasErrors);
             ExportConvertedAmazonInvoicesCommand = new RelayCommand(ExportConvertedAmazonInvoices, ExportConvertedAmazonInvoicesCanExecute);
             ConvertTransactionsCommand = new RelayCommand(ConvertTransactions, () => true);
+            ConvertWarehouseDataCommand = new RelayCommand(ConvertWarehouseData, () => true);
 
             InvoiceItemsCollectionView = InitializeCollectionView();
 
@@ -224,6 +240,68 @@ namespace Shmap.UI.ViewModels
             _trackingCode = _configProvider.TrackingCode;
         }
 
+
+        private async void ConvertWarehouseData()
+        {
+            StockDataXmlSourceDefinition[] sources =
+            {
+                new()
+                {
+                    Url= "https://www.rappa.cz/export/vo.xml",
+                    ItemNodeName = "SHOPITEM",
+                    SkuNodeParsingOptions = new []
+                    {
+                        new ValueParsingOption("EAN", null),
+                    },
+                    StockQuantityNodeParsingOptions = new []
+                    {
+                        new ValueParsingOption("STOCK", null),
+                    },
+                },
+                new()
+                {
+                    Url= "https://en.bushman.eu/content/feeds/uQ5TueFNQh_expando_4.xml",
+                    ItemNodeName = "item",
+                    SkuNodeParsingOptions = new []
+                    {
+                        new ValueParsingOption("g:gtin", null),
+                        new ValueParsingOption("g:sku_with_ean", @"\d{13}"),
+                    },
+                    StockQuantityNodeParsingOptions = new []
+                    {
+                        new ValueParsingOption("g:quantity", null),
+                    },
+                }
+            };
+
+            var stockQuantityUpdater = new StockQuantityUpdater();
+            var stockData = await stockQuantityUpdater.ConvertWarehouseData(sources);
+            var columnNamesLine =
+                "sku\tprice\tminimum-seller-allowed-price\tmaximum-seller-allowed-price\tquantity\thandling-time\tfulfillment-channel";
+            var lines = new List<string>(stockData.Count() + 1) { columnNamesLine };
+            string lineTemplate = "{0}\t\t\t\t{1}\t\t";
+            foreach (var stockInfo in stockData)
+            {
+                lines.Add(lineTemplate.FormatWith(stockInfo.Sku, stockInfo.Quantity));
+            }
+
+            var saveFileDialog = new SaveFileDialog
+            {
+                Title = "Zvol umisteni vystupniho souboru",
+                FileName = "stockQuantity_" + DateTime.Today.ToString("dd-MM-yyyy") + ".txt",
+                Filter = "Text files|*.txt"
+            };
+            bool? result = saveFileDialog.ShowDialog();
+            if (result != true) return;
+
+            await File.WriteAllLinesAsync(saveFileDialog.FileName, lines);
+            if (_configProvider.OpenTargetFolderAfterConversion)
+            {
+                _fileOperationService.OpenFileFolder(saveFileDialog.FileName);
+            }
+        }
+
+
         private ICollectionView InitializeCollectionView()
         {
             var collectionView = GetNewCollectionViewInstance(InvoiceItems);
@@ -233,7 +311,7 @@ namespace Shmap.UI.ViewModels
 
         private bool ExportConvertedAmazonInvoicesCanExecute()
         {
-            return !HasErrors && InvoiceItems.Any() && Invoices.Any() 
+            return !HasErrors && InvoiceItems.Any() && Invoices.Any()
                    && InvoiceItems.All(i => !i.HasErrors)
                    && Invoices.All(i => !i.HasErrors);
         }
