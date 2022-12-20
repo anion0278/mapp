@@ -1,11 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0-windows</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
 
     <IsPackable>false</IsPackable>
 
     <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
+
+    <OutputType>Library</OutputType>
   </PropertyGroup>
 
   <ItemGroup>
