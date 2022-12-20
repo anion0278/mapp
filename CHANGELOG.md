@@ -123,4 +123,22 @@ Total of 3 new changes since v3.2.2.15:
 
 - Update CHANGELOG.md
 - Update ci_cd.yml
-- Merge branch 'master' of https://github.com/anion0278/mapp
+- Merge branch 'master' of https://github.com/anion0278/mapp\nNew release
+Total of 1 new changes since v3.2.3.17:
+## 🧰 Chores
+
+- chore: Automated report [skip ci]
+
+## 📦 Uncategorized
+
+- Update changelog_settings.json
+
+[skip ci]
+- [tests] approval testing
+Security - Replaced dangerous Path.Combine with Path.Join
+- Merge branch 'master' into dev
+- Updated projects to newer platform
+- disabled UI test
+- Stock quantity data conversion
+Refactoring is needed!
+- simple notificaiton about processing
