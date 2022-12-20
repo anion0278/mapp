@@ -50,6 +50,7 @@ namespace Shmap.UI.ViewModels
         private string _defaultEmail;
         private string _trackingCode;
         private bool _openTargetFolderAfterConversion;
+        private bool _isReadyForProcessing = true;
 
         public RelayCommand SelectAmazonInvoicesCommand { get; }
         public RelayCommand ExportConvertedAmazonInvoicesCommand { get; }
@@ -156,6 +157,12 @@ namespace Shmap.UI.ViewModels
             }
         }
 
+        public bool IsReadyForProcessing
+        {
+            get => _isReadyForProcessing;
+            private set => Set(ref _isReadyForProcessing, value);
+        } // I knwo that it does not make any sense, but Im just too tired
+
         public string WindowTitle { get; set; }
 
 
@@ -243,62 +250,67 @@ namespace Shmap.UI.ViewModels
 
         private async void ConvertWarehouseData()
         {
-            StockDataXmlSourceDefinition[] sources =
+            IsReadyForProcessing = false;
+            try
             {
-                new()
+                StockDataXmlSourceDefinition[] sources =
                 {
-                    Url= "https://www.rappa.cz/export/vo.xml",
-                    ItemNodeName = "SHOPITEM",
-                    SkuNodeParsingOptions = new []
+                    new()
                     {
-                        new ValueParsingOption("EAN", null),
+                        Url = "https://www.rappa.cz/export/vo.xml",
+                        ItemNodeName = "SHOPITEM",
+                        SkuNodeParsingOptions = new[]
+                        {
+                            new ValueParsingOption("EAN", null),
+                        },
+                        StockQuantityNodeParsingOptions = new[]
+                        {
+                            new ValueParsingOption("STOCK", null),
+                        },
                     },
-                    StockQuantityNodeParsingOptions = new []
+                    new()
                     {
-                        new ValueParsingOption("STOCK", null),
-                    },
-                },
-                new()
+                        Url = "https://en.bushman.eu/content/feeds/uQ5TueFNQh_expando_4.xml",
+                        ItemNodeName = "item",
+                        SkuNodeParsingOptions = new[]
+                        {
+                            new ValueParsingOption("g:gtin", null),
+                            new ValueParsingOption("g:sku_with_ean", @"\d{13}"),
+                        },
+                        StockQuantityNodeParsingOptions = new[]
+                        {
+                            new ValueParsingOption("g:quantity", null),
+                        },
+                    }
+                };
+
+                var stockQuantityUpdater = new StockQuantityUpdater();
+                var stockData = await stockQuantityUpdater.ConvertWarehouseData(sources);
+                var columnNamesLine =
+                    "sku\tprice\tminimum-seller-allowed-price\tmaximum-seller-allowed-price\tquantity\thandling-time\tfulfillment-channel";
+                var lines = new List<string>(stockData.Count() + 1) { columnNamesLine };
+                string lineTemplate = "{0}\t\t\t\t{1}\t\t";
+                foreach (var stockInfo in stockData)
                 {
-                    Url= "https://en.bushman.eu/content/feeds/uQ5TueFNQh_expando_4.xml",
-                    ItemNodeName = "item",
-                    SkuNodeParsingOptions = new []
-                    {
-                        new ValueParsingOption("g:gtin", null),
-                        new ValueParsingOption("g:sku_with_ean", @"\d{13}"),
-                    },
-                    StockQuantityNodeParsingOptions = new []
-                    {
-                        new ValueParsingOption("g:quantity", null),
-                    },
+                    lines.Add(lineTemplate.FormatWith(stockInfo.Sku, stockInfo.Quantity));
                 }
-            };
 
-            var stockQuantityUpdater = new StockQuantityUpdater();
-            var stockData = await stockQuantityUpdater.ConvertWarehouseData(sources);
-            var columnNamesLine =
-                "sku\tprice\tminimum-seller-allowed-price\tmaximum-seller-allowed-price\tquantity\thandling-time\tfulfillment-channel";
-            var lines = new List<string>(stockData.Count() + 1) { columnNamesLine };
-            string lineTemplate = "{0}\t\t\t\t{1}\t\t";
-            foreach (var stockInfo in stockData)
-            {
-                lines.Add(lineTemplate.FormatWith(stockInfo.Sku, stockInfo.Quantity));
+                var saveFileDialog = new SaveFileDialog
+                {
+                    Title = "Zvol umisteni vystupniho souboru",
+                    FileName = "stockQuantity_" + DateTime.Today.ToString("dd-MM-yyyy") + ".txt",
+                    Filter = "Text files|*.txt"
+                };
+                bool? result = saveFileDialog.ShowDialog();
+                if (result != true) return;
+
+                await File.WriteAllLinesAsync(saveFileDialog.FileName, lines);
+                if (_configProvider.OpenTargetFolderAfterConversion)
+                {
+                    _fileOperationService.OpenFileFolder(saveFileDialog.FileName);
+                }
             }
-
-            var saveFileDialog = new SaveFileDialog
-            {
-                Title = "Zvol umisteni vystupniho souboru",
-                FileName = "stockQuantity_" + DateTime.Today.ToString("dd-MM-yyyy") + ".txt",
-                Filter = "Text files|*.txt"
-            };
-            bool? result = saveFileDialog.ShowDialog();
-            if (result != true) return;
-
-            await File.WriteAllLinesAsync(saveFileDialog.FileName, lines);
-            if (_configProvider.OpenTargetFolderAfterConversion)
-            {
-                _fileOperationService.OpenFileFolder(saveFileDialog.FileName);
-            }
+            finally{ IsReadyForProcessing = true; }
         }
 
 
