@@ -14,34 +14,34 @@ namespace Shmap.UI.UiTests
 {
     public class ApplicationUiTests
     {
-        [Fact]
-        public void RunApp_LoadPredefinedInvoices_ExportConvertedInvoices()
-        {
-            var assemblyLocation = Directory.GetParent(Assembly.GetExecutingAssembly().Location).FullName.Replace(".UiTests", null);
-            var app = FlaUI.Core.Application.Launch(Path.Join(assemblyLocation, @"win-x64\Shmap.exe"));
-            using (var automation = new UIA3Automation())
-            {
-                var mainWindow = app.GetMainWindow(automation);
+        //[Fact]
+        //public void RunApp_LoadPredefinedInvoices_ExportConvertedInvoices()
+        //{
+        //    var assemblyLocation = Directory.GetParent(Assembly.GetExecutingAssembly().Location).FullName.Replace(".UiTests", null);
+        //    var app = FlaUI.Core.Application.Launch(Path.Join(assemblyLocation, @"win-x64\Shmap.exe"));
+        //    using (var automation = new UIA3Automation())
+        //    {
+        //        var mainWindow = app.GetMainWindow(automation);
 
-                var updateWin = GetModalWindow(mainWindow, w => w.Name.Contains("available"), TimeSpan.FromSeconds(3)); 
-                updateWin.Close();
+        //        var updateWin = GetModalWindow(mainWindow, w => w.Name.Contains("available"), TimeSpan.FromSeconds(3)); 
+        //        updateWin.Close();
 
-                var openInvoiceButton = mainWindow.FindFirstDescendant(cf => cf.ByText("Zvolit fakturu"))?.AsButton();
-                openInvoiceButton.WaitUntilClickable(TimeSpan.FromSeconds(3));
-                openInvoiceButton?.Invoke();
+        //        var openInvoiceButton = mainWindow.FindFirstDescendant(cf => cf.ByText("Zvolit fakturu"))?.AsButton();
+        //        openInvoiceButton.WaitUntilClickable(TimeSpan.FromSeconds(3));
+        //        openInvoiceButton?.Invoke();
 
-                var fileDialog = GetModalWindow(mainWindow, w => w.Name == "Zvol Amazon report", TimeSpan.FromSeconds(5));
-                var fileNameInput = fileDialog.FindFirstDescendant(cf => cf.ByAutomationId("1148"))?.AsComboBox();
-                var fileNameInputEdit = WaitForElement(() => fileNameInput.FindAllChildren().Single(c => c.ControlType == ControlType.Edit).AsTextBox());
-                fileNameInputEdit.Text = @"D:\Stefan Grushko\OneDrive\My Projects\mapp\Invoices converter\Test cases\multi-item order\amazon_multi_item_order.txt";
+        //        var fileDialog = GetModalWindow(mainWindow, w => w.Name == "Zvol Amazon report", TimeSpan.FromSeconds(5));
+        //        var fileNameInput = fileDialog.FindFirstDescendant(cf => cf.ByAutomationId("1148"))?.AsComboBox();
+        //        var fileNameInputEdit = WaitForElement(() => fileNameInput.FindAllChildren().Single(c => c.ControlType == ControlType.Edit).AsTextBox());
+        //        fileNameInputEdit.Text = @"D:\Stefan Grushko\OneDrive\My Projects\mapp\Invoices converter\Test cases\multi-item order\amazon_multi_item_order.txt";
 
-                var buttonOpenFile = fileDialog.FindFirstDescendant(cf => cf.ByAutomationId("1"))?.AsButton();
-                buttonOpenFile?.Invoke();
-                Thread.Sleep(TimeSpan.FromSeconds(5));
+        //        var buttonOpenFile = fileDialog.FindFirstDescendant(cf => cf.ByAutomationId("1"))?.AsButton();
+        //        buttonOpenFile?.Invoke();
+        //        Thread.Sleep(TimeSpan.FromSeconds(5));
 
-                app.Close();
-            }
-        }
+        //        app.Close();
+        //    }
+        //}
 
         //https://stackoverflow.com/questions/51026119/wait-for-application-launch-without-using-thread-sleep-using-flaui
         private T WaitForElement<T>(Func<T> getter)
