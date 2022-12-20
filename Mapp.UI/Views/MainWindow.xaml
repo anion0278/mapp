@@ -331,6 +331,18 @@
                 </rs:UnblockingDataGrid>
             </Grid>
         </TabItem>
+        <TabItem Header="Aktualizace poctu kusu">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Row="1">
+                    <Button Content="Natahnout pocty a konvertovat" Width="200" Height="35" Command="{Binding ConvertWarehouseDataCommand}" />
+                </StackPanel>
+            </Grid>
+        </TabItem>
         <TabItem Header="Konverze transakci">
             <Grid>
                 <Grid.RowDefinitions>
