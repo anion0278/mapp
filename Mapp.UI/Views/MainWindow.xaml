@@ -339,7 +339,18 @@
                     <RowDefinition />
                 </Grid.RowDefinitions>
                 <StackPanel Grid.Row="1">
-                    <Button Content="Natahnout pocty a konvertovat" Width="200" Height="35" Command="{Binding ConvertWarehouseDataCommand}" />
+                    <Button Width="200" IsEnabled="{Binding IsReadyForProcessing}"  Height="35" Command="{Binding ConvertWarehouseDataCommand}" >
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Content" Value="Natahnout pocty a konvertovat"></Setter>
+                                <Style.Triggers>
+                                    <Trigger Property="IsEnabled" Value="False">
+                                        <Setter Property="Content" Value="...zpracovuje se..." />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
                 </StackPanel>
             </Grid>
         </TabItem>
