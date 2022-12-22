@@ -70,7 +70,7 @@ namespace Mapp
             //https://github.com/dotnet/winforms/blob/72c140e531729b58737bb7b84212ff96767a151d/src/System.Windows.Forms/src/System/Windows/Forms/Application.cs#L952
             //AppCenter.Start("9549dd3a-1371-4a23-b973-f5e80154119d", typeof(Analytics), typeof(Crashes)); // TODO should solve secrt storing somehow :(
 #endif
-            //SetupExceptionHandling();
+            SetupExceptionHandling();
 
             //PresentationTraceSources.Refresh();
             //var wpfBindingErrorHandler = new ExplicitBindingErrorTraceListener();
@@ -108,10 +108,11 @@ namespace Mapp
             string message = $"Unhandled exception with source: {source}. ";
             try
             {
+
 #if !DEBUG
                 //Crashes.TrackError(exception);
 #endif
-                var assemblyName = Assembly.GetExecutingAssembly().GetName();
+                var assemblyName = Assembly.GetExecutingAssembly().GetName(); //TODO handle possible exception ! - no name for singlefile app
                 message += $"Unhandled exception in {assemblyName.Name} v{assemblyName.Version}";
                 message += $"\n * Top-most message: {exception.Message} \n * stack: {exception.StackTrace}";
                 while (exception.InnerException != null) 

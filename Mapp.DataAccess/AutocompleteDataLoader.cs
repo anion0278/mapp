@@ -78,19 +78,18 @@ namespace Shmap.DataAccess
         {
             // TODO PathsProvider!!
             // TODO completely rewrite
-            var assemblyLocation = Directory.GetParent(Assembly.GetExecutingAssembly().Location).FullName;
-            PohodaProdCodeBySkuJson = Path.Join(assemblyLocation, _configProvider.InvoiceConverterConfigsDir, "AutocompletePohodaProdCodeBySku.json");
+            PohodaProdCodeBySkuJson = Path.Join(_configProvider.InvoiceConverterConfigsDir, "AutocompletePohodaProdCodeBySku.json");
             ProdWarehouseSectionBySkuJson =
-                Path.Join(assemblyLocation, _configProvider.InvoiceConverterConfigsDir, "AutocompleteProdWarehouseSectionBySku.json");
+                Path.Join(_configProvider.InvoiceConverterConfigsDir, "AutocompleteProdWarehouseSectionBySku.json");
             ShippingNameBySkuJson =
-                Path.Join(assemblyLocation, _configProvider.InvoiceConverterConfigsDir, "AutocompleteShippingTypeBySku.json");
+                Path.Join(_configProvider.InvoiceConverterConfigsDir, "AutocompleteShippingTypeBySku.json");
             ProductQuantityBySkuJson =
-                Path.Join(assemblyLocation, _configProvider.InvoiceConverterConfigsDir, "AutocompleteProdQuantityBySku.json");
+                Path.Join(_configProvider.InvoiceConverterConfigsDir, "AutocompleteProdQuantityBySku.json");
             CustomsDeclarationBySkuJson =
-                Path.Join(assemblyLocation, _configProvider.InvoiceConverterConfigsDir, "AutocompleteCustomsDeclarationBySku.json");
+                Path.Join(_configProvider.InvoiceConverterConfigsDir, "AutocompleteCustomsDeclarationBySku.json");
 
             DefaultShippingByPartnerCountryJson =
-                Path.Join(assemblyLocation, _configProvider.InvoiceConverterConfigsDir, "AutocompleteDefaultShippingByPartnerCountry.json");
+                Path.Join(_configProvider.InvoiceConverterConfigsDir, "AutocompleteDefaultShippingByPartnerCountry.json");
 
             var autocompleteData = new AutocompleteData // TODO factory
             {

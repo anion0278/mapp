@@ -29,8 +29,7 @@ namespace Shmap.DataAccess
             string fileContent;
             try
             {
-                var assemblyLocation = Directory.GetParent(Assembly.GetExecutingAssembly().Location).FullName;
-                fileContent = File.ReadAllText(Path.Join(assemblyLocation, _configProvider.InvoiceConverterConfigsDir, "fixed_currency_rates.csv")); // TODO PathsProvider!!
+                fileContent = File.ReadAllText(Path.Join(_configProvider.InvoiceConverterConfigsDir, "fixed_currency_rates.csv")); // TODO PathsProvider!!
             }
             catch (Exception ex)
             {
@@ -45,8 +44,7 @@ namespace Shmap.DataAccess
             string fileContent;
             try
             {
-                var assemblyLocation = Directory.GetParent(Assembly.GetExecutingAssembly().Location).FullName;
-                fileContent = File.ReadAllText(Path.Join(assemblyLocation, _configProvider.InvoiceConverterConfigsDir, "vat_by_country.csv"));
+                fileContent = File.ReadAllText(Path.Join(_configProvider.InvoiceConverterConfigsDir, "vat_by_country.csv"));
             }
             catch (Exception ex)
             {
