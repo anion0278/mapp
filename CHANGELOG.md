@@ -141,4 +141,13 @@ Security - Replaced dangerous Path.Combine with Path.Join
 - disabled UI test
 - Stock quantity data conversion
 Refactoring is needed!
-- simple notificaiton about processing
+- simple notificaiton about processing\nNew release
+Total of 1 new changes since v3.3.1.19:
+## 🧰 Chores
+
+- chore: Automated report [skip ci]
+
+## 📦 Uncategorized
+
+- Fixed invalid paths
+- Merge branch 'master' of https://github.com/anion0278/mapp
