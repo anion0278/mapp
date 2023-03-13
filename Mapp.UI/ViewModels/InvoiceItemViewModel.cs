@@ -7,6 +7,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using Mapp.CommonServices;
 using Mapp.DataAccess;
+using Mapp.UI;
 using NLog.LayoutRenderers;
 
 namespace Mapp.ViewModels
@@ -14,6 +15,7 @@ namespace Mapp.ViewModels
     public class InvoiceItemViewModel : ViewModelWithErrorValidationBase
     {
         private readonly InvoiceItemBase _model;
+        private readonly IBrowserService _browserService;
         private readonly IAutocompleteData _autocompleteData;
         private string _amazonProductName;
         private string _warehouseProductCode;
@@ -69,7 +71,7 @@ namespace Mapp.ViewModels
             }
         }
 
-        public InvoiceItemViewModel(InvoiceItemBase model, IAutocompleteData autocompleteData)
+        public InvoiceItemViewModel(InvoiceItemBase model, IAutocompleteData autocompleteData, IBrowserService browserService)
         {
             AmazonNumber = model.ParentInvoice.VariableSymbolFull;
             SalesChannel = model.ParentInvoice.SalesChannel;
@@ -96,6 +98,7 @@ namespace Mapp.ViewModels
 
             // temp
             _model = model;
+            _browserService = browserService;
         }
 
         private void GoToInvoicePage() // TODO into separate provider + tests
@@ -112,7 +115,7 @@ namespace Mapp.ViewModels
                          ?? defaultAmazonCentralUrl;
 
             url += AmazonNumber;
-            Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
+            _browserService.OpenBrowserOnUrl(url);
         }
 
         private bool ValidateProductCode()
