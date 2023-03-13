@@ -48,6 +48,7 @@ namespace Mapp
             Container.RegisterTypeAsSingleton<IFileOperationService, FileOperationsService>();
             Container.RegisterTypeAsSingleton<IMainWindowViewModel, MainWindowViewModel>();
             Container.RegisterTypeAsSingleton<IDialogService, DialogService>();
+            Container.RegisterTypeAsSingleton<IStockQuantityUpdater, StockQuantityUpdater>();
 
             Container.RegisterType<IManualChangeWindowViewModel, ManualChangeWindowViewModel>();
 

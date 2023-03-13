@@ -9,16 +9,29 @@ using System.Threading.Tasks;
 
 namespace Shmap.DataAccess;
 
-public class StockQuantityUpdater
+public interface IStockQuantityUpdater
 {
+    Task<IEnumerable<StockData>> ConvertWarehouseData();
+}
 
-    public async Task<IEnumerable<StockData>> ConvertWarehouseData(IEnumerable<StockDataXmlSourceDefinition> stockDataXmlSources)
+public class StockQuantityUpdater : IStockQuantityUpdater
+{
+    private readonly IJsonManager _jsonManager;
+    private readonly IEnumerable<StockDataXmlSourceDefinition> _sourceDefinitions;
+
+    public StockQuantityUpdater(IJsonManager jsonManager)
+    {
+        _jsonManager = jsonManager;
+        _sourceDefinitions = _jsonManager.LoadStockQuantityUpdaterConfigs();
+    }
+
+    public async Task<IEnumerable<StockData>> ConvertWarehouseData()
     {
       
         var httpClient = new HttpClient();
 
         var stockData = new List<StockData>();
-        foreach (var source in stockDataXmlSources)
+        foreach (var source in _sourceDefinitions)
         {
             var stream = await (await httpClient.GetAsync(source.Url)).Content.ReadAsStreamAsync();
             stockData.AddRange(ExtractStockData(stream, source));

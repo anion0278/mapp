@@ -40,6 +40,7 @@ namespace Shmap.UI.ViewModels
         private readonly ITransactionsReader _transactionsReader;
         private readonly IGpcGenerator _gpcGenerator;
         private readonly IAutocompleteData _autocompleteData;
+        private readonly IStockQuantityUpdater _quantityUpdater;
         private readonly IDialogService _dialogService;
         private int _windowWidth;
         private int _windowHeight;
@@ -216,6 +217,7 @@ namespace Shmap.UI.ViewModels
             ITransactionsReader transactionsReader,
             IGpcGenerator gpcGenerator,
             IAutocompleteData autocompleteData,
+            IStockQuantityUpdater quantityUpdater,
             IDialogService dialogService)
         {
             _invoiceConverter = invoiceConverter;
@@ -224,6 +226,7 @@ namespace Shmap.UI.ViewModels
             _transactionsReader = transactionsReader;
             _gpcGenerator = gpcGenerator;
             _autocompleteData = autocompleteData;
+            _quantityUpdater = quantityUpdater;
             _dialogService = dialogService;
 
             SelectAmazonInvoicesCommand = new RelayCommand(SelectAmazonInvoices, () => !HasErrors);
@@ -253,39 +256,39 @@ namespace Shmap.UI.ViewModels
             IsReadyForProcessing = false;
             try
             {
-                StockDataXmlSourceDefinition[] sources =
-                {
-                    new()
-                    {
-                        Url = "https://www.rappa.cz/export/vo.xml",
-                        ItemNodeName = "SHOPITEM",
-                        SkuNodeParsingOptions = new[]
-                        {
-                            new ValueParsingOption("EAN", null),
-                        },
-                        StockQuantityNodeParsingOptions = new[]
-                        {
-                            new ValueParsingOption("STOCK", null),
-                        },
-                    },
-                    new()
-                    {
-                        Url = "https://en.bushman.eu/content/feeds/uQ5TueFNQh_expando_4.xml",
-                        ItemNodeName = "item",
-                        SkuNodeParsingOptions = new[]
-                        {
-                            new ValueParsingOption("g:gtin", null),
-                            new ValueParsingOption("g:sku_with_ean", @"\d{13}"),
-                        },
-                        StockQuantityNodeParsingOptions = new[]
-                        {
-                            new ValueParsingOption("g:quantity", null),
-                        },
-                    }
-                };
+                //StockDataXmlSourceDefinition[] sources =
+                //{
+                //    new()
+                //    {
+                //        Url = "https://www.rappa.cz/export/vo.xml",
+                //        ItemNodeName = "SHOPITEM",
+                //        SkuNodeParsingOptions = new[]
+                //        {
+                //            new ValueParsingOption("EAN", null),
+                //        },
+                //        StockQuantityNodeParsingOptions = new[]
+                //        {
+                //            new ValueParsingOption("STOCK", null),
+                //        },
+                //    },
+                //    new()
+                //    {
+                //        Url = "https://en.bushman.eu/content/feeds/uQ5TueFNQh_expando_4.xml",
+                //        ItemNodeName = "item",
+                //        SkuNodeParsingOptions = new[]
+                //        {
+                //            new ValueParsingOption("g:gtin", null),
+                //            new ValueParsingOption("g:sku_with_ean", @"\d{13}"),
+                //        },
+                //        StockQuantityNodeParsingOptions = new[]
+                //        {
+                //            new ValueParsingOption("g:quantity", null),
+                //        },
+                //    }
+                //};
 
-                var stockQuantityUpdater = new StockQuantityUpdater();
-                var stockData = await stockQuantityUpdater.ConvertWarehouseData(sources);
+
+                var stockData = await _quantityUpdater.ConvertWarehouseData();
                 var columnNamesLine =
                     "sku\tprice\tminimum-seller-allowed-price\tmaximum-seller-allowed-price\tquantity\thandling-time\tfulfillment-channel";
                 var lines = new List<string>(stockData.Count() + 1) { columnNamesLine };

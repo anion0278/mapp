@@ -17,9 +17,10 @@ namespace Shmap.DataAccess
         Dictionary<string, string> DeserializeJsonDictionary(string fileName);
         void SerializeDictionaryToJson(Dictionary<string, string> map, string fileName);
         IEnumerable<MarketPlaceTransactionsConfigDTO> LoadTransactionsConfigs();
+        IEnumerable<StockDataXmlSourceDefinition> LoadStockQuantityUpdaterConfigs();
     }
 
-    public class JsonManager: IJsonManager
+    public class JsonManager : IJsonManager
     {
 
         public IEnumerable<UpdateInfoEventArgs> DeserializeUpdates(string remoteJsonData)
@@ -47,7 +48,8 @@ namespace Shmap.DataAccess
         {
             string json = JsonSerializer.Serialize(map, new JsonSerializerOptions
             {
-                IgnoreNullValues = true, WriteIndented = true
+                IgnoreNullValues = true,
+                WriteIndented = true
             });
             File.WriteAllText(fileName, json);
         }
@@ -65,6 +67,17 @@ namespace Shmap.DataAccess
             }
 
             return configDtos;
+        }
+
+        public IEnumerable<StockDataXmlSourceDefinition> LoadStockQuantityUpdaterConfigs()
+        {
+            var serializeOptions = new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                WriteIndented = true
+            };
+            string json = File.ReadAllText(Path.Join("StockQuantityUpdater", "config.json"));
+            return JsonSerializer.Deserialize<StockDataXmlSourceDefinition[]>(json, serializeOptions);
         }
     }
 }
