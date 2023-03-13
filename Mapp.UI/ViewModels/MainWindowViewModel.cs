@@ -9,12 +9,12 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Mail;
 using System.Reflection;
-using System.Security.Policy;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Navigation;
 using System.Xml;
 using Castle.Core.Internal;
 using GalaSoft.MvvmLight.CommandWpf;
@@ -40,6 +40,7 @@ namespace Shmap.UI.ViewModels
         private readonly ITransactionsReader _transactionsReader;
         private readonly IGpcGenerator _gpcGenerator;
         private readonly IAutocompleteData _autocompleteData;
+        private readonly IBrowserService _browserService;
         private readonly IStockQuantityUpdater _quantityUpdater;
         private readonly IDialogService _dialogService;
         private int _windowWidth;
@@ -57,6 +58,7 @@ namespace Shmap.UI.ViewModels
         public RelayCommand ExportConvertedAmazonInvoicesCommand { get; }
         public RelayCommand ConvertTransactionsCommand { get; }
         public RelayCommand ConvertWarehouseDataCommand { get; set; }
+        public RelayCommand<string> OpenAmazonMarketPlaceUriCommand { get; set; }
 
         public ObservableCollection<InvoiceItemViewModel> InvoiceItems { get; } = new(); // TODO make private field?
 
@@ -206,7 +208,7 @@ namespace Shmap.UI.ViewModels
             var dataMock = Mock.Of<IAutocompleteData>();
             foreach (var item in items)
             {
-                InvoiceItems.Add(new InvoiceItemViewModel(item, dataMock)); // TODO create bindable collection with AddRange method
+                InvoiceItems.Add(new InvoiceItemViewModel(item, dataMock, new BrowserService())); // TODO create bindable collection with AddRange method
             }
             Invoices.Add(new InvoiceViewModel(invoice, dataMock));
         }
@@ -217,6 +219,7 @@ namespace Shmap.UI.ViewModels
             ITransactionsReader transactionsReader,
             IGpcGenerator gpcGenerator,
             IAutocompleteData autocompleteData,
+            IBrowserService browserService,
             IStockQuantityUpdater quantityUpdater,
             IDialogService dialogService)
         {
@@ -226,6 +229,7 @@ namespace Shmap.UI.ViewModels
             _transactionsReader = transactionsReader;
             _gpcGenerator = gpcGenerator;
             _autocompleteData = autocompleteData;
+            _browserService = browserService;
             _quantityUpdater = quantityUpdater;
             _dialogService = dialogService;
 
@@ -233,6 +237,7 @@ namespace Shmap.UI.ViewModels
             ExportConvertedAmazonInvoicesCommand = new RelayCommand(ExportConvertedAmazonInvoices, ExportConvertedAmazonInvoicesCanExecute);
             ConvertTransactionsCommand = new RelayCommand(ConvertTransactions, () => true);
             ConvertWarehouseDataCommand = new RelayCommand(ConvertWarehouseData, () => true);
+            OpenAmazonMarketPlaceUriCommand = new RelayCommand<string>(OpenAmazonMarketPlaceUri);
 
             InvoiceItemsCollectionView = InitializeCollectionView();
 
@@ -251,43 +256,17 @@ namespace Shmap.UI.ViewModels
         }
 
 
+        private void OpenAmazonMarketPlaceUri(string uri)
+        {
+            _browserService.OpenBrowserOnUrl(uri);
+        }
+
+
         private async void ConvertWarehouseData()
         {
             IsReadyForProcessing = false;
             try
             {
-                //StockDataXmlSourceDefinition[] sources =
-                //{
-                //    new()
-                //    {
-                //        Url = "https://www.rappa.cz/export/vo.xml",
-                //        ItemNodeName = "SHOPITEM",
-                //        SkuNodeParsingOptions = new[]
-                //        {
-                //            new ValueParsingOption("EAN", null),
-                //        },
-                //        StockQuantityNodeParsingOptions = new[]
-                //        {
-                //            new ValueParsingOption("STOCK", null),
-                //        },
-                //    },
-                //    new()
-                //    {
-                //        Url = "https://en.bushman.eu/content/feeds/uQ5TueFNQh_expando_4.xml",
-                //        ItemNodeName = "item",
-                //        SkuNodeParsingOptions = new[]
-                //        {
-                //            new ValueParsingOption("g:gtin", null),
-                //            new ValueParsingOption("g:sku_with_ean", @"\d{13}"),
-                //        },
-                //        StockQuantityNodeParsingOptions = new[]
-                //        {
-                //            new ValueParsingOption("g:quantity", null),
-                //        },
-                //    }
-                //};
-
-
                 var stockData = await _quantityUpdater.ConvertWarehouseData();
                 var columnNamesLine =
                     "sku\tprice\tminimum-seller-allowed-price\tmaximum-seller-allowed-price\tquantity\thandling-time\tfulfillment-channel";
@@ -380,7 +359,7 @@ namespace Shmap.UI.ViewModels
 
             foreach (var invoiceItem in invoices.SelectMany(di => di.InvoiceItems))
             {
-                InvoiceItems.Add(new InvoiceItemViewModel(invoiceItem, _autocompleteData));
+                InvoiceItems.Add(new InvoiceItemViewModel(invoiceItem, _autocompleteData, _browserService));
             }
 
             foreach (var invoice in invoices)
@@ -395,8 +374,9 @@ namespace Shmap.UI.ViewModels
             if (string.IsNullOrWhiteSpace(fileName)) return;
 
             var invoices = Invoices.Select(i => i.ExportModel()).ToList();
-            var invoiceItems = InvoiceItems.Select(i => i.ExportModel()).ToList();
+            
             // TODO how to avoid need for calling ToList (due to laziness of linq)?
+            var invoiceItems = InvoiceItems.Select(i => i.ExportModel()).ToList();
 
             if (!invoices.Any())
             {

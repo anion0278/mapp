@@ -137,7 +137,7 @@
                 </DataTrigger>
             </Style.Triggers>
 
-            
+
         </Style>
 
         <Style x:Key="ProductCodeToggleableReadonlyCellStyle" TargetType="{x:Type DataGridCell}"
@@ -351,6 +351,21 @@
                             </Style>
                         </Button.Style>
                     </Button>
+                    <TextBlock HorizontalAlignment="Center" Margin="10">           
+                        <Hyperlink CommandParameter="https://sellercentral.amazon.ca/listing/upload?ref_=xx_upload_tnav_status"  Command="{Binding OpenAmazonMarketPlaceUriCommand}">
+                            Amazon CA
+                        </Hyperlink>
+                    </TextBlock>
+                    <TextBlock HorizontalAlignment="Center" Margin="10">           
+                        <Hyperlink CommandParameter="https://sellercentral.amazon.com/listing/upload?ref_=xx_upload_tnav_status"  Command="{Binding OpenAmazonMarketPlaceUriCommand}">
+                            Amazon USA
+                        </Hyperlink>
+                    </TextBlock>
+                    <TextBlock HorizontalAlignment="Center" Margin="10">           
+                        <Hyperlink CommandParameter="https://sellercentral.amazon.de/listing/upload?ref_=xx_upload_tnav_status"  Command="{Binding OpenAmazonMarketPlaceUriCommand}">
+                            Amazon DE
+                        </Hyperlink>
+                    </TextBlock>
                 </StackPanel>
             </Grid>
         </TabItem>

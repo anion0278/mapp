@@ -5,7 +5,9 @@ using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Xml;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
+using Shmap.CommonServices;
 
 namespace Shmap.DataAccess;
 
@@ -17,27 +19,41 @@ public interface IStockQuantityUpdater
 public class StockQuantityUpdater : IStockQuantityUpdater
 {
     private readonly IJsonManager _jsonManager;
+    private readonly IDialogService _dialogService;
     private readonly IEnumerable<StockDataXmlSourceDefinition> _sourceDefinitions;
 
-    public StockQuantityUpdater(IJsonManager jsonManager)
+    public StockQuantityUpdater(IJsonManager jsonManager, IDialogService dialogService)
     {
         _jsonManager = jsonManager;
+        _dialogService = dialogService;
         _sourceDefinitions = _jsonManager.LoadStockQuantityUpdaterConfigs();
     }
 
     public async Task<IEnumerable<StockData>> ConvertWarehouseData()
     {
-      
         var httpClient = new HttpClient();
 
-        var stockData = new List<StockData>();
+        var stockDataTotal = new List<StockData>();
+
+        Dictionary<string, int> statistics = new Dictionary<string, int>();
+
         foreach (var source in _sourceDefinitions)
         {
             var stream = await (await httpClient.GetAsync(source.Url)).Content.ReadAsStreamAsync();
-            stockData.AddRange(ExtractStockData(stream, source));
+            var stockData = ExtractStockData(stream, source);
+            stockDataTotal.AddRange(stockData);
+
+            statistics.Add(source.Url, stockData.Count());
         }
 
-        return stockData;
+        string msg = "Konvertovano:\n";
+        foreach (var (url, count) in statistics)
+        {
+            msg += $"{count} zaznamu z: {url} \n";
+        }
+        _dialogService.ShowMessage(msg);
+
+        return stockDataTotal;
     }
 
     private IEnumerable<StockData> ExtractStockData(Stream stream, StockDataXmlSourceDefinition source)
