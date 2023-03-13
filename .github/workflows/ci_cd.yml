@@ -10,9 +10,9 @@ on:
       release_minor:
         description: 'Release - minor number'     
         required: true
-        default: '3' # minor
+        default: '4' # minor
       release_patch:
-        description: 'Release - patch number (previous 2)'     
+        description: 'Release - patch number (previous 1)'     
         required: true
       release_name:
         description: 'Additional name of the release'     
