@@ -1,0 +1,34 @@
+[
+  {
+    "url": "https://www.rappa.cz/export/vo.xml",
+    "itemNodeName": "SHOPITEM",
+    "skuNodeParsingOptions": [
+      {
+        "elementName": "EAN"
+      }
+    ],
+    "stockQuantityNodeParsingOptions": [
+      {
+        "elementName": "STOCK"
+      }
+    ]
+  },
+  {
+    "url": "https://en.bushman.eu/content/feeds/uQ5TueFNQh_expando_4.xml",
+    "itemNodeName": "item",
+    "skuNodeParsingOptions": [
+      {
+        "elementName": "g:gtin"
+      },
+      {
+        "elementName": "g:sku_with_ean",
+        "substringPattern": "\\d{13}"
+      }
+    ],
+    "stockQuantityNodeParsingOptions": [
+      {
+        "elementName": "g:quantity"
+      }
+    ]
+  }
+]
