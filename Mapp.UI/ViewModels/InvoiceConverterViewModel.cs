@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Enumeration;
@@ -17,13 +18,14 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Xml;
 using Castle.Core.Internal;
-using GalaSoft.MvvmLight.CommandWpf;
+using CommunityToolkit.Mvvm.Input;
 using Shmap.BusinessLogic.Invoices;
 using Shmap.BusinessLogic.Invoices.Annotations;
 using Shmap.BusinessLogic.Transactions;
 using Shmap.CommonServices;
 using Shmap.DataAccess;
 using Shmap.Models;
+using Shmap.UI.Views.Resources;
 using Shmap.ViewModels;
 using Microsoft.Win32;
 using Moq;
@@ -32,7 +34,7 @@ using Size = System.Drawing.Size;
 
 namespace Shmap.UI.ViewModels
 {
-    internal class MainWindowViewModel : ViewModelWithErrorValidationBase, IMainWindowViewModel
+    internal class InvoiceConverterViewModel : ViewModelBase, IInvoiceConverterViewModel
     {
         private readonly IInvoiceConverter _invoiceConverter;
         private readonly IConfigProvider _configProvider;
@@ -48,9 +50,6 @@ namespace Shmap.UI.ViewModels
         private int _windowLeft;
         private uint? _existingInvoiceNumber;
         private string _defaultEmail;
-        private string _trackingCode;
-        private bool _openTargetFolderAfterConversion;
-        private bool _isReadyForProcessing = true;
 
         public RelayCommand SelectAmazonInvoicesCommand { get; }
         public RelayCommand ExportConvertedAmazonInvoicesCommand { get; }
@@ -71,7 +70,6 @@ namespace Shmap.UI.ViewModels
             get => _windowLeft;
             set
             {
-                Set(ref _windowLeft, value);
                 SetWindowPositionConfig();
             }
         }
@@ -81,7 +79,6 @@ namespace Shmap.UI.ViewModels
             get => _windowTop;
             set
             {
-                Set(ref _windowTop, value);
                 SetWindowPositionConfig();
             }
         }
@@ -91,7 +88,6 @@ namespace Shmap.UI.ViewModels
             get => _windowWidth;
             set
             {
-                Set(ref _windowWidth, value);
                 SetWindowSizeConfig();
             }
         }
@@ -101,7 +97,6 @@ namespace Shmap.UI.ViewModels
             get => _windowHeight;
             set
             {
-                Set(ref _windowHeight, value);
                 SetWindowSizeConfig();
             }
         }
@@ -111,28 +106,32 @@ namespace Shmap.UI.ViewModels
             get => _windowState;
             set
             {
-                Set(ref _windowState, value);
                 _configProvider.IsMainWindowMaximized = value == WindowState.Maximized;
             }
         }
 
+        [Required]
         public uint? ExistingInvoiceNumber
         {
             get => _existingInvoiceNumber;
             set
             {
-                Set(ref _existingInvoiceNumber, value);
-                if (value.HasValue) _configProvider.ExistingInvoiceNumber = value.Value; // TODO join methods, since names are same
+                if (value.HasValue)
+                {
+                    _configProvider.ExistingInvoiceNumber = value.Value * 2; // TODO join methods, since names are same
+                    _existingInvoiceNumber = value.Value;
+                }
             }
         }
 
+        [EmailAddress]
         public string DefaultEmail
         {
             get => _defaultEmail;
             set
             {
                 value = value.ToLower();
-                Set(ref _defaultEmail, value);
+                _defaultEmail = value;
                 _configProvider.DefaultEmail = value; // TODO when value is not valid (according to the rules), it still saves data to config. Solve for all props
             }
         }
@@ -142,7 +141,6 @@ namespace Shmap.UI.ViewModels
             get => _configProvider.TrackingCode;
             set
             {
-                Set(ref _trackingCode, value);
                 _configProvider.TrackingCode = value;
             }
         }
@@ -152,21 +150,16 @@ namespace Shmap.UI.ViewModels
             get => _configProvider.OpenTargetFolderAfterConversion;
             set
             {
-                Set(ref _openTargetFolderAfterConversion, value);
                 _configProvider.OpenTargetFolderAfterConversion = value; // TODO move all config stuff to export part and use Fody PropertyChanged...
             }
         }
 
-        public bool IsReadyForProcessing
-        {
-            get => _isReadyForProcessing;
-            private set => Set(ref _isReadyForProcessing, value);
-        } // I knwo that it does not make any sense, but Im just too tired
+        public bool IsReadyForProcessing { get; private set; } = true; // I knwo that it does not make any sense, but Im just too tired
 
         public string WindowTitle { get; set; }
 
 
-        public MainWindowViewModel() // Design-time ctor
+        public InvoiceConverterViewModel() // Design-time ctor
         {
             _windowHeight = 650;
             _windowWidth = 900;
@@ -210,7 +203,7 @@ namespace Shmap.UI.ViewModels
             Invoices.Add(new InvoiceViewModel(invoice, dataMock));
         }
 
-        public MainWindowViewModel(IConfigProvider configProvider,
+        public InvoiceConverterViewModel(IConfigProvider configProvider,
             IInvoiceConverter invoiceConverter,
             IFileOperationService fileOperationService,
             ITransactionsReader transactionsReader,
@@ -233,9 +226,6 @@ namespace Shmap.UI.ViewModels
 
             InvoiceItemsCollectionView = InitializeCollectionView();
 
-            AddValidationRule(() => DefaultEmail, () => MailAddress.TryCreate(DefaultEmail, out _), "Zadany email neni v poradku");
-            AddValidationRule(() => ExistingInvoiceNumber, () => ExistingInvoiceNumber.HasValue, "Cislo faktury neni zadano spravne");
-
             WindowTitle += FormatTitleAssemblyFileVersion(Assembly.GetEntryAssembly());
             _windowHeight = _configProvider.MainWindowSize.Height;
             _windowWidth = _configProvider.MainWindowSize.Width;
@@ -244,7 +234,6 @@ namespace Shmap.UI.ViewModels
             _windowTop = _configProvider.MainWindowTopLeftCorner.Y;
             _existingInvoiceNumber = _configProvider.ExistingInvoiceNumber;
             _defaultEmail = _configProvider.DefaultEmail;
-            _trackingCode = _configProvider.TrackingCode;
         }
 
 
@@ -310,7 +299,7 @@ namespace Shmap.UI.ViewModels
                     _fileOperationService.OpenFileFolder(saveFileDialog.FileName);
                 }
             }
-            finally{ IsReadyForProcessing = true; }
+            finally { IsReadyForProcessing = true; }
         }
 
 
@@ -392,8 +381,9 @@ namespace Shmap.UI.ViewModels
             if (string.IsNullOrWhiteSpace(fileName)) return;
 
             var invoices = Invoices.Select(i => i.ExportModel()).ToList();
-            var invoiceItems = InvoiceItems.Select(i => i.ExportModel()).ToList();
+            
             // TODO how to avoid need for calling ToList (due to laziness of linq)?
+            var invoiceItems = InvoiceItems.Select(i => i.ExportModel()).ToList();
 
             if (!invoices.Any())
             {

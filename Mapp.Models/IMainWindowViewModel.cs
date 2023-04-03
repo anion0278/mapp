@@ -2,7 +2,7 @@
 
 namespace Shmap.Models
 {
-    public interface IMainWindowViewModel
+    public interface IInvoiceConverterViewModel
     {
         string TrackingCode { get; set; }
     }

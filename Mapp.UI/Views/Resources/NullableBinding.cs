@@ -1,4 +1,5 @@
-﻿using System.Windows.Data;
+﻿using Newtonsoft.Json;
+using System.Windows.Data;
 
 namespace Shmap.UI.Views.Resources
 {
@@ -20,16 +21,17 @@ namespace Shmap.UI.Views.Resources
 
     public class ValidatableBinding : Binding
     {
-        public ValidatableBinding() : base()
+        public ValidatableBinding()
         {
-            ValidatesOnDataErrors = true;
+            // TODO remove dupication
+            ValidatesOnNotifyDataErrors = true;
             ValidatesOnExceptions = true;
             UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
         }
 
         public ValidatableBinding(string path) : base(path)
         {
-            ValidatesOnDataErrors = true;
+            ValidatesOnNotifyDataErrors = true;
             ValidatesOnExceptions = true;
             UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
         }

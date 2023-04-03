@@ -1,17 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Linq;
 using System.Security.Policy;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.CommandWpf;
+using CommunityToolkit.Mvvm.Input;
 using Shmap.CommonServices;
 using Shmap.DataAccess;
+using Shmap.UI;
+using Shmap.UI.ViewModels;
 using NLog.LayoutRenderers;
 
 namespace Shmap.ViewModels
 {
-    public class InvoiceItemViewModel : ViewModelWithErrorValidationBase
+    public class InvoiceItemViewModel : ViewModelBase
     {
         private readonly InvoiceItemBase _model;
         private readonly IAutocompleteData _autocompleteData;
@@ -32,7 +34,7 @@ namespace Shmap.ViewModels
             get => _amazonProductName;
             set
             {
-                Set(ref _amazonProductName, value);
+                _amazonProductName = value;
 
                 if (string.IsNullOrWhiteSpace(value) || string.IsNullOrEmpty(AmazonSku)) return;
 
@@ -50,20 +52,20 @@ namespace Shmap.ViewModels
             set
             {
                 if (string.IsNullOrWhiteSpace(value) || string.IsNullOrEmpty(AmazonSku)) return;
-                Set(ref _warehouseProductCode, value);
+                _warehouseProductCode = value;
 
                 var rememberedDictionary = _autocompleteData.PohodaProdCodeBySku;
                 _autocompleteData.UpdateAutocompleteData(value, rememberedDictionary, AmazonSku);
             }
         }
 
+        [Range(0, uint.MaxValue)]
         public uint? PackQuantityMultiplier
         {
             get => _packQuantityMultiplier;
             set
             {
                 if (string.IsNullOrEmpty(AmazonSku)) return;
-                Set(ref _packQuantityMultiplier, value);
                 var rememberedDictionary = _autocompleteData.PackQuantitySku;
                 _autocompleteData.UpdateAutocompleteData(value.ToString(), rememberedDictionary, AmazonSku); // TODO make autocomplete data correctly typed
             }
@@ -77,13 +79,11 @@ namespace Shmap.ViewModels
 
             GoToInvoicePageCommand = new RelayCommand(GoToInvoicePage);
 
-            AddValidationRule(() => PackQuantityMultiplier,
-                () => PackQuantityMultiplier > 0,
-                "Pocet musi byt vetsi nez nula");
 
-            AddValidationRule(() => WarehouseProductCode,
-                ValidateProductCode,
-                "Neni zadan kod produktu");
+            // Not implemented
+            //AddValidationRule(() => WarehouseProductCode,
+            //    ValidateProductCode,
+            //    "Neni zadan kod produktu");
 
             _packQuantityMultiplier = 1;
             if (model is InvoiceProduct product)

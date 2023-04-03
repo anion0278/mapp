@@ -1,8 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Windows.Controls;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.CommandWpf;
+using CommunityToolkit.Mvvm.Input;
+using Shmap.UI.ViewModels;
 
 namespace Shmap.ViewModels
 {
@@ -15,7 +15,7 @@ namespace Shmap.ViewModels
         string EditedText { get; set; }
     }
 
-    public class ManualChangeWindowViewModel : ViewModelWithErrorValidationBase, IManualChangeWindowViewModel
+    public class ManualChangeWindowViewModel : ViewModelBase, IManualChangeWindowViewModel
     {
         // Fody takes care of PropChange notification
         public RelayCommand AcceptChangesCommand { get; } // TODO expose ICommand or IAsyncRelayCommand everywhere
@@ -32,15 +32,16 @@ namespace Shmap.ViewModels
 
         public int CurrentTextLength => EditedText?.Length ?? 0;
 
-        public ManualChangeWindowViewModel() // design time ctor
+  
+        public ManualChangeWindowViewModel()
         {
-            if (IsInDesignMode)
-            {
-                OriginalText = "Original text example";
-                MaxLength = 30;
-                EditedText = "Edited text example";
-                Message = "Nazev mesta/zeme je prilis dlouhy v objednavce C.: 751-548-846G" + "\n multiline\n multiline\n multiline";
-            }
+            //if (IsInDesignMode)
+            //{
+            //    OriginalText = "Original text example";
+            //    MaxLength = 30;
+            //    EditedText = "Edited text example";
+            //    Message = "Nazev mesta/zeme je prilis dlouhy v objednavce C.: 751-548-846G" + "\n multiline\n multiline\n multiline";
+            //}
 
             AcceptChangesCommand = new RelayCommand(AcceptChanges, AcceptedChangesCanExecute);
             IsChangeAccepted = false;

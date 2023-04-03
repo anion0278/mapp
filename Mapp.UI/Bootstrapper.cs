@@ -46,7 +46,7 @@ namespace Mapp
             Container.RegisterTypeAsSingleton<ITransactionsReader, TransactionsReader>();
             Container.RegisterTypeAsSingleton<IGpcGenerator, GpcGenerator>();
             Container.RegisterTypeAsSingleton<IFileOperationService, FileOperationsService>();
-            Container.RegisterTypeAsSingleton<IMainWindowViewModel, MainWindowViewModel>();
+            Container.RegisterTypeAsSingleton<IInvoiceConverterViewModel, InvoiceConverterViewModel>();
             Container.RegisterTypeAsSingleton<IDialogService, DialogService>();
 
             Container.RegisterType<IManualChangeWindowViewModel, ManualChangeWindowViewModel>();

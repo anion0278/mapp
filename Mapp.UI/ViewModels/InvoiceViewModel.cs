@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using GalaSoft.MvvmLight;
 using Shmap.CommonServices;
 using Shmap.DataAccess;
+using Shmap.UI.ViewModels;
 
 namespace Shmap.ViewModels
 {
-    public class InvoiceViewModel : ViewModelWithErrorValidationBase
+    public class InvoiceViewModel : ViewModelBase
     {
         private readonly Invoice _model;
         private readonly IAutocompleteData _autocompleteData;
@@ -19,12 +20,13 @@ namespace Shmap.ViewModels
         public IEnumerable<string> InvoiceProductNames { get; } 
         public IEnumerable<string> AmazonSkuCodes { get; }
 
+        [MaxLength(24)]
         public string CustomsDeclaration
         {
             get => _customsDeclaration;
             set
             {
-                Set(ref _customsDeclaration, value);
+                _customsDeclaration = value;
                 if (string.IsNullOrWhiteSpace(value)) return;
 
                 if (_model.InvoiceItems.OfType<InvoiceProduct>().Count() == 1) // v tomto pripade pamatujeme celni prohlaseni pro jeden produkt, protoze se nemeni
@@ -38,12 +40,13 @@ namespace Shmap.ViewModels
             }
         }
 
+        [Required]
         public string RelatedWarehouseSection
         {
             get => _relatedWarehouseSection;
             set
             {
-                Set(ref _relatedWarehouseSection, value);
+                _relatedWarehouseSection = value;
                 if (string.IsNullOrWhiteSpace(value)) return;
 
                 var rememberedDictionary = _autocompleteData.ProdWarehouseSectionBySku;
@@ -63,14 +66,6 @@ namespace Shmap.ViewModels
             _relatedWarehouseSection = model.RelatedWarehouseName;
             _customsDeclaration = model.CustomsDeclaration;
             _autocompleteData = autocompleteData;
-            
-            AddValidationRule(() => RelatedWarehouseSection, 
-                ()=>!string.IsNullOrWhiteSpace(RelatedWarehouseSection), 
-                "Neni zadan kod skladu");
-
-            AddValidationRule(() => CustomsDeclaration,
-                () => CustomsDeclaration.Length <= 24,
-                "Celni prohlaseni max. 24 symbolu");
 
             // for now saving model
             _model = model;

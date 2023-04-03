@@ -15,8 +15,8 @@
         WindowStartupLocation="Manual" WindowState="{Binding WindowState, Mode=TwoWay}" 
         Top="{Binding WindowTop, Mode=TwoWay}" Left="{Binding WindowLeft, Mode=TwoWay}"
         Height="{Binding WindowHeight, Mode=TwoWay}" Width="{Binding WindowWidth, Mode=TwoWay}"
-        d:DataContext="{d:DesignInstance viewModels:MainWindowViewModel, IsDesignTimeCreatable=True}"
-        DataContext="{Binding MainWindowVm, Source={StaticResource ViewModelLocator}}">
+        d:DataContext="{d:DesignInstance viewModels:InvoiceConverterViewModel, IsDesignTimeCreatable=True}"
+        DataContext="{Binding InvoiceConverterVm, Source={StaticResource ViewModelLocator}}">
 
     <Window.Resources>
         <mapp:ProductsListConverter x:Key="ProductsConverter"/>
