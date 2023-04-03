@@ -12,7 +12,7 @@ namespace Mapp.ViewModels
             _bootStrapper = new Bootstrapper();
         }
 
-        public IMainWindowViewModel MainWindowVm => _bootStrapper.Container.Resolve<IMainWindowViewModel>();
+        public IInvoiceConverterViewModel InvoiceConverterVm => _bootStrapper.Container.Resolve<IInvoiceConverterViewModel>();
         public IManualChangeWindowViewModel ManualChangeWindowVm => _bootStrapper.Container.Resolve<IManualChangeWindowViewModel>();
     }
 }
