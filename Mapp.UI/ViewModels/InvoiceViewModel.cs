@@ -3,9 +3,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using Shmap.CommonServices;
 using Shmap.DataAccess;
-using Shmap.UI.ViewModels;
 
-namespace Shmap.ViewModels
+namespace Shmap.UI.ViewModels
 {
     public class InvoiceViewModel : ViewModelBase
     {

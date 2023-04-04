@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Shmap.BusinessLogic.Transactions
+﻿namespace Shmap.BusinessLogic.Transactions
 {
     public class TransactionsConverter
     {

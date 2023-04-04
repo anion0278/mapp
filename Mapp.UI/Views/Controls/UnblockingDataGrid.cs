@@ -5,7 +5,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 
-namespace Shmap.UI.Views.Resources
+namespace Shmap.UI.Views.Controls
 {
     public class UnblockingDataGrid : DataGrid
     {

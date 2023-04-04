@@ -1,10 +1,6 @@
-﻿using System;
-using System.ComponentModel;
-using System.Windows.Controls;
-using CommunityToolkit.Mvvm.Input;
-using Shmap.UI.ViewModels;
+﻿using CommunityToolkit.Mvvm.Input;
 
-namespace Shmap.ViewModels
+namespace Shmap.UI.ViewModels
 {
     public interface IManualChangeWindowViewModel
     {

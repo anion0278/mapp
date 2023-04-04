@@ -6,7 +6,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using Microsoft.Xaml.Behaviors;
 
-namespace Mapp
+namespace Shmap.UI.Views.Controls
 {
 
     public class DataGridNumberColumn : DataGridTextColumn

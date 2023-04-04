@@ -3,7 +3,7 @@ using Unity;
 using Unity.Injection;
 using Unity.Lifetime;
 
-namespace Mapp
+namespace Shmap.UI
 {
     public static class ContainerExtensions
     {

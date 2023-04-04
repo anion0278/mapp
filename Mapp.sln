@@ -34,7 +34,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shmap.UpdatePackagesRouterFunction", "Shmap.UpdatePackagesRouterFunction\Shmap.UpdatePackagesRouterFunction.csproj", "{478547B7-AD77-436E-8C32-481366BAED2D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shmap.UI.UiTests", "Shmap.UI.UiTests\Shmap.UI.UiTests.csproj", "{8069FD7E-9809-4692-984C-621639005146}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shmap.UI.UiTests", "Shmap.UI.UiTests\Shmap.UI.UiTests.csproj", "{8069FD7E-9809-4692-984C-621639005146}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shmap.Infrastructure", "Shmap.Infrastructure\Shmap.Infrastructure.csproj", "{FEFFEAE6-64CF-4ACD-9377-F303BC81A311}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -94,6 +96,10 @@ Global
 		{8069FD7E-9809-4692-984C-621639005146}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8069FD7E-9809-4692-984C-621639005146}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8069FD7E-9809-4692-984C-621639005146}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FEFFEAE6-64CF-4ACD-9377-F303BC81A311}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FEFFEAE6-64CF-4ACD-9377-F303BC81A311}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FEFFEAE6-64CF-4ACD-9377-F303BC81A311}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FEFFEAE6-64CF-4ACD-9377-F303BC81A311}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

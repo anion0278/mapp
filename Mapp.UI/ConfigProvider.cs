@@ -1,11 +1,9 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Runtime.CompilerServices;
 using Shmap.CommonServices;
 using Shmap.DataAccess;
-using Shmap.UI;
 
-namespace Mapp
+namespace Shmap.UI
 {
   
     public class ConfigProvider: IConfigProvider
@@ -81,7 +79,7 @@ namespace Mapp
             {
                 _settings.UpgradeSettingsIfRequired();
             }
-            catch (Exception ex)
+            catch (System.Exception ex)
             {
                 throw new SettingsDataAccessException("Problem with upgrading the configuration data!", ex);
             }
@@ -94,7 +92,7 @@ namespace Mapp
             {
                 _settings.Save(); 
             }
-            catch (Exception ex)
+            catch (System.Exception ex)
             {
                 throw new SettingsDataAccessException("Problem with saving the settings file!", ex); // BUG this exception is somehow swollen by the app!
             }

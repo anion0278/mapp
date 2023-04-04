@@ -1,10 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Xml;
-using System;
 using System.Threading.Tasks;
 
 namespace Shmap.DataAccess;

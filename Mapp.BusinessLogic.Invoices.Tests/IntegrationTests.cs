@@ -1,18 +1,13 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
-using Shmap.BusinessLogic.AutocompletionHelper;
 using Shmap.BusinessLogic.Currency;
 using Shmap.CommonServices;
 using Shmap.DataAccess;
 using Moq;
 using VerifyXunit;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace Shmap.BusinessLogic.Invoices.Tests
 {

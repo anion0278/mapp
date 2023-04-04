@@ -7,16 +7,18 @@ using Shmap.BusinessLogic.Currency;
 using Shmap.BusinessLogic.Invoices;
 using Shmap.BusinessLogic.Transactions;
 using Shmap.CommonServices;
+using Shmap.CommonServices.Log;
 using Shmap.DataAccess;
 using Shmap.Models;
-using Shmap.UI;
+using Shmap.UI.Exception;
 using Shmap.UI.ViewModels;
-using Shmap.ViewModels;
+using Serilog.Core;
 using Unity;
+using Logger = Shmap.CommonServices.Log.Logger;
 
-namespace Mapp
+namespace Shmap.UI.Startup
 {
-    public class Bootstrapper // TODO analyse whether it makes sense to put into separate assembly. Requires to also move Views into separate assembly 
+    public class Bootstrapper  
     {
         public UnityContainer Container { get; }
         private IApplicationUpdater _appUpdater;
@@ -26,13 +28,10 @@ namespace Mapp
         public Bootstrapper()
         {
             Container = new UnityContainer();
-            ConfigureContainer();
         }
 
-        private void ConfigureContainer()
+        public UnityContainer ConfigureContainer()
         {
-            // lets consider ServiceLocator is an anti-pattern
-
             // TODO use naming convention auto-registering
             Container.RegisterInstance<IConfigProvider>(new ConfigProvider(AppSettings.Default, true));
             Container.RegisterTypeAsSingleton<IJsonManager, JsonManager>();
@@ -46,11 +45,18 @@ namespace Mapp
             Container.RegisterTypeAsSingleton<ITransactionsReader, TransactionsReader>();
             Container.RegisterTypeAsSingleton<IGpcGenerator, GpcGenerator>();
             Container.RegisterTypeAsSingleton<IFileOperationService, FileOperationsService>();
-            Container.RegisterTypeAsSingleton<IInvoiceConverterViewModel, InvoiceConverterViewModel>();
             Container.RegisterTypeAsSingleton<IDialogService, DialogService>();
+            Container.RegisterTypeAsSingleton<IGlobalExceptionHandler, GlobalExceptionHandler>();
+            Container.RegisterTypeAsSingleton<ILogger, Logger>();
+            Container.RegisterTypeAsSingleton<IMainViewModel, MainViewModel>();
+
+            Container.RegisterTypeAsSingleton<IInvoiceConverterViewModel, InvoiceConverterViewModel>();
+            Container.RegisterTypeAsSingleton<ITransactionsConverterViewModel, TransactionsConverterViewModel>();
+            Container.RegisterTypeAsSingleton<IWarehouseQuantityUpdaterViewModel, WarehouseQuantityUpdaterViewModel>();
 
             Container.RegisterType<IManualChangeWindowViewModel, ManualChangeWindowViewModel>();
 
+            // TODO move - does not belong here
             var autocompleteDataLoader = Container.Resolve<IAutocompleteDataLoader>();
             _autocompleteData = autocompleteDataLoader.LoadSettings();
             Container.RegisterInstance(_autocompleteData);
@@ -61,6 +67,8 @@ namespace Mapp
 
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); 
             Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture; // TODO avoid using
+
+            return Container;
         }
     }
 }

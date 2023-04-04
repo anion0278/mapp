@@ -1,25 +1,31 @@
-﻿using System.Collections.Generic;
+﻿using Shmap.UI.ViewModels;
+using System;
+using System.Diagnostics;
+using System.Reflection;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
-using System.Windows.Input;
-using System.Windows.Media;
-using Microsoft.AppCenter;
-using Microsoft.AppCenter.Analytics;
 
-namespace Shmap.Views
+namespace Shmap.UI.Views
 {
     public partial class MainWindow : Window
     {
-        public MainWindow()
+        public MainWindow(MainViewModel viewModel)
         {
             InitializeComponent();
-            //AppCenter.Start("9549dd3a-1371-4a23-b973-f5e80154119d", typeof(Analytics));
-            //Analytics.SetEnabledAsync(true);
-            //Analytics.TrackEvent("Mapp clicked", new Dictionary<string, string> {
-            //    { "Category", "Music" },
-            //    { "FileName", "favorite.avi"}
-            //});
+            DataContext = viewModel;
+            Title = FormatTitleAssemblyFileVersion(Assembly.GetEntryAssembly());
+        }
+
+        private string FormatTitleAssemblyFileVersion(Assembly assembly)
+        {
+            try
+            {
+                var fileVersion = FileVersionInfo.GetVersionInfo(assembly.Location);
+                return "Mapp v" + new Version(fileVersion.FileVersion).ToString(3);
+            }
+            catch (System.Exception)
+            {
+                return "Mapp v" + (assembly?.GetName()?.Version?.ToString(3) ?? "Version unavailable");
+            }
         }
     }
 }

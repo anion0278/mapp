@@ -1,6 +1,4 @@
-﻿using System.Collections.ObjectModel;
-
-namespace Shmap.Models
+﻿namespace Shmap.Models
 {
     public interface IInvoiceConverterViewModel
     {
