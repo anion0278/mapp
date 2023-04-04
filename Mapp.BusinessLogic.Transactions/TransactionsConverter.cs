@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Mapp.BusinessLogic.Transactions
+﻿namespace Mapp.BusinessLogic.Transactions
 {
     public class TransactionsConverter
     {

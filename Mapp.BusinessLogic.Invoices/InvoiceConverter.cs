@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
-using System.Reflection.Metadata.Ecma335;
 using Mapp.BusinessLogic.Currency;
 using Mapp.CommonServices;
 using Mapp.DataAccess;
-using Mapp;
 
 namespace Mapp.BusinessLogic.Invoices
 {

@@ -3,9 +3,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using Mapp.CommonServices;
 using Mapp.DataAccess;
-using Mapp.UI.ViewModels;
 
-namespace Mapp.ViewModels
+namespace Mapp.UI.ViewModels
 {
     public class InvoiceViewModel : ViewModelBase
     {

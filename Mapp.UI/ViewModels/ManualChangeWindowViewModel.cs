@@ -1,10 +1,6 @@
-﻿using System;
-using System.ComponentModel;
-using System.Windows.Controls;
-using CommunityToolkit.Mvvm.Input;
-using Mapp.UI.ViewModels;
+﻿using CommunityToolkit.Mvvm.Input;
 
-namespace Mapp.ViewModels
+namespace Mapp.UI.ViewModels
 {
     public interface IManualChangeWindowViewModel
     {

@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace Mapp.Views
+namespace Mapp.UI.Views
 {
     /// <summary>
     /// Interaction logic for ManualChange.xaml

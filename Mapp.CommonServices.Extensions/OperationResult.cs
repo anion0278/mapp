@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Mapp.CommonServices
+﻿namespace Mapp.CommonServices
 {
     //public class OperationResult
     //{
