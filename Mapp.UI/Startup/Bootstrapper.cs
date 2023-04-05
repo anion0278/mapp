@@ -7,14 +7,14 @@ using Shmap.BusinessLogic.Currency;
 using Shmap.BusinessLogic.Invoices;
 using Shmap.BusinessLogic.Transactions;
 using Shmap.CommonServices;
-using Shmap.CommonServices.Log;
+using Shmap.CommonServices.Logging;
 using Shmap.DataAccess;
 using Shmap.Models;
 using Shmap.UI.Exception;
 using Shmap.UI.ViewModels;
 using Serilog.Core;
 using Unity;
-using Logger = Shmap.CommonServices.Log.Logger;
+using Logger = Shmap.CommonServices.Logging.Logger;
 
 namespace Shmap.UI.Startup
 {
