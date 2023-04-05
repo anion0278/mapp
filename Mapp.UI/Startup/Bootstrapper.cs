@@ -7,14 +7,14 @@ using Mapp.BusinessLogic.Currency;
 using Mapp.BusinessLogic.Invoices;
 using Mapp.BusinessLogic.Transactions;
 using Mapp.CommonServices;
-using Mapp.CommonServices.Log;
+using Mapp.CommonServices.Logging;
 using Mapp.DataAccess;
 using Mapp.Models;
 using Mapp.UI.Exception;
 using Mapp.UI.ViewModels;
 using Serilog.Core;
 using Unity;
-using Logger = Mapp.CommonServices.Log.Logger;
+using Logger = Mapp.CommonServices.Logging.Logger;
 
 namespace Mapp.UI.Startup
 {
