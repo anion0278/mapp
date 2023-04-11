@@ -76,54 +76,55 @@ public class InvoiceConverterViewModel : TabViewModelBase, IInvoiceConverterView
 
     public bool OpenTargetFolderAfterConversion
     {
-        get => _configProvider.OpenTargetFolderAfterConversion;
+        get => _configProvider?.OpenTargetFolderAfterConversion ?? false; // TODO null conditional should not be used
         set
         {
-            _configProvider.OpenTargetFolderAfterConversion = value; // TODO move all config stuff to export part and use Fody PropertyChanged...
+            _configProvider.OpenTargetFolderAfterConversion = value; // TODO move all config stuff to export part
         }
     }
 
-    public InvoiceConverterViewModel() : base("Design-Time ctor")
-    {
-        _existingInvoiceNumber = 123456789;
-        _defaultEmail = "email@email.com";
+    //[Obsolete("Design-time only!")]
+    //public InvoiceConverterViewModel() : base("Design-Time ctor")
+    //{
+    //    _existingInvoiceNumber = 123456789;
+    //    _defaultEmail = "email@email.com";
 
-        InvoiceItemsCollectionView = InitializeCollectionView();
+    //    InvoiceItemsCollectionView = InitializeCollectionView();
 
-        var invoice = new Invoice(new Dictionary<string, decimal>())
-        {
-            VariableSymbolFull = "203-5798943-2666737",
-            ShipCountryCode = "GB",
-            RelatedWarehouseName = "CGE",
-            CustomsDeclaration = "1x deskova hra",
-            SalesChannel = "amazon.com"
-        };
-        var items = new InvoiceItemBase[]
-        {
-                new InvoiceProduct(invoice)
-                {
-                    AmazonSku = "55-KOH-FR6885",
-                    Name = "Dermacol Make-Up Cover, Waterproof Hypoallergenic for All Skin Types, Nr 218",
-                    PackQuantityMultiplier = 1,
-                    WarehouseCode = "CGE08",
-                },
-                new InvoiceItemGeneral(invoice, InvoiceItemType.Shipping)
-                {
-                    Name = "Shipping",
-                },
-                new InvoiceItemGeneral(invoice, InvoiceItemType.Discount)
-                {
-                    Name = "Discount"
-                }
-        };
-        invoice.AddInvoiceItems(items);
-        var dataMock = Mock.Of<IAutocompleteData>();
-        foreach (var item in items)
-        {
-            InvoiceItems.Add(new InvoiceItemViewModel(item, dataMock)); // TODO create bindable collection with AddRange method
-        }
-        Invoices.Add(new InvoiceViewModel(invoice, dataMock));
-    }
+    //    var invoice = new Invoice(new Dictionary<string, decimal>())
+    //    {
+    //        VariableSymbolFull = "203-5798943-2666737",
+    //        ShipCountryCode = "GB",
+    //        RelatedWarehouseName = "CGE",
+    //        CustomsDeclaration = "1x deskova hra",
+    //        SalesChannel = "amazon.com"
+    //    };
+    //    var items = new InvoiceItemBase[]
+    //    {
+    //            new InvoiceProduct(invoice)
+    //            {
+    //                AmazonSku = "55-KOH-FR6885",
+    //                Name = "Dermacol Make-Up Cover, Waterproof Hypoallergenic for All Skin Types, Nr 218",
+    //                PackQuantityMultiplier = 1,
+    //                WarehouseCode = "CGE08",
+    //            },
+    //            new InvoiceItemGeneral(invoice, InvoiceItemType.Shipping)
+    //            {
+    //                Name = "Shipping",
+    //            },
+    //            new InvoiceItemGeneral(invoice, InvoiceItemType.Discount)
+    //            {
+    //                Name = "Discount"
+    //            }
+    //    };
+    //    invoice.AddInvoiceItems(items);
+    //    var dataMock = Mock.Of<IAutocompleteData>();
+    //    foreach (var item in items)
+    //    {
+    //        InvoiceItems.Add(new InvoiceItemViewModel(item, dataMock)); // TODO create bindable collection with AddRange method
+    //    }
+    //    Invoices.Add(new InvoiceViewModel(invoice, dataMock));
+    //}
 
     public InvoiceConverterViewModel(
         IConfigProvider configProvider,

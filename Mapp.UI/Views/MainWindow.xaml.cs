@@ -8,7 +8,7 @@ namespace Shmap.UI.Views
 {
     public partial class MainWindow : Window
     {
-        public MainWindow(MainViewModel viewModel)
+        public MainWindow(IMainViewModel viewModel)
         {
             InitializeComponent();
             DataContext = viewModel;

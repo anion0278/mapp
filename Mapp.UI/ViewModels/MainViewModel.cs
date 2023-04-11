@@ -8,6 +8,7 @@ using Size = System.Drawing.Size;
 using System.ComponentModel;
 using System.Windows.Data;
 using ABI.Windows.UI.ViewManagement;
+using System;
 
 namespace Shmap.UI.ViewModels;
 
@@ -26,6 +27,7 @@ public class MainViewModel : ViewModelBase, IMainViewModel
     /// <summary>
     /// Design-time ctor
     /// </summary>
+    [Obsolete("Design-time only!")]
     public MainViewModel()
     {
         

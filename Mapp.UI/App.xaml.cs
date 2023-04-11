@@ -1,12 +1,18 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Globalization;
+using System.Text;
+using System.Threading;
 using System.Windows;
 using System.Windows.Threading;
+using Autofac;
+using Shmap.ApplicationUpdater;
+using Shmap.BusinessLogic.AutocompletionHelper;
+using Shmap.DataAccess;
 using Shmap.UI.Exception;
 using Shmap.UI.Startup;
 using Shmap.UI.Views;
 using NLog;
-using Unity;
 
 namespace Shmap.UI
 {
@@ -39,26 +45,24 @@ namespace Shmap.UI
         private IGlobalExceptionHandler _exceptionHandler = null!;
 
         private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
+        private IApplicationUpdater _appUpdater;
+        private IAutocompleteData _autocompleteData;
+        private IAutoKeyboardInputHelper _keyboardInputHelper;
 
         // TODO project-wide System.OverflowException check !!!
 
         protected void Application_Startup(object sender, StartupEventArgs e)
         {
-            //using var loggerFactory = LoggerFactory.Create(builder =>
-            //{
-            //    builder
-            //        .AddFilter("Microsoft", LogLevel.Warning)
-            //        .AddFilter("System", LogLevel.Warning)
-            //        .AddFilter("LoggingConsoleApp.Program", LogLevel.Debug)
-            //        .AddNLog(NLog.LogFactory());
-            //});
-
-            //Microsoft.Extensions.Logging.ILogger logger = loggerFactory.CreateLogger<App>();
-            //logger.LogInformation("Example log message");
-
             var bootstrapper = new Bootstrapper();
             var container = bootstrapper.ConfigureContainer();
+
             _exceptionHandler = container.Resolve<IGlobalExceptionHandler>();
+            _keyboardInputHelper = container.Resolve<IAutoKeyboardInputHelper>(); // SHOULD BE HERE, otherwise will not get instantiated
+            _appUpdater = container.Resolve<IApplicationUpdater>();
+            _appUpdater.CheckUpdate();
+
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+            Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture; // TODO avoid using
             DispatcherUnhandledException += OnDispatcherUnhandledException;
 
             var mainWindow = container.Resolve<MainWindow>();

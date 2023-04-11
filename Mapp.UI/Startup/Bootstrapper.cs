@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using System.Text;
 using System.Threading;
+using Autofac;
 using Shmap.ApplicationUpdater;
 using Shmap.BusinessLogic.AutocompletionHelper;
 using Shmap.BusinessLogic.Currency;
@@ -12,63 +13,43 @@ using Shmap.DataAccess;
 using Shmap.Models;
 using Shmap.UI.Exception;
 using Shmap.UI.ViewModels;
-using Serilog.Core;
-using Unity;
-using Logger = Shmap.CommonServices.Logging.Logger;
+using Shmap.UI.Extensions;
+using Shmap.UI.Views;
 
-namespace Shmap.UI.Startup
+namespace Shmap.UI.Startup;
+
+public class Bootstrapper
 {
-    public class Bootstrapper  
+    public IContainer ConfigureContainer()
     {
-        public UnityContainer Container { get; }
-        private IApplicationUpdater _appUpdater;
-        private IAutocompleteData _autocompleteData;
-        private IAutoKeyboardInputHelper _keyboardInputHelper;
+        var builder = new ContainerBuilder();
 
-        public Bootstrapper()
-        {
-            Container = new UnityContainer();
-        }
+        builder.RegisterAsInterfaceSingleton<JsonManager>();
+        builder.RegisterAsInterfaceSingleton<AutoKeyboardInputHelper>();
+        builder.RegisterAsInterfaceSingleton<ApplicationUpdater.ApplicationUpdater>();
+        builder.RegisterAsInterfaceSingleton<InvoicesXmlManager>();
+        builder.RegisterAsInterfaceSingleton<CsvLoader>();
+        builder.RegisterAsInterfaceSingleton<AutocompleteDataLoader>();
+        builder.RegisterAsInterfaceSingleton<CurrencyConverter>();
+        builder.RegisterAsInterfaceSingleton<InvoiceConverter>();
+        builder.RegisterAsInterfaceSingleton<TransactionsReader>();
+        builder.RegisterAsInterfaceSingleton<GpcGenerator>();
+        builder.RegisterAsInterfaceSingleton<FileOperationsService>();
+        builder.RegisterAsInterfaceSingleton<DialogService>();
+        builder.RegisterAsInterfaceSingleton<GlobalExceptionHandler>();
+        builder.RegisterAsInterfaceSingleton<Logger>();
+        builder.RegisterAsInterfaceSingleton<AutocompleteData>();
 
-        public UnityContainer ConfigureContainer()
-        {
-            // TODO use naming convention auto-registering
-            Container.RegisterInstance<IConfigProvider>(new ConfigProvider(AppSettings.Default, true));
-            Container.RegisterTypeAsSingleton<IJsonManager, JsonManager>();
-            Container.RegisterTypeAsSingleton<IAutoKeyboardInputHelper, AutoKeyboardInputHelper>();
-            Container.RegisterTypeAsSingleton<IApplicationUpdater, ApplicationUpdater.ApplicationUpdater>();
-            Container.RegisterTypeAsSingleton<IInvoicesXmlManager, InvoicesXmlManager>();
-            Container.RegisterTypeAsSingleton<ICsvLoader, CsvLoader>();
-            Container.RegisterTypeAsSingleton<IAutocompleteDataLoader, AutocompleteDataLoader>();
-            Container.RegisterTypeAsSingleton<ICurrencyConverter, CurrencyConverter>();
-            Container.RegisterTypeAsSingleton<IInvoiceConverter, InvoiceConverter>();
-            Container.RegisterTypeAsSingleton<ITransactionsReader, TransactionsReader>();
-            Container.RegisterTypeAsSingleton<IGpcGenerator, GpcGenerator>();
-            Container.RegisterTypeAsSingleton<IFileOperationService, FileOperationsService>();
-            Container.RegisterTypeAsSingleton<IDialogService, DialogService>();
-            Container.RegisterTypeAsSingleton<IGlobalExceptionHandler, GlobalExceptionHandler>();
-            Container.RegisterTypeAsSingleton<ILogger, Logger>();
-            Container.RegisterTypeAsSingleton<IMainViewModel, MainViewModel>();
+        builder.RegisterAsInterfaceSingleton<MainViewModel>();
+        builder.RegisterAsInterfaceSingleton<InvoiceConverterViewModel>();
+        builder.RegisterAsInterfaceSingleton<TransactionsConverterViewModel>();
+        builder.RegisterAsInterfaceSingleton<WarehouseQuantityUpdaterViewModel>();
 
-            Container.RegisterTypeAsSingleton<IInvoiceConverterViewModel, InvoiceConverterViewModel>();
-            Container.RegisterTypeAsSingleton<ITransactionsConverterViewModel, TransactionsConverterViewModel>();
-            Container.RegisterTypeAsSingleton<IWarehouseQuantityUpdaterViewModel, WarehouseQuantityUpdaterViewModel>();
+        builder.RegisterAsInterface<ManualChangeWindowViewModel>();
 
-            Container.RegisterType<IManualChangeWindowViewModel, ManualChangeWindowViewModel>();
+        builder.RegisterInstance(new ConfigProvider(AppSettings.Default, true)).As<IConfigProvider>();
+        builder.RegisterType<MainWindow>();
 
-            // TODO move - does not belong here
-            var autocompleteDataLoader = Container.Resolve<IAutocompleteDataLoader>();
-            _autocompleteData = autocompleteDataLoader.LoadSettings();
-            Container.RegisterInstance(_autocompleteData);
-
-            _keyboardInputHelper = Container.Resolve<IAutoKeyboardInputHelper>(); // SHOULD BE HERE, otherwise will not get instantiated
-            _appUpdater = Container.Resolve<IApplicationUpdater>();
-            _appUpdater.CheckUpdate();
-
-            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); 
-            Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture; // TODO avoid using
-
-            return Container;
-        }
+        return builder.Build();
     }
 }
