@@ -85,10 +85,9 @@ namespace Shmap.BusinessLogic.Invoices.Tests
             var jsonManager = new JsonManager();
             var invoiceXmlXmlManager = new InvoicesXmlManager(Mock.Of<IDialogService>(), configMock.Object) ;
             var currencyLoader = new CsvLoader(configMock.Object);
-            var autocompleteDataLoader = new AutocompleteDataLoader(jsonManager, configMock.Object);
-            var autocompleteData = autocompleteDataLoader.LoadSettings();
+            //var autocompleteDataLoader = new AutocompleteDataLoader(jsonManager, configMock.Object);
+            //var autocompleteData = autocompleteDataLoader.LoadSettings();
             var invoiceConverter = new InvoiceConverter(
-                autocompleteData,
                 new CurrencyConverter(),
                 currencyLoader,
                 invoiceXmlXmlManager,
