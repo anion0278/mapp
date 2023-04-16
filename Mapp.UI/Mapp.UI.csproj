@@ -2,9 +2,9 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0-windows10.0.17763.0</TargetFramework>
+    <TargetFramework>net6.0-windows10.0.19041.0</TargetFramework>
     <UseWPF>true</UseWPF>
-    <ApplicationIcon>icon.ico</ApplicationIcon>
+    <ApplicationIcon>Assets\icon.ico</ApplicationIcon>
     <Deterministic>false</Deterministic>
     <PackageId>Mapp</PackageId>
     <AssemblyName>Mapp</AssemblyName>
@@ -12,10 +12,22 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <LangVersion>preview</LangVersion>
 
     <!--This inludes native e_sqlite3.dll into single file app-->
     <!--<IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>-->
   </PropertyGroup>
+
+
+  <Target Name="RemoveDuplicateAnalyzers" BeforeTargets="CoreCompile">
+    <!-- Work around https://github.com/dotnet/wpf/issues/6792 -->
+
+    <ItemGroup>
+      <FilteredAnalyzer Include="@(Analyzer-&gt;Distinct())" />
+      <Analyzer Remove="@(Analyzer)" />
+      <Analyzer Include="@(FilteredAnalyzer)" />
+    </ItemGroup>
+  </Target>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DebugType>none</DebugType>
@@ -28,11 +40,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Shmap.UI.csproj.DotSettings" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Autofac" Version="6.5.0" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0" />
+    <PackageReference Include="Fody" Version="6.6.4">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.AppCenter.Analytics" Version="4.5.0" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
     <PackageReference Include="Moq" Version="4.16.1" />
-    <PackageReference Include="MvvmLight" Version="5.4.1.1" />
-    <PackageReference Include="MvvmLightLibs" Version="5.4.1.1" />
     <PackageReference Include="NLog" Version="4.7.11" />
+    <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" />
     <PackageReference Include="System.Text.Encoding" Version="4.3.0">
       <IncludeAssets>compile</IncludeAssets>
     </PackageReference>
@@ -40,7 +62,6 @@
       <IncludeAssets>compile</IncludeAssets>
     </PackageReference>
     <PackageReference Include="System.Xml.XmlSerializer" Version="4.3.0" />
-    <PackageReference Include="Unity" Version="5.11.10" />
   </ItemGroup>
 
 
@@ -56,6 +77,10 @@
       <_Parameter1>$(AssemblyName).Tests</_Parameter1>
       <_Parameter1>Shmap.Bootstrapper</_Parameter1>
     </AssemblyAttribute>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Assets\icon.ico" />
   </ItemGroup>
 
 
@@ -190,6 +215,10 @@
     <None Update="Transactions Configs\TransactionsConfigPaypal.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Exception\" />
   </ItemGroup>
 
 </Project>

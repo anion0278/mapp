@@ -1,9 +1,9 @@
 ﻿using System.Windows;
 using Shmap.CommonServices;
-using Shmap.ViewModels;
-using Shmap.Views;
+using Shmap.UI.ViewModels;
+using Shmap.UI.Views;
 
-namespace Mapp
+namespace Shmap.UI
 {
     public class DialogService : IDialogService
     {

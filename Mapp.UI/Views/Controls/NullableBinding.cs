@@ -1,6 +1,6 @@
 ﻿using System.Windows.Data;
 
-namespace Shmap.UI.Views.Resources
+namespace Shmap.UI.Views.Controls
 {
     /// <summary>
     /// This binding is used for numeric textbox, where it is required to return null when text is empty (prop is nullable)
@@ -20,16 +20,17 @@ namespace Shmap.UI.Views.Resources
 
     public class ValidatableBinding : Binding
     {
-        public ValidatableBinding() : base()
+        public ValidatableBinding()
         {
-            ValidatesOnDataErrors = true;
+            // TODO remove dupication
+            ValidatesOnNotifyDataErrors = true;
             ValidatesOnExceptions = true;
             UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
         }
 
         public ValidatableBinding(string path) : base(path)
         {
-            ValidatesOnDataErrors = true;
+            ValidatesOnNotifyDataErrors = true;
             ValidatesOnExceptions = true;
             UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
         }

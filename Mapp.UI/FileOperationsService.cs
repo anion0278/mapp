@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using Microsoft.Win32;
 
-namespace Mapp
+namespace Shmap.UI
 {
 
     public interface IFileOperationService

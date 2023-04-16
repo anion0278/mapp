@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Net;
 using System.Reflection;
 using Shmap.CommonServices;
 using Microsoft.VisualBasic.FileIO;

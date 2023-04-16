@@ -1,33 +1,33 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Configuration;
-using System.Data;
 using System.Diagnostics;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
+using System.Globalization;
+using System.Text;
+using System.Threading;
 using System.Windows;
-using Shmap.ViewModels;
-using Shmap.Views;
-using Microsoft.AppCenter;
-using Microsoft.AppCenter.Analytics;
+using System.Windows.Threading;
+using Autofac;
+using Shmap.ApplicationUpdater;
+using Shmap.BusinessLogic.AutocompletionHelper;
+using Shmap.DataAccess;
+using Shmap.UI.Exception;
+using Shmap.UI.Startup;
+using Shmap.UI.Views;
 using NLog;
 
-namespace Mapp
+namespace Shmap.UI
 {
-    public class BindingException: Exception
+    public class BindingException : System.Exception
     {
         public BindingException(string message) : base(message)
         { }
 
-        public BindingException(string message, Exception innerException) : base(message, innerException)
-        {}
+        public BindingException(string message, System.Exception innerException) : base(message, innerException)
+        { }
     }
 
     public class ExplicitBindingErrorTraceListener : TraceListener
     {
-        public EventHandler<Exception> BindingErrorEventHandler { get; set; }
+        public EventHandler<System.Exception> BindingErrorEventHandler { get; set; }
 
         public override void Write(string message)
         { }
@@ -42,36 +42,35 @@ namespace Mapp
 
     public partial class App : Application
     {
+        private IGlobalExceptionHandler _exceptionHandler = null!;
+
         private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
+        private IApplicationUpdater _appUpdater;
+        private IAutocompleteData _autocompleteData;
+        private IAutoKeyboardInputHelper _keyboardInputHelper;
 
         // TODO project-wide System.OverflowException check !!!
 
-        protected override void OnStartup(StartupEventArgs e)
+        protected void Application_Startup(object sender, StartupEventArgs e)
         {
-            //var x = new[] { 1, 2, 3, };
-            //x.ToImmutableArray().
-            //ImmutableArrayExtensions.
-            //x[1] = 8;
+            var bootstrapper = new Bootstrapper();
+            var container = bootstrapper.ConfigureContainer();
 
-            //using var loggerFactory = LoggerFactory.Create(builder =>
-            //{
-            //    builder
-            //        .AddFilter("Microsoft", LogLevel.Warning)
-            //        .AddFilter("System", LogLevel.Warning)
-            //        .AddFilter("LoggingConsoleApp.Program", LogLevel.Debug)
-            //        .AddNLog(NLog.LogFactory());
-            //});
+            _exceptionHandler = container.Resolve<IGlobalExceptionHandler>();
+            _keyboardInputHelper = container.Resolve<IAutoKeyboardInputHelper>(); // SHOULD BE HERE, otherwise will not get instantiated
+            _appUpdater = container.Resolve<IApplicationUpdater>();
+            _appUpdater.CheckUpdate();
 
-            //Microsoft.Extensions.Logging.ILogger logger = loggerFactory.CreateLogger<App>();
-            //logger.LogInformation("Example log message");
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+            Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture; // TODO avoid using
+            DispatcherUnhandledException += OnDispatcherUnhandledException;
 
-            base.OnStartup(e);
+            var mainWindow = container.Resolve<MainWindow>();
+            mainWindow.Show();
 #if !DEBUG
             //https://github.com/dotnet/winforms/blob/72c140e531729b58737bb7b84212ff96767a151d/src/System.Windows.Forms/src/System/Windows/Forms/Application.cs#L952
             //AppCenter.Start("9549dd3a-1371-4a23-b973-f5e80154119d", typeof(Analytics), typeof(Crashes)); // TODO should solve secrt storing somehow :(
 #endif
-            SetupExceptionHandling();
-
             //PresentationTraceSources.Refresh();
             //var wpfBindingErrorHandler = new ExplicitBindingErrorTraceListener();
             //wpfBindingErrorHandler.BindingErrorEventHandler += (o, e) => LogException(e, "WPF Binding");
@@ -84,52 +83,29 @@ namespace Mapp
             //mainWindow.Show();
         }
 
-        private void SetupExceptionHandling()
+        private void Application_OnExit(object sender, ExitEventArgs e)
         {
-            AppDomain.CurrentDomain.UnhandledException += (s, e) =>
-                LogException((Exception)e.ExceptionObject, "AppDomain.CurrentDomain.UnhandledException");
-
-            DispatcherUnhandledException += (s, e) =>
-            {
-                LogException(e.Exception, "Application.Current.DispatcherUnhandledException");
-                e.Handled = true;
-            };
-
-            TaskScheduler.UnobservedTaskException += (s, e) =>
-            {
-                LogException(e.Exception, "TaskScheduler.UnobservedTaskException");
-                e.SetObserved();
-            };
+            DispatcherUnhandledException -= OnDispatcherUnhandledException;
         }
 
-        private void LogException(Exception originalException, string source)
+        private async void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
-            var exception = originalException;
-            string message = $"Unhandled exception with source: {source}. ";
-            try
+            e.Handled = true;
+            if (IsAutomationNonCriticalException(e))
             {
+                Debug.Print("Myodam DataGrid non-fatal exception swallowed.");
+                return;
+            }
 
-#if !DEBUG
-                //Crashes.TrackError(exception);
-#endif
-                var assemblyName = Assembly.GetExecutingAssembly().GetName(); //TODO handle possible exception ! - no name for singlefile app
-                message += $"Unhandled exception in {assemblyName.Name} v{assemblyName.Version}";
-                message += $"\n * Top-most message: {exception.Message} \n * stack: {exception.StackTrace}";
-                while (exception.InnerException != null) 
-                {
-                    exception = exception.InnerException;
-                    message += $"\n * Inner message: {exception.Message} \n * stack: {exception.StackTrace}";
-                } 
-            }
-            catch (Exception ex)
-            {
-                _logger.Error(ex, "Exception in LogUnhandledException");
-            }
-            finally
-            {
-                _logger.Error(originalException, message);
-                MessageBox.Show(message);
-            }
+            await _exceptionHandler.HandleExceptionAsync(e.Exception);
         }
+
+        private static bool IsAutomationNonCriticalException(DispatcherUnhandledExceptionEventArgs e)
+        {
+            // see https://stackoverflow.com/questions/16245732/nullreferenceexception-from-presentationframework-dll/16256740#16256740
+            var sourceSite = (e.Exception.TargetSite?.DeclaringType?.FullName ?? string.Empty);
+            return e.Exception.Source == "PresentationFramework" && sourceSite == "System.Windows.Automation.Peers.DataGridItemAutomationPeer";
+        }
+
     }
 }

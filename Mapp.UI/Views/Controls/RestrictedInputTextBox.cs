@@ -4,9 +4,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
-using System.Windows.Interactivity;
+using Microsoft.Xaml.Behaviors;
 
-namespace Mapp
+namespace Shmap.UI.Views.Controls
 {
 
     public class DataGridNumberColumn : DataGridTextColumn

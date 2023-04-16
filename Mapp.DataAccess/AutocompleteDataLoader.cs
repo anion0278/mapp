@@ -22,7 +22,7 @@ namespace Shmap.DataAccess
         void UpdateAutocompleteData<T>(T newParamValue, IDictionary<string, T> autocompleteData, string productKey);
     }
 
-    internal class AutocompleteData : IAutocompleteData
+    public class AutocompleteData : IAutocompleteData
     {
         public Dictionary<string, string> ProdWarehouseSectionBySku { get; set; } // TODO fix names
 
@@ -72,6 +72,7 @@ namespace Shmap.DataAccess
         {
             _jsonManager = jsonManager;
             _configProvider = configProvider;
+            LoadSettings();
         }
 
         public IAutocompleteData LoadSettings()

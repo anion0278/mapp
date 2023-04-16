@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace Shmap.Views
+namespace Shmap.UI.Views
 {
     /// <summary>
     /// Interaction logic for ManualChange.xaml

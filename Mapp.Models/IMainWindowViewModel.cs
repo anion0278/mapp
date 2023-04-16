@@ -1,8 +1,6 @@
-﻿using System.Collections.ObjectModel;
-
-namespace Shmap.Models
+﻿namespace Shmap.Models
 {
-    public interface IMainWindowViewModel
+    public interface IInvoiceConverterViewModel
     {
         string TrackingCode { get; set; }
     }
