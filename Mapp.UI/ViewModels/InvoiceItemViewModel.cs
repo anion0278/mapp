@@ -1,18 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Linq;
-using System.Security.Policy;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.CommandWpf;
+using CommunityToolkit.Mvvm.Input;
 using Mapp.CommonServices;
+using Mapp.CommonServices.Validation;
 using Mapp.DataAccess;
-using Mapp.UI;
-using NLog.LayoutRenderers;
 
-namespace Mapp.ViewModels
+namespace Mapp.UI.ViewModels
 {
-    public class InvoiceItemViewModel : ViewModelWithErrorValidationBase
+    public class InvoiceItemViewModel : ViewModelBase
     {
         private readonly InvoiceItemBase _model;
         private readonly IBrowserService _browserService;
@@ -34,7 +32,7 @@ namespace Mapp.ViewModels
             get => _amazonProductName;
             set
             {
-                Set(ref _amazonProductName, value);
+                _amazonProductName = value;
 
                 if (string.IsNullOrWhiteSpace(value) || string.IsNullOrEmpty(AmazonSku)) return;
 
@@ -46,26 +44,28 @@ namespace Mapp.ViewModels
             }
         }
 
+        [CustomValidation(typeof(InvoiceItemViewModel), nameof(ValidateProductCode))]
         public string WarehouseProductCode
         {
             get => _warehouseProductCode;
             set
             {
                 if (string.IsNullOrWhiteSpace(value) || string.IsNullOrEmpty(AmazonSku)) return;
-                Set(ref _warehouseProductCode, value);
+                _warehouseProductCode = value;
 
                 var rememberedDictionary = _autocompleteData.PohodaProdCodeBySku;
                 _autocompleteData.UpdateAutocompleteData(value, rememberedDictionary, AmazonSku);
             }
         }
 
+        [GreaterThan<uint>(0)]
         public uint? PackQuantityMultiplier
         {
             get => _packQuantityMultiplier;
             set
             {
                 if (string.IsNullOrEmpty(AmazonSku)) return;
-                Set(ref _packQuantityMultiplier, value);
+                _packQuantityMultiplier = value;
                 var rememberedDictionary = _autocompleteData.PackQuantitySku;
                 _autocompleteData.UpdateAutocompleteData(value.ToString(), rememberedDictionary, AmazonSku); // TODO make autocomplete data correctly typed
             }
@@ -79,14 +79,6 @@ namespace Mapp.ViewModels
 
             GoToInvoicePageCommand = new RelayCommand(GoToInvoicePage);
 
-            AddValidationRule(() => PackQuantityMultiplier,
-                () => PackQuantityMultiplier > 0,
-                "Pocet musi byt vetsi nez nula");
-
-            AddValidationRule(() => WarehouseProductCode,
-                ValidateProductCode,
-                "Neni zadan kod produktu");
-
             _packQuantityMultiplier = 1;
             if (model is InvoiceProduct product)
             {
@@ -96,9 +88,22 @@ namespace Mapp.ViewModels
             }
             _autocompleteData = autocompleteData;
 
-            // temp
+            // TODO Fixme temp?
             _model = model;
             _browserService = browserService;
+        }
+
+
+        // TODO FIXME validation does not work immediately after loading
+        public static ValidationResult ValidateProductCode(string name, ValidationContext context)
+        {
+            var item = (InvoiceItemViewModel)context.ObjectInstance;
+            if (item.ItemType != InvoiceItemType.Product || !string.IsNullOrWhiteSpace(item.WarehouseProductCode))
+            {
+                return ValidationResult.Success;
+            }
+
+            return new("Neni zadan kod produktu");
         }
 
         private void GoToInvoicePage() // TODO into separate provider + tests
@@ -116,11 +121,6 @@ namespace Mapp.ViewModels
 
             url += AmazonNumber;
             _browserService.OpenBrowserOnUrl(url);
-        }
-
-        private bool ValidateProductCode()
-        {
-            return _model.Type != InvoiceItemType.Product || !string.IsNullOrWhiteSpace(WarehouseProductCode);
         }
 
         public InvoiceItemBase ExportModel()

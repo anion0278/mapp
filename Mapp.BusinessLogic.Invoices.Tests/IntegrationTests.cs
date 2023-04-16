@@ -1,18 +1,13 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
-using Mapp.BusinessLogic.AutocompletionHelper;
 using Mapp.BusinessLogic.Currency;
 using Mapp.CommonServices;
 using Mapp.DataAccess;
 using Moq;
 using VerifyXunit;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace Mapp.BusinessLogic.Invoices.Tests
 {
@@ -93,11 +88,10 @@ namespace Mapp.BusinessLogic.Invoices.Tests
             var autocompleteDataLoader = new AutocompleteDataLoader(jsonManager, configMock.Object);
             var autocompleteData = autocompleteDataLoader.LoadSettings();
             var invoiceConverter = new InvoiceConverter(
-                autocompleteData,
                 new CurrencyConverter(),
                 currencyLoader,
                 invoiceXmlXmlManager,
-                Mock.Of<IAutocompleteDataLoader>(),
+                autocompleteDataLoader,
                 dialogServiceMock.Object);
 
             var conversionContext = new InvoiceConversionContext()
@@ -114,6 +108,7 @@ namespace Mapp.BusinessLogic.Invoices.Tests
 
             //string expectedResult = File.ReadAllText(expectedResultFilePath); // TODO save to memory
             string result = await File.ReadAllTextAsync(resultFileName);
+
 
             await Verify(result);
             //Assert.Equal(expectedResult, result);

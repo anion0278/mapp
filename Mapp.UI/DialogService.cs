@@ -1,9 +1,9 @@
 ﻿using System.Windows;
 using Mapp.CommonServices;
-using Mapp.ViewModels;
-using Mapp.Views;
+using Mapp.UI.ViewModels;
+using Mapp.UI.Views;
 
-namespace Mapp
+namespace Mapp.UI
 {
     public class DialogService : IDialogService
     {

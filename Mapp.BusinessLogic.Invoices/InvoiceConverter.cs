@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
-using System.Reflection.Metadata.Ecma335;
 using Mapp.BusinessLogic.Currency;
 using Mapp.CommonServices;
 using Mapp.DataAccess;
-using Mapp;
 
 namespace Mapp.BusinessLogic.Invoices
 {
@@ -32,14 +27,14 @@ namespace Mapp.BusinessLogic.Invoices
         private Dictionary<string, decimal> _rates;
         private readonly Dictionary<string, decimal> _vatPercentage;
 
-        public InvoiceConverter(IAutocompleteData autocompleteData,
+        public InvoiceConverter(
             ICurrencyConverter currencyConverter,
             ICsvLoader csvLoader,
             IInvoicesXmlManager invoicesXmlManager,
             IAutocompleteDataLoader autocompleteDataLoader,
             IDialogService dialogService)
         {
-            _autocompleteData = autocompleteData;
+            _autocompleteData = autocompleteDataLoader.LoadSettings(); // TODO rewove!!
             _currencyConverter = currencyConverter;
             _invoicesXmlManager = invoicesXmlManager;
             _autocompleteDataLoader = autocompleteDataLoader;

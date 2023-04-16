@@ -1,12 +1,7 @@
 using System;
-using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Threading;
 using FlaUI.Core;
-using Xunit;
 using FlaUI.Core.AutomationElements;
-using FlaUI.Core.Definitions;
 using FlaUI.Core.Tools;
 using FlaUI.UIA3;
 

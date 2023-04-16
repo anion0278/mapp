@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Windows.Data;
 
-namespace Mapp
+namespace Mapp.UI.Views.Converters
 {
     public class StockItemToBoolConverter : IValueConverter
     {

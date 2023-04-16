@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Mapp.CommonServices
+﻿namespace Mapp.CommonServices
 {
     public enum InvoiceItemType // TODO how to let know that this sequence is a business rule (order in final output)
     {

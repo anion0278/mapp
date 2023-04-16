@@ -1,8 +1,6 @@
-﻿using System.Collections.ObjectModel;
-
-namespace Mapp.Models
+﻿namespace Mapp.Models
 {
-    public interface IMainWindowViewModel
+    public interface IInvoiceConverterViewModel
     {
         string TrackingCode { get; set; }
     }

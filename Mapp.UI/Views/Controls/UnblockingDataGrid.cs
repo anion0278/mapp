@@ -5,7 +5,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 
-namespace Mapp.UI.Views.Resources
+namespace Mapp.UI.Views.Controls
 {
     public class UnblockingDataGrid : DataGrid
     {
