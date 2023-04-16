@@ -1,0 +1,23 @@
+#!/bin/sh
+
+echo "BUILD & TEST HOOK"
+
+dotnet clean --v:q
+dotnet build --v:q 
+rc=$?
+
+if [[ $rc != 0 ]] ; then
+    echo -e "BUILD FAILED!"
+    exit $rc
+fi
+
+dotnet test --v:q 
+rc=$?
+
+if [[ $rc != 0 ]] ; then
+    echo -e "TEST FAILED!"
+    exit $rc
+fi
+
+echo -e "Commit succeded"
+exit 0
