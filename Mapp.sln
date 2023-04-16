@@ -29,6 +29,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shmap.BusinessLogic.Invoice
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{86B12A01-1934-4F64-9EB2-AE8D2930D928}"
 	ProjectSection(SolutionItems) = preProject
+		.githooks\pre-commit = .githooks\pre-commit
 		UpdatesDefinitions.json = UpdatesDefinitions.json
 	EndProjectSection
 EndProject
@@ -36,7 +37,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shmap.UpdatePackagesRouterF
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shmap.UI.UiTests", "Shmap.UI.UiTests\Shmap.UI.UiTests.csproj", "{8069FD7E-9809-4692-984C-621639005146}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shmap.Infrastructure", "Shmap.Infrastructure\Shmap.Infrastructure.csproj", "{FEFFEAE6-64CF-4ACD-9377-F303BC81A311}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shmap.Infrastructure", "Shmap.Infrastructure\Shmap.Infrastructure.csproj", "{FEFFEAE6-64CF-4ACD-9377-F303BC81A311}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

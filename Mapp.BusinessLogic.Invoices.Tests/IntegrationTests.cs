@@ -85,13 +85,13 @@ namespace Shmap.BusinessLogic.Invoices.Tests
             var jsonManager = new JsonManager();
             var invoiceXmlXmlManager = new InvoicesXmlManager(Mock.Of<IDialogService>(), configMock.Object) ;
             var currencyLoader = new CsvLoader(configMock.Object);
-            //var autocompleteDataLoader = new AutocompleteDataLoader(jsonManager, configMock.Object);
-            //var autocompleteData = autocompleteDataLoader.LoadSettings();
+            var autocompleteDataLoader = new AutocompleteDataLoader(jsonManager, configMock.Object);
+            var autocompleteData = autocompleteDataLoader.LoadSettings();
             var invoiceConverter = new InvoiceConverter(
                 new CurrencyConverter(),
                 currencyLoader,
                 invoiceXmlXmlManager,
-                Mock.Of<IAutocompleteDataLoader>(),
+                autocompleteDataLoader,
                 dialogServiceMock.Object);
 
             var conversionContext = new InvoiceConversionContext()
@@ -108,6 +108,7 @@ namespace Shmap.BusinessLogic.Invoices.Tests
 
             //string expectedResult = File.ReadAllText(expectedResultFilePath); // TODO save to memory
             string result = await File.ReadAllTextAsync(resultFileName);
+
 
             await Verify(result);
             //Assert.Equal(expectedResult, result);
