@@ -150,4 +150,14 @@ Total of 1 new changes since v3.3.1.19:
 ## 📦 Uncategorized
 
 - Fixed invalid paths
+- Merge branch 'master' of https://github.com/anion0278/mapp\nNew release
+Total of 1 new changes since v3.3.2.20:
+## 🧰 Chores
+
+- chore: Automated report [skip ci]
+
+## 📦 Uncategorized
+
+- Loading stock quantity updater config from json
 - Merge branch 'master' of https://github.com/anion0278/mapp
+- [feature] Added hyperlinks for marketplaces
