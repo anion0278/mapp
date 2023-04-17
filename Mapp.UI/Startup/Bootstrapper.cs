@@ -14,6 +14,7 @@ using Mapp.Models;
 using Mapp.UI.Exception;
 using Mapp.UI.ViewModels;
 using Mapp.UI.Extensions;
+using Mapp.UI.Settings;
 using Mapp.UI.Views;
 
 namespace Mapp.UI.Startup;
@@ -48,7 +49,7 @@ public class Bootstrapper
 
         builder.RegisterAsInterface<ManualChangeWindowViewModel>();
 
-        builder.RegisterInstance(new ConfigProvider(AppSettings.Default, true)).As<IConfigProvider>();
+        builder.RegisterInstance(new SettingsWrapper(Settings.AppSettings.Default, true)).As<ISettingsWrapper>();
         builder.RegisterType<MainWindow>();
 
         return builder.Build();

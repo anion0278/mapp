@@ -3,13 +3,22 @@ using System;
 using System.Diagnostics;
 using System.Reflection;
 using System.Windows;
+using Mapp.CommonServices;
+using Mapp.UI.Settings;
 
 namespace Mapp.UI.Views
 {
-    public partial class MainWindow : Window
+
+    public class WindowWithSettings : Window
     {
-        public MainWindow(IMainViewModel viewModel)
+        public ISettingsWrapper SettingsWrapper { get; protected set; }
+    }
+
+    public partial class MainWindow : WindowWithSettings
+    {
+        public MainWindow(IMainViewModel viewModel, ISettingsWrapper settingsWrapper)
         {
+            SettingsWrapper = settingsWrapper;
             InitializeComponent();
             DataContext = viewModel;
             Title = FormatTitleAssemblyFileVersion(Assembly.GetEntryAssembly());

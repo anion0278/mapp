@@ -3,10 +3,10 @@ using System.Runtime.CompilerServices;
 using Mapp.CommonServices;
 using Mapp.DataAccess;
 
-namespace Mapp.UI
+namespace Mapp.UI.Settings
 {
   
-    public class ConfigProvider: IConfigProvider
+    public class SettingsWrapper: ISettingsWrapper
     {
         private readonly AppSettings _settings;
         private readonly bool _isAutosaveEnabled;
@@ -70,7 +70,7 @@ namespace Mapp.UI
         }
 
 
-        public ConfigProvider(AppSettings settings, bool isAutosaveEnabled)
+        public SettingsWrapper(AppSettings settings, bool isAutosaveEnabled)
         {
             _settings = settings;
             _isAutosaveEnabled = isAutosaveEnabled;
