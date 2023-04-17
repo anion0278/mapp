@@ -7,20 +7,20 @@
                     xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
                     xmlns:attachedBehaviour="clr-namespace:Shmap.UI.Views.AttachedBehaviour"
                     xmlns:views="clr-namespace:Shmap.UI.Views"
+                    xmlns:lex="http://wpflocalizeextension.codeplex.com"
                     mc:Ignorable="d"
-                    WindowStartupLocation="Manual" 
-                    d:DataContext="{d:DesignInstance viewModels:MainViewModel, IsDesignTimeCreatable=True}">
+                    WindowStartupLocation="Manual"
+                    d:DataContext="{d:DesignInstance viewModels:MainViewModel, IsDesignTimeCreatable=True}"
+
+                    lex:LocalizeDictionary.DesignCulture="en"
+                    lex:LocalizeDictionary.OutputMissingKeys="True"
+                    lex:ResxLocalizationProvider.DefaultAssembly="Shmap.UI"
+                    lex:ResxLocalizationProvider.DefaultDictionary="LocalizationStrings">
+
     <b:Interaction.Behaviors>
         <attachedBehaviour:WindowFullStateToSettingsBehavior/>
     </b:Interaction.Behaviors>
-    <!--WindowState="{Binding WindowState, Mode=TwoWay}" 
-        Top="{Binding WindowTop, Mode=TwoWay}" Left="{Binding WindowLeft, Mode=TwoWay}"
-        Height="{Binding WindowHeight, Mode=TwoWay}" Width="{Binding WindowWidth, Mode=TwoWay}" -->
-
     <TabControl ItemsSource="{Binding Tabs}" IsSynchronizedWithCurrentItem="True">
-        <!--<b:Interaction.Behaviors>
-            <resouces:TabControlPreventVirtualizationBehavior/>
-        </b:Interaction.Behaviors>-->
 
         <TabControl.ItemContainerStyle>
             <Style TargetType="TabItem" BasedOn="{StaticResource {x:Type TabItem}}">

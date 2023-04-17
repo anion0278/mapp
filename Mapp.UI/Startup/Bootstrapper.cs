@@ -10,6 +10,7 @@ using Shmap.BusinessLogic.Transactions;
 using Shmap.CommonServices;
 using Shmap.CommonServices.Logging;
 using Shmap.DataAccess;
+using Shmap.Infrastructure;
 using Shmap.Models;
 using Shmap.UI.Exception;
 using Shmap.UI.ViewModels;

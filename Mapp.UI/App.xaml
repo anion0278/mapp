@@ -5,6 +5,7 @@
              xmlns:views="clr-namespace:Shmap.UI.Views"
              xmlns:viewModels="clr-namespace:Shmap.UI.ViewModels"
              xmlns:converters="clr-namespace:Shmap.UI.Views.Converters"
+             xmlns:lex="http://wpflocalizeextension.codeplex.com"
              Startup="Application_Startup"
              Exit="Application_OnExit">
     <Application.Resources>

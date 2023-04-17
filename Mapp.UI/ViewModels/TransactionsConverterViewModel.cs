@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using Shmap.BusinessLogic.Transactions;
 using Shmap.CommonServices;
+using Shmap.UI.Localization;
 using Shmap.UI.Settings;
 
 namespace Shmap.UI.ViewModels;
@@ -23,7 +24,7 @@ public class TransactionsConverterViewModel: TabViewModelBase, ITransactionsConv
         ITransactionsReader transactionsReader,
         IGpcGenerator gpcGenerator,
         IFileOperationService fileOperationService,
-        IDialogService dialogService) : base("Transaction Converter")
+        IDialogService dialogService) : base(LocalizationStrings.TransactionsConverterTabTitle.GetLocalized())
     {
         _settingsWrapper = settingsWrapper;
         _transactionsReader = transactionsReader;

@@ -30,7 +30,7 @@ public class WindowFullStateToSettingsBehavior : Microsoft.Xaml.Behaviors.Behavi
         AssociatedObject.Width = _settingsWrapper.MainWindowSize.Width;
         AssociatedObject.Height = _settingsWrapper.MainWindowSize.Height;
 
-        AssociatedObject.Left = _settingsWrapper.MainWindowTopLeftCorner.X;
+        AssociatedObject.Left = _settingsWrapper.MainWindowTopLeftCorner.X; // TODO add limits (0...Screen Size), because it may sometimes go out
         AssociatedObject.Top = _settingsWrapper.MainWindowTopLeftCorner.Y;
 
         if (_settingsWrapper.IsMainWindowMaximized) AssociatedObject.WindowState = WindowState.Maximized;

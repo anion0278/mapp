@@ -13,7 +13,9 @@ using Shmap.BusinessLogic.Invoices;
 using Shmap.BusinessLogic.Transactions;
 using Shmap.CommonServices;
 using Shmap.DataAccess;
+using Shmap.Infrastructure;
 using Shmap.Models;
+using Shmap.UI.Localization;
 using Shmap.UI.Settings;
 using Microsoft.Win32;
 using Moq;
@@ -134,7 +136,7 @@ public class InvoiceConverterViewModel : TabViewModelBase, IInvoiceConverterView
         IFileOperationService fileOperationService,
         IAutocompleteData autocompleteData,
         IDialogService dialogService,
-        IBrowserService browserService) : base("Invoice Converter")
+        IBrowserService browserService) : base(LocalizationStrings.InvoiceConverterTabTitle.GetLocalized())
     {
         _invoiceConverter = invoiceConverter;
         _settingsWrapper = settingsWrapper;
@@ -207,7 +209,7 @@ public class InvoiceConverterViewModel : TabViewModelBase, IInvoiceConverterView
 
         if (!invoices.Any())
         {
-            _dialogService.ShowMessage("Zadne faktury nebyly konvertovany!"); // TODO solve using OperationResult
+            _dialogService.ShowMessage(LocalizationStrings.InvoiceNotConvertedMsg.GetLocalized()); // TODO solve using OperationResult
             return;
         }
 

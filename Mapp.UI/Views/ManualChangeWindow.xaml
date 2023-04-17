@@ -3,9 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Mapp"
+        xmlns:viewModels="clr-namespace:Shmap.UI.ViewModels"
+        xmlns:lex="http://wpflocalizeextension.codeplex.com"
         mc:Ignorable="d"
-        Title="Manualni uprava" Height="auto" SizeToContent="Height" MaxHeight="400" Width="450" ResizeMode="NoResize" 
+        Title="{lex:Loc ManualChangeTitle}" Height="auto" SizeToContent="Height" MaxHeight="400" Width="450" ResizeMode="NoResize" 
         d:DataContext="{d:DesignInstance viewModels:ManualChangeWindowViewModel, IsDesignTimeCreatable=True}"
         DataContext="{Binding ManualChangeWindowVm, Source={StaticResource ViewModelLocator}}"
         WindowStartupLocation="CenterOwner">
@@ -38,7 +39,7 @@
             <Label.Content>
                 <TextBlock>
                     <TextBlock.Text>
-                        <MultiBinding StringFormat="Aktualni delka {0} z maximalne {1}">
+                        <MultiBinding StringFormat="{lex:Loc MaxLengthXOutOfN}">
                             <Binding Path="CurrentTextLength" />
                             <Binding Path="MaxLength" />
                         </MultiBinding>

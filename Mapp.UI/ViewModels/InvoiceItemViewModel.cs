@@ -7,6 +7,8 @@ using CommunityToolkit.Mvvm.Input;
 using Shmap.CommonServices;
 using Shmap.CommonServices.Validation;
 using Shmap.DataAccess;
+using Shmap.Infrastructure;
+using Shmap.UI.Localization;
 
 namespace Shmap.UI.ViewModels
 {
@@ -103,7 +105,7 @@ namespace Shmap.UI.ViewModels
                 return ValidationResult.Success;
             }
 
-            return new("Neni zadan kod produktu");
+            return new(LocalizationStrings.ProductCodeIsNotSetValidationMsg.GetLocalized());
         }
 
         private void GoToInvoicePage() // TODO into separate provider + tests

@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Shmap.UI.Localization;
 using Shmap.UI.Settings;
 
 namespace Shmap.UI.ViewModels;
@@ -29,12 +30,13 @@ public class WarehouseQuantityUpdaterViewModel : TabViewModelBase, IWarehouseQua
         ISettingsWrapper settingsWrapper,
         IJsonManager jsonManager,
         IFileOperationService fileOperationService,
-        IDialogService dialogService) : base("Quantity Updater")
+        IDialogService dialogService) : base(LocalizationStrings.QuantityUpdaterTabTitle.GetLocalized())
     {
         _settingsWrapper = settingsWrapper;
         _jsonManager = jsonManager;
         _fileOperationService = fileOperationService;
         _dialogService = dialogService;
+
         //AsyncRelayCommandOptions.None - disable button during execution of Async Task (AllowConcurrentExecutions = false)
         ConvertWarehouseDataCommand = new AsyncRelayCommand(ConvertWarehouseData, AsyncRelayCommandOptions.None);
     }
@@ -85,9 +87,9 @@ public class WarehouseQuantityUpdaterViewModel : TabViewModelBase, IWarehouseQua
 
         var saveFileDialog = new SaveFileDialog
         {
-            Title = "Zvol umisteni vystupniho souboru",
+            Title = LocalizationStrings.ChooseOutputLocationTitle.GetLocalized(),
             FileName = "stockQuantity_" + DateTime.Today.ToString("dd-MM-yyyy") + ".txt",
-            Filter = "Text files|*.txt"
+            Filter = LocalizationStrings.TextFilesExtensionDescription.GetLocalized() + "|*.txt"
         };
         bool? result = saveFileDialog.ShowDialog();
         if (result != true) return;
@@ -98,7 +100,5 @@ public class WarehouseQuantityUpdaterViewModel : TabViewModelBase, IWarehouseQua
             _fileOperationService.OpenFileFolder(saveFileDialog.FileName);
         }
     }
-
-
 
 }
