@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using Mapp.BusinessLogic.Transactions;
 using Mapp.CommonServices;
+using Mapp.UI.Localization;
 using Mapp.UI.Settings;
 
 namespace Mapp.UI.ViewModels;
@@ -18,7 +19,7 @@ public class AutoFillViewModel: TabViewModelBase
         ITransactionsReader transactionsReader,
         IGpcGenerator gpcGenerator,
         IFileOperationService fileOperationService,
-        IDialogService dialogService) : base("AutoFiller")
+        IDialogService dialogService) : base(LocalizationStrings.AutoFillTabTitle.GetLocalized())
     {
         _settingsWrapper = settingsWrapper;
         _transactionsReader = transactionsReader;

@@ -7,6 +7,8 @@ using CommunityToolkit.Mvvm.Input;
 using Mapp.CommonServices;
 using Mapp.CommonServices.Validation;
 using Mapp.DataAccess;
+using Mapp.Infrastructure;
+using Mapp.UI.Localization;
 
 namespace Mapp.UI.ViewModels
 {
@@ -103,7 +105,7 @@ namespace Mapp.UI.ViewModels
                 return ValidationResult.Success;
             }
 
-            return new("Neni zadan kod produktu");
+            return new(LocalizationStrings.ProductCodeIsNotSetValidationMsg.GetLocalized());
         }
 
         private void GoToInvoicePage() // TODO into separate provider + tests

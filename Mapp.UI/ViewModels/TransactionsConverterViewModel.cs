@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using Mapp.BusinessLogic.Transactions;
 using Mapp.CommonServices;
+using Mapp.UI.Localization;
 using Mapp.UI.Settings;
 
 namespace Mapp.UI.ViewModels;
@@ -23,7 +24,7 @@ public class TransactionsConverterViewModel: TabViewModelBase, ITransactionsConv
         ITransactionsReader transactionsReader,
         IGpcGenerator gpcGenerator,
         IFileOperationService fileOperationService,
-        IDialogService dialogService) : base("Transaction Converter")
+        IDialogService dialogService) : base(LocalizationStrings.TransactionsConverterTabTitle.GetLocalized())
     {
         _settingsWrapper = settingsWrapper;
         _transactionsReader = transactionsReader;

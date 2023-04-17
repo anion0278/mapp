@@ -5,6 +5,7 @@
              xmlns:views="clr-namespace:Mapp.UI.Views"
              xmlns:viewModels="clr-namespace:Mapp.UI.ViewModels"
              xmlns:converters="clr-namespace:Mapp.UI.Views.Converters"
+             xmlns:lex="http://wpflocalizeextension.codeplex.com"
              Startup="Application_Startup"
              Exit="Application_OnExit">
     <Application.Resources>

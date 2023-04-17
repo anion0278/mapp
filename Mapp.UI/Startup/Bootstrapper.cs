@@ -10,6 +10,7 @@ using Mapp.BusinessLogic.Transactions;
 using Mapp.CommonServices;
 using Mapp.CommonServices.Logging;
 using Mapp.DataAccess;
+using Mapp.Infrastructure;
 using Mapp.Models;
 using Mapp.UI.Exception;
 using Mapp.UI.ViewModels;
