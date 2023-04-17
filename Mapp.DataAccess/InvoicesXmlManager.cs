@@ -13,21 +13,21 @@ namespace Shmap.DataAccess
     public class InvoicesXmlManager : IInvoicesXmlManager
     {
         private readonly IDialogService _dialogService;
-        private readonly IConfigProvider _configProvider;
+        private readonly ISettingsWrapper _settingsWrapper;
 
 
         private readonly Encoding _xmlEncoding = CodePagesEncodingProvider.Instance.GetEncoding("windows-1250"); // pass encoding as param
 
-        public InvoicesXmlManager(IDialogService dialogService, IConfigProvider configProvider)
+        public InvoicesXmlManager(IDialogService dialogService, ISettingsWrapper settingsWrapper)
         {
             _dialogService = dialogService;
-            _configProvider = configProvider;
+            _settingsWrapper = settingsWrapper;
         }
 
         public InvoiceXml.dataPackDataPackItem PrepareDatapackItem()
         {
             InvoiceXml.dataPack dataPack;
-            using (var streamReader = new StreamReader(Path.Combine(_configProvider.InvoiceConverterConfigsDir, "InvoiceBasic"), _xmlEncoding))
+            using (var streamReader = new StreamReader(Path.Combine(_settingsWrapper.InvoiceConverterConfigsDir, "InvoiceBasic"), _xmlEncoding))
             {
                 Debug.WriteLine("Following FileNotFoundException - is normal XmlSerializer behavior");
                 dataPack = (InvoiceXml.dataPack)new XmlSerializer(typeof(InvoiceXml.dataPack)).Deserialize(streamReader);

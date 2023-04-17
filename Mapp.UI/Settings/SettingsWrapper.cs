@@ -3,10 +3,10 @@ using System.Runtime.CompilerServices;
 using Shmap.CommonServices;
 using Shmap.DataAccess;
 
-namespace Shmap.UI
+namespace Shmap.UI.Settings
 {
   
-    public class ConfigProvider: IConfigProvider
+    public class SettingsWrapper: ISettingsWrapper
     {
         private readonly AppSettings _settings;
         private readonly bool _isAutosaveEnabled;
@@ -70,7 +70,7 @@ namespace Shmap.UI
         }
 
 
-        public ConfigProvider(AppSettings settings, bool isAutosaveEnabled)
+        public SettingsWrapper(AppSettings settings, bool isAutosaveEnabled)
         {
             _settings = settings;
             _isAutosaveEnabled = isAutosaveEnabled;

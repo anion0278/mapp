@@ -14,6 +14,7 @@ using Shmap.BusinessLogic.Transactions;
 using Shmap.CommonServices;
 using Shmap.DataAccess;
 using Shmap.Models;
+using Shmap.UI.Settings;
 using Microsoft.Win32;
 using Moq;
 
@@ -21,7 +22,7 @@ namespace Shmap.UI.ViewModels;
 public class InvoiceConverterViewModel : TabViewModelBase, IInvoiceConverterViewModel
 {
     private readonly IInvoiceConverter _invoiceConverter;
-    private readonly IConfigProvider _configProvider;
+    private readonly ISettingsWrapper _settingsWrapper;
     private readonly IFileOperationService _fileOperationService;
     private readonly IAutocompleteData _autocompleteData;
     private readonly IDialogService _dialogService;
@@ -48,7 +49,7 @@ public class InvoiceConverterViewModel : TabViewModelBase, IInvoiceConverterView
         {
             if (value.HasValue)
             {
-                _configProvider.ExistingInvoiceNumber = value.Value * 2; // TODO join methods, since names are same
+                _settingsWrapper.ExistingInvoiceNumber = value.Value * 2; // TODO join methods, since names are same
                 _existingInvoiceNumber = value.Value;
             }
         }
@@ -62,25 +63,25 @@ public class InvoiceConverterViewModel : TabViewModelBase, IInvoiceConverterView
         {
             value = value.ToLower();
             _defaultEmail = value;
-            _configProvider.DefaultEmail = value; // TODO when value is not valid (according to the rules), it still saves data to config. Solve for all props
+            _settingsWrapper.DefaultEmail = value; // TODO when value is not valid (according to the rules), it still saves data to config. Solve for all props
         }
     }
 
     public string TrackingCode
     {
-        get => _configProvider.TrackingCode;
+        get => _settingsWrapper.TrackingCode;
         set
         {
-            _configProvider.TrackingCode = value;
+            _settingsWrapper.TrackingCode = value;
         }
     }
 
     public bool OpenTargetFolderAfterConversion
     {
-        get => _configProvider?.OpenTargetFolderAfterConversion ?? false; // TODO null conditional should not be used
+        get => _settingsWrapper?.OpenTargetFolderAfterConversion ?? false; // TODO null conditional should not be used
         set
         {
-            _configProvider.OpenTargetFolderAfterConversion = value; // TODO move all config stuff to export part
+            _settingsWrapper.OpenTargetFolderAfterConversion = value; // TODO move all config stuff to export part
         }
     }
 
@@ -128,7 +129,7 @@ public class InvoiceConverterViewModel : TabViewModelBase, IInvoiceConverterView
     //}
 
     public InvoiceConverterViewModel(
-        IConfigProvider configProvider,
+        ISettingsWrapper settingsWrapper,
         IInvoiceConverter invoiceConverter,
         IFileOperationService fileOperationService,
         IAutocompleteData autocompleteData,
@@ -136,7 +137,7 @@ public class InvoiceConverterViewModel : TabViewModelBase, IInvoiceConverterView
         IBrowserService browserService) : base("Invoice Converter")
     {
         _invoiceConverter = invoiceConverter;
-        _configProvider = configProvider;
+        _settingsWrapper = settingsWrapper;
         _fileOperationService = fileOperationService;
         _autocompleteData = autocompleteData;
         _dialogService = dialogService;
@@ -147,8 +148,8 @@ public class InvoiceConverterViewModel : TabViewModelBase, IInvoiceConverterView
 
         InvoiceItemsCollectionView = InitializeCollectionView();
 
-        _existingInvoiceNumber = _configProvider.ExistingInvoiceNumber;
-        _defaultEmail = _configProvider.DefaultEmail;
+        _existingInvoiceNumber = _settingsWrapper.ExistingInvoiceNumber;
+        _defaultEmail = _settingsWrapper.DefaultEmail;
 
         ValidateAllProperties(); // TODO should not be needed
     }
@@ -213,7 +214,7 @@ public class InvoiceConverterViewModel : TabViewModelBase, IInvoiceConverterView
         _invoiceConverter.ProcessInvoices(invoices, fileName);
         ExistingInvoiceNumber += (uint)invoices.Count;
 
-        if (_configProvider.OpenTargetFolderAfterConversion)
+        if (_settingsWrapper.OpenTargetFolderAfterConversion)
         {
             _fileOperationService.OpenFileFolder(fileName);
         }

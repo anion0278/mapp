@@ -85,7 +85,7 @@
 
 
   <ItemGroup>
-    <Compile Update="AppSettings.Designer.cs">
+    <Compile Update="Settings\AppSettings.Designer.cs">
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <AutoGen>True</AutoGen>
       <DependentUpon>AppSettings.settings</DependentUpon>
@@ -162,7 +162,7 @@
     <None Update="ProductCodeByAmazonName.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="AppSettings.settings">
+    <None Update="Settings\AppSettings.settings">
       <Generator>PublicSettingsSingleFileGenerator</Generator>
       <LastGenOutput>AppSettings.Designer.cs</LastGenOutput>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
@@ -219,6 +219,7 @@
 
   <ItemGroup>
     <Folder Include="Exception\" />
+    <Folder Include="Views\AttachedBehaviour\" />
   </ItemGroup>
 
 </Project>

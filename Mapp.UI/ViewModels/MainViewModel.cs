@@ -9,6 +9,7 @@ using System.ComponentModel;
 using System.Windows.Data;
 using ABI.Windows.UI.ViewManagement;
 using System;
+using Shmap.UI.Settings;
 
 namespace Shmap.UI.ViewModels;
 
@@ -18,7 +19,7 @@ public interface IMainViewModel
 
 public class MainViewModel : ViewModelBase, IMainViewModel
 {
-    private readonly IConfigProvider _configProvider;
+    private readonly ISettingsWrapper _settingsWrapper;
     private ObservableCollection<TabViewModelBase> _tabs = new();
 
     public ICollectionView Tabs { get; }
@@ -34,12 +35,12 @@ public class MainViewModel : ViewModelBase, IMainViewModel
     }
 
     public MainViewModel(
-        IConfigProvider configProvider,
+        ISettingsWrapper settingsWrapper,
         IInvoiceConverterViewModel invoiceConverterVM, 
         IWarehouseQuantityUpdaterViewModel warehouseQuantityUpdaterVM,
         ITransactionsConverterViewModel transactionsConverterVM)
     {
-        _configProvider = configProvider;
+        _settingsWrapper = settingsWrapper;
 
         _tabs.Add(invoiceConverterVM as TabViewModelBase);
         _tabs.Add(warehouseQuantityUpdaterVM as TabViewModelBase);

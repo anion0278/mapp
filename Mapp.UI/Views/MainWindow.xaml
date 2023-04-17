@@ -1,14 +1,19 @@
-﻿<Window x:Class="Shmap.UI.Views.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:viewModels="clr-namespace:Shmap.UI.ViewModels"
-        mc:Ignorable="d"
-        WindowStartupLocation="Manual" 
-        d:DataContext="{d:DesignInstance viewModels:MainViewModel, IsDesignTimeCreatable=True}">
-
-        <!--WindowState="{Binding WindowState, Mode=TwoWay}" 
+﻿<views:WindowWithSettings x:Class="Shmap.UI.Views.MainWindow"
+                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                    xmlns:viewModels="clr-namespace:Shmap.UI.ViewModels"
+                    xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+                    xmlns:attachedBehaviour="clr-namespace:Shmap.UI.Views.AttachedBehaviour"
+                    xmlns:views="clr-namespace:Shmap.UI.Views"
+                    mc:Ignorable="d"
+                    WindowStartupLocation="Manual" 
+                    d:DataContext="{d:DesignInstance viewModels:MainViewModel, IsDesignTimeCreatable=True}">
+    <b:Interaction.Behaviors>
+        <attachedBehaviour:WindowFullStateToSettingsBehavior/>
+    </b:Interaction.Behaviors>
+    <!--WindowState="{Binding WindowState, Mode=TwoWay}" 
         Top="{Binding WindowTop, Mode=TwoWay}" Left="{Binding WindowLeft, Mode=TwoWay}"
         Height="{Binding WindowHeight, Mode=TwoWay}" Width="{Binding WindowWidth, Mode=TwoWay}" -->
 
@@ -61,4 +66,4 @@
 
     </TabControl>
 
-</Window>
+</views:WindowWithSettings>

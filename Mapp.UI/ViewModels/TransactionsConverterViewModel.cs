@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using Shmap.BusinessLogic.Transactions;
 using Shmap.CommonServices;
+using Shmap.UI.Settings;
 
 namespace Shmap.UI.ViewModels;
 
@@ -11,20 +12,20 @@ public interface ITransactionsConverterViewModel
 
 public class TransactionsConverterViewModel: TabViewModelBase, ITransactionsConverterViewModel
 {
-    private readonly IConfigProvider _configProvider;
+    private readonly ISettingsWrapper _settingsWrapper;
     private readonly ITransactionsReader _transactionsReader;
     private readonly IGpcGenerator _gpcGenerator;
     private readonly IFileOperationService _fileOperationService;
     private readonly IDialogService _dialogService;
     public RelayCommand ConvertTransactionsCommand { get; }
 
-    public TransactionsConverterViewModel(IConfigProvider configProvider,
+    public TransactionsConverterViewModel(ISettingsWrapper settingsWrapper,
         ITransactionsReader transactionsReader,
         IGpcGenerator gpcGenerator,
         IFileOperationService fileOperationService,
         IDialogService dialogService) : base("Transaction Converter")
     {
-        _configProvider = configProvider;
+        _settingsWrapper = settingsWrapper;
         _transactionsReader = transactionsReader;
         _gpcGenerator = gpcGenerator;
         _fileOperationService = fileOperationService;
@@ -44,7 +45,7 @@ public class TransactionsConverterViewModel: TabViewModelBase, ITransactionsConv
 
         _gpcGenerator.SaveTransactions(transactions, saveFileName);
 
-        if (_configProvider.OpenTargetFolderAfterConversion)
+        if (_settingsWrapper.OpenTargetFolderAfterConversion)
         {
             _fileOperationService.OpenFileFolder(saveFileName);
         }

@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Shmap.UI.Settings;
 
 namespace Shmap.UI.ViewModels;
 
@@ -18,19 +19,19 @@ public interface IWarehouseQuantityUpdaterViewModel
 
 public class WarehouseQuantityUpdaterViewModel : TabViewModelBase, IWarehouseQuantityUpdaterViewModel
 {
-    private readonly IConfigProvider _configProvider;
+    private readonly ISettingsWrapper _settingsWrapper;
     private readonly IJsonManager _jsonManager;
     private readonly IFileOperationService _fileOperationService;
     private readonly IDialogService _dialogService;
     public ICommand ConvertWarehouseDataCommand { get; set; }
 
     public WarehouseQuantityUpdaterViewModel(
-        IConfigProvider configProvider,
+        ISettingsWrapper settingsWrapper,
         IJsonManager jsonManager,
         IFileOperationService fileOperationService,
         IDialogService dialogService) : base("Quantity Updater")
     {
-        _configProvider = configProvider;
+        _settingsWrapper = settingsWrapper;
         _jsonManager = jsonManager;
         _fileOperationService = fileOperationService;
         _dialogService = dialogService;
@@ -92,7 +93,7 @@ public class WarehouseQuantityUpdaterViewModel : TabViewModelBase, IWarehouseQua
         if (result != true) return;
 
         await File.WriteAllLinesAsync(saveFileDialog.FileName, lines);
-        if (_configProvider.OpenTargetFolderAfterConversion)
+        if (_settingsWrapper.OpenTargetFolderAfterConversion)
         {
             _fileOperationService.OpenFileFolder(saveFileDialog.FileName);
         }

@@ -14,6 +14,7 @@ using Shmap.Models;
 using Shmap.UI.Exception;
 using Shmap.UI.ViewModels;
 using Shmap.UI.Extensions;
+using Shmap.UI.Settings;
 using Shmap.UI.Views;
 
 namespace Shmap.UI.Startup;
@@ -48,7 +49,7 @@ public class Bootstrapper
 
         builder.RegisterAsInterface<ManualChangeWindowViewModel>();
 
-        builder.RegisterInstance(new ConfigProvider(AppSettings.Default, true)).As<IConfigProvider>();
+        builder.RegisterInstance(new SettingsWrapper(Settings.AppSettings.Default, true)).As<ISettingsWrapper>();
         builder.RegisterType<MainWindow>();
 
         return builder.Build();
