@@ -46,16 +46,27 @@ public class WindowFullStateToSettingsBehavior : Microsoft.Xaml.Behaviors.Behavi
 
     private void AssociatedObjectOnLocationChanged(object sender, EventArgs e)
     {
-        _settingsWrapper.MainWindowTopLeftCorner = new System.Drawing.Point((int)AssociatedObject.Left, (int)AssociatedObject.Top);
+        if (IsSizeAndPositionValid())
+        {
+            _settingsWrapper.MainWindowTopLeftCorner = new System.Drawing.Point((int)AssociatedObject.Left, (int)AssociatedObject.Top);
+        }
     }
 
     private void AssociatedObject_SizeChanged(object sender, SizeChangedEventArgs e)
     {
-        _settingsWrapper.MainWindowSize = new System.Drawing.Size((int)AssociatedObject.ActualWidth, (int)AssociatedObject.ActualHeight);
+        if (IsSizeAndPositionValid())
+        {
+            _settingsWrapper.MainWindowSize = new System.Drawing.Size((int)AssociatedObject.ActualWidth, (int)AssociatedObject.ActualHeight);
+        }
     }
 
     private void AssociatedObject_StateChanged(object sender, EventArgs e)
     {
         _settingsWrapper.IsMainWindowMaximized = AssociatedObject.WindowState == WindowState.Maximized;
+    }
+
+    private bool IsSizeAndPositionValid()
+    {
+        return AssociatedObject.WindowState != WindowState.Minimized;
     }
 }
