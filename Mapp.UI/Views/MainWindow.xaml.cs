@@ -3,7 +3,7 @@ using System;
 using System.Diagnostics;
 using System.Reflection;
 using System.Windows;
-using Mapp.CommonServices;
+using Mapp.Common;
 using Mapp.UI.Settings;
 
 namespace Mapp.UI.Views

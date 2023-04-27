@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace Mapp.CommonServices
+namespace Mapp.Common
 {
     public interface ISettingsWrapper // TODO move to UI.Settings
     {

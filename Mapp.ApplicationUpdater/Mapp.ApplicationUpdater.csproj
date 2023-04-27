@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Mapp.CommonServices.Extensions\Mapp.CommonServices.csproj" />
+    <ProjectReference Include="..\Mapp.CommonServices.Extensions\Mapp.Common.csproj" />
     <ProjectReference Include="..\Mapp.DataAccess\Mapp.DataAccess.csproj" />
   </ItemGroup>
 

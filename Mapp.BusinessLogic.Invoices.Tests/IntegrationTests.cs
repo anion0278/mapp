@@ -3,7 +3,7 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using Mapp.BusinessLogic.Currency;
-using Mapp.CommonServices;
+using Mapp.Common;
 using Mapp.DataAccess;
 using Moq;
 using VerifyXunit;

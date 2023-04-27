@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 
-namespace Mapp.CommonServices
+namespace Mapp.Common
 {
     public static class CommonExtensions
     {

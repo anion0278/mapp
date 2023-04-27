@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 using System.Runtime.CompilerServices;
-using Mapp.CommonServices;
+using Mapp.Common;
 using Mapp.DataAccess;
 
 namespace Mapp.UI.Settings

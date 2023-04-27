@@ -20,8 +20,21 @@
     <b:Interaction.Behaviors>
         <attachedBehaviour:WindowFullStateToSettingsBehavior/>
     </b:Interaction.Behaviors>
-    <TabControl ItemsSource="{Binding Tabs}" IsSynchronizedWithCurrentItem="True">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <ComboBox Grid.Row="0" Width="100" HorizontalAlignment="Right" 
+                  ItemsSource="{Binding AvailableLanguages}" IsSynchronizedWithCurrentItem="True">
+            <b:Interaction.Triggers>
+                <b:EventTrigger EventName="SelectionChanged">
+                    <b:InvokeCommandAction Command="{Binding SetLanguageCommand}" />
+                </b:EventTrigger>
+            </b:Interaction.Triggers>
+        </ComboBox>
 
+        <TabControl Grid.Row="1"  ItemsSource="{Binding Tabs}" IsSynchronizedWithCurrentItem="True">
         <TabControl.ItemContainerStyle>
             <Style TargetType="TabItem" BasedOn="{StaticResource {x:Type TabItem}}">
                 <Setter Property="Background" Value="Silver"/>
@@ -65,5 +78,5 @@
         </TabControl.ItemContainerStyle>
 
     </TabControl>
-
+    </Grid>
 </views:WindowWithSettings>

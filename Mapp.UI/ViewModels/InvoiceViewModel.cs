@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using Mapp.CommonServices;
+using Mapp.Common;
 using Mapp.DataAccess;
 
 namespace Mapp.UI.ViewModels

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Mapp.CommonServices
+namespace Mapp.Common
 {
     public interface IInteractionRequester
     {

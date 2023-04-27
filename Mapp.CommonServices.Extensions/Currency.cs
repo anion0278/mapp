@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
-namespace Mapp.CommonServices
+namespace Mapp.Common
 {
     [DebuggerDisplay("{AmountForeign} {ForeignCurrencyName}")]
     public class Currency

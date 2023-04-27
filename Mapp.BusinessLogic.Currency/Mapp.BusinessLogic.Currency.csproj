@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Mapp.CommonServices.Extensions\Mapp.CommonServices.csproj" />
+    <ProjectReference Include="..\Mapp.CommonServices.Extensions\Mapp.Common.csproj" />
   </ItemGroup>
 
 </Project>

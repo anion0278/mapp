@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Mapp.CommonServices;
+using Mapp.Common;
 
 namespace Mapp.BusinessLogic.Transactions
 {

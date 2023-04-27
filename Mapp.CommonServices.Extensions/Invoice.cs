@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 
-namespace Mapp.CommonServices
+namespace Mapp.Common
 {
     public enum InvoiceVatClassification
     {

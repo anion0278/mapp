@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Mapp.BusinessLogic.Currency;
-using Mapp.CommonServices;
+using Mapp.Common;
 using Mapp.DataAccess;
 
 namespace Mapp.BusinessLogic.Invoices
@@ -211,13 +211,13 @@ namespace Mapp.BusinessLogic.Invoices
         {
             invoiceItem.Name = name;
             invoiceItem.Quantity = quantity;
-            invoiceItem.TotalPriceWithTax = new CommonServices.Currency(
+            invoiceItem.TotalPriceWithTax = new Common.Currency(
                 priceIncludingTax, // There is no need to manually calculate tax (ReverseTaxValue) and subtract it since its value is available in amazon report
                                    // and recalculation logic is included into InvoiceBase Item
                 invoiceItem.ParentInvoice.TotalPrice.ForeignCurrencyName,
                 _rates);
 
-            invoiceItem.Tax = new CommonServices.Currency(
+            invoiceItem.Tax = new Common.Currency(
                 tax,
                 invoiceItem.ParentInvoice.TotalPrice.ForeignCurrencyName,
                 _rates);

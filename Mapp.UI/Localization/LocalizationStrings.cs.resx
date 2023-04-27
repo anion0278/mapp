@@ -181,4 +181,10 @@
   <data name="VatType" xml:space="preserve">
     <value>Typ VAT</value>
   </data>
+  <data name="AvailableLanguages" xml:space="preserve">
+    <value>Jazyk:</value>
+  </data>
+  <data name="ConvertTransactions" xml:space="preserve">
+    <value>Konvertuj transakce</value>
+  </data>
 </root>

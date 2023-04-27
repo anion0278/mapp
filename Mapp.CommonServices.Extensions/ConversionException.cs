@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Mapp
+namespace Mapp.Common
 {
     public class ConversionException : Exception
     {

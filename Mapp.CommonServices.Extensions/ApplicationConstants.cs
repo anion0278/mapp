@@ -1,4 +1,4 @@
-﻿namespace Mapp.CommonServices
+﻿namespace Mapp.Common
 {
     public static class ApplicationConstants
     {

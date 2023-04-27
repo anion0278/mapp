@@ -1,6 +1,6 @@
 ﻿using Serilog;
 
-namespace Mapp.CommonServices.Logging;
+namespace Mapp.Common.Logging;
 
 
 public interface ILogger

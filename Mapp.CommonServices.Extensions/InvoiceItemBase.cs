@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace Mapp.CommonServices
+namespace Mapp.Common
 {
     public abstract class InvoiceItemBase
     {
