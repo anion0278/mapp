@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
-using Shmap.CommonServices;
+using Shmap.Common;
 using Microsoft.VisualBasic.FileIO;
 
 namespace Shmap.DataAccess

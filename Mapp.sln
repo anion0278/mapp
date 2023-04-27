@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shmap.DataAccess", "Shmap.D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shmap.BusinessLogic.Transactions", "Shmap.BusinessLogic.Transactions\Shmap.BusinessLogic.Transactions.csproj", "{ABE81A5B-8946-464E-91A4-6A668A084ED2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shmap.CommonServices", "Shmap.CommonServices.Extensions\Shmap.CommonServices.csproj", "{2407B99B-6BA5-412B-9D9C-1745F7E92373}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shmap.Common", "Shmap.CommonServices.Extensions\Shmap.Common.csproj", "{2407B99B-6BA5-412B-9D9C-1745F7E92373}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shmap.Models", "Shmap.Models\Shmap.Models.csproj", "{08791058-4D98-4A44-9CF0-2219122D61BF}"
 EndProject

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using AutoMapper;
-using Shmap.CommonServices;
+using Shmap.Common;
 using Shmap.DataAccess;
 using Shmap.Models;
 using Microsoft.VisualBasic.FileIO;

@@ -1,6 +1,6 @@
 ﻿using Serilog;
 
-namespace Shmap.CommonServices.Logging;
+namespace Shmap.Common.Logging;
 
 
 public interface ILogger

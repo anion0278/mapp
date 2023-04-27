@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using Shmap.BusinessLogic.Transactions;
-using Shmap.CommonServices;
+using Shmap.Common;
 using Shmap.UI.Localization;
 using Shmap.UI.Settings;
 

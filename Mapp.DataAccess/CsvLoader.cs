@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
-using Shmap.CommonServices;
+using Shmap.Common;
 using Microsoft.VisualBasic.FileIO;
 
 namespace Shmap.DataAccess

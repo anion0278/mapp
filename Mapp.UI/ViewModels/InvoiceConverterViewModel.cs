@@ -11,7 +11,7 @@ using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
 using Shmap.BusinessLogic.Invoices;
 using Shmap.BusinessLogic.Transactions;
-using Shmap.CommonServices;
+using Shmap.Common;
 using Shmap.DataAccess;
 using Shmap.Infrastructure;
 using Shmap.Models;
@@ -49,11 +49,10 @@ public class InvoiceConverterViewModel : TabViewModelBase, IInvoiceConverterView
         get => _existingInvoiceNumber;
         set
         {
-            if (value.HasValue)
-            {
-                _settingsWrapper.ExistingInvoiceNumber = value.Value * 2; // TODO join methods, since names are same
-                _existingInvoiceNumber = value.Value;
-            }
+            if (!value.HasValue) return;
+
+            _settingsWrapper.ExistingInvoiceNumber = value.Value * 2; // TODO join methods, since names are same
+            _existingInvoiceNumber = value.Value;
         }
     }
 
@@ -72,19 +71,13 @@ public class InvoiceConverterViewModel : TabViewModelBase, IInvoiceConverterView
     public string TrackingCode
     {
         get => _settingsWrapper.TrackingCode;
-        set
-        {
-            _settingsWrapper.TrackingCode = value;
-        }
+        set => _settingsWrapper.TrackingCode = value;
     }
 
     public bool OpenTargetFolderAfterConversion
     {
         get => _settingsWrapper?.OpenTargetFolderAfterConversion ?? false; // TODO null conditional should not be used
-        set
-        {
-            _settingsWrapper.OpenTargetFolderAfterConversion = value; // TODO move all config stuff to export part
-        }
+        set => _settingsWrapper.OpenTargetFolderAfterConversion = value; // TODO move all config stuff to export part
     }
 
     //[Obsolete("Design-time only!")]
@@ -163,13 +156,6 @@ public class InvoiceConverterViewModel : TabViewModelBase, IInvoiceConverterView
         return collectionView;
     }
 
-    private bool ExportConvertedAmazonInvoicesCanExecute()
-    {
-        return !HasErrors && InvoiceItems.Any() && Invoices.Any()
-               && InvoiceItems.All(i => !i.HasErrors)
-               && Invoices.All(i => !i.HasErrors);
-    }
-
     private void SelectAmazonInvoices()
     {
         InvoiceItems.Clear();
@@ -195,6 +181,13 @@ public class InvoiceConverterViewModel : TabViewModelBase, IInvoiceConverterView
         {
             Invoices.Add(new InvoiceViewModel(invoice, _autocompleteData));
         }
+    }
+
+    private bool ExportConvertedAmazonInvoicesCanExecute()
+    {
+        return !HasErrors && InvoiceItems.Any() && Invoices.Any()
+               && InvoiceItems.All(i => !i.HasErrors)
+               && Invoices.All(i => !i.HasErrors);
     }
 
     private void ExportConvertedAmazonInvoices()

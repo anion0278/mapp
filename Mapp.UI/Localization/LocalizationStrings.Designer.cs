@@ -97,6 +97,15 @@ namespace Shmap.UI.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Language:.
+        /// </summary>
+        internal static string AvailableLanguages {
+            get {
+                return ResourceManager.GetString("AvailableLanguages", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Start conversion....
         /// </summary>
         internal static string BeginConversion {
@@ -120,6 +129,15 @@ namespace Shmap.UI.Localization {
         internal static string ChooseOutputLocationTitle {
             get {
                 return ResourceManager.GetString("ChooseOutputLocationTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Convert transactions.
+        /// </summary>
+        internal static string ConvertTransactions {
+            get {
+                return ResourceManager.GetString("ConvertTransactions", resourceCulture);
             }
         }
         

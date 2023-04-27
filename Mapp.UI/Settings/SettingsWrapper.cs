@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 using System.Runtime.CompilerServices;
-using Shmap.CommonServices;
+using Shmap.Common;
 using Shmap.DataAccess;
 
 namespace Shmap.UI.Settings

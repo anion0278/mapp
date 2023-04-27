@@ -5,11 +5,11 @@
              xmlns:views="clr-namespace:Shmap.UI.Views"
              xmlns:viewModels="clr-namespace:Shmap.UI.ViewModels"
              xmlns:converters="clr-namespace:Shmap.UI.Views.Converters"
-             xmlns:lex="http://wpflocalizeextension.codeplex.com"
              Startup="Application_Startup"
              Exit="Application_OnExit">
     <Application.Resources>
 
+        <!--Region Implicit styles-->
         <Style TargetType="{x:Type Label}">
             <Setter Property="HorizontalAlignment" Value="Center" />
         </Style>
@@ -24,6 +24,7 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+        <!--EndRegion-->
 
         <!--Region Implicit Templates-->
         <DataTemplate DataType="{x:Type viewModels:InvoiceConverterViewModel}">
@@ -41,12 +42,12 @@
         <DataTemplate DataType="{x:Type viewModels:AutoFillViewModel}">
             <views:AutoFillView />
         </DataTemplate>
-        <!--End Region-->
+        <!--EndRegion-->
 
-        <!--Region-->
+        <!--Region Converters-->
         <BooleanToVisibilityConverter x:Key="booleanToVisibilityConverter"/>
         <converters:InverseBooleanConverter x:Key="inverseBooleanConverter"/>
-        <!--End Region-->
+        <!--EndRegion-->
 
     </Application.Resources>
 </Application>

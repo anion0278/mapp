@@ -3,7 +3,7 @@ using System;
 using System.Diagnostics;
 using System.Reflection;
 using System.Windows;
-using Shmap.CommonServices;
+using Shmap.Common;
 using Shmap.UI.Settings;
 
 namespace Shmap.UI.Views

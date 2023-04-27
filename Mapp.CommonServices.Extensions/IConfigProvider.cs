@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace Shmap.CommonServices
+namespace Shmap.Common
 {
     public interface ISettingsWrapper // TODO move to UI.Settings
     {

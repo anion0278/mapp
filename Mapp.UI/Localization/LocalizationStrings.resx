@@ -201,4 +201,10 @@
   <data name="VatType" xml:space="preserve">
     <value>VAT type</value>
   </data>
+  <data name="AvailableLanguages" xml:space="preserve">
+    <value>Language:</value>
+  </data>
+  <data name="ConvertTransactions" xml:space="preserve">
+    <value>Convert transactions</value>
+  </data>
 </root>

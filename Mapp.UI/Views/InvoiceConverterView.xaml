@@ -4,10 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Shmap.UI.Views"
-             xmlns:common="clr-namespace:Shmap.CommonServices;assembly=Shmap.CommonServices"
              xmlns:converters="clr-namespace:Shmap.UI.Views.Converters"
              xmlns:controls="clr-namespace:Shmap.UI.Views.Controls"
              xmlns:lex="http://wpflocalizeextension.codeplex.com"
+             xmlns:common1="clr-namespace:Shmap.Common;assembly=Shmap.Common"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
@@ -71,7 +71,7 @@
             <Setter Property="IsTabStop" Value="False"></Setter>
             <Setter Property="Focusable" Value="False"></Setter>
             <Style.Triggers>
-                <DataTrigger Binding="{Binding Path=ItemType}" Value="{x:Static common:InvoiceItemType.Shipping}">
+                <DataTrigger Binding="{Binding Path=ItemType}" Value="{x:Static common1:InvoiceItemType.Shipping}">
                     <Setter Property="IsTabStop" Value="True"></Setter>
                     <Setter Property="Focusable" Value="True"></Setter>
                 </DataTrigger>
@@ -85,7 +85,7 @@
             <Setter Property="IsTabStop" Value="False"></Setter>
             <Setter Property="Focusable" Value="False"></Setter>
             <Style.Triggers>
-                <DataTrigger Binding="{Binding Path=ItemType}" Value="{x:Static common:InvoiceItemType.Product}">
+                <DataTrigger Binding="{Binding Path=ItemType}" Value="{x:Static common1:InvoiceItemType.Product}">
                     <Setter Property="IsTabStop" Value="True"></Setter>
                     <Setter Property="Focusable" Value="True"></Setter>
                 </DataTrigger>

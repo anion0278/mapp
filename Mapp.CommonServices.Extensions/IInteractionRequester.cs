@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Shmap.CommonServices
+namespace Shmap.Common
 {
     public interface IInteractionRequester
     {

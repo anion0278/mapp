@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
-using Shmap.CommonServices;
-using Shmap.CommonServices.Logging;
+using Shmap.Common;
+using Shmap.Common.Logging;
 
 namespace Shmap.UI.Exception;
 

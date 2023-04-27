@@ -1,5 +1,5 @@
 ﻿using System.Windows;
-using Shmap.CommonServices;
+using Shmap.Common;
 using Shmap.UI.ViewModels;
 using Shmap.UI.Views;
 

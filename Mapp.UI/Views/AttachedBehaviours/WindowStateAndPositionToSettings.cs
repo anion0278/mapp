@@ -2,8 +2,11 @@
 using System.CodeDom;
 using System.Drawing;
 using System.Windows;
-using Shmap.CommonServices;
+using Shmap.Common;
+using Shmap.UI.Localization;
 using Shmap.UI.Settings;
+using Microsoft.Xaml.Behaviors;
+using WPFLocalizeExtension.Providers;
 
 namespace Shmap.UI.Views.AttachedBehaviour;
 
@@ -36,20 +39,20 @@ public class WindowFullStateToSettingsBehavior : Microsoft.Xaml.Behaviors.Behavi
         if (_settingsWrapper.IsMainWindowMaximized) AssociatedObject.WindowState = WindowState.Maximized;
     }
 
-    protected override void OnDetaching()
-    {
-        base.OnDetaching();
-        AssociatedObject.StateChanged -= AssociatedObject_StateChanged;
-        AssociatedObject.SizeChanged -= AssociatedObject_SizeChanged;
-        AssociatedObject.LocationChanged -= AssociatedObjectOnLocationChanged;
-    }
-
     private void AssociatedObjectOnLocationChanged(object sender, EventArgs e)
     {
         if (IsSizeAndPositionValid())
         {
             _settingsWrapper.MainWindowTopLeftCorner = new System.Drawing.Point((int)AssociatedObject.Left, (int)AssociatedObject.Top);
         }
+    }
+
+    protected override void OnDetaching()
+    { 
+        base.OnDetaching();
+        AssociatedObject.StateChanged -= AssociatedObject_StateChanged;
+        AssociatedObject.SizeChanged -= AssociatedObject_SizeChanged;
+        AssociatedObject.LocationChanged -= AssociatedObjectOnLocationChanged;
     }
 
     private void AssociatedObject_SizeChanged(object sender, SizeChangedEventArgs e)

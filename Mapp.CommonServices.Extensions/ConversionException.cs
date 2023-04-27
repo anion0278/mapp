@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Mapp
+namespace Shmap.Common
 {
     public class ConversionException : Exception
     {

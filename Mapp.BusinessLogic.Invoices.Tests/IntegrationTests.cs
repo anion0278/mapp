@@ -3,7 +3,7 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using Shmap.BusinessLogic.Currency;
-using Shmap.CommonServices;
+using Shmap.Common;
 using Shmap.DataAccess;
 using Moq;
 using VerifyXunit;

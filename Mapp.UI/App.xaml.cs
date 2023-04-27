@@ -61,7 +61,7 @@ namespace Shmap.UI
             //ResxLocalizationProvider.DefaultDictionaryProperty = "LocalizationStrings";
 
             LocalizeDictionary.Instance.SetCurrentThreadCulture = true;
-            LocalizeDictionary.Instance.SetCultureCommand.Execute("en");
+            LocalizeDictionary.Instance.SetCultureCommand.Execute(Constants.NeutralDefaultLanguageName);
 
             var bootstrapper = new Bootstrapper();
             var container = bootstrapper.ConfigureContainer();
@@ -117,35 +117,5 @@ namespace Shmap.UI
             var sourceSite = (e.Exception.TargetSite?.DeclaringType?.FullName ?? string.Empty);
             return e.Exception.Source == "PresentationFramework" && sourceSite == "System.Windows.Automation.Peers.DataGridItemAutomationPeer";
         }
-
-        //public static IEnumerable<CultureInfo> GetAvailableCultures()
-        //{
-        //    var availableCultures = new List<CultureInfo>();
-        //    var rm = new ResourceManager(typeof(LocalizationStrings));
-        //    foreach (var culture in CultureInfo.GetCultures(CultureTypes.AllCultures))
-        //    {
-        //        try
-        //        {
-        //            //do not use "==", won't work
-        //            if (culture.Equals(CultureInfo.InvariantCulture)) continue; 
-
-        //            var rs = rm.GetResourceSet(culture, true, false);
-        //            if (rs != null) availableCultures.Add(culture);
-        //        }
-        //        catch (CultureNotFoundException)
-        //        {
-        //            Debug.Print("No matching culture is found");
-        //        }
-        //    }
-        //    return availableCultures;
-        //}
-
-        //private void Button_Click_1(object sender, RoutedEventArgs e)
-        //{
-        //    var langs = GetAvailableCultures();
-
-        //    LocalizeDictionary.Instance.Culture = new CultureInfo(langs.ElementAt(new Random().Next(langs.Count())).Name);
-        //}
-
     }
 }

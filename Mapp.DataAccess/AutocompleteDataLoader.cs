@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using Shmap.CommonServices;
+using Shmap.Common;
 
 namespace Shmap.DataAccess
 {

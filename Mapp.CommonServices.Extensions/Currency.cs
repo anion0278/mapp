@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
-namespace Shmap.CommonServices
+namespace Shmap.Common
 {
     [DebuggerDisplay("{AmountForeign} {ForeignCurrencyName}")]
     public class Currency

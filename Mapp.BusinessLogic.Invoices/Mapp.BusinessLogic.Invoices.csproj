@@ -19,7 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Shmap.BusinessLogic.Currency\Shmap.BusinessLogic.Currency.csproj" />
-    <ProjectReference Include="..\Shmap.CommonServices.Extensions\Shmap.CommonServices.csproj" />
+    <ProjectReference Include="..\Shmap.CommonServices.Extensions\Shmap.Common.csproj" />
     <ProjectReference Include="..\Shmap.DataAccess\Shmap.DataAccess.csproj" />
   </ItemGroup>
 
