@@ -10,7 +10,6 @@ using System.Windows.Data;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
 using Mapp.BusinessLogic.Invoices;
-using Mapp.BusinessLogic.Transactions;
 using Mapp.Common;
 using Mapp.DataAccess;
 using Mapp.Infrastructure;

@@ -18,9 +18,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Mapp.BusinessLogic.Currency\Mapp.BusinessLogic.Currency.csproj" />
     <ProjectReference Include="..\Mapp.CommonServices.Extensions\Mapp.Common.csproj" />
     <ProjectReference Include="..\Mapp.DataAccess\Mapp.DataAccess.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="AutoComplete\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="12.0.1" />
   </ItemGroup>
 
 </Project>
