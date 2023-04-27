@@ -51,7 +51,7 @@ namespace Shmap.BusinessLogic.Transactions
 
             var configDtos = _jsonManager.LoadTransactionsConfigs();
 
-            var configs = configDtos.Select(dto =>
+            var configs = configDtos.Select<MarketPlaceTransactionsConfigDTO, MarketPlaceTransactionsConfig>(dto =>
                 mapper.Map<MarketPlaceTransactionsConfigDTO, MarketPlaceTransactionsConfig>(dto));
 
             var marketPlaceIds = configs.Select(s => s.MarketPlaceId).ToList();

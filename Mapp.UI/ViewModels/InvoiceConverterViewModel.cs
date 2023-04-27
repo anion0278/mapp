@@ -10,7 +10,6 @@ using System.Windows.Data;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
 using Shmap.BusinessLogic.Invoices;
-using Shmap.BusinessLogic.Transactions;
 using Shmap.Common;
 using Shmap.DataAccess;
 using Shmap.Infrastructure;
