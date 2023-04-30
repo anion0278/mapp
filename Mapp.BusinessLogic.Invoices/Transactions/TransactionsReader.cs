@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using AutoMapper;
-using Shmap.CommonServices;
+using Shmap.Common;
 using Shmap.DataAccess;
-using Shmap.Models;
+using Shmap.Models.Transactions;
 using Microsoft.VisualBasic.FileIO;
 
 namespace Shmap.BusinessLogic.Transactions
@@ -51,7 +51,7 @@ namespace Shmap.BusinessLogic.Transactions
 
             var configDtos = _jsonManager.LoadTransactionsConfigs();
 
-            var configs = configDtos.Select(dto =>
+            var configs = configDtos.Select<MarketPlaceTransactionsConfigDTO, MarketPlaceTransactionsConfig>(dto =>
                 mapper.Map<MarketPlaceTransactionsConfigDTO, MarketPlaceTransactionsConfig>(dto));
 
             var marketPlaceIds = configs.Select(s => s.MarketPlaceId).ToList();

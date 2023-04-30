@@ -10,10 +10,11 @@ using System.Windows.Data;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
 using Shmap.BusinessLogic.Invoices;
-using Shmap.BusinessLogic.Transactions;
-using Shmap.CommonServices;
+using Shmap.Common;
 using Shmap.DataAccess;
-using Shmap.Models;
+using Shmap.Infrastructure;
+using Shmap.UI.Localization;
+using Shmap.UI.Settings;
 using Microsoft.Win32;
 using Moq;
 
@@ -21,7 +22,7 @@ namespace Shmap.UI.ViewModels;
 public class InvoiceConverterViewModel : TabViewModelBase, IInvoiceConverterViewModel
 {
     private readonly IInvoiceConverter _invoiceConverter;
-    private readonly IConfigProvider _configProvider;
+    private readonly ISettingsWrapper _settingsWrapper;
     private readonly IFileOperationService _fileOperationService;
     private readonly IAutocompleteData _autocompleteData;
     private readonly IDialogService _dialogService;
@@ -46,11 +47,10 @@ public class InvoiceConverterViewModel : TabViewModelBase, IInvoiceConverterView
         get => _existingInvoiceNumber;
         set
         {
-            if (value.HasValue)
-            {
-                _configProvider.ExistingInvoiceNumber = value.Value * 2; // TODO join methods, since names are same
-                _existingInvoiceNumber = value.Value;
-            }
+            if (!value.HasValue) return;
+
+            _settingsWrapper.ExistingInvoiceNumber = value.Value * 2; // TODO join methods, since names are same
+            _existingInvoiceNumber = value.Value;
         }
     }
 
@@ -62,26 +62,20 @@ public class InvoiceConverterViewModel : TabViewModelBase, IInvoiceConverterView
         {
             value = value.ToLower();
             _defaultEmail = value;
-            _configProvider.DefaultEmail = value; // TODO when value is not valid (according to the rules), it still saves data to config. Solve for all props
+            _settingsWrapper.DefaultEmail = value; // TODO when value is not valid (according to the rules), it still saves data to config. Solve for all props
         }
     }
 
     public string TrackingCode
     {
-        get => _configProvider.TrackingCode;
-        set
-        {
-            _configProvider.TrackingCode = value;
-        }
+        get => _settingsWrapper.TrackingCode;
+        set => _settingsWrapper.TrackingCode = value;
     }
 
     public bool OpenTargetFolderAfterConversion
     {
-        get => _configProvider?.OpenTargetFolderAfterConversion ?? false; // TODO null conditional should not be used
-        set
-        {
-            _configProvider.OpenTargetFolderAfterConversion = value; // TODO move all config stuff to export part
-        }
+        get => _settingsWrapper?.OpenTargetFolderAfterConversion ?? false; // TODO null conditional should not be used
+        set => _settingsWrapper.OpenTargetFolderAfterConversion = value; // TODO move all config stuff to export part
     }
 
     //[Obsolete("Design-time only!")]
@@ -128,15 +122,15 @@ public class InvoiceConverterViewModel : TabViewModelBase, IInvoiceConverterView
     //}
 
     public InvoiceConverterViewModel(
-        IConfigProvider configProvider,
+        ISettingsWrapper settingsWrapper,
         IInvoiceConverter invoiceConverter,
         IFileOperationService fileOperationService,
         IAutocompleteData autocompleteData,
         IDialogService dialogService,
-        IBrowserService browserService) : base("Invoice Converter")
+        IBrowserService browserService) : base(LocalizationStrings.InvoiceConverterTabTitle.GetLocalized())
     {
         _invoiceConverter = invoiceConverter;
-        _configProvider = configProvider;
+        _settingsWrapper = settingsWrapper;
         _fileOperationService = fileOperationService;
         _autocompleteData = autocompleteData;
         _dialogService = dialogService;
@@ -147,8 +141,8 @@ public class InvoiceConverterViewModel : TabViewModelBase, IInvoiceConverterView
 
         InvoiceItemsCollectionView = InitializeCollectionView();
 
-        _existingInvoiceNumber = _configProvider.ExistingInvoiceNumber;
-        _defaultEmail = _configProvider.DefaultEmail;
+        _existingInvoiceNumber = _settingsWrapper.ExistingInvoiceNumber;
+        _defaultEmail = _settingsWrapper.DefaultEmail;
 
         ValidateAllProperties(); // TODO should not be needed
     }
@@ -158,13 +152,6 @@ public class InvoiceConverterViewModel : TabViewModelBase, IInvoiceConverterView
         var collectionView = GetNewCollectionViewInstance(InvoiceItems);
         collectionView.GroupDescriptions.Add(new PropertyGroupDescription(nameof(InvoiceItemViewModel.AmazonNumber)));
         return collectionView;
-    }
-
-    private bool ExportConvertedAmazonInvoicesCanExecute()
-    {
-        return !HasErrors && InvoiceItems.Any() && Invoices.Any()
-               && InvoiceItems.All(i => !i.HasErrors)
-               && Invoices.All(i => !i.HasErrors);
     }
 
     private void SelectAmazonInvoices()
@@ -194,6 +181,13 @@ public class InvoiceConverterViewModel : TabViewModelBase, IInvoiceConverterView
         }
     }
 
+    private bool ExportConvertedAmazonInvoicesCanExecute()
+    {
+        return !HasErrors && InvoiceItems.Any() && Invoices.Any()
+               && InvoiceItems.All(i => !i.HasErrors)
+               && Invoices.All(i => !i.HasErrors);
+    }
+
     private void ExportConvertedAmazonInvoices()
     {
         string fileName = _fileOperationService.SaveConvertedAmazonInvoices();
@@ -206,16 +200,21 @@ public class InvoiceConverterViewModel : TabViewModelBase, IInvoiceConverterView
 
         if (!invoices.Any())
         {
-            _dialogService.ShowMessage("Zadne faktury nebyly konvertovany!"); // TODO solve using OperationResult
+            _dialogService.ShowMessage(LocalizationStrings.InvoiceNotConvertedMsg.GetLocalized()); // TODO solve using OperationResult
             return;
         }
 
         _invoiceConverter.ProcessInvoices(invoices, fileName);
         ExistingInvoiceNumber += (uint)invoices.Count;
 
-        if (_configProvider.OpenTargetFolderAfterConversion)
+        if (_settingsWrapper.OpenTargetFolderAfterConversion)
         {
             _fileOperationService.OpenFileFolder(fileName);
         }
     }
+}
+
+public interface IInvoiceConverterViewModel
+{
+    
 }

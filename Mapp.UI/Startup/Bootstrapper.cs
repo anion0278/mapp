@@ -3,17 +3,19 @@ using System.Text;
 using System.Threading;
 using Autofac;
 using Shmap.ApplicationUpdater;
-using Shmap.BusinessLogic.AutocompletionHelper;
+using Shmap.BusinessLogic.AutoComplete;
 using Shmap.BusinessLogic.Currency;
 using Shmap.BusinessLogic.Invoices;
 using Shmap.BusinessLogic.Transactions;
-using Shmap.CommonServices;
-using Shmap.CommonServices.Logging;
+using Shmap.Common;
+using Shmap.Common.Logging;
 using Shmap.DataAccess;
-using Shmap.Models;
+using Shmap.Infrastructure;
+using Shmap.Infrastructure.Input;
 using Shmap.UI.Exception;
 using Shmap.UI.ViewModels;
 using Shmap.UI.Extensions;
+using Shmap.UI.Settings;
 using Shmap.UI.Views;
 
 namespace Shmap.UI.Startup;
@@ -40,6 +42,9 @@ public class Bootstrapper
         builder.RegisterAsInterfaceSingleton<Logger>();
         builder.RegisterAsInterfaceSingleton<AutocompleteData>();
         builder.RegisterAsInterfaceSingleton<BrowserService>();
+        builder.RegisterAsInterfaceSingleton<AutocompleteConfiguration>();
+        builder.RegisterAsInterfaceSingleton<KeyboardHook>();
+        builder.RegisterAsInterfaceSingleton<InputSimulator>();
 
         builder.RegisterAsInterfaceSingleton<MainViewModel>();
         builder.RegisterAsInterfaceSingleton<InvoiceConverterViewModel>();
@@ -48,7 +53,7 @@ public class Bootstrapper
 
         builder.RegisterAsInterface<ManualChangeWindowViewModel>();
 
-        builder.RegisterInstance(new ConfigProvider(AppSettings.Default, true)).As<IConfigProvider>();
+        builder.RegisterInstance(new SettingsWrapper(Settings.AppSettings.Default, true)).As<ISettingsWrapper>();
         builder.RegisterType<MainWindow>();
 
         return builder.Build();

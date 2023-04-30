@@ -1,4 +1,4 @@
-﻿namespace Shmap.CommonServices
+﻿namespace Shmap.Common
 {
     public interface IDialogService
     {

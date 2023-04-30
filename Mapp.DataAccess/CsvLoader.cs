@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
-using Shmap.CommonServices;
+using Shmap.Common;
 using Microsoft.VisualBasic.FileIO;
 
 namespace Shmap.DataAccess
@@ -16,11 +16,11 @@ namespace Shmap.DataAccess
 
     public class CsvLoader : ICsvLoader // TODO use CSVHelper nuget !!!
     { 
-        private readonly IConfigProvider _configProvider;
+        private readonly ISettingsWrapper _settingsWrapper;
 
-        public CsvLoader(IConfigProvider configProvider)
+        public CsvLoader(ISettingsWrapper settingsWrapper)
         {
-            _configProvider = configProvider;
+            _settingsWrapper = settingsWrapper;
         }
 
         public Dictionary<string, decimal> LoadFixedCurrencyRates()
@@ -28,7 +28,7 @@ namespace Shmap.DataAccess
             string fileContent;
             try
             {
-                fileContent = File.ReadAllText(Path.Join(_configProvider.InvoiceConverterConfigsDir, "fixed_currency_rates.csv")); // TODO PathsProvider!!
+                fileContent = File.ReadAllText(Path.Join(_settingsWrapper.InvoiceConverterConfigsDir, "fixed_currency_rates.csv")); // TODO PathsProvider!!
             }
             catch (Exception ex)
             {
@@ -43,7 +43,7 @@ namespace Shmap.DataAccess
             string fileContent;
             try
             {
-                fileContent = File.ReadAllText(Path.Join(_configProvider.InvoiceConverterConfigsDir, "vat_by_country.csv"));
+                fileContent = File.ReadAllText(Path.Join(_settingsWrapper.InvoiceConverterConfigsDir, "vat_by_country.csv"));
             }
             catch (Exception ex)
             {

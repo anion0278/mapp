@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Reflection;
 using AutoUpdaterDotNET;
-using Shmap.CommonServices;
+using Shmap.Common;
 using Shmap.DataAccess;
 
 namespace Shmap.ApplicationUpdater

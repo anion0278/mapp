@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using Shmap.CommonServices;
+using Shmap.Common;
 using Shmap.DataAccess;
 
 namespace Shmap.UI.ViewModels

@@ -1,18 +1,23 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
+using System.Linq;
+using System.Resources;
 using System.Text;
 using System.Threading;
 using System.Windows;
 using System.Windows.Threading;
 using Autofac;
 using Shmap.ApplicationUpdater;
-using Shmap.BusinessLogic.AutocompletionHelper;
+using Shmap.BusinessLogic.AutoComplete;
 using Shmap.DataAccess;
 using Shmap.UI.Exception;
+using Shmap.UI.Localization;
 using Shmap.UI.Startup;
 using Shmap.UI.Views;
 using NLog;
+using WPFLocalizeExtension.Engine;
 
 namespace Shmap.UI
 {
@@ -40,19 +45,24 @@ namespace Shmap.UI
     }
 
 
-    public partial class App : Application
+    public partial class App : System.Windows.Application
     {
         private IGlobalExceptionHandler _exceptionHandler = null!;
 
         private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private IApplicationUpdater _appUpdater;
-        private IAutocompleteData _autocompleteData;
         private IAutoKeyboardInputHelper _keyboardInputHelper;
 
         // TODO project-wide System.OverflowException check !!!
 
         protected void Application_Startup(object sender, StartupEventArgs e)
         {
+            //ResxLocalizationProvider.SetDefaultAssembly("Shmap.UI"); // TODO use https://stackoverflow.com/questions/32612045/is-there-any-way-to-assign-default-values-globally-for-a-localization-extension
+            //ResxLocalizationProvider.DefaultDictionaryProperty = "LocalizationStrings";
+
+            LocalizeDictionary.Instance.SetCurrentThreadCulture = true;
+            LocalizeDictionary.Instance.SetCultureCommand.Execute(Constants.NeutralDefaultLanguageName);
+
             var bootstrapper = new Bootstrapper();
             var container = bootstrapper.ConfigureContainer();
 
@@ -67,6 +77,7 @@ namespace Shmap.UI
 
             var mainWindow = container.Resolve<MainWindow>();
             mainWindow.Show();
+
 #if !DEBUG
             //https://github.com/dotnet/winforms/blob/72c140e531729b58737bb7b84212ff96767a151d/src/System.Windows.Forms/src/System/Windows/Forms/Application.cs#L952
             //AppCenter.Start("9549dd3a-1371-4a23-b973-f5e80154119d", typeof(Analytics), typeof(Crashes)); // TODO should solve secrt storing somehow :(
@@ -106,6 +117,5 @@ namespace Shmap.UI
             var sourceSite = (e.Exception.TargetSite?.DeclaringType?.FullName ?? string.Empty);
             return e.Exception.Source == "PresentationFramework" && sourceSite == "System.Windows.Automation.Peers.DataGridItemAutomationPeer";
         }
-
     }
 }

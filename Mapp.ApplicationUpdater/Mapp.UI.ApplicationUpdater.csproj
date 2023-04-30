@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
     <DebugType>none</DebugType>
     <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>
@@ -18,8 +19,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Shmap.BusinessLogic.Currency\Shmap.BusinessLogic.Currency.csproj" />
-    <ProjectReference Include="..\Shmap.CommonServices.Extensions\Shmap.CommonServices.csproj" />
+    <PackageReference Include="Autoupdater.NET.Official" Version="1.7.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Shmap.CommonServices.Extensions\Shmap.Common.csproj" />
     <ProjectReference Include="..\Shmap.DataAccess\Shmap.DataAccess.csproj" />
   </ItemGroup>
 

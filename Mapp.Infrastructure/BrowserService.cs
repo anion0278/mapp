@@ -1,8 +1,6 @@
 ﻿using System.Diagnostics;
-using System;
 
-
-namespace Shmap.UI;
+namespace Shmap.Infrastructure;
 
 public interface IBrowserService
 {

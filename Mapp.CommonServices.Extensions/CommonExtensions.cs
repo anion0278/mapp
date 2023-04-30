@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 
-namespace Shmap.CommonServices
+namespace Shmap.Common
 {
     public static class CommonExtensions
     {

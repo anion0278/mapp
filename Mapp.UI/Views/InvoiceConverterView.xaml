@@ -4,12 +4,13 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Shmap.UI.Views"
-             xmlns:mapp="clr-namespace:Mapp"
-             xmlns:common="clr-namespace:Shmap.CommonServices;assembly=Shmap.CommonServices"
              xmlns:converters="clr-namespace:Shmap.UI.Views.Converters"
              xmlns:controls="clr-namespace:Shmap.UI.Views.Controls"
+             xmlns:lex="http://wpflocalizeextension.codeplex.com"
+             xmlns:common1="clr-namespace:Shmap.Common;assembly=Shmap.Common"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+
     <UserControl.Resources>
         <Style TargetType="{x:Type DataGridColumnHeader}">
             <Setter Property="HorizontalAlignment" Value="Stretch"/>
@@ -70,7 +71,7 @@
             <Setter Property="IsTabStop" Value="False"></Setter>
             <Setter Property="Focusable" Value="False"></Setter>
             <Style.Triggers>
-                <DataTrigger Binding="{Binding Path=ItemType}" Value="{x:Static common:InvoiceItemType.Shipping}">
+                <DataTrigger Binding="{Binding Path=ItemType}" Value="{x:Static common1:InvoiceItemType.Shipping}">
                     <Setter Property="IsTabStop" Value="True"></Setter>
                     <Setter Property="Focusable" Value="True"></Setter>
                 </DataTrigger>
@@ -84,7 +85,7 @@
             <Setter Property="IsTabStop" Value="False"></Setter>
             <Setter Property="Focusable" Value="False"></Setter>
             <Style.Triggers>
-                <DataTrigger Binding="{Binding Path=ItemType}" Value="{x:Static common:InvoiceItemType.Product}">
+                <DataTrigger Binding="{Binding Path=ItemType}" Value="{x:Static common1:InvoiceItemType.Product}">
                     <Setter Property="IsTabStop" Value="True"></Setter>
                     <Setter Property="Focusable" Value="True"></Setter>
                 </DataTrigger>
@@ -141,28 +142,28 @@
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="0" Margin="10">
-            <Button Content="Zvolit fakturu"  
+            <Button Content="{lex:Loc ChooseInvoices}"  
                             Command="{Binding SelectAmazonInvoicesCommand}"/>
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                 <StackPanel>
-                    <Label Content="Prechozi № v Pohode:" />
+                    <Label Content="{lex:Loc PreviousInvoiceNumberInPohoda}" />
                     <controls:NumericTextBox MaxLength="9" Style="{StaticResource InputBoxStyle}"
                                               Text="{controls:NullableBinding ExistingInvoiceNumber}" />
                 </StackPanel>
 
                 <StackPanel>
-                    <Label Content="Vychozi email:" />
+                    <Label Content="{lex:Loc DefaultEmail}" />
                     <controls:EmailTextBox MaxLength="30" Style="{StaticResource InputBoxStyle}"
                                             Text="{controls:ValidatableBinding DefaultEmail}" />
                 </StackPanel>
             </StackPanel>
 
 
-            <CheckBox Content="Otevrit slozku po konvertaci" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10"
+            <CheckBox Content="{lex:Loc OpenFolderAfterOperationFinished}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10"
                               IsChecked="{Binding OpenTargetFolderAfterConversion}"/>
 
-            <Button Content="Konvertovat..." Command="{Binding ExportConvertedAmazonInvoicesCommand}"/>
+            <Button Content="{lex:Loc BeginConversion}" Command="{Binding ExportConvertedAmazonInvoicesCommand}"/>
         </StackPanel>
 
         <controls:UnblockingDataGrid Grid.Row="1" Margin="5" AutoGenerateColumns="false" CanUserAddRows="false" CanUserDeleteRows="False"
@@ -198,7 +199,7 @@
                                                 <StackPanel Orientation="Horizontal">
                                                     <TextBlock FontSize="11" FontStyle="Italic" Foreground="White">
                                                         <TextBlock.Text>
-                                                            <MultiBinding StringFormat="Groupovano dle: {0}, pocet zaznamu: {1}">
+                                                            <MultiBinding StringFormat="{lex:Loc GroupSummaryTitle}">
                                                                 <Binding Path="Name" />
                                                                 <Binding Path="ItemCount" />
                                                             </MultiBinding>
@@ -224,35 +225,35 @@
             </DataGrid.GroupStyle>
 
             <DataGrid.Columns>
-                <controls:HyperlinkCommandColumn Header="Cislo (Amazon)" MinWidth="150" Width="100" IsReadOnly="true" 
+                <controls:HyperlinkCommandColumn Header="{lex:Loc AmazonSku}" MinWidth="150" Width="100" IsReadOnly="true" 
                                                    ElementStyle="{StaticResource CellBlockStyle}"
                                                    EditingElementStyle="{StaticResource CellBoxEditingStyle}"
                                                    Command="{Binding GoToInvoicePageCommand}"
                                                    Binding="{Binding AmazonNumber}"  />
 
-                <DataGridTextColumn Header="Puvod" MinWidth="100" Width="100" IsReadOnly="true" 
+                <DataGridTextColumn Header="{lex:Loc InvoiceOrigin}" MinWidth="100" Width="100" IsReadOnly="true" 
                                             ElementStyle="{StaticResource CellBlockStyle}"
                                             EditingElementStyle="{StaticResource CellBoxEditingStyle}"
                                             Binding="{Binding SalesChannel}"/>
 
-                <DataGridTextColumn Header="Nazev produktu (Amazon)" Width="*" 
+                <DataGridTextColumn Header="{lex:Loc AmazonProductName}" Width="*" 
                                             CellStyle="{StaticResource ProductNameToggleableReadonlyCellStyle}"
                                             ElementStyle="{StaticResource CellBlockStyle}"
                                             EditingElementStyle="{StaticResource CellBoxEditingStyle}"
                                             Binding="{Binding AmazonProductName}" />
 
-                <DataGridTextColumn Header="SKU (Amazon)" IsReadOnly="True" MinWidth="100" Width="150" 
+                <DataGridTextColumn Header="{lex:Loc AmazonNumber}" IsReadOnly="True" MinWidth="100" Width="150" 
                                             ElementStyle="{StaticResource CellBlockStyle}"
                                             EditingElementStyle="{StaticResource CellBoxEditingStyle}"
                                             Binding="{Binding AmazonSku}" />
 
-                <DataGridTextColumn Header="Kod zbozi" Width="150" 
+                <DataGridTextColumn Header="{lex:Loc ProductCode}" Width="150" 
                                             CellStyle="{StaticResource ProductCodeToggleableReadonlyCellStyle}"
                                             ElementStyle="{StaticResource CellBlockStyle}"
                                             EditingElementStyle="{StaticResource CellBoxEditingStyle}"
                                             Binding="{controls:ValidatableBinding Path=WarehouseProductCode, Mode=TwoWay}" />
 
-                <controls:DataGridNumberColumn MaxInputLength="3" IsInteger="True" Header="Mnozstvi v packu" Width="150" 
+                <controls:DataGridNumberColumn MaxInputLength="3" IsInteger="True" Header="{lex:Loc PackQuantity}" Width="150" 
                                                     CellStyle="{StaticResource ProductCodeToggleableReadonlyCellStyle}"
                                                     ElementStyle="{StaticResource CellBlockStyle}"
                                                     EditingElementStyle="{StaticResource CellBoxEditingStyle}"
@@ -266,40 +267,39 @@
                                      RowValidationErrorTemplate="{StaticResource ErrorTemplate}" 
                                      ItemsSource="{Binding Invoices}" >
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Cislo (Amazon)" Width="150" IsReadOnly="true"
+                <DataGridTextColumn Header="{lex:Loc AmazonNumber}" Width="150" IsReadOnly="true"
                                             ElementStyle="{StaticResource CellBlockStyle}"
                                             EditingElementStyle="{StaticResource CellBoxEditingStyle}"
                                             Binding="{Binding AmazonNumber}"/>
 
-                <DataGridTextColumn Header="Puvod" Width="100" IsReadOnly="true"
+                <DataGridTextColumn Header="{lex:Loc InvoiceOrigin}" Width="100" IsReadOnly="true"
                                             ElementStyle="{StaticResource CellBlockStyle}"
                                             EditingElementStyle="{StaticResource CellBoxEditingStyle}"
                                             Binding="{Binding SalesChannel}"/>
 
-                <DataGridTextColumn Header="Produkty" Width="2*" IsReadOnly="true" 
+                <DataGridTextColumn Header="{lex:Loc InvoiceItems}" Width="2*" IsReadOnly="true" 
                                             ElementStyle="{StaticResource CellBlockStyle}"
                                             EditingElementStyle="{StaticResource CellBoxEditingStyle}"
                                             Binding="{Binding InvoiceProductNames, Converter={StaticResource ProductsConverter}}"/>
 
-                <DataGridTextColumn Header="SKU kody" Width="120" IsReadOnly="true" 
+                <DataGridTextColumn Header="{lex:Loc ItemsSkuCodes}" Width="120" IsReadOnly="true" 
                                             ElementStyle="{StaticResource CellBlockStyle}"
                                             EditingElementStyle="{StaticResource CellBoxEditingStyle}"
                                             Binding="{Binding AmazonSkuCodes, Converter={StaticResource ProductsToSkuConverter}}"/>
 
-
-                <DataGridTextColumn Header="Kod ze skladu" Width="120" 
+                <DataGridTextColumn Header="{lex:Loc WarehouseCode}" Width="120" 
                                             CellStyle="{StaticResource InputCellStyle}"
                                             ElementStyle="{StaticResource CellBlockStyle}"
                                             EditingElementStyle="{StaticResource CellBoxEditingStyle}"
                                             Binding="{controls:ValidatableBinding Path=RelatedWarehouseSection, Mode=TwoWay}" />
 
-                <DataGridTextColumn Header="Celni prohlaseni" Width="*" 
+                <DataGridTextColumn Header="{lex:Loc CustomsDeclaration}" Width="*" 
                                             CellStyle="{StaticResource InputCellStyle}"
                                             ElementStyle="{StaticResource CellBlockStyle}"
                                             EditingElementStyle="{StaticResource CellBoxEditingStyle}"
                                             Binding="{controls:ValidatableBinding CustomsDeclaration}" />
 
-                <DataGridTextColumn Header="Typ VAT" Width="80"  IsReadOnly="True"
+                <DataGridTextColumn Header="{lex:Loc VatType}" Width="80"  IsReadOnly="True"
                                             ElementStyle="{StaticResource CellBlockStyle}"
                                             EditingElementStyle="{StaticResource CellBoxEditingStyle}"
                                             Binding="{Binding VatType}"/>

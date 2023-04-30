@@ -22,7 +22,7 @@ namespace Shmap.UI.ViewModels
 
         public int MaxLength { get; set; } // TODO does not need to be a prop
 
-        public string OriginalText { get; set; } // FIXME does not work!
+        public string OriginalText { get; set; } // TODO FIXME does not work!
 
         public string EditedText { get; set; }
 

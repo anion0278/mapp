@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace Shmap.CommonServices
+namespace Shmap.Common
 {
     public abstract class InvoiceItemBase
     {

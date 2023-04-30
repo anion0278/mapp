@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 
-namespace Shmap.CommonServices
+namespace Shmap.Common
 {
     public enum InvoiceVatClassification
     {

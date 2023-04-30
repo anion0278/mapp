@@ -7,7 +7,7 @@
     <ApplicationIcon>Assets\icon.ico</ApplicationIcon>
     <Deterministic>false</Deterministic>
     <PackageId>Mapp</PackageId>
-    <AssemblyName>Mapp</AssemblyName>
+    <AssemblyName>Shmap.UI</AssemblyName>
     <NeutralLanguage>en</NeutralLanguage>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
@@ -50,7 +50,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.AppCenter.Analytics" Version="4.5.0" />
+    <PackageReference Include="Microsoft.AppCenter.Analytics" Version="5.0.1" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
     <PackageReference Include="Moq" Version="4.16.1" />
     <PackageReference Include="NLog" Version="4.7.11" />
@@ -62,14 +62,14 @@
       <IncludeAssets>compile</IncludeAssets>
     </PackageReference>
     <PackageReference Include="System.Xml.XmlSerializer" Version="4.3.0" />
+    <PackageReference Include="WPFLocalizeExtension" Version="3.10.0" />
   </ItemGroup>
 
 
   <ItemGroup>
-    <ProjectReference Include="..\Shmap.ApplicationUpdater\Shmap.ApplicationUpdater.csproj" />
-    <ProjectReference Include="..\Shmap.BusinessLogic.AutocompletionHelper\Shmap.BusinessLogic.AutocompletionHelper.csproj" />
-    <ProjectReference Include="..\Shmap.BusinessLogic.Invoices\Shmap.BusinessLogic.Invoices.csproj" />
-    <ProjectReference Include="..\Shmap.BusinessLogic.Transactions\Shmap.BusinessLogic.Transactions.csproj" />
+    <ProjectReference Include="..\Shmap.ApplicationUpdater\Shmap.UI.ApplicationUpdater.csproj" />
+    <ProjectReference Include="..\Shmap.BusinessLogic.Invoices\Shmap.Application.csproj" />
+    <ProjectReference Include="..\Shmap.Infrastructure\Shmap.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -85,7 +85,12 @@
 
 
   <ItemGroup>
-    <Compile Update="AppSettings.Designer.cs">
+    <Compile Update="Localization\LocalizationStrings.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>LocalizationStrings.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Settings\AppSettings.Designer.cs">
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <AutoGen>True</AutoGen>
       <DependentUpon>AppSettings.settings</DependentUpon>
@@ -162,7 +167,7 @@
     <None Update="ProductCodeByAmazonName.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="AppSettings.settings">
+    <None Update="Settings\AppSettings.settings">
       <Generator>PublicSettingsSingleFileGenerator</Generator>
       <LastGenOutput>AppSettings.Designer.cs</LastGenOutput>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
@@ -219,6 +224,14 @@
 
   <ItemGroup>
     <Folder Include="Exception\" />
+    <Folder Include="Views\AttachedBehaviours\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Localization\LocalizationStrings.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>LocalizationStrings.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Shmap.CommonServices
+namespace Shmap.Common
 {
     public static class Require
     {

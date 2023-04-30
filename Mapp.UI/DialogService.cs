@@ -1,5 +1,5 @@
 ﻿using System.Windows;
-using Shmap.CommonServices;
+using Shmap.Common;
 using Shmap.UI.ViewModels;
 using Shmap.UI.Views;
 
@@ -17,7 +17,7 @@ namespace Shmap.UI
             message += $"\nUpravit manualne (Yes), nebo orezat dle maximalni delky {maxLength} (No)?";
             while (textToChange.Length > maxLength) 
             {
-                var result = MessageBox.Show(Application.Current.MainWindow, message, "Upozorneni", MessageBoxButton.YesNo);  
+                var result = MessageBox.Show(System.Windows.Application.Current.MainWindow, message, "Upozorneni", MessageBoxButton.YesNo);  
                 // TODO how to set owner center for MessageBox? maybe best way is to create own MB?
 
                 if (result == MessageBoxResult.Yes)

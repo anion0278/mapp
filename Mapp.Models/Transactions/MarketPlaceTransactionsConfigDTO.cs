@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Shmap.Models
+namespace Shmap.Models.Transactions
 {
     public class MarketPlaceTransactionsConfigDTO
     {

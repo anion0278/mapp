@@ -1,6 +1,6 @@
 ﻿using System.Configuration;
 
-namespace Shmap.UI
+namespace Shmap.UI.Settings
 {
     public sealed partial class AppSettings
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Shmap.CommonServices;
+using Shmap.Common;
 
 namespace Shmap.BusinessLogic.Transactions
 {

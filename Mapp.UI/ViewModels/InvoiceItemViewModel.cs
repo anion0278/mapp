@@ -4,9 +4,11 @@ using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Linq;
 using CommunityToolkit.Mvvm.Input;
-using Shmap.CommonServices;
-using Shmap.CommonServices.Validation;
+using Shmap.Common;
+using Shmap.Common.Validation;
 using Shmap.DataAccess;
+using Shmap.Infrastructure;
+using Shmap.UI.Localization;
 
 namespace Shmap.UI.ViewModels
 {
@@ -103,7 +105,7 @@ namespace Shmap.UI.ViewModels
                 return ValidationResult.Success;
             }
 
-            return new("Neni zadan kod produktu");
+            return new(LocalizationStrings.ProductCodeIsNotSetValidationMsg.GetLocalized());
         }
 
         private void GoToInvoicePage() // TODO into separate provider + tests
@@ -125,6 +127,7 @@ namespace Shmap.UI.ViewModels
 
         public InvoiceItemBase ExportModel()
         {
+            // TODO remove - this should not be needed, since this assinging should be part of the setters
             _model.Name = _amazonProductName;
             if (_model is InvoiceProduct product)
             {

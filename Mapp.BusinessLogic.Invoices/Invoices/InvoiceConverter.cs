@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Shmap.BusinessLogic.Currency;
-using Shmap.CommonServices;
+using Shmap.Common;
 using Shmap.DataAccess;
 
 namespace Shmap.BusinessLogic.Invoices
@@ -211,13 +211,13 @@ namespace Shmap.BusinessLogic.Invoices
         {
             invoiceItem.Name = name;
             invoiceItem.Quantity = quantity;
-            invoiceItem.TotalPriceWithTax = new CommonServices.Currency(
+            invoiceItem.TotalPriceWithTax = new Common.Currency(
                 priceIncludingTax, // There is no need to manually calculate tax (ReverseTaxValue) and subtract it since its value is available in amazon report
                                    // and recalculation logic is included into InvoiceBase Item
                 invoiceItem.ParentInvoice.TotalPrice.ForeignCurrencyName,
                 _rates);
 
-            invoiceItem.Tax = new CommonServices.Currency(
+            invoiceItem.Tax = new Common.Currency(
                 tax,
                 invoiceItem.ParentInvoice.TotalPrice.ForeignCurrencyName,
                 _rates);
