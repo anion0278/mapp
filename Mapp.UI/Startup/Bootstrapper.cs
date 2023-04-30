@@ -3,7 +3,7 @@ using System.Text;
 using System.Threading;
 using Autofac;
 using Mapp.ApplicationUpdater;
-using Mapp.BusinessLogic.AutocompletionHelper;
+using Mapp.BusinessLogic.AutoComplete;
 using Mapp.BusinessLogic.Currency;
 using Mapp.BusinessLogic.Invoices;
 using Mapp.BusinessLogic.Transactions;
@@ -11,7 +11,7 @@ using Mapp.Common;
 using Mapp.Common.Logging;
 using Mapp.DataAccess;
 using Mapp.Infrastructure;
-using Mapp.Models;
+using Mapp.Infrastructure.Input;
 using Mapp.UI.Exception;
 using Mapp.UI.ViewModels;
 using Mapp.UI.Extensions;
@@ -42,6 +42,9 @@ public class Bootstrapper
         builder.RegisterAsInterfaceSingleton<Logger>();
         builder.RegisterAsInterfaceSingleton<AutocompleteData>();
         builder.RegisterAsInterfaceSingleton<BrowserService>();
+        builder.RegisterAsInterfaceSingleton<AutocompleteConfiguration>();
+        builder.RegisterAsInterfaceSingleton<KeyboardHook>();
+        builder.RegisterAsInterfaceSingleton<InputSimulator>();
 
         builder.RegisterAsInterfaceSingleton<MainViewModel>();
         builder.RegisterAsInterfaceSingleton<InvoiceConverterViewModel>();

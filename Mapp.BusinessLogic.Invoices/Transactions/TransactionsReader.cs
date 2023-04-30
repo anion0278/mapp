@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 using AutoMapper;
 using Mapp.Common;
 using Mapp.DataAccess;
-using Mapp.Models;
+using Mapp.Models.Transactions;
 using Microsoft.VisualBasic.FileIO;
 
 namespace Mapp.BusinessLogic.Transactions

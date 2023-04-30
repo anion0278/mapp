@@ -3,16 +3,13 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Text.RegularExpressions;
-using System.Xml;
 using System.Threading.Tasks;
+using System.Xml;
 using Mapp.Common;
+using Mapp.DataAccess;
+using Mapp.Models.StockQuantity;
 
-namespace Mapp.DataAccess;
-
-public interface IStockQuantityUpdater
-{
-    Task<IEnumerable<StockData>> ConvertWarehouseData();
-}
+namespace Mapp.BusinessLogic.StockQuantity;
 
 public class StockQuantityUpdater : IStockQuantityUpdater
 {
@@ -109,19 +106,3 @@ public class StockQuantityUpdater : IStockQuantityUpdater
         return targetNodeName.Remove(0, targetNodeName.IndexOf(':') + 1);
     }
 }
-
-
-public record StockData(string Sku, int Quantity);
-
-public record ValueParsingOption(string ElementName, string SubstringPattern);
-
-//public record StockDataXmlSourceDefinition(string Url, string ItemNodeName, string SkuNodeName, string StockQuantityNodeName);e
-
-public record StockDataXmlSourceDefinition()
-{
-    public string Url { get; init; }
-    public string ItemNodeName { get; init; }
-    public IEnumerable<ValueParsingOption> SkuNodeParsingOptions { get; init; }
-    public IEnumerable<ValueParsingOption> StockQuantityNodeParsingOptions { get; init; }
-}
-

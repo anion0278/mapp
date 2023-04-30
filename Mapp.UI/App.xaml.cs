@@ -10,7 +10,7 @@ using System.Windows;
 using System.Windows.Threading;
 using Autofac;
 using Mapp.ApplicationUpdater;
-using Mapp.BusinessLogic.AutocompletionHelper;
+using Mapp.BusinessLogic.AutoComplete;
 using Mapp.DataAccess;
 using Mapp.UI.Exception;
 using Mapp.UI.Localization;
@@ -45,7 +45,7 @@ namespace Mapp.UI
     }
 
 
-    public partial class App : Application
+    public partial class App : System.Windows.Application
     {
         private IGlobalExceptionHandler _exceptionHandler = null!;
 

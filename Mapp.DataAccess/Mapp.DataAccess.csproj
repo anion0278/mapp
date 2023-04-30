@@ -28,4 +28,8 @@
     <ProjectReference Include="..\Mapp.Models\Mapp.Models.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Repositories\" />
+  </ItemGroup>
+
 </Project>

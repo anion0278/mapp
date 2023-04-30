@@ -13,7 +13,6 @@ using Mapp.BusinessLogic.Invoices;
 using Mapp.Common;
 using Mapp.DataAccess;
 using Mapp.Infrastructure;
-using Mapp.Models;
 using Mapp.UI.Localization;
 using Mapp.UI.Settings;
 using Microsoft.Win32;
@@ -213,4 +212,9 @@ public class InvoiceConverterViewModel : TabViewModelBase, IInvoiceConverterView
             _fileOperationService.OpenFileFolder(fileName);
         }
     }
+}
+
+public interface IInvoiceConverterViewModel
+{
+    
 }

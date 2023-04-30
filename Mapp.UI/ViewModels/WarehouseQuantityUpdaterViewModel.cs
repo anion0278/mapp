@@ -8,7 +8,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Mapp.BusinessLogic.StockQuantity;
 using Mapp.Common;
+using Mapp.Models.StockQuantity;
 using Mapp.UI.Localization;
 using Mapp.UI.Settings;
 

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Mapp.Models
+namespace Mapp.Models.Transactions
 {
     public class MarketPlaceTransactionsConfigDTO
     {
