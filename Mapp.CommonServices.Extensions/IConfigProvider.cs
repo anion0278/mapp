@@ -1,8 +1,8 @@
 ﻿using System.Drawing;
 
-namespace Mapp.CommonServices
+namespace Mapp.Common
 {
-    public interface IConfigProvider
+    public interface ISettingsWrapper // TODO move to UI.Settings
     {
         uint ExistingInvoiceNumber { get; set; }
         string DefaultEmail { get; set; }

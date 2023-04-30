@@ -1,7 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
-namespace Mapp.CommonServices.Validation;
+namespace Mapp.Common.Validation;
 
 public class GreaterThanAttribute<T>: ValidationAttribute where T:IComparable<T>
 {

@@ -24,10 +24,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Mapp.ApplicationUpdater\Mapp.ApplicationUpdater.csproj" />
-    <ProjectReference Include="..\Mapp.BusinessLogic.AutocompletionHelper\Mapp.BusinessLogic.AutocompletionHelper.csproj" />
-    <ProjectReference Include="..\Mapp.BusinessLogic.Invoices\Mapp.BusinessLogic.Invoices.csproj" />
-    <ProjectReference Include="..\Mapp.CommonServices.Extensions\Mapp.CommonServices.csproj" />
+    <ProjectReference Include="..\Mapp.ApplicationUpdater\Mapp.UI.ApplicationUpdater.csproj" />
+    <ProjectReference Include="..\Mapp.BusinessLogic.Invoices\Mapp.Application.csproj" />
+    <ProjectReference Include="..\Mapp.CommonServices.Extensions\Mapp.Common.csproj" />
     <ProjectReference Include="..\Mapp.DataAccess\Mapp.DataAccess.csproj" />
     <ProjectReference Include="..\Mapp.Models\Mapp.Models.csproj" />
   </ItemGroup>

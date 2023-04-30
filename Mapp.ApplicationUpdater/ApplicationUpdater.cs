@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Reflection;
 using AutoUpdaterDotNET;
-using Mapp.CommonServices;
+using Mapp.Common;
 using Mapp.DataAccess;
 
 namespace Mapp.ApplicationUpdater

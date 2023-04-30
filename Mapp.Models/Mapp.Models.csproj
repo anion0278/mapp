@@ -17,4 +17,8 @@
     <Compile Include="..\Mapp.UI\Properties\SharedAssemblyInfo.cs" Link="SharedAssemblyInfo.cs" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Invoices\" />
+  </ItemGroup>
+
 </Project>

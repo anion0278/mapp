@@ -3,7 +3,7 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using Mapp.BusinessLogic.Currency;
-using Mapp.CommonServices;
+using Mapp.Common;
 using Mapp.DataAccess;
 using Moq;
 using VerifyXunit;
@@ -72,7 +72,7 @@ namespace Mapp.BusinessLogic.Invoices.Tests
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); 
             string invoiceDir = "TestData\\TestSettings\\Invoice Converter";
 
-            var configMock = new Mock<IConfigProvider>();
+            var configMock = new Mock<ISettingsWrapper>();
             configMock.Setup(m => m.InvoiceConverterConfigsDir).Returns(invoiceDir);
 
             var dialogServiceMock = new Mock<IDialogService>();

@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
-using Mapp.CommonServices;
-using Mapp.CommonServices.Logging;
+using Mapp.Common;
+using Mapp.Common.Logging;
 
 namespace Mapp.UI.Exception;
 

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Mapp.CommonServices
+namespace Mapp.Common
 {
     public static class Require
     {

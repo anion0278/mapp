@@ -1,8 +1,6 @@
 ﻿using System.Diagnostics;
-using System;
 
-
-namespace Mapp.UI;
+namespace Mapp.Infrastructure;
 
 public interface IBrowserService
 {

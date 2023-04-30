@@ -1,6 +1,6 @@
 ﻿using System.Configuration;
 
-namespace Mapp.UI
+namespace Mapp.UI.Settings
 {
     public sealed partial class AppSettings
     {

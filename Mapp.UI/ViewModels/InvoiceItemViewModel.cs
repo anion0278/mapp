@@ -4,9 +4,11 @@ using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Linq;
 using CommunityToolkit.Mvvm.Input;
-using Mapp.CommonServices;
-using Mapp.CommonServices.Validation;
+using Mapp.Common;
+using Mapp.Common.Validation;
 using Mapp.DataAccess;
+using Mapp.Infrastructure;
+using Mapp.UI.Localization;
 
 namespace Mapp.UI.ViewModels
 {
@@ -103,7 +105,7 @@ namespace Mapp.UI.ViewModels
                 return ValidationResult.Success;
             }
 
-            return new("Neni zadan kod produktu");
+            return new(LocalizationStrings.ProductCodeIsNotSetValidationMsg.GetLocalized());
         }
 
         private void GoToInvoicePage() // TODO into separate provider + tests
@@ -125,6 +127,7 @@ namespace Mapp.UI.ViewModels
 
         public InvoiceItemBase ExportModel()
         {
+            // TODO remove - this should not be needed, since this assinging should be part of the setters
             _model.Name = _amazonProductName;
             if (_model is InvoiceProduct product)
             {

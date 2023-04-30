@@ -3,17 +3,19 @@ using System.Text;
 using System.Threading;
 using Autofac;
 using Mapp.ApplicationUpdater;
-using Mapp.BusinessLogic.AutocompletionHelper;
+using Mapp.BusinessLogic.AutoComplete;
 using Mapp.BusinessLogic.Currency;
 using Mapp.BusinessLogic.Invoices;
 using Mapp.BusinessLogic.Transactions;
-using Mapp.CommonServices;
-using Mapp.CommonServices.Logging;
+using Mapp.Common;
+using Mapp.Common.Logging;
 using Mapp.DataAccess;
-using Mapp.Models;
+using Mapp.Infrastructure;
+using Mapp.Infrastructure.Input;
 using Mapp.UI.Exception;
 using Mapp.UI.ViewModels;
 using Mapp.UI.Extensions;
+using Mapp.UI.Settings;
 using Mapp.UI.Views;
 
 namespace Mapp.UI.Startup;
@@ -40,6 +42,9 @@ public class Bootstrapper
         builder.RegisterAsInterfaceSingleton<Logger>();
         builder.RegisterAsInterfaceSingleton<AutocompleteData>();
         builder.RegisterAsInterfaceSingleton<BrowserService>();
+        builder.RegisterAsInterfaceSingleton<AutocompleteConfiguration>();
+        builder.RegisterAsInterfaceSingleton<KeyboardHook>();
+        builder.RegisterAsInterfaceSingleton<InputSimulator>();
 
         builder.RegisterAsInterfaceSingleton<MainViewModel>();
         builder.RegisterAsInterfaceSingleton<InvoiceConverterViewModel>();
@@ -48,7 +53,7 @@ public class Bootstrapper
 
         builder.RegisterAsInterface<ManualChangeWindowViewModel>();
 
-        builder.RegisterInstance(new ConfigProvider(AppSettings.Default, true)).As<IConfigProvider>();
+        builder.RegisterInstance(new SettingsWrapper(Settings.AppSettings.Default, true)).As<ISettingsWrapper>();
         builder.RegisterType<MainWindow>();
 
         return builder.Build();

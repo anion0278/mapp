@@ -5,7 +5,8 @@ using System.Linq;
 using System.Reflection;
 using System.Text.Json;
 using AutoUpdaterDotNET;
-using Mapp.Models;
+using Mapp.Models.StockQuantity;
+using Mapp.Models.Transactions;
 
 
 namespace Mapp.DataAccess
