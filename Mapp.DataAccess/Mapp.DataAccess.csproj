@@ -28,4 +28,8 @@
     <ProjectReference Include="..\Shmap.Models\Shmap.Models.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Repositories\" />
+  </ItemGroup>
+
 </Project>

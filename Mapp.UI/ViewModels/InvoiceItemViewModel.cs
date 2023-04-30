@@ -127,6 +127,7 @@ namespace Shmap.UI.ViewModels
 
         public InvoiceItemBase ExportModel()
         {
+            // TODO remove - this should not be needed, since this assinging should be part of the setters
             _model.Name = _amazonProductName;
             if (_model is InvoiceProduct product)
             {

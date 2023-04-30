@@ -10,7 +10,7 @@ using System.Windows;
 using System.Windows.Threading;
 using Autofac;
 using Shmap.ApplicationUpdater;
-using Shmap.BusinessLogic.AutocompletionHelper;
+using Shmap.BusinessLogic.AutoComplete;
 using Shmap.DataAccess;
 using Shmap.UI.Exception;
 using Shmap.UI.Localization;
@@ -45,7 +45,7 @@ namespace Shmap.UI
     }
 
 
-    public partial class App : Application
+    public partial class App : System.Windows.Application
     {
         private IGlobalExceptionHandler _exceptionHandler = null!;
 

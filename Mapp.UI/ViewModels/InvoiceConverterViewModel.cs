@@ -13,7 +13,6 @@ using Shmap.BusinessLogic.Invoices;
 using Shmap.Common;
 using Shmap.DataAccess;
 using Shmap.Infrastructure;
-using Shmap.Models;
 using Shmap.UI.Localization;
 using Shmap.UI.Settings;
 using Microsoft.Win32;
@@ -213,4 +212,9 @@ public class InvoiceConverterViewModel : TabViewModelBase, IInvoiceConverterView
             _fileOperationService.OpenFileFolder(fileName);
         }
     }
+}
+
+public interface IInvoiceConverterViewModel
+{
+    
 }

@@ -5,7 +5,8 @@ using System.Linq;
 using System.Reflection;
 using System.Text.Json;
 using AutoUpdaterDotNET;
-using Shmap.Models;
+using Shmap.Models.StockQuantity;
+using Shmap.Models.Transactions;
 
 
 namespace Shmap.DataAccess

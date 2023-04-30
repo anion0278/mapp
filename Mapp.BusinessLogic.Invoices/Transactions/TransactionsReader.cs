@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 using AutoMapper;
 using Shmap.Common;
 using Shmap.DataAccess;
-using Shmap.Models;
+using Shmap.Models.Transactions;
 using Microsoft.VisualBasic.FileIO;
 
 namespace Shmap.BusinessLogic.Transactions

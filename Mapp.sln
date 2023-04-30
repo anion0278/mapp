@@ -13,15 +13,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shmap.Common", "Shmap.Commo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shmap.Models", "Shmap.Models\Shmap.Models.csproj", "{08791058-4D98-4A44-9CF0-2219122D61BF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shmap.BusinessLogic.AutocompletionHelper", "Shmap.BusinessLogic.AutocompletionHelper\Shmap.BusinessLogic.AutocompletionHelper.csproj", "{2DF0B25B-A69A-455D-8B12-00D6D219C767}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shmap.ApplicationUpdater", "Shmap.ApplicationUpdater\Shmap.ApplicationUpdater.csproj", "{18FA859D-9F1D-49B2-9601-BEDB2CA3B6DD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shmap.UI.ApplicationUpdater", "Shmap.ApplicationUpdater\Shmap.UI.ApplicationUpdater.csproj", "{18FA859D-9F1D-49B2-9601-BEDB2CA3B6DD}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shmap.BusinessLogic.Invoices.Tests", "Shmap.BusinessLogic.Invoices.Tests\Shmap.BusinessLogic.Invoices.Tests.csproj", "{02854395-D914-42C3-95B6-8CC18F31C1A7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{D20AE460-B73F-46A2-B618-83F253B3199F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shmap.BusinessLogic", "Shmap.BusinessLogic.Invoices\Shmap.BusinessLogic.csproj", "{F009125B-DCB2-496B-83A9-A1FF1CE48D38}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shmap.Application", "Shmap.BusinessLogic.Invoices\Shmap.Application.csproj", "{F009125B-DCB2-496B-83A9-A1FF1CE48D38}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{86B12A01-1934-4F64-9EB2-AE8D2930D928}"
 	ProjectSection(SolutionItems) = preProject
@@ -61,10 +59,6 @@ Global
 		{08791058-4D98-4A44-9CF0-2219122D61BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{08791058-4D98-4A44-9CF0-2219122D61BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{08791058-4D98-4A44-9CF0-2219122D61BF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2DF0B25B-A69A-455D-8B12-00D6D219C767}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2DF0B25B-A69A-455D-8B12-00D6D219C767}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2DF0B25B-A69A-455D-8B12-00D6D219C767}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2DF0B25B-A69A-455D-8B12-00D6D219C767}.Release|Any CPU.Build.0 = Release|Any CPU
 		{18FA859D-9F1D-49B2-9601-BEDB2CA3B6DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{18FA859D-9F1D-49B2-9601-BEDB2CA3B6DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{18FA859D-9F1D-49B2-9601-BEDB2CA3B6DD}.Release|Any CPU.ActiveCfg = Release|Any CPU

@@ -8,7 +8,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Shmap.BusinessLogic.StockQuantity;
 using Shmap.Common;
+using Shmap.Models.StockQuantity;
 using Shmap.UI.Localization;
 using Shmap.UI.Settings;
 

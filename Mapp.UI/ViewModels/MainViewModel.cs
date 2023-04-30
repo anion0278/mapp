@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows;
-using Shmap.Models;
 using System.ComponentModel;
 using System.Windows.Data;
 using System;
