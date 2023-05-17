@@ -33,8 +33,15 @@ public class WindowFullStateToSettingsBehavior : Microsoft.Xaml.Behaviors.Behavi
         AssociatedObject.Width = _settingsWrapper.MainWindowSize.Width;
         AssociatedObject.Height = _settingsWrapper.MainWindowSize.Height;
 
-        AssociatedObject.Left = _settingsWrapper.MainWindowTopLeftCorner.X; // TODO add limits (0...Screen Size), because it may sometimes go out
-        AssociatedObject.Top = _settingsWrapper.MainWindowTopLeftCorner.Y;
+        if (_settingsWrapper.MainWindowTopLeftCorner.X < 0 || _settingsWrapper.MainWindowTopLeftCorner.Y < 0)
+        {
+            AssociatedObject.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+        }
+        else
+        {
+            AssociatedObject.Left =  _settingsWrapper.MainWindowTopLeftCorner.X;
+            AssociatedObject.Top = _settingsWrapper.MainWindowTopLeftCorner.Y;
+        }
 
         if (_settingsWrapper.IsMainWindowMaximized) AssociatedObject.WindowState = WindowState.Maximized;
     }
@@ -70,6 +77,8 @@ public class WindowFullStateToSettingsBehavior : Microsoft.Xaml.Behaviors.Behavi
 
     private bool IsSizeAndPositionValid()
     {
-        return AssociatedObject.WindowState != WindowState.Minimized;
+        return AssociatedObject.WindowState != WindowState.Minimized
+            && AssociatedObject.Left >= 0
+            && AssociatedObject.Top >= 0;
     }
 }
