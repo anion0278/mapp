@@ -28,11 +28,13 @@ public class WarehouseQuantityUpdaterViewModel : TabViewModelBase, IWarehouseQua
     private readonly IDialogService _dialogService;
     public ICommand ConvertWarehouseDataCommand { get; set; }
 
+    public override string Title => LocalizationStrings.QuantityUpdaterTabTitle.GetLocalized();
+
     public WarehouseQuantityUpdaterViewModel(
         ISettingsWrapper settingsWrapper,
         IJsonManager jsonManager,
         IFileOperationService fileOperationService,
-        IDialogService dialogService) : base(LocalizationStrings.QuantityUpdaterTabTitle.GetLocalized())
+        IDialogService dialogService) 
     {
         _settingsWrapper = settingsWrapper;
         _jsonManager = jsonManager;

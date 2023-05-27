@@ -2,10 +2,9 @@
 
 public abstract class TabViewModelBase : ViewModelBase
 {
-    public virtual string Title { get; protected set; }
+    /// <summary>
+    /// Refreshed each time the Culture is changed
+    /// </summary>
+    public virtual string Title { get; } 
 
-    protected TabViewModelBase(string title)
-    {
-        Title = title;
-    }
 }
