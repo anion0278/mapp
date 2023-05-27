@@ -224,7 +224,6 @@
 
   <ItemGroup>
     <Folder Include="Exception\" />
-    <Folder Include="Views\AttachedBehaviours\" />
   </ItemGroup>
 
   <ItemGroup>

@@ -20,11 +20,13 @@ public class TransactionsConverterViewModel: TabViewModelBase, ITransactionsConv
     private readonly IDialogService _dialogService;
     public RelayCommand ConvertTransactionsCommand { get; }
 
+    public override string Title => LocalizationStrings.TransactionsConverterTabTitle.GetLocalized();
+
     public TransactionsConverterViewModel(ISettingsWrapper settingsWrapper,
         ITransactionsReader transactionsReader,
         IGpcGenerator gpcGenerator,
         IFileOperationService fileOperationService,
-        IDialogService dialogService) : base(LocalizationStrings.TransactionsConverterTabTitle.GetLocalized())
+        IDialogService dialogService) : base()
     {
         _settingsWrapper = settingsWrapper;
         _transactionsReader = transactionsReader;

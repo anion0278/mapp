@@ -15,11 +15,13 @@ public class AutoFillViewModel: TabViewModelBase
     private readonly IDialogService _dialogService;
     public RelayCommand ConvertTransactionsCommand { get; }
 
+    public override string Title => LocalizationStrings.AutoFillTabTitle.GetLocalized();
+
     public AutoFillViewModel(ISettingsWrapper settingsWrapper,
         ITransactionsReader transactionsReader,
         IGpcGenerator gpcGenerator,
         IFileOperationService fileOperationService,
-        IDialogService dialogService) : base(LocalizationStrings.AutoFillTabTitle.GetLocalized())
+        IDialogService dialogService) 
     {
         _settingsWrapper = settingsWrapper;
         _transactionsReader = transactionsReader;
