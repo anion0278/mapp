@@ -6,8 +6,7 @@ Key technologies:
 - Asynchronous programming, Async/Await
 - Dependency Injection, IoC Containers
 - xUnit
-- GitHub CI/CD, automated changelog, application updater
-- Layered data-centric architecture.
+- GitHub CI/CD, automated changelog, application updater.
 
 # Build status
 Master [![Actions Status](https://github.com/anion0278/mapp/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/anion0278/mapp/actions)
