@@ -41,6 +41,8 @@ public class InvoiceConverterViewModel : TabViewModelBase, IInvoiceConverterView
     public BindingList<InvoiceViewModel> Invoices { get; } = new(); // use BindingList if it is required to update UI for inner items changes
 
 
+    public override string Title => LocalizationStrings.InvoiceConverterTabTitle.GetLocalized();
+
     [Required]
     public uint? ExistingInvoiceNumber
     {
@@ -114,10 +116,7 @@ public class InvoiceConverterViewModel : TabViewModelBase, IInvoiceConverterView
     //    };
     //    invoice.AddInvoiceItems(items);
     //    var dataMock = Mock.Of<IAutocompleteData>();
-    //    foreach (var item in items)
-    //    {
-    //        InvoiceItems.Add(new InvoiceItemViewModel(item, dataMock)); // TODO create bindable collection with AddRange method
-    //    }
+
     //    Invoices.Add(new InvoiceViewModel(invoice, dataMock));
     //}
 
@@ -127,7 +126,7 @@ public class InvoiceConverterViewModel : TabViewModelBase, IInvoiceConverterView
         IFileOperationService fileOperationService,
         IAutocompleteData autocompleteData,
         IDialogService dialogService,
-        IBrowserService browserService) : base(LocalizationStrings.InvoiceConverterTabTitle.GetLocalized())
+        IBrowserService browserService)
     {
         _invoiceConverter = invoiceConverter;
         _settingsWrapper = settingsWrapper;

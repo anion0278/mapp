@@ -1,12 +1,6 @@
 ﻿using System;
-using System.CodeDom;
-using System.Drawing;
 using System.Windows;
 using Shmap.Common;
-using Shmap.UI.Localization;
-using Shmap.UI.Settings;
-using Microsoft.Xaml.Behaviors;
-using WPFLocalizeExtension.Providers;
 
 namespace Shmap.UI.Views.AttachedBehaviour;
 
@@ -17,10 +11,6 @@ public class WindowFullStateToSettingsBehavior : Microsoft.Xaml.Behaviors.Behavi
 {
     private ISettingsWrapper _settingsWrapper;
 
-    public WindowFullStateToSettingsBehavior()
-    {
-        
-    }
 
     protected override void OnAttached()
     {
@@ -39,7 +29,7 @@ public class WindowFullStateToSettingsBehavior : Microsoft.Xaml.Behaviors.Behavi
         }
         else
         {
-            AssociatedObject.Left =  _settingsWrapper.MainWindowTopLeftCorner.X;
+            AssociatedObject.Left = _settingsWrapper.MainWindowTopLeftCorner.X;
             AssociatedObject.Top = _settingsWrapper.MainWindowTopLeftCorner.Y;
         }
 
@@ -55,7 +45,7 @@ public class WindowFullStateToSettingsBehavior : Microsoft.Xaml.Behaviors.Behavi
     }
 
     protected override void OnDetaching()
-    { 
+    {
         base.OnDetaching();
         AssociatedObject.StateChanged -= AssociatedObject_StateChanged;
         AssociatedObject.SizeChanged -= AssociatedObject_SizeChanged;

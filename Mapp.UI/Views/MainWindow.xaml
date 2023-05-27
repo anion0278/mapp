@@ -8,6 +8,7 @@
                     xmlns:attachedBehaviour="clr-namespace:Shmap.UI.Views.AttachedBehaviour"
                     xmlns:views="clr-namespace:Shmap.UI.Views"
                     xmlns:lex="http://wpflocalizeextension.codeplex.com"
+                    xmlns:e="clr-namespace:Shmap.UI.Views.Extensions"
                     mc:Ignorable="d"
                     WindowStartupLocation="Manual"
                     d:DataContext="{d:DesignInstance viewModels:MainViewModel, IsDesignTimeCreatable=True}"
@@ -48,7 +49,7 @@
                                         <ColumnDefinition/>
                                         <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
-                                    <TextBlock Grid.Column="0" Text="{Binding Title}">
+                                        <TextBlock Grid.Column="0" Text="{e:LocBinding Title}">
                                         <TextBlock.Style>
                                             <Style TargetType="TextBlock">
                                                 <Style.Triggers>
