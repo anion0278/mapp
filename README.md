@@ -1,11 +1,10 @@
 # Automating processes for an e-commerce company
 
 Key technologies:
-- .NET 6
-- WPF MVVM
-- Asynchronous programming, Async/Await
+- WPF MVVM (.NET 6)
 - Dependency Injection, IoC Containers
 - xUnit
+- Fody ProperyChanged.
 - GitHub CI/CD, automated changelog, application updater.
 
 # Build status
