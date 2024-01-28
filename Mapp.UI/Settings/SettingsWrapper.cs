@@ -12,6 +12,7 @@ namespace Mapp.UI.Settings
         private readonly bool _isAutosaveEnabled;
 
         public string InvoiceConverterConfigsDir => "Invoice Converter";
+        public string TransactionConverterConfigsDir => "Invoice Converter";
 
         public bool IsMainWindowMaximized
         {

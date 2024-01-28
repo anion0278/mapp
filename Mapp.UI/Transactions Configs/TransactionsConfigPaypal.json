@@ -4,7 +4,7 @@
   "DistinctionPhrase":"Date",
   "DateSubstring":"(.*)",
   "TimeSeparatorOverride":null,
-  "DateCultureInfoName":"en-US",
+  "DateCultureInfoName":"",
   "OrderIdColumnName":"Transaction ID",
   "TransactionTypeColumnName":"Description",
   "DateTimeColumnNames":[

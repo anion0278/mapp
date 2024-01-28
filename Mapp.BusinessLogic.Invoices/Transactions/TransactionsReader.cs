@@ -14,9 +14,6 @@ namespace Mapp.BusinessLogic.Transactions
     public interface ITransactionsReader
     {
         IEnumerable<Transaction> ReadTransactionsFromMultipleFiles(IEnumerable<string> fileNames);
-        DateTime ParseDate(string dateString, MarketPlaceTransactionsConfig settings);
-        IEnumerable<Transaction> ReadTransactions(string fileName);
-        TransactionTypes ParseTransactionType(string transactionType, MarketPlaceTransactionsConfig settings);
     }
 
     public class TransactionsReader : ITransactionsReader
@@ -49,9 +46,9 @@ namespace Mapp.BusinessLogic.Transactions
             });
             IMapper mapper = mapperConfiguration.CreateMapper();
 
-            var configDtos = _jsonManager.LoadTransactionsConfigs();
+            var configsData = _jsonManager.LoadTransactionsConfigs();
 
-            var configs = configDtos.Select<MarketPlaceTransactionsConfigDTO, MarketPlaceTransactionsConfig>(dto =>
+            var configs = configsData.Select(dto =>
                 mapper.Map<MarketPlaceTransactionsConfigDTO, MarketPlaceTransactionsConfig>(dto));
 
             var marketPlaceIds = configs.Select(s => s.MarketPlaceId).ToList();
@@ -84,13 +81,13 @@ namespace Mapp.BusinessLogic.Transactions
             return lineItems;
         }
 
-        public DateTime ParseDate(string dateString, MarketPlaceTransactionsConfig settings)
+        private DateTime ParseDate(string dateString, MarketPlaceTransactionsConfig config)
         {
-            var match = Regex.Match(dateString, settings.DateSubstring);
-            return DateTime.Parse(match.Groups[1].Value, settings.DateCultureInfo);
+            var match = Regex.Match(dateString, config.DateSubstring);
+            return DateTime.Parse(match.Groups[1].Value, config.DateCultureInfo);
         }
 
-        public IEnumerable<Transaction> ReadTransactions(string fileName)
+        private IEnumerable<Transaction> ReadTransactions(string fileName)
         {
             var lines = GetFileLines(fileName);
 
@@ -174,7 +171,7 @@ namespace Mapp.BusinessLogic.Transactions
             return transactions;
         }
 
-        public TransactionTypes ParseTransactionType(string transactionType, MarketPlaceTransactionsConfig settings)
+        private TransactionTypes ParseTransactionType(string transactionType, MarketPlaceTransactionsConfig settings)
         {
             // TODO refactoring AWFUL CODE
             if (settings.OrderTypeNames.Any(n => n.EqualsIgnoreCase(transactionType)))

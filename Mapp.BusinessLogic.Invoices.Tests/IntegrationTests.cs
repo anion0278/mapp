@@ -8,10 +8,12 @@ using Mapp.DataAccess;
 using Moq;
 using VerifyXunit;
 using Xunit;
+using Xunit.Categories;
 
 namespace Mapp.BusinessLogic.Invoices.Tests
 {
     [UsesVerify]
+    [IntegrationTest]
     public class IntegrationTests: VerifyBase
     {
         // TODO add multi-file import test
@@ -82,7 +84,7 @@ namespace Mapp.BusinessLogic.Invoices.Tests
 
             ApplicationConstants.Rounding = 2; // TODO solve by intoducing settings context
 
-            var jsonManager = new JsonManager();
+            var jsonManager = new JsonManager(configMock.Object, new FileManager());
             var invoiceXmlXmlManager = new InvoicesXmlManager(Mock.Of<IDialogService>(), configMock.Object) ;
             var currencyLoader = new CsvLoader(configMock.Object);
             var autocompleteDataLoader = new AutocompleteDataLoader(jsonManager, configMock.Object);
