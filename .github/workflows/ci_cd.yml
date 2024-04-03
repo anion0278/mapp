@@ -52,7 +52,7 @@ jobs:
       
     - name: Build
       run: |
-        dotnet build --configuration Release --no-restore
+        dotnet build --configuration Release --no-restore -m:1
         dotnet publish Mapp.UI -c Release -r win-x64 -o  ${{env.bin_dir}} -p:PublishSingleFile=true --self-contained false
 
     - name: Test
