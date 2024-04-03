@@ -1,39 +1,39 @@
 {
-  "LinesToSkipBeforeColumnNames":0,
-  "MarketPlaceId":21,
-  "DistinctionPhrase":"Date",
-  "DateSubstring":"(.*)",
-  "TimeSeparatorOverride":null,
-  "DateCultureInfoName":"",
-  "OrderIdColumnName":"Transaction ID",
-  "TransactionTypeColumnName":"Description",
-  "DateTimeColumnNames":[
-     "Date",
-     "Time"
+  "LinesToSkipBeforeColumnNames": 0,
+  "MarketPlaceId": 21,
+  "DistinctionPhrases": [ "Date", "Time", "Time Zone", "Description", "Currency" ],
+  "DateSubstring": "(.*)",
+  "TimeSeparatorOverride": null,
+  "DateCultureInfoName": "",
+  "OrderIdColumnName": "Transaction ID",
+  "TransactionTypeColumnName": "Description",
+  "DateTimeColumnNames": [
+    "Date",
+    "Time"
   ],
-  "ValueComponentsColumnName":[
-     "Gross",
-     "Sales Tax"
+  "ValueComponentsColumnName": [
+    "Gross",
+    "Sales Tax"
   ],
-  "TransferTypeNames":[
-     "General Withdrawal - Bank Account"
+  "TransferTypeNames": [
+    "General Withdrawal - Bank Account"
   ],
-  "RefundTypeNames":[
-     "Payment Refund"
+  "RefundTypeNames": [
+    "Payment Refund"
   ],
-  "OrderTypeNames":[
-     "eBay Auction Payment",
-     "Express Checkout Payment",
-     "General Payment",
-     "Mobile Payment",
-     "Website Payment"
+  "OrderTypeNames": [
+    "eBay Auction Payment",
+    "Express Checkout Payment",
+    "General Payment",
+    "Mobile Payment",
+    "Website Payment"
   ],
-  "ServiceFeeTypeNames":[
-     "General Currency Conversion",
-     "Tax collected by partner",
-     "Cancellation of Hold for Dispute Resolution",
-     "Hold on Balance for Dispute Investigation",
-     "PreApproved Payment Bill User Payment"
+  "ServiceFeeTypeNames": [
+    "General Currency Conversion",
+    "Tax collected by partner",
+    "Cancellation of Hold for Dispute Resolution",
+    "Hold on Balance for Dispute Investigation",
+    "PreApproved Payment Bill User Payment"
   ],
-  "TotalPriceColumnName":"Gross"
+  "TotalPriceColumnName": "Gross"
 }

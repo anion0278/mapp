@@ -42,14 +42,14 @@ namespace Mapp.BusinessLogic.Transactions
         {
             // TODO load only once
             var mapperConfiguration = new MapperConfiguration(cfg => {
-                cfg.CreateMap<MarketPlaceTransactionsConfigDTO, MarketPlaceTransactionsConfig>();
+                cfg.CreateMap<MarketPlaceTransactionsConfigData, MarketPlaceTransactionsConfig>();
             });
             IMapper mapper = mapperConfiguration.CreateMapper();
 
             var configsData = _jsonManager.LoadTransactionsConfigs();
 
-            var configs = configsData.Select(dto =>
-                mapper.Map<MarketPlaceTransactionsConfigDTO, MarketPlaceTransactionsConfig>(dto));
+            var configs = configsData.Select(data =>
+                mapper.Map<MarketPlaceTransactionsConfigData, MarketPlaceTransactionsConfig>(data));
 
             var marketPlaceIds = configs.Select(s => s.MarketPlaceId).ToList();
             if (marketPlaceIds.Distinct().Count() != marketPlaceIds.Count())
@@ -139,7 +139,7 @@ namespace Mapp.BusinessLogic.Transactions
                 }
 
                 // DATE 
-                string dateComplete = String.Empty;
+                string dateComplete = string.Empty;
                 foreach (var columnName in marketPlaceSetting.DateTimeColumnNames)
                 {
                     dateComplete += transactionsDict[columnName][index] + " ";
@@ -192,13 +192,18 @@ namespace Mapp.BusinessLogic.Transactions
             // put into factory
             foreach (var marketPlace in _marketplaceConfigs)
             {
-                var found = dataLines.SingleOrDefault(l => l.First().EqualsIgnoreCase(marketPlace.DistinctionPhrase));
-                if (found != null)
+                var isFound = IsFirstLineCorrespondToConfig(dataLines, marketPlace);
+                if (isFound)
                 {
                     return marketPlace;
                 }
             }
             throw new ArgumentException("Nerozpoznany typ souboru");
+        }
+
+        private static bool IsFirstLineCorrespondToConfig(IReadOnlyList<string[]> dataLines, MarketPlaceTransactionsConfig marketPlace)
+        {
+            return dataLines.Any(l => !marketPlace.DistinctionPhrases.Except(l).Any());
         }
     }
 }

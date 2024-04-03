@@ -1,32 +1,32 @@
 {
-  "LinesToSkipBeforeColumnNames":7,
-  "MarketPlaceId":13,
-  "DistinctionPhrase":"All amounts in GBP, unless specified",
-  "DateSubstring":"(.*) UTC",
-  "TimeSeparatorOverride":null,
-  "DateCultureInfoName":"en-GB",
-  "OrderIdColumnName":"order id",
-  "TransactionTypeColumnName":"type",
-  "DateTimeColumnNames":[
-     "date/time"
+  "LinesToSkipBeforeColumnNames": 7,
+  "MarketPlaceId": 13,
+  "DistinctionPhrases": [ "All amounts in GBP, unless specified" ],
+  "DateSubstring": "(.*) (UTC|GMT).*",
+  "TimeSeparatorOverride": null,
+  "DateCultureInfoName": "en-GB",
+  "OrderIdColumnName": "order id",
+  "TransactionTypeColumnName": "type",
+  "DateTimeColumnNames": [
+    "date/time"
   ],
-  "ValueComponentsColumnName":[
-     "product sales",
-     "postage credits",
-     "promotional rebates",
-     "gift wrap credits"
+  "ValueComponentsColumnName": [
+    "product sales",
+    "postage credits",
+    "promotional rebates",
+    "gift wrap credits"
   ],
-  "TransferTypeNames":[
-     "Transfer"
+  "TransferTypeNames": [
+    "Transfer"
   ],
-  "RefundTypeNames":[
-     "Refund"
+  "RefundTypeNames": [
+    "Refund"
   ],
-  "OrderTypeNames":[
-     "Order"
+  "OrderTypeNames": [
+    "Order"
   ],
-  "ServiceFeeTypeNames":[
-     "Service Fee"
+  "ServiceFeeTypeNames": [
+    "Service Fee"
   ],
-  "TotalPriceColumnName":"total"
+  "TotalPriceColumnName": "total"
 }

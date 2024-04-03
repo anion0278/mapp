@@ -17,7 +17,7 @@ namespace Mapp.DataAccess
         IEnumerable<UpdateInfoEventArgs> DeserializeUpdates(string remoteJsonData);
         Dictionary<string, string> DeserializeJsonDictionary(string fileName);
         void SerializeDictionaryToJson(Dictionary<string, string> map, string fileName);
-        IEnumerable<MarketPlaceTransactionsConfigDTO> LoadTransactionsConfigs();
+        IEnumerable<MarketPlaceTransactionsConfigData> LoadTransactionsConfigs();
         IEnumerable<StockDataXmlSourceDefinition> LoadStockQuantityUpdaterConfigs();
     }
 
@@ -57,21 +57,22 @@ namespace Mapp.DataAccess
         {
             string json = JsonSerializer.Serialize(map, new JsonSerializerOptions
             {
-                IgnoreNullValues = true,
+                DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull,
                 WriteIndented = true
             });
             _fileManager.WriteAllTextToFile(fileName, json);
         }
 
-        public IEnumerable<MarketPlaceTransactionsConfigDTO> LoadTransactionsConfigs()
+        public IEnumerable<MarketPlaceTransactionsConfigData> LoadTransactionsConfigs()
         {
             // WE need it because when app is started from other dir (for example during UI tests), it would not otherwise find the configs!!
             var fileNames = Directory.GetFiles(_settings.TransactionConverterConfigsDir);
-            var configDtos = new List<MarketPlaceTransactionsConfigDTO>();
+            var configDtos = new List<MarketPlaceTransactionsConfigData>();
             foreach (var fileName in fileNames.Where(fn => fn.Contains("TransactionsConfig")))
             {
-                string json = _fileManager.ReadAllTextFromFile(fileName);
-                var configDto = JsonSerializer.Deserialize<MarketPlaceTransactionsConfigDTO>(json);
+                string json = File.ReadAllText(fileName);
+                var configDto = JsonSerializer.Deserialize<MarketPlaceTransactionsConfigData>(json);
+                configDto.Name = Path.GetFileNameWithoutExtension(fileName);
                 configDtos.Add(configDto);
             }
 

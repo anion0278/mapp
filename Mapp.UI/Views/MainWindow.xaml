@@ -62,8 +62,8 @@
                                         </TextBlock.Style>
                                     </TextBlock>
 
-                                    <TextBlock Grid.Column="1" Text="[changed]" Margin="3 -4 0 0" Padding="0" FontSize="12" 
-                                                   Visibility="{Binding HasChanges, Converter={StaticResource booleanToVisibilityConverter}}"/>
+                                    <!--<TextBlock Grid.Column="1" Text="[changed]" Margin="3 -4 0 0" Padding="0" FontSize="12" 
+                                                   Visibility="{Binding HasChanges, Converter={StaticResource booleanToVisibilityConverter}}"/>-->
                                 </Grid>
                             </Border>
                         </ControlTemplate>

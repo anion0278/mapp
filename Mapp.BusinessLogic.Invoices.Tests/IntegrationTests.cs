@@ -116,6 +116,6 @@ namespace Mapp.BusinessLogic.Invoices.Tests
             //Assert.Equal(expectedResult, result);
         }
 
-        public IntegrationTests(): base(){ }
+        public IntegrationTests() : base() { }
     }
 }

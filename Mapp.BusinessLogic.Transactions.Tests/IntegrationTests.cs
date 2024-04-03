@@ -7,37 +7,88 @@ using Moq;
 using Xunit.Categories;
 using Mapp.Common;
 using Mapp.DataAccess;
-using ApprovalTests.Reporters;
-using ApprovalTests;
+using Mapp.BusinessLogic.Currency;
+using Mapp.BusinessLogic.Invoices;
+using VerifyXunit;
+using FluentAssertions;
+using FluentAssertions.Extensions;
 
 namespace Mapp.BusinessLogic.Transactions.Tests
 {
-    [UseReporter(typeof(VisualStudioReporter))]
-    public class IntegrationTests
+    [UsesVerify]
+    [IntegrationTest]
+    public class IntegrationTests : VerifyBase
     {
-        //[Theory]
         [Fact]
-        [IntegrationTest]
-        //[InlineData("AmazonCA")]
-        //[InlineData("AmazonDE")]
-        //[InlineData("AmazonES")]
-        //[InlineData("AmazonGB")]
-        //[InlineData("AmazonIT")]
-        //[InlineData("AmazonJP")]
-        //[InlineData("AmazonMX")]
-        //[InlineData("AmazonNL")]
-        //[InlineData("PayPal")]
-        public void ConvertTransactions_ParsesAndConvertsTransactions()
+        public async Task ConvertTransactions_ParsesAndConvertsTransactions_Paypal()
         {
-            string testCaseDataName = "PayPal";
+            await IntegrationTestBase("PayPal");
+        }
 
+        [Fact]
+        public async Task ConvertTransactions_ParsesAndConvertsTransactions_AmazonCA()
+        {
+            await IntegrationTestBase("AmazonCA");
+        }
+
+        [Fact]
+        public async Task ConvertTransactions_ParsesAndConvertsTransactions_AmazonDE()
+        {
+            await IntegrationTestBase("AmazonDE");
+        }
+
+        [Fact]
+        public async Task ConvertTransactions_ParsesAndConvertsTransactions_AmazonES()
+        {
+            await IntegrationTestBase("AmazonES");
+        }
+
+        [Fact]
+        public async Task ConvertTransactions_ParsesAndConvertsTransactions_AmazonGB()
+        {
+            await IntegrationTestBase("AmazonGB");
+        }
+
+        [Fact]
+        public async Task ConvertTransactions_ParsesAndConvertsTransactions_AmazonIT()
+        {
+            await IntegrationTestBase("AmazonIT");
+        }
+
+        [Fact]
+        public async Task ConvertTransactions_ParsesAndConvertsTransactions_AmazonJP()
+        {
+            await IntegrationTestBase("AmazonJP");
+        }
+
+        [Fact]
+        public async Task ConvertTransactions_ParsesAndConvertsTransactions_AmazonMX()
+        {
+            await IntegrationTestBase("AmazonMX");
+        }
+
+        [Fact]
+        public async Task ConvertTransactions_ParsesAndConvertsTransactions_AmazonNL()
+        {
+            await IntegrationTestBase("AmazonNL");
+        }
+
+        [Fact]
+        [Bug]
+        public async Task ConvertTransactions_ParsesAndConvertsTransactions_ZerosBug()
+        {
+            await IntegrationTestBase("Zeros");
+        }
+
+        private async Task IntegrationTestBase(string testCaseDataName)
+        {
             // Arrange
-            string inputTransactionFile = @$"../../../TestData/{testCaseDataName}/{testCaseDataName}.csv";
+            string inputTransactionFile = @$"../../../TestData/{testCaseDataName}.csv";
 
             //Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
             var configMock = new Mock<ISettingsWrapper>();
-            configMock.Setup(m => m.TransactionConverterConfigsDir).Returns(@"C:\Users\stefan\source\repos\anion0278\mapp\Mapp.UI\bin\Debug\net6.0-windows10.0.19041.0\win-x64\Transactions Configs");
+            configMock.Setup(m => m.TransactionConverterConfigsDir).Returns(@"..\..\..\..\Mapp.UI\Transactions Configs");
 
             string resultText = string.Empty;
             var fileManagerMock = new Mock<IFileManager>();
@@ -45,17 +96,21 @@ namespace Mapp.BusinessLogic.Transactions.Tests
                 .Setup(fm => fm.WriteAllTextToFile(It.IsAny<string>(), It.IsAny<string>()))
                 .Callback<string, string>((name, content) => resultText = content);
 
+            var dateTimeManagerMock = new Mock<IDateTimeManager>();
+            dateTimeManagerMock
+                .Setup(m => m.Today).Returns(1.April(2024));
+
             var jsonManager = new JsonManager(configMock.Object, new FileManager());
             var transactionsConverter = new TransactionsReader(jsonManager);
-            var gpcGenerator = new GpcGenerator(fileManagerMock.Object);
+            var gpcGenerator = new GpcGenerator(fileManagerMock.Object, dateTimeManagerMock.Object);
 
             // Act
             var transactions = transactionsConverter.ReadTransactionsFromMultipleFiles(new[] { inputTransactionFile });
             gpcGenerator.SaveTransactions(transactions, "IrrelevantFileName");
 
-            // Assert
-            //Approvals.VerifyAll(resultText, label: "");
-            Assert.True(true);
+            await Verify(resultText);
         }
+
+        public IntegrationTests() : base() { }
     }
 }

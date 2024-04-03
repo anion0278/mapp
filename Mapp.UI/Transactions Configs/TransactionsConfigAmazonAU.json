@@ -1,8 +1,8 @@
 {
   "LinesToSkipBeforeColumnNames": 7,
   "MarketPlaceId": 4,
-  "DistinctionPhrase": "All amounts in AUD, unless specified",
-  "DateSubstring": "(.*) GMT",
+  "DistinctionPhrases": [ "All amounts in AUD, unless specified" ],
+  "DateSubstring": "(.*) (UTC|GMT).*",
   "TimeSeparatorOverride": null,
   "DateCultureInfoName": "en-AU",
   "OrderIdColumnName": "order id",

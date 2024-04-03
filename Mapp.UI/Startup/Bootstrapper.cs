@@ -44,6 +44,7 @@ public class Bootstrapper
         builder.RegisterAsInterfaceSingleton<BrowserService>();
         builder.RegisterAsInterfaceSingleton<AutocompleteConfiguration>();
         builder.RegisterAsInterfaceSingleton<FileManager>();
+        builder.RegisterAsInterfaceSingleton<DateTimeManager>();
         builder.RegisterAsInterfaceSingleton<KeyboardHook>();
         builder.RegisterAsInterfaceSingleton<InputSimulator>();
 

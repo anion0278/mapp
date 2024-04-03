@@ -19,10 +19,12 @@ namespace Mapp.BusinessLogic.Transactions
 
         private string _transactionBase = "07500000020013539{0}000000000000000000000000000000000{1}{2}{3}00000000000000000000000000{4}000124{5}";
         private readonly IFileManager _fileManager;
+        private readonly IDateTimeManager _dateTimeManager;
 
-        public GpcGenerator(IFileManager fileManager)
+        public GpcGenerator(IFileManager fileManager, IDateTimeManager dateTimeManager)
         {
             _fileManager = fileManager;
+            _dateTimeManager = dateTimeManager;
         }
 
         public void SaveTransactions(IEnumerable<Transaction> transactions, string fileName)
@@ -41,28 +43,19 @@ namespace Mapp.BusinessLogic.Transactions
             _fileManager.WriteAllTextToFile(fileName, outputText.ToString());
         }
 
-        private string GetShortVariableCodeForRefund(string fullVariableCode) // TODO remove repetition 
-        {
-            // refunds are filled manually in pohoda, so there is no need to care about invoice symVar
-            string filteredCode = fullVariableCode.RemoveAll("-");
-            filteredCode = filteredCode.Substring(0, 10);
-            return filteredCode;
-        }
-
         private string GetTransactionLine(Transaction transaction)
         {
-            var shortVariableCode = Invoice.GetShortVariableCode(transaction.OrderId, out var zerosRemoved);
+            var shortVariableCode = VariableCode.GetShortVariableCode(transaction.OrderId);
             if (transaction.Type == TransactionTypes.Refund) // Refunds have short variable codes from first 10 symbols
             {
-                shortVariableCode = GetShortVariableCodeForRefund(transaction.OrderId);
-                zerosRemoved = 0;
+                shortVariableCode = VariableCode.GetShortVariableCode(transaction.OrderId);
             }
 
-            string type = ((int)transaction.Type).ToString();
-            // in case that order ID contained zeros at the beginning
-            type = type.PadRight(type.Length + zerosRemoved, '0');
+            shortVariableCode = shortVariableCode.PadLeft(VariableCode.ShortVariableCodeLength, '0');
 
-            string marketPlace = transaction.MarketplaceId.ToString().PadLeft(2, '0');
+            string type = ((int)transaction.Type).ToString();
+
+            string marketPlace = transaction.MarketplaceId.ToString().PadLeft(2, '0'); // max 2
 
             string orderId = transaction.OrderId.PadRight(19, '0');
 
@@ -90,9 +83,9 @@ namespace Mapp.BusinessLogic.Transactions
             return priceFormatted;
         }
 
-        private static DateTime GetEndOfCurrentMonth()
+        private DateTime GetEndOfCurrentMonth()
         {
-            var today = DateTime.Today;
+            var today = _dateTimeManager.Today;
             return today.AddDays(1 - today.Day).AddMonths(1).AddDays(-1).Date;
         }
 

@@ -1,8 +1,8 @@
 {
   "LinesToSkipBeforeColumnNames": 7,
   "MarketPlaceId": 12,
-  "DistinctionPhrase": "Wszystkie kwoty w PLN, chyba że określono inaczej",
-  "DateSubstring": "(.*) UTC",
+  "DistinctionPhrases": [ "Wszystkie kwoty w PLN, chyba że określono inaczej" ],
+  "DateSubstring": "(.*) (UTC|GMT).*",
   "TimeSeparatorOverride": null,
   "DateCultureInfoName": "pl-PL",
   "OrderIdColumnName": "identyfikator zamówienia",
