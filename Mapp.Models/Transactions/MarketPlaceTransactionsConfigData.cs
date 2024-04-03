@@ -2,14 +2,15 @@
 
 namespace Mapp.Models.Transactions
 {
-    public class MarketPlaceTransactionsConfigDTO
+    public class MarketPlaceTransactionsConfigData
     {
-        public MarketPlaceTransactionsConfigDTO() // TODO why cannot be protected ? (exception)
+        public MarketPlaceTransactionsConfigData() // TODO why cannot be protected ? (exception)
         { }
 
+        public string Name { get; set; }
         public int MarketPlaceId { get; set; }
 
-        public string DistinctionPhrase { get; set; }
+        public IEnumerable<string> DistinctionPhrases { get; set; }
 
         public string DateSubstring { get; set; }
 

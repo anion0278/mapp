@@ -1,7 +1,7 @@
 {
   "LinesToSkipBeforeColumnNames":7,
   "MarketPlaceId":3,
-  "DistinctionPhrase":"指定のない場合、単位は円",
+  "DistinctionPhrases":["指定のない場合、単位は円"],
   "DateSubstring":"(.*)JST",
   "TimeSeparatorOverride":null,
   "DateCultureInfoName":"ja-JP",

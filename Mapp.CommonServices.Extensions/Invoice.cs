@@ -5,6 +5,23 @@ using System.Linq;
 
 namespace Mapp.Common
 {
+    public class VariableCode
+    {
+        public const int ShortVariableCodeLength = 10;
+
+        public static string GetShortVariableCode(string fullVariableCode)
+        {
+            string filteredCode = fullVariableCode.RemoveAll("-").RemoveAll("#");
+            string finalCode = filteredCode;
+            if (filteredCode.Length > ShortVariableCodeLength) finalCode = finalCode.Substring(filteredCode.Length - ShortVariableCodeLength, ShortVariableCodeLength);
+
+            // if short var code has zeros in the begining - they cannot be stored in Invoice
+            finalCode = finalCode.TrimStart('0');  // zeros don't get correctly imported into Pohoda
+
+            return finalCode;
+        }
+    }
+
     public enum InvoiceVatClassification
     {
         Undefined,
@@ -17,7 +34,7 @@ namespace Mapp.Common
     }
 
 
-    public class Invoice  
+    public class Invoice
     {
         private readonly List<InvoiceItemBase> _invoiceItems = new();
         private Dictionary<string, decimal> _vatPercentage;
@@ -44,7 +61,7 @@ namespace Mapp.Common
 
         // TODO join variable symbols into single Class with ShortVersion autoprop
         public string VariableSymbolFull { get; set; }
-        public string VariableSymbolShort => GetShortVariableCode(VariableSymbolFull, out _);
+        public string VariableSymbolShort => VariableCode.GetShortVariableCode(VariableSymbolFull);
         public DateTime ConversionDate { get; set; }
         public DateTime DateTax => CalculateTaxDate();
         public DateTime DateAccounting => ConversionDate;
@@ -115,17 +132,6 @@ namespace Mapp.Common
             AggregateItems(existingItemOfType, newItemOfType);
         }
 
-        public static string GetShortVariableCode(string fullVariableCode, out int zerosRemoved)
-        {
-            string filteredCode = fullVariableCode.RemoveAll("-");
-            filteredCode = filteredCode.Substring(filteredCode.Length - 10, 10);
-
-            // if short var code has zeros in the begining - they cannot be stored in Invoice, that is why we delete them
-            // and give information about how many zeros were deleted to GPC generator
-            var finalCode = filteredCode.TrimStart('0');  // zeros don't get correctly imported into Pohoda
-            zerosRemoved = filteredCode.Length - finalCode.Length;
-            return finalCode;
-        }
 
         private void AggregateItems(InvoiceItemBase existingItem, InvoiceItemBase aggregatedItem)
         {

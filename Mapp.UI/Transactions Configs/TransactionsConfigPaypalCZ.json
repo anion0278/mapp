@@ -1,19 +1,19 @@
 {
   "LinesToSkipBeforeColumnNames": 0,
   "MarketPlaceId": 21,
-  "DistinctionPhrases": [ "Date", "Time", "Time Zone", "Description", "Currency" ],
+  "DistinctionPhrases": [ "Datum", "Čas", "Časové pásmo", "Popis" ],
   "DateSubstring": "(.*)",
   "TimeSeparatorOverride": null,
-  "DateCultureInfoName": "",
-  "OrderIdColumnName": "Transaction ID",
-  "TransactionTypeColumnName": "Description",
+  "DateCultureInfoName": "cs-CZ",
+  "OrderIdColumnName": "ID transakce",
+  "TransactionTypeColumnName": "Popis",
   "DateTimeColumnNames": [
-    "Date",
-    "Time"
+    "Datum",
+    "Čas"
   ],
   "ValueComponentsColumnName": [
-    "Gross",
-    "Sales Tax"
+    "Brutto",
+    "Daň z prodeje"
   ],
   "TransferTypeNames": [
     "General Withdrawal - Bank Account"
@@ -35,5 +35,5 @@
     "Hold on Balance for Dispute Investigation",
     "PreApproved Payment Bill User Payment"
   ],
-  "TotalPriceColumnName": "Gross"
+  "TotalPriceColumnName": "Brutto"
 }

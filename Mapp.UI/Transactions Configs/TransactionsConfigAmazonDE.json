@@ -1,8 +1,8 @@
 {
   "LinesToSkipBeforeColumnNames": 7,
   "MarketPlaceId": 6,
-  "DistinctionPhrase": "Alle Beträge in Euro sofern nicht anders gekennzeichnet",
-  "DateSubstring": "(.*) UTC",
+  "DistinctionPhrases": [ "Alle Beträge in Euro sofern nicht anders gekennzeichnet" ],
+  "DateSubstring": "(.*) (UTC|GMT).*",
   "TimeSeparatorOverride": null,
   "DateCultureInfoName": "de-DE",
   "OrderIdColumnName": "Bestellnummer",

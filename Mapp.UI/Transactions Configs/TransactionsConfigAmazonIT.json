@@ -1,32 +1,32 @@
 {
-  "LinesToSkipBeforeColumnNames":7,
-  "MarketPlaceId":9,
-  "DistinctionPhrase":"Tutti gli importi sono espressi in EUR, se non diversamente specificato.",
-  "DateSubstring":"(.*) UTC",
-  "TimeSeparatorOverride":".",
-  "DateCultureInfoName":"it-IT",
-  "OrderIdColumnName":"Numero ordine",
-  "TransactionTypeColumnName":"Tipo",
-  "DateTimeColumnNames":[
-     "Data/Ora:"
+  "LinesToSkipBeforeColumnNames": 7,
+  "MarketPlaceId": 9,
+  "DistinctionPhrases": [ "Tutti gli importi sono espressi in EUR, se non diversamente specificato." ],
+  "DateSubstring": "(.*) (UTC|GMT).*",
+  "TimeSeparatorOverride": ".",
+  "DateCultureInfoName": "it-IT",
+  "OrderIdColumnName": "Numero ordine",
+  "TransactionTypeColumnName": "Tipo",
+  "DateTimeColumnNames": [
+    "Data/Ora:"
   ],
-  "ValueComponentsColumnName":[
-     "Vendite",
-     "Accrediti per le spedizioni",
-     "Sconti promozionali",
-     "Accrediti per confezioni regalo"
+  "ValueComponentsColumnName": [
+    "Vendite",
+    "Accrediti per le spedizioni",
+    "Sconti promozionali",
+    "Accrediti per confezioni regalo"
   ],
-  "TransferTypeNames":[
-     "Trasferimento"
+  "TransferTypeNames": [
+    "Trasferimento"
   ],
-  "RefundTypeNames":[
-     "Rimborso"
+  "RefundTypeNames": [
+    "Rimborso"
   ],
-  "OrderTypeNames":[
-     "Ordine"
+  "OrderTypeNames": [
+    "Ordine"
   ],
-  "ServiceFeeTypeNames":[
-     "Service Fee"
+  "ServiceFeeTypeNames": [
+    "Service Fee"
   ],
-  "TotalPriceColumnName":"totale"
+  "TotalPriceColumnName": "totale"
 }

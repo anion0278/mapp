@@ -1,10 +1,14 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 
 namespace Mapp.BusinessLogic.Transactions
 {
+    [DebuggerDisplay("{Name}")]
     public class MarketPlaceTransactionsConfig 
     {
+        public string Name { get; set; }
+
         public MarketPlaceTransactionsConfig(string dateCultureInfoName, string dateSubstring, int marketPlaceId)
         {
             DateCultureInfoName = dateCultureInfoName;
@@ -48,7 +52,7 @@ namespace Mapp.BusinessLogic.Transactions
         }
 
         // it is decided to  use this phrase because parameter Market place can be unavailable (no transactions)
-        public string DistinctionPhrase { get; set; }
+        public IEnumerable<string> DistinctionPhrases { get; set; }
 
         public string DateSubstring { get; }
 

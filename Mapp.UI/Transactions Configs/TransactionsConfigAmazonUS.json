@@ -1,7 +1,7 @@
 {
   "LinesToSkipBeforeColumnNames":7,
   "MarketPlaceId":0,
-  "DistinctionPhrase":"All amounts in USD, unless specified",
+  "DistinctionPhrases": ["All amounts in USD, unless specified"],
   "DateSubstring":"(.*) (PST|PDT)",
   "TimeSeparatorOverride":null,
   "DateCultureInfoName":"en-US",

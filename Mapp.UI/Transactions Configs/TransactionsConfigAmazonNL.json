@@ -1,32 +1,32 @@
 {
-  "LinesToSkipBeforeColumnNames":7,
-  "MarketPlaceId":10,
-  "DistinctionPhrase":"Alle bedragen in EUR, tenzij anders vermeld",
-  "DateSubstring":"(.*) UTC",
-  "TimeSeparatorOverride":null,
-  "DateCultureInfoName":"nl-NL",
-  "OrderIdColumnName":"bestelnummer",
-  "TransactionTypeColumnName":"type",
-  "DateTimeColumnNames":[
-     "datum/tijd"
+  "LinesToSkipBeforeColumnNames": 7,
+  "MarketPlaceId": 10,
+  "DistinctionPhrases": [ "Alle bedragen in EUR, tenzij anders vermeld" ],
+  "DateSubstring": "(.*) (UTC|GMT).*",
+  "TimeSeparatorOverride": null,
+  "DateCultureInfoName": "nl-NL",
+  "OrderIdColumnName": "bestelnummer",
+  "TransactionTypeColumnName": "type",
+  "DateTimeColumnNames": [
+    "datum/tijd"
   ],
-  "ValueComponentsColumnName":[
-     "verkoop van producten",
-     "Verzendtegoeden",
-     "promotiekortingen",
-     "kredietpunten cadeauverpakking"
+  "ValueComponentsColumnName": [
+    "verkoop van producten",
+    "Verzendtegoeden",
+    "promotiekortingen",
+    "kredietpunten cadeauverpakking"
   ],
-  "TransferTypeNames":[
-     "Overboeking"
+  "TransferTypeNames": [
+    "Overboeking"
   ],
-  "RefundTypeNames":[
-     "Terugbetaling"
+  "RefundTypeNames": [
+    "Terugbetaling"
   ],
-  "OrderTypeNames":[
-     "Bestelling"
+  "OrderTypeNames": [
+    "Bestelling"
   ],
-  "ServiceFeeTypeNames":[
-     "Servicekosten"
+  "ServiceFeeTypeNames": [
+    "Servicekosten"
   ],
-  "TotalPriceColumnName":"totaal"
+  "TotalPriceColumnName": "totaal"
 }

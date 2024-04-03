@@ -12,6 +12,7 @@ namespace Mapp.Common
         Point MainWindowTopLeftCorner { get; set; }
         bool OpenTargetFolderAfterConversion { get; set; }
         string InvoiceConverterConfigsDir { get; }
+        string TransactionConverterConfigsDir { get; }
         void SaveConfig();
     }
 

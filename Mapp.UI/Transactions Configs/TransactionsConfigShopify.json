@@ -1,0 +1,31 @@
+{
+  "LinesToSkipBeforeColumnNames": 0,
+  "MarketPlaceId": 22,
+  "DistinctionPhrases": [ "Transaction Date", "Type", "Order", "Card Brand" ],
+  "DateSubstring": "(.*)",
+  "TimeSeparatorOverride": null,
+  "DateCultureInfoName": "en-US",
+  "OrderIdColumnName": "Order",
+  "TransactionTypeColumnName": "Type",
+  "DateTimeColumnNames": [
+    "Transaction Date"
+  ],
+  "ValueComponentsColumnName": [
+    "Presentment Amount"
+  ],
+  "TransferTypeNames": [
+
+  ],
+  "RefundTypeNames": [
+    "refund",
+    "chargeback"
+  ],
+  "OrderTypeNames": [
+    "charge"
+
+  ],
+  "ServiceFeeTypeNames": [
+
+  ],
+  "TotalPriceColumnName": "Presentment Amount"
+}

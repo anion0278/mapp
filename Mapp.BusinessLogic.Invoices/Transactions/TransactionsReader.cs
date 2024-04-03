@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Text.RegularExpressions;
 using AutoMapper;
@@ -14,9 +15,6 @@ namespace Mapp.BusinessLogic.Transactions
     public interface ITransactionsReader
     {
         IEnumerable<Transaction> ReadTransactionsFromMultipleFiles(IEnumerable<string> fileNames);
-        DateTime ParseDate(string dateString, MarketPlaceTransactionsConfig settings);
-        IEnumerable<Transaction> ReadTransactions(string fileName);
-        TransactionTypes ParseTransactionType(string transactionType, MarketPlaceTransactionsConfig settings);
     }
 
     public class TransactionsReader : ITransactionsReader
@@ -45,20 +43,20 @@ namespace Mapp.BusinessLogic.Transactions
         {
             // TODO load only once
             var mapperConfiguration = new MapperConfiguration(cfg => {
-                cfg.CreateMap<MarketPlaceTransactionsConfigDTO, MarketPlaceTransactionsConfig>();
+                cfg.CreateMap<MarketPlaceTransactionsConfigData, MarketPlaceTransactionsConfig>();
             });
             IMapper mapper = mapperConfiguration.CreateMapper();
 
-            var configDtos = _jsonManager.LoadTransactionsConfigs();
+            var configsData = _jsonManager.LoadTransactionsConfigs();
 
-            var configs = configDtos.Select<MarketPlaceTransactionsConfigDTO, MarketPlaceTransactionsConfig>(dto =>
-                mapper.Map<MarketPlaceTransactionsConfigDTO, MarketPlaceTransactionsConfig>(dto));
+            var configs = configsData.Select(data =>
+                mapper.Map<MarketPlaceTransactionsConfigData, MarketPlaceTransactionsConfig>(data));
 
             var marketPlaceIds = configs.Select(s => s.MarketPlaceId).ToList();
-            if (marketPlaceIds.Distinct().Count() != marketPlaceIds.Count())
-            {
-                throw new ArgumentException($"Chyba, duplicitni hodnota {nameof(marketPlaceIds)} v JSON konfiguracich!");
-            }
+            //if (marketPlaceIds.Distinct().Count() != marketPlaceIds.Count()) // commented because we now have PaypalCZ and paypal 
+            //{
+            //    throw new ArgumentException($"Chyba, duplicitni hodnota {nameof(marketPlaceIds)} v JSON konfiguracich!");
+            //}
 
             return configs;
         }
@@ -84,13 +82,13 @@ namespace Mapp.BusinessLogic.Transactions
             return lineItems;
         }
 
-        public DateTime ParseDate(string dateString, MarketPlaceTransactionsConfig settings)
+        private DateTime ParseDate(string dateString, MarketPlaceTransactionsConfig config)
         {
-            var match = Regex.Match(dateString, settings.DateSubstring);
-            return DateTime.Parse(match.Groups[1].Value, settings.DateCultureInfo);
+            var match = Regex.Match(dateString, config.DateSubstring);
+            return DateTime.Parse(match.Groups[1].Value, config.DateCultureInfo);
         }
 
-        public IEnumerable<Transaction> ReadTransactions(string fileName)
+        private IEnumerable<Transaction> ReadTransactions(string fileName)
         {
             var lines = GetFileLines(fileName);
 
@@ -117,12 +115,13 @@ namespace Mapp.BusinessLogic.Transactions
             {
                 string columnNameKey = validLines[0][columnIndex].Trim(); //tolower? 
                 transactionsDict.Add(columnNameKey, validLines.Skip(1).Select(l => l[columnIndex]).ToArray());
-            }
+            } 
 
             var transactions = new List<Transaction>();
             for (int index = 0; index < transactionsDict.First().Value.Count(); index++)
             {
                 string orderId = transactionsDict[marketPlaceSetting.OrderIdColumnName][index];
+                orderId = new string(orderId.ToCharArray().Where(c => char.IsDigit(c) || c == '-').ToArray()); // we only need to take numbers, since for Shoppify order is smth like #3214, however '-' should be ok
                 if (string.IsNullOrEmpty(orderId))
                     orderId = "0000000000000000000";
 
@@ -131,7 +130,8 @@ namespace Mapp.BusinessLogic.Transactions
                 decimal transactionTotalValue = 0;
                 foreach (var compColumnName in marketPlaceSetting.ValueComponentsColumnName)
                 {
-                    transactionTotalValue += decimal.Parse(transactionsDict[compColumnName][index], marketPlaceSetting.DateCultureInfo);
+                    string val = transactionsDict[compColumnName][index];
+                    transactionTotalValue += decimal.Parse(val, marketPlaceSetting.DateCultureInfo);
                 }
 
                 var transactionType = ParseTransactionType(transactionsDict[marketPlaceSetting.TransactionTypeColumnName][index], marketPlaceSetting);
@@ -142,7 +142,7 @@ namespace Mapp.BusinessLogic.Transactions
                 }
 
                 // DATE 
-                string dateComplete = String.Empty;
+                string dateComplete = string.Empty;
                 foreach (var columnName in marketPlaceSetting.DateTimeColumnNames)
                 {
                     dateComplete += transactionsDict[columnName][index] + " ";
@@ -174,7 +174,7 @@ namespace Mapp.BusinessLogic.Transactions
             return transactions;
         }
 
-        public TransactionTypes ParseTransactionType(string transactionType, MarketPlaceTransactionsConfig settings)
+        private TransactionTypes ParseTransactionType(string transactionType, MarketPlaceTransactionsConfig settings)
         {
             // TODO refactoring AWFUL CODE
             if (settings.OrderTypeNames.Any(n => n.EqualsIgnoreCase(transactionType)))
@@ -195,13 +195,18 @@ namespace Mapp.BusinessLogic.Transactions
             // put into factory
             foreach (var marketPlace in _marketplaceConfigs)
             {
-                var found = dataLines.SingleOrDefault(l => l.First().EqualsIgnoreCase(marketPlace.DistinctionPhrase));
-                if (found != null)
+                var isFound = IsFirstLineCorrespondToConfig(dataLines, marketPlace);
+                if (isFound)
                 {
                     return marketPlace;
                 }
             }
             throw new ArgumentException("Nerozpoznany typ souboru");
+        }
+
+        private static bool IsFirstLineCorrespondToConfig(IReadOnlyList<string[]> dataLines, MarketPlaceTransactionsConfig marketPlace)
+        {
+            return dataLines.Any(l => !marketPlace.DistinctionPhrases.Except(l).Any());
         }
     }
 }

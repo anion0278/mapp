@@ -1,32 +1,32 @@
 {
-  "LinesToSkipBeforeColumnNames":7,
-  "MarketPlaceId":2,
-  "DistinctionPhrase":"Todos los importes en MXN, a menos que se especifique",
-  "DateSubstring":"(.*) GMT-7",
-  "TimeSeparatorOverride":null,
-  "DateCultureInfoName":"es-MX",
-  "OrderIdColumnName":"Id. del pedido",
-  "TransactionTypeColumnName":"tipo",
-  "DateTimeColumnNames":[
-     "fecha/hora"
+  "LinesToSkipBeforeColumnNames": 7,
+  "MarketPlaceId": 2,
+  "DistinctionPhrases": [ "Todos los importes en dólares, a menos que se especifique" ],
+  "DateSubstring": "(.*) (UTC|GMT).*",
+  "TimeSeparatorOverride": null,
+  "DateCultureInfoName": "es-MX",
+  "OrderIdColumnName": "Id. del pedido",
+  "TransactionTypeColumnName": "tipo",
+  "DateTimeColumnNames": [
+    "fecha/hora"
   ],
-  "ValueComponentsColumnName":[
-     "ventas de productos",
-     "créditos de envío",
-     "descuentos promocionales",
-     "créditos por envoltorio de regalo"
+  "ValueComponentsColumnName": [
+    "ventas de productos",
+    "créditos de envío",
+    "descuentos promocionales",
+    "créditos por envoltorio de regalo"
   ],
-  "TransferTypeNames":[
-     "Trasferir"
+  "TransferTypeNames": [
+    "Trasferir"
   ],
-  "RefundTypeNames":[
-     "Reembolso"
+  "RefundTypeNames": [
+    "Reembolso"
   ],
-  "OrderTypeNames":[
-     "Pedido"
+  "OrderTypeNames": [
+    "Pedido"
   ],
-  "ServiceFeeTypeNames":[
-     "Service Fee"
+  "ServiceFeeTypeNames": [
+    "Service Fee"
   ],
-  "TotalPriceColumnName":"total"
+  "TotalPriceColumnName": "total"
 }
