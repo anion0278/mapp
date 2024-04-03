@@ -26,6 +26,12 @@ namespace Mapp.BusinessLogic.Transactions.Tests
         }
 
         [Fact]
+        public async Task ConvertTransactions_ParsesAndConvertsTransactions_PaypalCZ()
+        {
+            await IntegrationTestBase("PayPalCZ");
+        }
+
+        [Fact]
         public async Task ConvertTransactions_ParsesAndConvertsTransactions_AmazonCA()
         {
             await IntegrationTestBase("AmazonCA");

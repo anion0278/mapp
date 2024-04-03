@@ -217,6 +217,9 @@
     <None Update="Transactions Configs\TransactionsConfigAmazonUS.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Transactions Configs\TransactionsConfigPaypalCZ.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Transactions Configs\TransactionsConfigPaypal.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

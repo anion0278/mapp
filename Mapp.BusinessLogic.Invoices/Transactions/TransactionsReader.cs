@@ -53,10 +53,10 @@ namespace Mapp.BusinessLogic.Transactions
                 mapper.Map<MarketPlaceTransactionsConfigData, MarketPlaceTransactionsConfig>(data));
 
             var marketPlaceIds = configs.Select(s => s.MarketPlaceId).ToList();
-            if (marketPlaceIds.Distinct().Count() != marketPlaceIds.Count())
-            {
-                throw new ArgumentException($"Chyba, duplicitni hodnota {nameof(marketPlaceIds)} v JSON konfiguracich!");
-            }
+            //if (marketPlaceIds.Distinct().Count() != marketPlaceIds.Count()) // commented because we now have PaypalCZ and paypal 
+            //{
+            //    throw new ArgumentException($"Chyba, duplicitni hodnota {nameof(marketPlaceIds)} v JSON konfiguracich!");
+            //}
 
             return configs;
         }
@@ -130,7 +130,8 @@ namespace Mapp.BusinessLogic.Transactions
                 decimal transactionTotalValue = 0;
                 foreach (var compColumnName in marketPlaceSetting.ValueComponentsColumnName)
                 {
-                    transactionTotalValue += decimal.Parse(transactionsDict[compColumnName][index], marketPlaceSetting.DateCultureInfo);
+                    string val = transactionsDict[compColumnName][index];
+                    transactionTotalValue += decimal.Parse(val, marketPlaceSetting.DateCultureInfo);
                 }
 
                 var transactionType = ParseTransactionType(transactionsDict[marketPlaceSetting.TransactionTypeColumnName][index], marketPlaceSetting);

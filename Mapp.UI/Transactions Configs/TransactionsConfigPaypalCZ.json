@@ -1,0 +1,39 @@
+{
+  "LinesToSkipBeforeColumnNames": 0,
+  "MarketPlaceId": 21,
+  "DistinctionPhrases": [ "Datum", "Čas", "Časové pásmo", "Popis" ],
+  "DateSubstring": "(.*)",
+  "TimeSeparatorOverride": null,
+  "DateCultureInfoName": "cs-CZ",
+  "OrderIdColumnName": "ID transakce",
+  "TransactionTypeColumnName": "Popis",
+  "DateTimeColumnNames": [
+    "Datum",
+    "Čas"
+  ],
+  "ValueComponentsColumnName": [
+    "Brutto",
+    "Daň z prodeje"
+  ],
+  "TransferTypeNames": [
+    "General Withdrawal - Bank Account"
+  ],
+  "RefundTypeNames": [
+    "Payment Refund"
+  ],
+  "OrderTypeNames": [
+    "eBay Auction Payment",
+    "Express Checkout Payment",
+    "General Payment",
+    "Mobile Payment",
+    "Website Payment"
+  ],
+  "ServiceFeeTypeNames": [
+    "General Currency Conversion",
+    "Tax collected by partner",
+    "Cancellation of Hold for Dispute Resolution",
+    "Hold on Balance for Dispute Investigation",
+    "PreApproved Payment Bill User Payment"
+  ],
+  "TotalPriceColumnName": "Brutto"
+}
