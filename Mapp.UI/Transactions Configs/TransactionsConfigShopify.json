@@ -12,7 +12,6 @@
   ],
   "ValueComponentsColumnName": [
     "Presentment Amount"
-
   ],
   "TransferTypeNames": [
 
@@ -20,7 +19,6 @@
   "RefundTypeNames": [
     "refund",
     "chargeback"
-
   ],
   "OrderTypeNames": [
     "charge"

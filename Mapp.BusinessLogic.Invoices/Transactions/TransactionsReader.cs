@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Text.RegularExpressions;
 using AutoMapper;
@@ -114,12 +115,13 @@ namespace Mapp.BusinessLogic.Transactions
             {
                 string columnNameKey = validLines[0][columnIndex].Trim(); //tolower? 
                 transactionsDict.Add(columnNameKey, validLines.Skip(1).Select(l => l[columnIndex]).ToArray());
-            }
+            } 
 
             var transactions = new List<Transaction>();
             for (int index = 0; index < transactionsDict.First().Value.Count(); index++)
             {
                 string orderId = transactionsDict[marketPlaceSetting.OrderIdColumnName][index];
+                orderId = new string(orderId.ToCharArray().Where(c => char.IsDigit(c) || c == '-').ToArray()); // we only need to take numbers, since for Shoppify order is smth like #3214, however '-' should be ok
                 if (string.IsNullOrEmpty(orderId))
                     orderId = "0000000000000000000";
 

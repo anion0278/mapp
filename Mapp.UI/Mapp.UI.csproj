@@ -220,7 +220,7 @@
     <None Update="Transactions Configs\TransactionsConfigPaypal.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Transactions Configs\TransactionsConfigShopPayCM.json">
+    <None Update="Transactions Configs\TransactionsConfigShopify.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

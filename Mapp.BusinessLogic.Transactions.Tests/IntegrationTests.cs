@@ -74,6 +74,12 @@ namespace Mapp.BusinessLogic.Transactions.Tests
         }
 
         [Fact]
+        public async Task ConvertTransactions_ParsesAndConvertsTransactions_Shopify()
+        {
+            await IntegrationTestBase("Shopify");
+        }
+
+        [Fact]
         [Bug]
         public async Task ConvertTransactions_ParsesAndConvertsTransactions_ZerosBug()
         {
