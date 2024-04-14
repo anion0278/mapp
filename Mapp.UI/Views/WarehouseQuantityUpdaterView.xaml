@@ -3,8 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Mapp.UI.Views.Converters"
-             mc:Ignorable="d" 
+             xmlns:local="clr-namespace:Mapp.UI.Views.Converters" xmlns:viewmodels="clr-namespace:Mapp.UI.ViewModels"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance viewmodels:WarehouseQuantityUpdaterViewModel, IsDesignTimeCreatable=False}"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <Grid.RowDefinitions>
@@ -13,6 +14,13 @@
             <RowDefinition />
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="1">
+            <DataGrid ItemsSource="{Binding SourceDefinitions}" AutoGenerateColumns="False" HorizontalAlignment="Center">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="URL" IsReadOnly="True" Binding="{Binding Url}"/>
+                    <DataGridCheckBoxColumn Header="Aktivni" Binding="{Binding IsEnabled}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+
             <Button Width="200" Height="35" Command="{Binding ConvertWarehouseDataCommand}" >
                 <Button.Style>
                     <Style TargetType="Button">
@@ -25,6 +33,7 @@
                     </Style>
                 </Button.Style>
             </Button>
+            
         </StackPanel>
     </Grid>
 </UserControl>

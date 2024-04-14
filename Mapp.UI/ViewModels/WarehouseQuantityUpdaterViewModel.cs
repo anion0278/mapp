@@ -24,62 +24,44 @@ public class WarehouseQuantityUpdaterViewModel : TabViewModelBase, IWarehouseQua
 {
     private readonly ISettingsWrapper _settingsWrapper;
     private readonly IJsonManager _jsonManager;
+    private readonly IStockQuantityUpdater stockQuantityUpdater;
     private readonly IFileOperationService _fileOperationService;
+    private readonly IStockQuantityUpdater _stockQuantityUpdater;
     private readonly IDialogService _dialogService;
     public ICommand ConvertWarehouseDataCommand { get; set; }
+
+    public IReadOnlyList<StockDataXmlSourceDefinition> SourceDefinitions { get; }
 
     public override string Title => LocalizationStrings.QuantityUpdaterTabTitle.GetLocalized();
 
     public WarehouseQuantityUpdaterViewModel(
         ISettingsWrapper settingsWrapper,
         IJsonManager jsonManager,
+        IStockQuantityUpdater stockQuantityUpdater,
         IFileOperationService fileOperationService,
-        IDialogService dialogService) 
+        IDialogService dialogService)
     {
         _settingsWrapper = settingsWrapper;
         _jsonManager = jsonManager;
+        _stockQuantityUpdater = stockQuantityUpdater;
         _fileOperationService = fileOperationService;
         _dialogService = dialogService;
 
         //AsyncRelayCommandOptions.None - disable button during execution of Async Task (AllowConcurrentExecutions = false)
         ConvertWarehouseDataCommand = new AsyncRelayCommand(ConvertWarehouseData, AsyncRelayCommandOptions.None);
+
+        SourceDefinitions = _stockQuantityUpdater.SourceDefinitions;
+        foreach (var sourceDefinition in SourceDefinitions)
+        {
+            if (sourceDefinition.IsEnabled == null) sourceDefinition.IsEnabled = true;
+        }
     }
 
     private async Task ConvertWarehouseData()
     {
-        StockDataXmlSourceDefinition[] sources =
-        {
-                    new()
-                    {
-                        Url = "https://www.rappa.cz/export/vo.xml",
-                        ItemNodeName = "SHOPITEM",
-                        SkuNodeParsingOptions = new[]
-                        {
-                            new ValueParsingOption("EAN", null),
-                        },
-                        StockQuantityNodeParsingOptions = new[]
-                        {
-                            new ValueParsingOption("STOCK", null),
-                        },
-                    },
-                    new()
-                    {
-                        Url = "https://en.bushman.eu/content/feeds/uQ5TueFNQh_expando_4.xml",
-                        ItemNodeName = "item",
-                        SkuNodeParsingOptions = new[]
-                        {
-                            new ValueParsingOption("g:gtin", null),
-                            new ValueParsingOption("g:sku_with_ean", @"\d{13}"),
-                        },
-                        StockQuantityNodeParsingOptions = new[]
-                        {
-                            new ValueParsingOption("g:quantity", null),
-                        },
-                    }
-                };
+        _jsonManager.SaveStockQuantityUpdaterConfigs(SourceDefinitions);
 
-        var stockQuantityUpdater = new StockQuantityUpdater(_jsonManager, _dialogService);
-        var stockData = await stockQuantityUpdater.ConvertWarehouseData();
+        var stockData = await _stockQuantityUpdater.ConvertWarehouseData(SourceDefinitions.Where(s => s.IsEnabled == true).ToList());
         var columnNamesLine =
             "sku\tprice\tminimum-seller-allowed-price\tmaximum-seller-allowed-price\tquantity\thandling-time\tfulfillment-channel";
         var lines = new List<string>(stockData.Count() + 1) { columnNamesLine };
@@ -104,5 +86,4 @@ public class WarehouseQuantityUpdaterViewModel : TabViewModelBase, IWarehouseQua
             _fileOperationService.OpenFileFolder(saveFileDialog.FileName);
         }
     }
-
 }

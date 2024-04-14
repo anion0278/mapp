@@ -17,6 +17,7 @@ using Mapp.UI.ViewModels;
 using Mapp.UI.Extensions;
 using Mapp.UI.Settings;
 using Mapp.UI.Views;
+using Mapp.BusinessLogic.StockQuantity;
 
 namespace Mapp.UI.Startup;
 
@@ -44,6 +45,7 @@ public class Bootstrapper
         builder.RegisterAsInterfaceSingleton<FileManager>();
         builder.RegisterAsInterfaceSingleton<DateTimeManager>();
         builder.RegisterAsInterfaceSingleton<KeyboardHook>();
+        builder.RegisterAsInterfaceSingleton<StockQuantityUpdater>();
         builder.RegisterAsInterfaceSingleton<InputSimulator>();
 
         builder.RegisterAsInterfaceSingleton<MainViewModel>();

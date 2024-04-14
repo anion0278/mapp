@@ -6,5 +6,6 @@ namespace Mapp.BusinessLogic.StockQuantity;
 
 public interface IStockQuantityUpdater
 {
-    Task<IEnumerable<StockData>> ConvertWarehouseData();
+    IReadOnlyList<StockDataXmlSourceDefinition> SourceDefinitions { get; }
+    Task<IEnumerable<StockData>> ConvertWarehouseData(IReadOnlyList<StockDataXmlSourceDefinition> sources);
 }
