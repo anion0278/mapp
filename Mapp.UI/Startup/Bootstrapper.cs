@@ -42,7 +42,6 @@ public class Bootstrapper
         builder.RegisterAsInterfaceSingleton<Logger>();
         builder.RegisterAsInterfaceSingleton<AutocompleteData>();
         builder.RegisterAsInterfaceSingleton<BrowserService>();
-        builder.RegisterAsInterfaceSingleton<AutocompleteConfiguration>();
         builder.RegisterAsInterfaceSingleton<FileManager>();
         builder.RegisterAsInterfaceSingleton<DateTimeManager>();
         builder.RegisterAsInterfaceSingleton<KeyboardHook>();
@@ -56,6 +55,7 @@ public class Bootstrapper
         builder.RegisterAsInterface<ManualChangeWindowViewModel>();
 
         builder.RegisterInstance(new SettingsWrapper(Settings.AppSettings.Default, true)).As<ISettingsWrapper>();
+        builder.RegisterType<AutoFillViewModel>();
         builder.RegisterType<MainWindow>();
 
         return builder.Build();

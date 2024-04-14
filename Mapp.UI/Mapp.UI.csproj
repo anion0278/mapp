@@ -69,6 +69,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Mapp.ApplicationUpdater\Mapp.UI.ApplicationUpdater.csproj" />
     <ProjectReference Include="..\Mapp.BusinessLogic.Invoices\Mapp.Application.csproj" />
+    <ProjectReference Include="..\Mapp.CommonServices.Extensions\Mapp.Common.csproj" />
     <ProjectReference Include="..\Mapp.Infrastructure\Mapp.Infrastructure.csproj" />
   </ItemGroup>
 

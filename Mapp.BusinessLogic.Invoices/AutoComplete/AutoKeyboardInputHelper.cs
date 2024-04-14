@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Mapp.Application.Interfaces;
+using Mapp.Common;
 using WindowsInput.Native;
 
 namespace Mapp.BusinessLogic.AutoComplete;
@@ -13,14 +14,14 @@ public interface IAutoKeyboardInputHelper : IDisposable
 
 public class AutoKeyboardInputHelper : IAutoKeyboardInputHelper
 {
-    private readonly IAutocompleteConfiguration _autocompleteConfiguration;
+    private readonly ISettingsWrapper _settingsWrapper;
     private IInputSimulator _inputSim;
     private IKeyboardHook _keyboardHook;
     private bool _isCommandPressed;
 
-    public AutoKeyboardInputHelper(IAutocompleteConfiguration autocompleteConfiguration, IKeyboardHook keyboardHook, IInputSimulator inputSimulator)
+    public AutoKeyboardInputHelper(ISettingsWrapper settingsWrapper, IKeyboardHook keyboardHook, IInputSimulator inputSimulator)
     {
-        _autocompleteConfiguration = autocompleteConfiguration;
+        _settingsWrapper = settingsWrapper;
         _inputSim = inputSimulator;
         _keyboardHook = keyboardHook; // TODO replace by https://www.nuget.org/packages/MouseKeyHook/
         _keyboardHook.KeyDown += keyboardHook_KeyDown;
@@ -48,7 +49,7 @@ public class AutoKeyboardInputHelper : IAutoKeyboardInputHelper
         if (key == VKeys.F4 && _isCommandPressed) /*&& elapsedTime.Seconds > 2*/
         {
             //_lastAutoinputTime = DateTime.Now;
-            _inputSim.TextEntry($"RR{_autocompleteConfiguration.TrackingCode}CZ");
+            _inputSim.TextEntry($"RR{_settingsWrapper.TrackingCode}CZ");
             _inputSim.KeyPress(VirtualKeyCode.TAB);
             Task.Delay(TimeSpan.FromMilliseconds(50));
             _inputSim.TextEntry(DateTime.Now.ToString("dd.MM.yyyy"));
@@ -69,14 +70,4 @@ public class AutoKeyboardInputHelper : IAutoKeyboardInputHelper
             _isCommandPressed = false;
         }
     }
-}
-
-public interface IAutocompleteConfiguration
-{
-    public string TrackingCode { get; set; }
-}
-
-public class AutocompleteConfiguration : IAutocompleteConfiguration
-{
-    public string TrackingCode { get; set; }
 }

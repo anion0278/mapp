@@ -47,6 +47,7 @@ public class MainViewModel : ViewModelBase, IMainViewModel
     public MainViewModel(
         ISettingsWrapper settingsWrapper,
         IInvoiceConverterViewModel invoiceConverterVM,
+        AutoFillViewModel autofillVm,
         IWarehouseQuantityUpdaterViewModel warehouseQuantityUpdaterVM,
         ITransactionsConverterViewModel transactionsConverterVM)
     {
@@ -56,6 +57,7 @@ public class MainViewModel : ViewModelBase, IMainViewModel
 
         _tabs.Add(invoiceConverterVM as TabViewModelBase);
         _tabs.Add(warehouseQuantityUpdaterVM as TabViewModelBase);
+        _tabs.Add(autofillVm);
         _tabs.Add(transactionsConverterVM as TabViewModelBase);
         Tabs = CollectionViewSource.GetDefaultView(_tabs);
 
