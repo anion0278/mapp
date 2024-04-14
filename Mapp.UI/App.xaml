@@ -44,6 +44,10 @@
         <DataTemplate DataType="{x:Type viewModels:AutoFillViewModel}">
             <views:AutoFillView />
         </DataTemplate>
+        
+        <DataTemplate DataType="{x:Type viewModels:ManualChangeWindowViewModel}">
+            <views:ManualChange />
+        </DataTemplate>
         <!--EndRegion-->
 
         <!--Region Converters-->

@@ -51,7 +51,7 @@ public class InvoiceConverterViewModel : TabViewModelBase, IInvoiceConverterView
         {
             if (!value.HasValue) return;
 
-            _settingsWrapper.ExistingInvoiceNumber = value.Value * 2; // TODO join methods, since names are same
+            _settingsWrapper.ExistingInvoiceNumber = value.Value; // TODO join methods, since names are same
             _existingInvoiceNumber = value.Value;
         }
     }
@@ -81,7 +81,7 @@ public class InvoiceConverterViewModel : TabViewModelBase, IInvoiceConverterView
     }
 
     //[Obsolete("Design-time only!")]
-    //public InvoiceConverterViewModel() : base("Design-Time ctor")
+    //public InvoiceConverterViewModel() 
     //{
     //    _existingInvoiceNumber = 123456789;
     //    _defaultEmail = "email@email.com";
@@ -124,14 +124,12 @@ public class InvoiceConverterViewModel : TabViewModelBase, IInvoiceConverterView
         ISettingsWrapper settingsWrapper,
         IInvoiceConverter invoiceConverter,
         IFileOperationService fileOperationService,
-        IAutocompleteData autocompleteData,
         IDialogService dialogService,
         IBrowserService browserService)
     {
         _invoiceConverter = invoiceConverter;
         _settingsWrapper = settingsWrapper;
         _fileOperationService = fileOperationService;
-        _autocompleteData = autocompleteData;
         _dialogService = dialogService;
         _browserService = browserService;
 
@@ -142,6 +140,7 @@ public class InvoiceConverterViewModel : TabViewModelBase, IInvoiceConverterView
 
         _existingInvoiceNumber = _settingsWrapper.ExistingInvoiceNumber;
         _defaultEmail = _settingsWrapper.DefaultEmail;
+        _autocompleteData = invoiceConverter.AutocompleteData;
 
         ValidateAllProperties(); // TODO should not be needed
     }

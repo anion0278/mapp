@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Input;
+using System.ComponentModel;
 
 namespace Mapp.UI.ViewModels
 {
@@ -31,13 +32,13 @@ namespace Mapp.UI.ViewModels
   
         public ManualChangeWindowViewModel()
         {
-            //if (IsInDesignMode)
-            //{
-            //    OriginalText = "Original text example";
-            //    MaxLength = 30;
-            //    EditedText = "Edited text example";
-            //    Message = "Nazev mesta/zeme je prilis dlouhy v objednavce C.: 751-548-846G" + "\n multiline\n multiline\n multiline";
-            //}
+            if (DesignerProperties.GetIsInDesignMode(new System.Windows.DependencyObject()))
+            {
+                OriginalText = "Original text example";
+                MaxLength = 30;
+                EditedText = "Edited text example";
+                Message = "Nazev mesta/zeme je prilis dlouhy v objednavce C.: 751-548-846G" + "\n multiline\n multiline\n multiline";
+            }
 
             AcceptChangesCommand = new RelayCommand(AcceptChanges, AcceptedChangesCanExecute);
             IsChangeAccepted = false;

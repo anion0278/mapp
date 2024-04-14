@@ -72,7 +72,6 @@ namespace Mapp.DataAccess
         {
             _jsonManager = jsonManager;
             _settingsWrapper = settingsWrapper;
-            LoadSettings();
         }
 
         public IAutocompleteData LoadSettings()

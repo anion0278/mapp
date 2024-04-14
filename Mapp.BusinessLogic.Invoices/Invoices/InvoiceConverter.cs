@@ -9,6 +9,7 @@ namespace Mapp.BusinessLogic.Invoices
 {
     public interface IInvoiceConverter
     {
+        IAutocompleteData AutocompleteData { get; }
         IEnumerable<Invoice> LoadAmazonReports(IEnumerable<string> reportsFileNames, InvoiceConversionContext conversionContext);
 
         void ProcessInvoices(IEnumerable<Invoice> invoices, string fileName);
@@ -16,7 +17,7 @@ namespace Mapp.BusinessLogic.Invoices
 
     public class InvoiceConverter : IInvoiceConverter
     {
-        public readonly IAutocompleteData _autocompleteData;
+        public IAutocompleteData AutocompleteData { get; }
         private readonly ICurrencyConverter _currencyConverter;
         private readonly IInvoicesXmlManager _invoicesXmlManager;
         private readonly IAutocompleteDataLoader _autocompleteDataLoader;
@@ -34,14 +35,15 @@ namespace Mapp.BusinessLogic.Invoices
             IAutocompleteDataLoader autocompleteDataLoader,
             IDialogService dialogService)
         {
-            _autocompleteData = autocompleteDataLoader.LoadSettings(); // TODO rewove!!
             _currencyConverter = currencyConverter;
             _invoicesXmlManager = invoicesXmlManager;
             _autocompleteDataLoader = autocompleteDataLoader;
             _dialogService = dialogService;
-            autocompleteDataLoader.LoadSettings();
+
             _rates = csvLoader.LoadFixedCurrencyRates(); // TODO make it possible to choose from settings
             _vatPercentage = csvLoader.LoadCountryVatRates(); // TODO make it possible to choose from settings
+            
+            AutocompleteData = _autocompleteDataLoader.LoadSettings();
         }
 
         public IEnumerable<Invoice> LoadAmazonReports(IEnumerable<string> reportsFileNames, InvoiceConversionContext conversionContext)
@@ -148,9 +150,9 @@ namespace Mapp.BusinessLogic.Invoices
 
             invoiceProduct.PackQuantityMultiplier = 1;
             if (!string.IsNullOrEmpty(invoiceProduct.AmazonSku) &&
-                _autocompleteData.PackQuantitySku.ContainsKey(invoiceProduct.AmazonSku))
+                AutocompleteData.PackQuantitySku.ContainsKey(invoiceProduct.AmazonSku))
             {
-                invoiceProduct.PackQuantityMultiplier = uint.Parse(_autocompleteData.PackQuantitySku[invoiceProduct.AmazonSku]);
+                invoiceProduct.PackQuantityMultiplier = uint.Parse(AutocompleteData.PackQuantitySku[invoiceProduct.AmazonSku]);
             }
             invoiceItems.Add(invoiceItemProduct);
 
@@ -229,7 +231,7 @@ namespace Mapp.BusinessLogic.Invoices
 
         public void ProcessInvoices(IEnumerable<Invoice> invoices, string fileName)
         {
-            _autocompleteDataLoader.SaveSettings(_autocompleteData);
+            _autocompleteDataLoader.SaveSettings(AutocompleteData);
             _invoicesXmlManager.SerializeXmlInvoice(fileName, invoices);
         }
 
@@ -243,7 +245,7 @@ namespace Mapp.BusinessLogic.Invoices
             if (IsNonEuCountryByClassification(classification))
             {
                 return GetAutocompleteOrEmpty(
-                    _autocompleteData.CustomsDeclarationBySku,
+                    AutocompleteData.CustomsDeclarationBySku,
                     sku,
                     string.Empty);
             }
@@ -254,7 +256,7 @@ namespace Mapp.BusinessLogic.Invoices
         {
             string defaultShippingName = "Shipping";
 
-            if (_autocompleteData.DefaultShippingByPartnerCountry.TryGetValue(clientInfo.Address.Country, out string countryDefaultShipping))
+            if (AutocompleteData.DefaultShippingByPartnerCountry.TryGetValue(clientInfo.Address.Country, out string countryDefaultShipping))
             {
                 defaultShippingName = countryDefaultShipping;
             }
@@ -266,7 +268,7 @@ namespace Mapp.BusinessLogic.Invoices
 
             // only for non-EU
             return GetAutocompleteOrEmpty( // TODO ПРОБЛЕМА в том что при агригации шипиногов их названия будут стираться
-                _autocompleteData.ShippingNameBySku,
+                AutocompleteData.ShippingNameBySku,
                 sku,
                 defaultShippingName);
         }
@@ -274,14 +276,14 @@ namespace Mapp.BusinessLogic.Invoices
         private string GetSavedItemCodeBySku(string sku)
         {
             return GetAutocompleteOrEmpty(
-                _autocompleteData.PohodaProdCodeBySku,
+                AutocompleteData.PohodaProdCodeBySku,
                 sku);
         }
 
         private string GetSavedWarehouseBySku(string sku)
         {
             return GetAutocompleteOrEmpty(
-                _autocompleteData.ProdWarehouseSectionBySku,
+                AutocompleteData.ProdWarehouseSectionBySku,
                 sku);
         }
 

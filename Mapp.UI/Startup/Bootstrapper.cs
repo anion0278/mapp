@@ -40,7 +40,6 @@ public class Bootstrapper
         builder.RegisterAsInterfaceSingleton<DialogService>();
         builder.RegisterAsInterfaceSingleton<GlobalExceptionHandler>();
         builder.RegisterAsInterfaceSingleton<Logger>();
-        builder.RegisterAsInterfaceSingleton<AutocompleteData>();
         builder.RegisterAsInterfaceSingleton<BrowserService>();
         builder.RegisterAsInterfaceSingleton<FileManager>();
         builder.RegisterAsInterfaceSingleton<DateTimeManager>();

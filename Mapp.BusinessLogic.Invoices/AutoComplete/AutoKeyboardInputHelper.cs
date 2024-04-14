@@ -24,11 +24,14 @@ public class AutoKeyboardInputHelper : IAutoKeyboardInputHelper
         _settingsWrapper = settingsWrapper;
         _inputSim = inputSimulator;
         _keyboardHook = keyboardHook; // TODO replace by https://www.nuget.org/packages/MouseKeyHook/
+
+#if RELEASE
         _keyboardHook.KeyDown += keyboardHook_KeyDown;
         _keyboardHook.KeyUp += keyboardHook_KeyUp;
 
         //Installing the Keyboard Hooks
         _keyboardHook.Install();
+#endif
     }
 
     public void Dispose()
