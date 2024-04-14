@@ -464,4 +464,34 @@ Iteration 4
 - Merge pull request #76 from anion0278/dev
 
 Dev
+- Change number of parallel build threads\nNew release
+Total of 6 new changes since v3.5.1.26:
+## 🚀 Features
+
+- feature: allow to choose sources for stock quantity conversion
+
+## 🐛 Fixes
+
+- fix: missing AutoFill tab and invalid Tracking number code
+
+Resolves #77
+- fix: start invoice conversion button is enabled when everything is fixed
+
+Resolves #79
+- fix: manual change window exception
+
+Resolves #80
+- Fix: multiple changes in transactions configruations due to lates updates in Amazon
+
+Resolves #78
+
+## 🧰 Chores
+
+- chore: Automated report [skip ci]
+
+## 📦 Uncategorized
+
 - Change number of parallel build threads
+- Merge pull request #81 from anion0278/dev
+
+Dev
