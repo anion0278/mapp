@@ -4,6 +4,7 @@
              xmlns:system="clr-namespace:System;assembly=System.Runtime"
              xmlns:views="clr-namespace:Mapp.UI.Views"
              xmlns:viewModels="clr-namespace:Mapp.UI.ViewModels"
+             xmlns:extensions="clr-namespace:Mapp.UI.Extensions"
              xmlns:converters="clr-namespace:Mapp.UI.Views.Converters"
              Startup="Application_Startup"
              Exit="Application_OnExit">
@@ -15,6 +16,7 @@
         </Style>
 
         <Style TargetType="{x:Type Button}">
+            <Setter Property="extensions:RelayCommandExtensions.IsCommandUpdateEnabled" Value="True" />
             <Setter Property="Width" Value="150" />
             <Setter Property="Height" Value="25" />
             <Setter Property="ToolTipService.ShowOnDisabled" Value="True"/>
@@ -41,6 +43,10 @@
 
         <DataTemplate DataType="{x:Type viewModels:AutoFillViewModel}">
             <views:AutoFillView />
+        </DataTemplate>
+        
+        <DataTemplate DataType="{x:Type viewModels:ManualChangeWindowViewModel}">
+            <views:ManualChange />
         </DataTemplate>
         <!--EndRegion-->
 

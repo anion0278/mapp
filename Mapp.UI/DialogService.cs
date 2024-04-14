@@ -23,7 +23,8 @@ namespace Mapp.UI
                 if (result == MessageBoxResult.Yes)
                 {
                     var window = new ManualChange();
-                    var vm = window.DataContext as IManualChangeWindowViewModel; // Disadvantage of View-first approach
+                    window.DataContext = new ManualChangeWindowViewModel();
+                    var vm = window.DataContext as IManualChangeWindowViewModel; 
                     vm.OriginalText = textToChange;
                     vm.EditedText = textToChange;
                     vm.MaxLength = maxLength;

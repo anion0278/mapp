@@ -6,10 +6,12 @@
              xmlns:local="clr-namespace:Mapp.UI.Views"
              xmlns:converters="clr-namespace:Mapp.UI.Views.Converters"
              xmlns:controls="clr-namespace:Mapp.UI.Views.Controls"
+             xmlns:extensions="clr-namespace:Mapp.UI.Extensions"
              xmlns:lex="http://wpflocalizeextension.codeplex.com"
              xmlns:common1="clr-namespace:Mapp.Common;assembly=Mapp.Common"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800" d:Background="White"
+             xmlns:viewmodels="clr-namespace:Mapp.UI.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:InvoiceConverterViewModel}">
 
     <UserControl.Resources>
         <Style TargetType="{x:Type DataGridColumnHeader}">
@@ -163,7 +165,8 @@
             <CheckBox Content="{lex:Loc OpenFolderAfterOperationFinished}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10"
                               IsChecked="{Binding OpenTargetFolderAfterConversion}"/>
 
-            <Button Content="{lex:Loc BeginConversion}" Command="{Binding ExportConvertedAmazonInvoicesCommand}"/>
+            <!--extensions:RelayCommandExtensions.IsCommandUpdateEnabled="True"-->
+            <Button Content="{lex:Loc BeginConversion}" Command="{Binding ExportConvertedAmazonInvoicesCommand}" />
         </StackPanel>
 
         <controls:UnblockingDataGrid Grid.Row="1" Margin="5" AutoGenerateColumns="false" CanUserAddRows="false" CanUserDeleteRows="False"

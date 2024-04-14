@@ -24,14 +24,15 @@ namespace Mapp.BusinessLogic.Transactions
             get { return _timeSeparatorOverride; }
             set
             {
+                _timeSeparatorOverride = value;
                 if (_dataCultureInfo != null)
                 {
-                    _dataCultureInfo.DateTimeFormat.TimeSeparator = TimeSeparatorOverride;
+                    _dataCultureInfo.DateTimeFormat.TimeSeparator = _timeSeparatorOverride;
                 }
-
-                _timeSeparatorOverride = value;
             }
         }
+
+        public string NumericFormatSourceCultureName { get; set; }
 
         private CultureInfo _dataCultureInfo;
 
@@ -45,7 +46,12 @@ namespace Mapp.BusinessLogic.Transactions
                     if (_timeSeparatorOverride != null)
                     {
                         _dataCultureInfo.DateTimeFormat.TimeSeparator = _timeSeparatorOverride;
-                    }    
+                    }
+                    if (NumericFormatSourceCultureName != null)
+                    {
+                        var numbericCultureInfo = new CultureInfo(NumericFormatSourceCultureName);
+                        _dataCultureInfo.NumberFormat = numbericCultureInfo.NumberFormat; 
+                    }
                 }
                 return _dataCultureInfo;
             }

@@ -26,7 +26,6 @@ public interface IMainViewModel
 
 public class MainViewModel : ViewModelBase, IMainViewModel
 {
-    private readonly ISettingsWrapper _settingsWrapper;
     private ObservableCollection<TabViewModelBase> _tabs = new();
     private ObservableCollection<string> _availableLanguages = new();
 
@@ -45,17 +44,16 @@ public class MainViewModel : ViewModelBase, IMainViewModel
     }
 
     public MainViewModel(
-        ISettingsWrapper settingsWrapper,
         IInvoiceConverterViewModel invoiceConverterVM,
+        AutoFillViewModel autofillVm,
         IWarehouseQuantityUpdaterViewModel warehouseQuantityUpdaterVM,
         ITransactionsConverterViewModel transactionsConverterVM)
     {
-        _settingsWrapper = settingsWrapper;
-
         SetupLanguages();
 
         _tabs.Add(invoiceConverterVM as TabViewModelBase);
         _tabs.Add(warehouseQuantityUpdaterVM as TabViewModelBase);
+        _tabs.Add(autofillVm);
         _tabs.Add(transactionsConverterVM as TabViewModelBase);
         Tabs = CollectionViewSource.GetDefaultView(_tabs);
 

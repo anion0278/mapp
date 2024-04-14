@@ -3,8 +3,9 @@
   "MarketPlaceId": 21,
   "DistinctionPhrases": [ "Datum", "Čas", "Časové pásmo", "Popis" ],
   "DateSubstring": "(.*)",
+  "NumericFormatSourceCultureName": "cs-CZ",
   "TimeSeparatorOverride": null,
-  "DateCultureInfoName": "cs-CZ",
+  "DateCultureInfoName": "",
   "OrderIdColumnName": "ID transakce",
   "TransactionTypeColumnName": "Popis",
   "DateTimeColumnNames": [
@@ -13,7 +14,7 @@
   ],
   "ValueComponentsColumnName": [
     "Brutto",
-    "Daň z prodeje"
+    "Daň z prodeje"
   ],
   "TransferTypeNames": [
     "General Withdrawal - Bank Account"
@@ -24,6 +25,7 @@
   "OrderTypeNames": [
     "eBay Auction Payment",
     "Express Checkout Payment",
+    "User Initiated Withdrawal",
     "General Payment",
     "Mobile Payment",
     "Website Payment"

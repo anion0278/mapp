@@ -1,26 +1,26 @@
 {
   "LinesToSkipBeforeColumnNames": 7,
   "MarketPlaceId": 13,
-  "DistinctionPhrases": [ "All amounts in GBP, unless specified" ],
+  "DistinctionPhrases": [ "Alla belopp i kr, om inte annat anges" ],
   "DateSubstring": "(.*) (UTC|GMT).*",
   "TimeSeparatorOverride": null,
-  "DateCultureInfoName": "en-GB",
-  "OrderIdColumnName": "order id",
-  "TransactionTypeColumnName": "type",
+  "DateCultureInfoName": "se-SE",
+  "OrderIdColumnName": "reglerings-id",
+  "TransactionTypeColumnName": "typ",
   "DateTimeColumnNames": [
-    "date/time"
+    "datum/tid"
   ],
   "ValueComponentsColumnName": [
-    "product sales",
-    "postage credits",
-    "promotional rebates",
-    "gift wrap credits"
+    "försäljning av produkter",
+    "fraktkrediter",
+    "kampanjrabatter",
+    "krediter för presentinslagning"
   ],
   "TransferTypeNames": [
-    "Transfer"
+    "Överföring"
   ],
   "RefundTypeNames": [
-    "Refund"
+    "Återbetalning"
   ],
   "OrderTypeNames": [
     "Order"
@@ -28,5 +28,5 @@
   "ServiceFeeTypeNames": [
     "Service Fee"
   ],
-  "TotalPriceColumnName": "total"
+  "TotalPriceColumnName": "totalt"
 }

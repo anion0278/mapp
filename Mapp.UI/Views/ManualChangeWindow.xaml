@@ -8,7 +8,6 @@
         mc:Ignorable="d"
         Title="{lex:Loc ManualChangeTitle}" Height="auto" SizeToContent="Height" MaxHeight="400" Width="450" ResizeMode="NoResize" 
         d:DataContext="{d:DesignInstance viewModels:ManualChangeWindowViewModel, IsDesignTimeCreatable=True}"
-        DataContext="{Binding ManualChangeWindowVm, Source={StaticResource ViewModelLocator}}"
         WindowStartupLocation="CenterOwner">
     <Grid Height="auto">
         <Grid.RowDefinitions>

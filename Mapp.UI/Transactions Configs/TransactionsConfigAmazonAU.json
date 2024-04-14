@@ -24,7 +24,8 @@
     "Chargeback Refund"
   ],
   "OrderTypeNames": [
-    "Order"
+    "Order",
+    "Debt"
   ],
   "ServiceFeeTypeNames": [
     "Service Fee"

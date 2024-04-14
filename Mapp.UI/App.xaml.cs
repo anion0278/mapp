@@ -65,11 +65,13 @@ namespace Mapp.UI
 
             var bootstrapper = new Bootstrapper();
             var container = bootstrapper.ConfigureContainer();
+            _exceptionHandler = container.Resolve<IGlobalExceptionHandler>();
 
             _exceptionHandler = container.Resolve<IGlobalExceptionHandler>();
             _keyboardInputHelper = container.Resolve<IAutoKeyboardInputHelper>(); // SHOULD BE HERE, otherwise will not get instantiated
             _appUpdater = container.Resolve<IApplicationUpdater>();
             _appUpdater.CheckUpdate();
+
 
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture; // TODO avoid using

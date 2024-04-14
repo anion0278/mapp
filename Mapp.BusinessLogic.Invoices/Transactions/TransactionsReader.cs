@@ -41,7 +41,6 @@ namespace Mapp.BusinessLogic.Transactions
 
         private IEnumerable<MarketPlaceTransactionsConfig> GetAvailableMarketplaceConfigs()
         {
-            // TODO load only once
             var mapperConfiguration = new MapperConfiguration(cfg => {
                 cfg.CreateMap<MarketPlaceTransactionsConfigData, MarketPlaceTransactionsConfig>();
             });
@@ -110,7 +109,7 @@ namespace Mapp.BusinessLogic.Transactions
             }
             var validLines = lines.Skip(linesToSkip).ToList();
 
-            var transactionsDict = new Dictionary<string, string[]>();
+            var transactionsDict = new Dictionary<string, string[]>(StringComparer.OrdinalIgnoreCase);
             for (int columnIndex = 0; columnIndex < validLines[0].Length; ++columnIndex)
             {
                 string columnNameKey = validLines[0][columnIndex].Trim(); //tolower? 

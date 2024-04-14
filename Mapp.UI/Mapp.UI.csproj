@@ -45,7 +45,7 @@
 
   <ItemGroup>
     <PackageReference Include="Autofac" Version="6.5.0" />
-    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
     <PackageReference Include="Fody" Version="6.6.4">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -69,6 +69,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Mapp.ApplicationUpdater\Mapp.UI.ApplicationUpdater.csproj" />
     <ProjectReference Include="..\Mapp.BusinessLogic.Invoices\Mapp.Application.csproj" />
+    <ProjectReference Include="..\Mapp.CommonServices.Extensions\Mapp.Common.csproj" />
     <ProjectReference Include="..\Mapp.Infrastructure\Mapp.Infrastructure.csproj" />
   </ItemGroup>
 
@@ -213,6 +214,9 @@
     </None>
     <None Update="Transactions Configs\TransactionsConfigAmazonSE.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Transactions Configs\TransactionsConfigAmazonSG.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Transactions Configs\TransactionsConfigAmazonUS.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

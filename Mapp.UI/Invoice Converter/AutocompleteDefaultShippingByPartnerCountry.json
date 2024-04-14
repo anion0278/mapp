@@ -1,5 +1,9 @@
 {
-  "DE": "Default shipping - Germany",
-  "FR": "Default shipping - France",
-  "IT": "Default shipping - Italy"
+  "DE": "Shipping (100g)",
+  "IT": "Bartolini",
+  "ES": "MRW",
+  "FR": "Colissimo",
+  "GB": "Shipping (250g)",
+  "AT": "Shipping (100g)",
+  "PT": "MRW"
 }

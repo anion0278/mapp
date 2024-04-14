@@ -15,16 +15,16 @@ public class StockQuantityUpdater : IStockQuantityUpdater
 {
     private readonly IJsonManager _jsonManager;
     private readonly IDialogService _dialogService;
-    private readonly IEnumerable<StockDataXmlSourceDefinition> _sourceDefinitions;
+    public IReadOnlyList<StockDataXmlSourceDefinition> SourceDefinitions { get; }
 
     public StockQuantityUpdater(IJsonManager jsonManager, IDialogService dialogService)
     {
         _jsonManager = jsonManager;
         _dialogService = dialogService;
-        _sourceDefinitions = _jsonManager.LoadStockQuantityUpdaterConfigs();
+        SourceDefinitions = _jsonManager.LoadStockQuantityUpdaterConfigs();
     }
 
-    public async Task<IEnumerable<StockData>> ConvertWarehouseData()
+    public async Task<IEnumerable<StockData>> ConvertWarehouseData(IReadOnlyList<StockDataXmlSourceDefinition> sources)
     {
         var httpClient = new HttpClient();
 
@@ -32,7 +32,7 @@ public class StockQuantityUpdater : IStockQuantityUpdater
 
         Dictionary<string, int> statistics = new Dictionary<string, int>();
 
-        foreach (var source in _sourceDefinitions)
+        foreach (var source in sources)
         {
             var stream = await (await httpClient.GetAsync(source.Url)).Content.ReadAsStreamAsync();
             var stockData = ExtractStockData(stream, source);

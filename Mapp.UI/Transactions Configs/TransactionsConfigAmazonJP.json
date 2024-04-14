@@ -1,33 +1,33 @@
 {
-  "LinesToSkipBeforeColumnNames":7,
-  "MarketPlaceId":3,
-  "DistinctionPhrases":["指定のない場合、単位は円"],
-  "DateSubstring":"(.*)JST",
-  "TimeSeparatorOverride":null,
-  "DateCultureInfoName":"ja-JP",
-  "OrderIdColumnName":"注文番号",
-  "TransactionTypeColumnName":"トランザクションの種類",
-  "DateTimeColumnNames":[
-     "日付/時間"
+  "LinesToSkipBeforeColumnNames": 7,
+  "MarketPlaceId": 3,
+  "DistinctionPhrases": [ "指定のない場合、単位は円" ],
+  "DateSubstring": "(.*)JST",
+  "TimeSeparatorOverride": null,
+  "DateCultureInfoName": "ja-JP",
+  "OrderIdColumnName": "注文番号",
+  "TransactionTypeColumnName": "トランザクションの種類",
+  "DateTimeColumnNames": [
+    "日付/時間"
   ],
-  "ValueComponentsColumnName":[
-     "商品売上",
-     "配送料",
-     "プロモーション割引額",
-     "商品の売上税",
-     "配送料の税金"
+  "ValueComponentsColumnName": [
+    "商品売上",
+    "配送料",
+    "プロモーション割引額",
+    "商品の売上税",
+    "配送料の税金"
   ],
-  "TransferTypeNames":[
-     "振込み"
+  "TransferTypeNames": [
+    "振込み"
   ],
-  "RefundTypeNames":[
-     "返金"
+  "RefundTypeNames": [
+    "返金"
   ],
-  "OrderTypeNames":[
-     "注文"
+  "OrderTypeNames": [
+    "注文"
   ],
-  "ServiceFeeTypeNames":[
-     "注文外料金"
+  "ServiceFeeTypeNames": [
+    "注文外料金"
   ],
-  "TotalPriceColumnName":"合計"
+  "TotalPriceColumnName": "合計"
 }

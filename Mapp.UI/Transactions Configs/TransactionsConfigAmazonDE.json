@@ -21,14 +21,16 @@
   ],
   "RefundTypeNames": [
     "Erstattung",
-    "Erstattung durch Rückbuchung"
+    "Erstattung durch Rückbuchung",
+    "A-bis-z-Garantieantrag"
   ],
   "OrderTypeNames": [
     "Anpassung",
     "Bestellung"
   ],
   "ServiceFeeTypeNames": [
-    "Servicegebühr"
+    "Servicegebühr",
+    "Versanddienstleistungen"
   ],
   "TotalPriceColumnName": "Gesamt"
 }
