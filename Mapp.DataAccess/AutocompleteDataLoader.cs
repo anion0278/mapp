@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Threading;
 using Mapp.Common;
 
 namespace Mapp.DataAccess
@@ -24,18 +25,17 @@ namespace Mapp.DataAccess
 
     public class AutocompleteData : IAutocompleteData
     {
-        public Dictionary<string, string> ProdWarehouseSectionBySku { get; set; } // TODO fix names
+        public Dictionary<string, string> ProdWarehouseSectionBySku { get; set; } = new(); // TODO fix names
 
-        public Dictionary<string, string> PohodaProdCodeBySku { get; set; } // TODO decide - SKU or AmazonProdCode
+        public Dictionary<string, string> PohodaProdCodeBySku { get; set; } = new();// TODO decide - SKU or AmazonProdCode
 
-        public Dictionary<string, string> ShippingNameBySku { get; set; }
+        public Dictionary<string, string> ShippingNameBySku { get; set; } = new();
 
-        public Dictionary<string, string> PackQuantitySku { get; set; }
+        public Dictionary<string, string> PackQuantitySku { get; set; } = new();
 
-        public Dictionary<string, string> CustomsDeclarationBySku { get; set; }
+        public Dictionary<string, string> CustomsDeclarationBySku { get; set; } = new();
 
-        public Dictionary<string, string> DefaultShippingByPartnerCountry { get; set; }
-
+        public Dictionary<string, string> DefaultShippingByPartnerCountry { get; set; } = new();
 
         public void UpdateAutocompleteData<T>(T newParamValue, IDictionary<string, T> autocompleteData, string productKey)
         {
