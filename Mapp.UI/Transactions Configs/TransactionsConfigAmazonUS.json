@@ -1,32 +1,38 @@
 {
-  "LinesToSkipBeforeColumnNames":7,
-  "MarketPlaceId":0,
-  "DistinctionPhrases": ["All amounts in USD, unless specified"],
-  "DateSubstring":"(.*) (PST|PDT)",
-  "TimeSeparatorOverride":null,
-  "DateCultureInfoName":"en-US",
-  "OrderIdColumnName":"order id",
-  "TransactionTypeColumnName":"type",
-  "DateTimeColumnNames":[
-     "date/time"
+  "LinesToSkipBeforeColumnNames": 7,
+  "MarketPlaceId": 0,
+  "DistinctionPhrases": [ "All amounts in USD, unless specified" ],
+  "DateSubstring": "(.*) (PST|PDT)",
+  "TimeSeparatorOverride": null,
+  "DateCultureInfoName": "en-US",
+  "OrderIdColumnName": "order id",
+  "TransactionTypeColumnName": "type",
+  "DateTimeColumnNames": [
+    "date/time"
   ],
-  "ValueComponentsColumnName":[
-     "product sales",
-     "shipping credits",
-     "promotional rebates",
-     "gift wrap credits"
+  "ValueComponentsColumnName": [
+    "product sales",
+    "shipping credits",
+    "promotional rebates",
+    "gift wrap credits"
   ],
-  "TransferTypeNames":[
-     "Transfer"
+  "TransferTypeNames": [
+    "Transfer"
   ],
-  "RefundTypeNames":[
-     "Refund"
+  "RefundTypeNames": [
+    "Refund",
+    "Shipping Services",
+    "A-to-z Guarantee Claim",
+    "Chargeback Refund"
   ],
-  "OrderTypeNames":[
-     "Order"
+  "OrderTypeNames": [
+    "Order",
+    "Debt"
   ],
-  "ServiceFeeTypeNames":[
-     "Service Fee", ""
+  "ServiceFeeTypeNames": [
+    "Service Fee",
+    "Adjustment",
+    ""
   ],
-  "TotalPriceColumnName":"total"
+  "TotalPriceColumnName": "total"
 }

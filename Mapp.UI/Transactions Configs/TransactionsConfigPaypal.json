@@ -16,7 +16,8 @@
     "Sales Tax"
   ],
   "TransferTypeNames": [
-    "General Withdrawal - Bank Account"
+    "General Withdrawal - Bank Account",
+    "User Initiated Withdrawal"
   ],
   "RefundTypeNames": [
     "Payment Refund"

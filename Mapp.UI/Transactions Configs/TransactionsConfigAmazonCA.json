@@ -1,7 +1,7 @@
 {
   "LinesToSkipBeforeColumnNames": 7,
   "MarketPlaceId": 1,
-  "DistinctionPhrases": ["All amounts in CAD, unless specified"],
+  "DistinctionPhrases": [ "All amounts in CAD, unless specified" ],
   "DateSubstring": "(.*) ((p.m.)|(a.m.)|(AM)|(PM)) (PST|PDT)",
   "TimeSeparatorOverride": null,
   "DateCultureInfoName": "en-CA",
@@ -24,7 +24,8 @@
     "A-to-z Guarantee Claim"
   ],
   "OrderTypeNames": [
-    "Order"
+    "Order",
+    "Adjustment"
   ],
   "ServiceFeeTypeNames": [
     "Service Fee",

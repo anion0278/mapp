@@ -15,6 +15,7 @@ namespace Mapp.Models.Transactions
         public string DateSubstring { get; set; }
 
         public string TimeSeparatorOverride { get; set; }
+        public string NumericFormatSourceCultureName { get; set; }
 
         public string DateCultureInfoName { get; set; }
 

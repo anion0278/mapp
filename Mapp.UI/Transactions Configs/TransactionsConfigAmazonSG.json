@@ -1,10 +1,10 @@
 {
-  "LinesToSkipBeforeColumnNames": 7,
-  "MarketPlaceId": 5,
-  "DistinctionPhrases": [ "All amounts in GBP, unless specified" ],
+  "LinesToSkipBeforeColumnNames": 6,
+  "MarketPlaceId": 14,
+  "DistinctionPhrases": [ "All amounts in SGD, unless specified" ],
   "DateSubstring": "(.*) (UTC|GMT).*",
   "TimeSeparatorOverride": null,
-  "DateCultureInfoName": "en-GB",
+  "DateCultureInfoName": "en-US",
   "OrderIdColumnName": "order id",
   "TransactionTypeColumnName": "type",
   "DateTimeColumnNames": [
@@ -17,19 +17,18 @@
     "gift wrap credits"
   ],
   "TransferTypeNames": [
-    "Transfer"
+    "Transfer",
+    "Debt"
   ],
   "RefundTypeNames": [
-    "Refund",
-    "Delivery Services"
+    "Refund"
   ],
   "OrderTypeNames": [
-    "Order",
-    "Debt"
+    "Order"
   ],
   "ServiceFeeTypeNames": [
     "Service Fee",
-    "Adjustment"
+    ""
   ],
   "TotalPriceColumnName": "total"
 }

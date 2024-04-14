@@ -74,6 +74,25 @@ namespace Mapp.BusinessLogic.Transactions.Tests
         }
 
         [Fact]
+        public async Task ConvertTransactions_ParsesAndConvertsTransactions_AmazonFR()
+        {
+            await IntegrationTestBase("AmazonFR");
+        }
+
+        [Fact]
+        public async Task ConvertTransactions_ParsesAndConvertsTransactions_AmazonSG()
+        {
+            await IntegrationTestBase("AmazonSG");
+        }
+
+        [Fact]
+        public async Task ConvertTransactions_ParsesAndConvertsTransactions_AmazonSE()
+        {
+            await IntegrationTestBase("AmazonSE");
+        }
+
+
+        [Fact]
         public async Task ConvertTransactions_ParsesAndConvertsTransactions_AmazonNL()
         {
             await IntegrationTestBase("AmazonNL");

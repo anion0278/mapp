@@ -1,7 +1,7 @@
 {
   "LinesToSkipBeforeColumnNames": 7,
   "MarketPlaceId": 2,
-  "DistinctionPhrases": [ "Todos los importes en dólares, a menos que se especifique" ],
+  "DistinctionPhrases": [ "Todos los importes en MXN, a menos que se especifique" ],
   "DateSubstring": "(.*) (UTC|GMT).*",
   "TimeSeparatorOverride": null,
   "DateCultureInfoName": "es-MX",
@@ -26,7 +26,8 @@
     "Pedido"
   ],
   "ServiceFeeTypeNames": [
-    "Service Fee"
+    "Tarifa de servicio",
+    "Ajuste"
   ],
   "TotalPriceColumnName": "total"
 }
