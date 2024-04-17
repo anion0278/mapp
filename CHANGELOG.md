@@ -494,4 +494,18 @@ Resolves #78
 - Change number of parallel build threads
 - Merge pull request #81 from anion0278/dev
 
-Dev
+Dev\nNew release
+Total of 1 new changes since v3.5.2.27:
+## 🧰 Chores
+
+- chore: Automated report [skip ci]
+
+## 📦 Uncategorized
+
+- tests: Changes to multiple integration tests
+
+Resolves #78, #82
+- Merge pull request #83 from anion0278/dev
+
+tests: Changes to multiple integration tests
+- quick fix for CD [skip CI]
