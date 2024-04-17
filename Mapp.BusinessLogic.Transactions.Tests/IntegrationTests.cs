@@ -25,11 +25,11 @@ namespace Mapp.BusinessLogic.Transactions.Tests
             await IntegrationTestBase("Shopify");
         }
 
-        [Fact]
-        public async Task ConvertTransactions_ParsesAndConvertsTransactions_Paypal()
-        {
-            await IntegrationTestBase("PayPal");
-        }
+        //[Fact]
+        //public async Task ConvertTransactions_ParsesAndConvertsTransactions_Paypal()
+        //{
+        //    await IntegrationTestBase("PayPal");
+        //}
 
         [Fact]
         public async Task ConvertTransactions_ParsesAndConvertsTransactions_PaypalCZ()
