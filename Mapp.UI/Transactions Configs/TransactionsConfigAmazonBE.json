@@ -1,7 +1,7 @@
 {
   "LinesToSkipBeforeColumnNames": 7,
   "MarketPlaceId": 8,
-  "DistinctionPhrases": [ "Tous les montants sont en EUR, sauf mention contraire." ],
+  "DistinctionPhrases": [ "Tous les montants sont en EUR, sauf indication contraire" ],
   "DateSubstring": "(.*) (UTC|GMT).*",
   "TimeSeparatorOverride": null,
   "DateCultureInfoName": "fr-FR",
@@ -12,21 +12,23 @@
   ],
   "ValueComponentsColumnName": [
     "ventes de produits",
-    "crédits d\u0027expédition",
-    "Rabais promotionnels",
-    "crédits sur l'emballage cadeau"
+    "crédits d’expédition",
+    "Total des réductions",
+    "crédits d’emballage-cadeau"
   ],
   "TransferTypeNames": [
-    "Transfert"
+    "Transférer"
   ],
   "RefundTypeNames": [
-    "Remboursement"
+    "Remboursement",
+    "Services d'expédition"
   ],
   "OrderTypeNames": [
-    "Commande"
+    "Commande",
+    "Ajustement",
+    "Solde négatif"
   ],
   "ServiceFeeTypeNames": [
-    "Service Fee",
     "Frais de service"
   ],
   "TotalPriceColumnName": "total"

@@ -17,6 +17,7 @@ using Mapp.UI.Localization;
 using Mapp.UI.Settings;
 using WPFLocalizeExtension.Engine;
 using Moq;
+using System.Threading;
 
 namespace Mapp.UI.ViewModels;
 
@@ -70,7 +71,9 @@ public class MainViewModel : ViewModelBase, IMainViewModel
 
     private void SetLanguage()
     {
+        Debug.Print(Thread.CurrentThread.CurrentCulture.Name);
         LocalizeDictionary.Instance.SetCultureCommand.Execute(AvailableLanguages.CurrentItem);
+        Debug.Print(Thread.CurrentThread.CurrentCulture.Name);
     }
 
     public static IEnumerable<CultureInfo> GetAvailableCultures()
