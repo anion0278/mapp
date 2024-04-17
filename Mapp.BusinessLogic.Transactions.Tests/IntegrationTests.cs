@@ -20,6 +20,12 @@ namespace Mapp.BusinessLogic.Transactions.Tests
     public class IntegrationTests : VerifyBase
     {
         [Fact]
+        public async Task ConvertTransactions_ParsesAndConvertsTransactions_Shopify()
+        {
+            await IntegrationTestBase("Shopify");
+        }
+
+        [Fact]
         public async Task ConvertTransactions_ParsesAndConvertsTransactions_Paypal()
         {
             await IntegrationTestBase("PayPal");
@@ -29,6 +35,18 @@ namespace Mapp.BusinessLogic.Transactions.Tests
         public async Task ConvertTransactions_ParsesAndConvertsTransactions_PaypalCZ()
         {
             await IntegrationTestBase("PayPalCZ");
+        }
+
+        [Fact]
+        public async Task ConvertTransactions_ParsesAndConvertsTransactions_AmazonAU()
+        {
+            await IntegrationTestBase("AmazonAU");
+        }
+
+        [Fact]
+        public async Task ConvertTransactions_ParsesAndConvertsTransactions_AmazonBE()
+        {
+            await IntegrationTestBase("AmazonBE");
         }
 
         [Fact]
@@ -50,9 +68,9 @@ namespace Mapp.BusinessLogic.Transactions.Tests
         }
 
         [Fact]
-        public async Task ConvertTransactions_ParsesAndConvertsTransactions_AmazonGB()
+        public async Task ConvertTransactions_ParsesAndConvertsTransactions_AmazonFR()
         {
-            await IntegrationTestBase("AmazonGB");
+            await IntegrationTestBase("AmazonFR");
         }
 
         [Fact]
@@ -74,9 +92,21 @@ namespace Mapp.BusinessLogic.Transactions.Tests
         }
 
         [Fact]
-        public async Task ConvertTransactions_ParsesAndConvertsTransactions_AmazonFR()
+        public async Task ConvertTransactions_ParsesAndConvertsTransactions_AmazonNL()
         {
-            await IntegrationTestBase("AmazonFR");
+            await IntegrationTestBase("AmazonNL");
+        }
+
+        [Fact]
+        public async Task ConvertTransactions_ParsesAndConvertsTransactions_AmazonPL()
+        {
+            await IntegrationTestBase("AmazonPL");
+        }
+
+        [Fact]
+        public async Task ConvertTransactions_ParsesAndConvertsTransactions_AmazonSE()
+        {
+            await IntegrationTestBase("AmazonSE");
         }
 
         [Fact]
@@ -86,23 +116,18 @@ namespace Mapp.BusinessLogic.Transactions.Tests
         }
 
         [Fact]
-        public async Task ConvertTransactions_ParsesAndConvertsTransactions_AmazonSE()
+        public async Task ConvertTransactions_ParsesAndConvertsTransactions_AmazonUK()
         {
-            await IntegrationTestBase("AmazonSE");
-        }
-
-
-        [Fact]
-        public async Task ConvertTransactions_ParsesAndConvertsTransactions_AmazonNL()
-        {
-            await IntegrationTestBase("AmazonNL");
+            await IntegrationTestBase("AmazonUK");
         }
 
         [Fact]
-        public async Task ConvertTransactions_ParsesAndConvertsTransactions_Shopify()
+        public async Task ConvertTransactions_ParsesAndConvertsTransactions_AmazonUS()
         {
-            await IntegrationTestBase("Shopify");
+            await IntegrationTestBase("AmazonUS");
         }
+
+
 
         [Fact]
         [Bug]

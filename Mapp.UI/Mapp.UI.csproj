@@ -191,6 +191,9 @@
     <None Update="Transactions Configs\TransactionsConfigAmazonES.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Transactions Configs\TransactionsConfigAmazonBE.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Transactions Configs\TransactionsConfigAmazonFR.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
