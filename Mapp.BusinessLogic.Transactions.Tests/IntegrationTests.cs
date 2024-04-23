@@ -74,6 +74,12 @@ namespace Mapp.BusinessLogic.Transactions.Tests
         }
 
         [Fact]
+        public async Task ConvertTransactions_ParsesAndConvertsTransactions_AmazonGB()
+        {
+            await IntegrationTestBase("AmazonGB");
+        }
+
+        [Fact]
         public async Task ConvertTransactions_ParsesAndConvertsTransactions_AmazonIT()
         {
             await IntegrationTestBase("AmazonIT");
@@ -116,18 +122,10 @@ namespace Mapp.BusinessLogic.Transactions.Tests
         }
 
         [Fact]
-        public async Task ConvertTransactions_ParsesAndConvertsTransactions_AmazonUK()
-        {
-            await IntegrationTestBase("AmazonUK");
-        }
-
-        [Fact]
         public async Task ConvertTransactions_ParsesAndConvertsTransactions_AmazonUS()
         {
             await IntegrationTestBase("AmazonUS");
         }
-
-
 
         [Fact]
         [Bug]

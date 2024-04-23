@@ -83,6 +83,7 @@ namespace Mapp.BusinessLogic.Transactions
 
         private DateTime ParseDate(string dateString, MarketPlaceTransactionsConfig config)
         {
+            // TODO use CultureDependentValueParser
             var match = Regex.Match(dateString, config.DateSubstring);
             return DateTime.Parse(match.Groups[1].Value, config.DateCultureInfo);
         }

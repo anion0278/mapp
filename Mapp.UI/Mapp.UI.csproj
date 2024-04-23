@@ -7,7 +7,7 @@
     <ApplicationIcon>Assets\icon.ico</ApplicationIcon>
     <Deterministic>false</Deterministic>
     <PackageId>Mapp</PackageId>
-    <AssemblyName>Mapp.UI</AssemblyName>
+    <AssemblyName>Mapp</AssemblyName>
     <NeutralLanguage>en</NeutralLanguage>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
