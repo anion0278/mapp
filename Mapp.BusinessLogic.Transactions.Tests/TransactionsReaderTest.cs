@@ -1,4 +1,8 @@
-﻿using Xunit;
+﻿using System;
+using System.Diagnostics;
+using System.Globalization;
+using System.Threading;
+using Xunit;
 
 namespace Mapp.Business
 {
@@ -70,13 +74,16 @@ namespace Mapp.Business
         //}
 
         //[Fact]
-        //public void ParseFrDate()
+        //public void ParseMxDate()
         //{
-        //    var reader = new TransactionsReader(new JsonManager());
+        //    Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("");
+        //    //var result = DateTime.Parse("2 déc. 2019 08:04:58", new CultureInfo(""));
+        //    //var result2 = DateTime.Parse("12 févr. 2024 07:52:56", new CultureInfo("es-MX"));
+        //    //var result = DateTime.Parse("8 feb 2024 23:25:40 GMT-8", new CultureInfo(""));
+        //    var result2 = DateTime.Parse("8 feb 2024 23:25:40", new CultureInfo("es-MX"));
 
-        //    var result = reader.ParseDate("2 déc. 2019 08:04:58 UTC+00:00", @"(.*) UTC", new CultureInfo("fr-FR"));
-
-        //    Assert.Equal(new DateTime(2019, 12, 2, 8, 4, 58), result);
+        //    Debugger.Break();
+        //    //Assert.Equal(new DateTime(2019, 12, 2, 8, 4, 58), result);
         //}
 
         //[Fact]

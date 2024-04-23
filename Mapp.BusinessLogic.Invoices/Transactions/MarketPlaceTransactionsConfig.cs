@@ -42,14 +42,14 @@ namespace Mapp.BusinessLogic.Transactions
             {
                 if (_dataCultureInfo == null)
                 {
-                    _dataCultureInfo = new CultureInfo(DateCultureInfoName);
+                    _dataCultureInfo = new CultureInfo(DateCultureInfoName, false);
                     if (_timeSeparatorOverride != null)
                     {
                         _dataCultureInfo.DateTimeFormat.TimeSeparator = _timeSeparatorOverride;
                     }
                     if (NumericFormatSourceCultureName != null)
                     {
-                        var numbericCultureInfo = new CultureInfo(NumericFormatSourceCultureName);
+                        var numbericCultureInfo = new CultureInfo(NumericFormatSourceCultureName, false);
                         _dataCultureInfo.NumberFormat = numbericCultureInfo.NumberFormat; 
                     }
                 }

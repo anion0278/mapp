@@ -15,7 +15,7 @@
 
                     lex:LocalizeDictionary.DesignCulture="en"
                     lex:LocalizeDictionary.OutputMissingKeys="True"
-                    lex:ResxLocalizationProvider.DefaultAssembly="Mapp.UI"
+                    lex:ResxLocalizationProvider.DefaultAssembly="Mapp"
                     lex:ResxLocalizationProvider.DefaultDictionary="LocalizationStrings">
 
     <b:Interaction.Behaviors>

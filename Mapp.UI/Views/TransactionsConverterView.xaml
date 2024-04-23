@@ -6,8 +6,6 @@
              xmlns:local="clr-namespace:Mapp.UI.Views"
              xmlns:lex="http://wpflocalizeextension.codeplex.com"
              mc:Ignorable="d" 
-             lex:ResxLocalizationProvider.DefaultAssembly="Mapp.UI"
-             lex:ResxLocalizationProvider.DefaultDictionary="LocalizationStrings"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <Grid.RowDefinitions>
