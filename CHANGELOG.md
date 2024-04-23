@@ -508,4 +508,17 @@ Resolves #78, #82
 - Merge pull request #83 from anion0278/dev
 
 tests: Changes to multiple integration tests
-- quick fix for CD [skip CI]
+- quick fix for CD [skip CI]\nNew release
+Total of 1 new changes since v3.5.3.29:
+## 🧰 Chores
+
+- chore: Automated report [skip ci]
+
+## 📦 Uncategorized
+
+- Attempt to fix date parsing
+
+Related to #82
+- Merge pull request #84 from anion0278/dev
+
+Attempt to fix date parsing

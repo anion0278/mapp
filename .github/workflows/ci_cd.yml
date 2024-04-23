@@ -12,7 +12,7 @@ on:
         required: true
         default: '5' # minor
       release_patch:
-        description: 'Release - patch number (previous 3)'     
+        description: 'Release - patch number (previous 4)'     
         required: true
       release_name:
         description: 'Additional name of the release'     
