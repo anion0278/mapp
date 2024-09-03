@@ -16,3 +16,4 @@ Dev [![Actions Status](https://github.com/anion0278/mapp/actions/workflows/ci.ym
 ### Setup git hooks
 git config --local core.hooksPath .githooks/
 ```
+
